@@ -1,0 +1,43 @@
+import { _decorator, Button, Component, director, Label, Node } from "cc";
+const { ccclass, property } = _decorator;
+import * as 设置管理器 from '../管理器/设置管理器'
+import { 播放文本 } from "../方法函数/动画效果";
+
+@ccclass("设置")
+export class 设置 extends Component {
+  @property(Node)
+  标签: Node;
+  @property(Node)
+  按钮容器: Node;
+  @property(Node)
+  返回按钮: Node;
+
+  速度表 = { 1: "一般", 2: "快速", 6: "极速" }
+  start() {
+    this.标签.getComponent(Label).string = `当前速度为${this.速度表[设置管理器.设置.播放速度]}`;
+    this.按钮容器.getChildByName("速度").on(Button.EventType.CLICK, this.点击速度, this);
+    this.按钮容器.getChildByName("暗夜").on(Button.EventType.CLICK, this.点击暗夜, this);
+    this.按钮容器.getChildByName("公告").on(Button.EventType.CLICK, () => director.loadScene("公告"), this);
+    this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene("首页"), this);
+  }
+
+  点击速度() {
+    const 速度挡位 = Object.keys(this.速度表).map(Number)
+    const 当前速度 = 速度挡位.findIndex(速度 => 速度 === 设置管理器.设置.播放速度);
+
+    if (当前速度 === -1) {
+      设置管理器.设置.播放速度 = 速度挡位[0]
+    } else {
+      const 下一个速度 = (当前速度 + 1) % 速度挡位.length;
+      设置管理器.设置.播放速度 = 速度挡位[下一个速度];
+    }
+
+    设置管理器.保存设置();
+    播放文本(this.标签, `当前速度为${this.速度表[设置管理器.设置.播放速度]}`)
+  }
+  点击暗夜() {
+    设置管理器.设置.暗夜模式 = !设置管理器.设置.暗夜模式
+    设置管理器.保存设置();
+    播放文本(this.标签, `护眼模式已${设置管理器.设置.暗夜模式 ? '开启' : '关闭'}`)
+  }
+}

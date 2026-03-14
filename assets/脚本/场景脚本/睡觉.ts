@@ -1,0 +1,153 @@
+import { _decorator, Component, Node, Label, Color, UITransform, Button, director, tween } from "cc";
+import { 保存存档, 备份存档, 存档 } from "../管理器/存档管理器";
+import { 淡入 } from "../方法函数/动画效果";
+import { 设置 } from "../管理器/设置管理器";
+import { 获取地区名称 } from "../内容加载/地区";
+import { 计算最大生命, 计算最大精力, 计算最大饥饿 } from "../方法函数/属性计算";
+import { 自动进食 } from "../方法函数/公共函数";
+import { 执行钩子 } from "../管理器/钩子管理器";
+import { 获取剧情 } from "../内容加载/剧情";
+import { 更新成就 } from "../内容加载/成就";
+const { ccclass, property } = _decorator;
+
+@ccclass("睡觉")
+export class 睡觉 extends Component {
+    @property(Node)
+    标签: Node = null!;
+    @property(Node)
+    属性容器: Node = null!;
+    @property(Node)
+    文本容器: Node = null!;
+    @property(Node)
+    继续按钮: Node = null!;
+
+    start(): void {
+        this.标签.active = false;
+        this.属性容器.active = false;
+        this.文本容器.active = false;
+        this.继续按钮.active = false;
+        this.标签.getComponent(Label).string = `第${存档.天数 + 1}天`;
+        const sequence = tween(this.node);
+        sequence.call(() => 淡入(this.标签)).delay(2 / 设置.播放速度);
+        sequence.call(() => 淡入(this.属性容器)).delay(2 / 设置.播放速度);
+        sequence.call(() => 淡入(this.文本容器))
+        sequence.call(() => 淡入(this.继续按钮)).start();
+        this.恢复()
+        this.结算();
+
+        this.继续按钮.on(Button.EventType.CLICK, () => this.点击继续(), this,);
+    }
+
+    点击继续() {
+        const 剧情 = 获取剧情()
+        if (剧情) {
+            存档.当前剧情 = 剧情.名称
+            保存存档()
+            director.loadScene("剧情");
+        } else {
+            director.loadScene("主页");
+        }
+    }
+
+    恢复() {
+        let 精力恢复 = 计算最大精力() - 存档.精力;
+        let 饥饿消耗 = 20
+        let 生命恢复 = 0
+        const 计算容器 = { 精力恢复, 饥饿消耗, 生命恢复 }
+        执行钩子("睡觉恢复", [计算容器])
+
+        存档.精力 += 计算容器.精力恢复;
+        存档.饥饿 -= 计算容器.饥饿消耗;
+        存档.生命 += 计算容器.生命恢复;
+        自动进食();
+
+        const 最大精力 = 计算最大精力()
+        const 最大饥饿 = 计算最大饥饿()
+        const 最大生命 = 计算最大生命();
+
+        this.属性容器.getChildByName("精力").active = 计算容器.精力恢复 > 0
+        this.属性容器.getChildByName("饥饿").active = 计算容器.饥饿消耗 > 0
+        this.属性容器.getChildByName("生命").active = 计算容器.生命恢复 > 0
+        this.属性容器.getChildByName("精力").getChildByName("标签").getComponent(Label).string = `精力 +${计算容器.精力恢复}（${存档.精力}/${最大精力}）`;
+        this.属性容器.getChildByName("饥饿").getChildByName("标签").getComponent(Label).string = `饥饿 -${计算容器.饥饿消耗}（${存档.饥饿}/${最大饥饿}）`;
+        this.属性容器.getChildByName("生命").getChildByName("标签").getComponent(Label).string = `生命 +${计算容器.生命恢复}（${存档.生命}/${最大生命}）`;
+
+        const 结算前存档 = JSON.parse(JSON.stringify(存档))
+        const 结果文本 = [];
+        执行钩子("睡觉结算", [结果文本, 结算前存档])
+        this.创建文本(结果文本);
+    }
+
+    结算() {
+        // 增加天数
+        存档.天数 += 1;
+        存档.停留天数[获取地区名称()] += 1;
+        // 重置每日数据
+        for (let 名称 in 存档.当日加成) {
+            if (名称 in 存档) {
+                存档[名称] -= 存档.当日加成[名称]
+                存档.当日加成[名称] = 0
+            } else if (名称 in 存档.物品) {
+                存档.物品[名称] -= 存档.当日加成[名称]
+                存档.当日加成[名称] = 0
+            }
+        }
+
+        // 遇敌
+        if (Math.random() * 100 < 20) {
+            if (Math.random() * 100 < 70 || 获取地区名称() === "省城") {
+                const 贼系列 = ["女贼(小学生)", "女贼她姐", "女贼她小姨", "女贼她妈", "女贼她奶奶", "女贼集团总裁（精英）", "贼女王（精英）", "吸毒男（BOSS）", "吸毒男2阶（BOSS）", "吸毒男3阶（BOSS）", "吸毒男4阶（BOSS）", "吸毒男5阶（BOSS）"];
+                if (贼系列[存档.其他.贼系列击杀数]) {
+                    存档.当前敌人 = 贼系列[存档.其他.贼系列击杀数]
+                }
+            } else {
+                const 蚊子系列 = ["蚊小满", "大毛蚊", "密斯特蚊", "阿蚊", "徐蚊强", "女王", "蚊.媛"];
+                if (蚊子系列[存档.其他.蚊子系列消灭数]) {
+                    存档.当前敌人 = 蚊子系列[存档.其他.蚊子系列消灭数]
+                }
+            }
+
+            if (存档.天数 >= 21 && 获取地区名称() == "荒野") {
+                存档.当前敌人 = "蒙面人";
+            }
+            if (存档.天数 >= 83 && 获取地区名称() == "山脉") {
+                存档.当前敌人 = "蒙面人2";
+            }
+            if (Math.random() * 100 < (存档.物品.枪 - 1) * 10 + 1) {
+                存档.当前敌人 = "陈晓（大大）2";
+            }
+            if (存档.天数 >= 178) {
+                存档.当前敌人 = "";
+            }
+        }
+
+        // 其他
+        if (存档.停留天数.山脉 === 8 && 获取地区名称() === "山脉") {
+            备份存档("晓月")
+        }
+        if (存档.当前地点) {
+            存档.当前地点 = ''
+        }
+
+        // 刷新成就
+        更新成就()
+    }
+
+    创建文本(内容列表: string[]) {
+        for (let index = 0; index < 内容列表.length; index++) {
+            const feature = new Node(`label_${index}`);
+            const label = feature.addComponent(Label);
+
+            label.string = 内容列表[index];
+            label.fontSize = 42;
+            label.lineHeight = 50;
+            label.overflow = Label.Overflow.RESIZE_HEIGHT;
+            label.horizontalAlign = Label.HorizontalAlign.LEFT;
+            label.color = Color.WHITE;
+
+            feature.setParent(this.文本容器);
+            feature.setPosition(0, 0);
+            feature.getComponent(UITransform).setContentSize(650, 50);
+        }
+    }
+}

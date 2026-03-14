@@ -1,0 +1,402 @@
+import { _decorator, Button, Color, Component, director, Label, Node, Sprite } from 'cc';
+import { 保存存档, 存档 } from '../管理器/存档管理器';
+import { 获取地区事件, 获取地区名称, 获取地区敌人, 获取地区物品 } from '../内容加载/地区';
+import { 计算前进探索消耗精力, 计算前进探索消耗饥饿, 计算最大攻击, 计算最大生命, 计算最大精力, 计算最大防御, 计算最大饥饿 } from '../方法函数/属性计算';
+import { 按权重抽取, 按概率抽取, 格式化金钱, 自动进食, 自然恢复生命 } from '../方法函数/公共函数';
+import { 播放文本, 放大缩小 } from '../方法函数/动画效果';
+import { 事件 } from './事件';
+import { 战斗 } from './战斗';
+import { 执行钩子 } from '../管理器/钩子管理器';
+import { 获取当前日记 } from '../内容加载/日记';
+import { 设置 } from '../管理器/设置管理器';
+const { ccclass, property } = _decorator;
+
+@ccclass('主页')
+export class 主页 extends Component {
+    @property(Node)
+    顶部状态栏: Node = null;
+    @property(Node)
+    信息栏: Node = null;
+    @property(Node)
+    状态栏: Node = null;
+    @property(Node)
+    标签: Node = null;
+    @property(Node)
+    按钮容器: Node = null;
+    @property(Node)
+    背景: Node = null;
+
+    start() {
+        this.更新()
+        this.回档()
+
+        this.按钮容器.getChildByName("睡觉").on(Button.EventType.CLICK, this.点击睡觉, this)
+        this.按钮容器.getChildByName("挑战").on(Button.EventType.CLICK, this.点击挑战, this)
+        this.按钮容器.getChildByName("前进").on(Button.EventType.CLICK, this.点击前进, this)
+        this.按钮容器.getChildByName("探索").on(Button.EventType.CLICK, this.点击探索, this)
+        this.按钮容器.getChildByName("伙伴").on(Button.EventType.CLICK, () => director.loadScene("伙伴"), this)
+        this.按钮容器.getChildByName("进食").on(Button.EventType.CLICK, () => director.loadScene("进食"), this)
+        this.按钮容器.getChildByName("制作").on(Button.EventType.CLICK, () => director.loadScene("制作"), this)
+        this.按钮容器.getChildByName("特性").on(Button.EventType.CLICK, () => director.loadScene("特性"), this)
+        this.按钮容器.getChildByName("商店").on(Button.EventType.CLICK, () => director.loadScene("商店"), this)
+        this.信息栏.on(Node.EventType.TOUCH_END, () => {
+            if (存档.当前事件 || 存档.当前敌人) {
+                return
+            }
+            director.loadScene("面板")
+        }, this)
+        this.暗夜模式()
+    }
+
+    回档() {
+        this.scheduleOnce(() => {
+            if (存档.当前剧情) {
+                director.loadScene("剧情")
+            } else if (存档.当前敌人) {
+                this.node.getComponent(战斗).进入战斗(存档.当前敌人)
+            } else if (存档.当前事件) {
+                this.node.getComponent(事件).触发事件(存档.当前事件)
+            } else if (存档.当前文本) {
+                播放文本(this.标签, 存档.当前文本)
+                存档.当前文本 = ""
+            }
+        }, 0)
+    }
+
+    暗夜模式() {
+        if (设置.暗夜模式) {
+            const 标签 = this.node.getComponentsInChildren(Label);
+            标签.forEach(label => {
+                if (label.color.equals(Color.BLACK)) {
+                    label.color = new Color(233, 233, 233)
+                }
+            });
+            this.背景.getComponent(Sprite).color = new Color(23, 23, 23)
+        }
+    }
+
+    点击睡觉() {
+        if (存档.剧情.住在桥洞) {
+            director.loadScene("桥洞")
+        } else {
+            if (存档.精力 > 0) {
+                globalThis.确认参数 = {
+                    文本: "系统检测到你还有剩余的精力，是否要睡觉？",
+                    按钮: {
+                        "确认睡觉": () => {
+                            if (获取当前日记()) {
+                                director.loadScene("日记");
+                            } else {
+                                director.loadScene("睡觉");
+                            }
+                        },
+                        "返回": () => director.loadScene("主页")
+                    }
+                };
+                director.loadScene("确认");
+                return
+            }
+            if (获取当前日记()) {
+                director.loadScene("日记");
+            } else {
+                director.loadScene("睡觉");
+            }
+        }
+    }
+
+    点击挑战() {
+        if (存档.精力 < 10) {
+            播放文本(this.标签, "挑战需10点精力！")
+            return
+        }
+        const 挑战组 = ["眼镜王蛇（精英）", "逃犯（精英）", "深渊巨蟒", "机械人（被害妄想症）", "女剑士（中二病他姐）", "天下第一乖（么么啾）", "红狼", "8号拳师", "双枪老太婆", "自爆蛋", "晓风基因计划", "一块黑色的石头", "机甲少女", "炮击少女", "吾王", "晓风"];
+        const 敌人名称 = 挑战组[存档.其他.挑战进度]
+        if (!敌人名称) {
+            if (!存档.剧情.完成挑战) {
+                this.node.getComponent(事件).触发事件("完成挑战")
+            }
+            播放文本(this.标签, "你已经天下无敌了...")
+            return
+        }
+        存档.精力 -= 10;
+        this.node.getComponent(战斗).进入战斗(敌人名称)
+    }
+
+    前置条件() {
+        if (存档.健康 <= 0 || 存档.天数 >= 180) {
+            director.loadScene("结局")
+            return false
+        }
+        if (存档.精力 < 计算前进探索消耗精力()) {
+            播放文本(this.标签, "精力不足！")
+            return false
+        }
+        return true
+    }
+
+    基本消耗() {
+        存档.精力 -= 计算前进探索消耗精力();
+        存档.饥饿 -= 计算前进探索消耗饥饿();
+        自动进食()
+        if (存档.饥饿 <= 0) {
+            if (Math.random() * 100 < 50) {
+                存档.健康 -= 1;
+                放大缩小(this.顶部状态栏.getChildByName("健康"));
+            }
+        }
+        自然恢复生命()
+    }
+
+    主要逻辑() {
+        存档.其他.前进探索次数++
+
+        const 计算容器 = { 战斗权重: 20, 事件权重: 20, 收集权重: 60 }
+        执行钩子("计算前进探索权重", [计算容器])
+
+        if (存档.距离 <= 3) 计算容器.战斗权重 = 0;
+        if (存档.距离 <= 5) 计算容器.事件权重 = 0;
+
+        const 总权重 = 计算容器.战斗权重 + 计算容器.事件权重 + 计算容器.收集权重;
+        const 随机数 = Math.random() * 总权重;
+
+        if (随机数 < 计算容器.战斗权重) {
+            存档.其他.战斗次数++
+            const 地区敌人 = 获取地区敌人()
+            this.node.getComponent(战斗).进入战斗(按权重抽取(地区敌人));
+        } else if (随机数 < 计算容器.战斗权重 + 计算容器.事件权重) {
+            存档.其他.随机事件次数++
+            const 地区事件表 = 获取地区事件()
+            执行钩子("计算地区事件表", [地区事件表])
+
+            console.log('事件', 地区事件表)
+            this.node.getComponent(事件).触发事件(按权重抽取(地区事件表))
+        } else {
+            存档.其他.捡道具次数++
+
+            const 物品表 = 获取地区物品()
+            let 结果文本: string[] = []
+            执行钩子("收集材料前", [{ 物品表, 结果文本 }])
+
+            const 基本抽取 = 按概率抽取(物品表)
+            if (!基本抽取) {
+                存档.其他.啥也没找到次数++
+            }
+            const 基本文本 = 基本抽取 ? `发现：${基本抽取}` : '什么也没发现！'
+            结果文本.push(基本文本)
+
+            执行钩子("收集材料", [{ 物品表, 结果文本 }])
+
+            播放文本(this.标签, 结果文本.join('\n'))
+        }
+
+
+    }
+
+    点击前进() {
+        if (!this.前置条件() || !this.前进条件()) {
+            return
+        }
+        this.基本消耗()
+        this.主要逻辑()
+
+        存档.距离 += 1;
+        放大缩小(this.顶部状态栏.getChildByName("距离"));
+        执行钩子("前进后")
+        if (存档.距离 >= 300) {
+            存档.距离 = 300
+        }
+        this.更新()
+        保存存档()
+    }
+
+    前进条件() {
+        if (存档.天数 >= 180) {
+            // 不回家结局
+            if (!存档.剧情.愿意回家) {
+                director.loadScene('结局')
+                return false
+            }
+            // 回家
+            const 回家结局 = [
+                "听说中年大叔遗体被人领走啦，被一个中年妇女。（地点：省城。结局：安息吧，痛苦）",
+                "落满枫叶的小路上，晓月正和几位同学手舞足蹈的说着些什么，不知道她是否还记得那个安静的少年呢？（地点：省城。结局：两个世界）",
+                "再次碰到小兰时，她衣着端庄，在一家化妆品店做销售，她说，“还是自立过得舒坦呀，虽然没啥钱...”（地点：省城。结局：从零开始）",
+                "我再也没有等到碧瑶的消息，她能还清那些巨额的债款吗？”（地点：省城。结局：懵懂的青春）",
+                "老爷爷，你还好吗？（地点：省城。结局：无奈的人生）",
+                "与世隔绝的大山中，地质队长正在台灯下撰写报告；而在另一头，她的女儿正准备在论坛上通宵怼那些侮辱她偶像的人。（地点：山脉。结局：隔阂）",
+                "堂主的母亲突发脑溢血过世，他像孤魂一样终日在山间游荡着...（地点：山脉。结局：游荡的灵魂）",
+                "那个可疑的村庄已被警察封锁。（地点：山脉。结局：封锁的造毒窝点）",
+                "老人的房子前已长满杂草，房内早已空荡荡...（地点：山脉。结局：天空的流星）",
+                "年轻的妈妈和小女孩依旧在河边散步，小女孩对着一个流浪汉做了一个鬼脸...（地点：县城。结局：榜样）",
+                "抽烟的中年女人找到一个胖嘟嘟的男友。“虽然经常挨打，但是总算不是一个人了”，女人抽着烟，淡淡的说道。（地点：县城。结局：可怜还是可恨？）",
+                "送糖的小男孩，作文拿到全县第一名，梦里笑醒的妈妈、大半夜跑到便利店给他买了一大盒五颜六色的棒棒糖...等待着儿子的苏醒。（地点：县城。结局：甜甜的男孩）",
+                "三个流浪汉已经三分县城，各自守着自己的地盘...（地点：县城。结局：扩散的黑暗）",
+                "呆萌的女贼打算放弃原来的职业，因为她找到了更稳定的生存方法————捡塑料瓶...（地点：山脉。结局：孤儿的挣扎）",
+                "推开栅栏，院子里长满了杂草，似乎很久没人居住...（地点：家）",
+                "门是开着的，屋里没有灯火，静悄悄的；青灰色的屋顶、几颗新绿色的嫩芽，在夕阳的余晖下，显得格外的安静。一只猫咪在门前的阳光下打着哈欠（地点：家）",
+                "一个满头白发的老人，忽然呆在了门口....",
+                "...全剧终...",
+                "「感谢您能陪我看到最后！我是晓风，再会啦~」"
+            ]
+            if (回家结局[存档.其他.回家剧情]) {
+                播放文本(this.标签, 回家结局[存档.其他.回家剧情])
+                存档.其他.回家剧情 += 1
+                if (存档.距离 > 0) {
+                    存档.距离 -= 20
+                }
+                this.更新()
+                return false
+            }
+            director.loadScene('结局')
+            return false
+        }
+
+        if (存档.距离 == 1) {
+            存档.按钮.特性 = true;
+        }
+        if (存档.距离 == 2) {
+            存档.按钮.睡觉 = true;
+        }
+        if (存档.距离 == 3) {
+            存档.按钮.进食 = true;
+        }
+        if (存档.距离 == 6) {
+            存档.按钮.制造 = true;
+        }
+        if (存档.距离 == 44) {
+            存档.按钮.挑战 = true;
+        }
+        // 进入县城
+        if (存档.距离 == 99) {
+            存档.按钮.前进 = false;
+            存档.按钮.探索 = true;
+            存档.按钮.商店 = true;
+        }
+        //离开县城
+        if (存档.距离 == 101) {
+            存档.按钮.商店 = false
+        }
+        // 晓月剧情
+        if (存档.距离 == 289) {
+            if (存档.伙伴.晓月关系) {
+                存档.当前剧情 = "通缉犯";
+                director.loadScene('剧情');
+                存档.距离++
+                return false
+            }
+        }
+        // 进入省城
+        if (存档.距离 == 299) {
+            存档.按钮.前进 = false;
+            存档.按钮.探索 = true;
+            存档.按钮.商店 = true;
+            存档.剧情.住在桥洞 = true;
+            存档.距离++
+            if (存档.伙伴.晓月关系) {
+                存档.当前剧情 = "告别晓月";
+                director.loadScene('剧情');
+            } else {
+                播放文本(this.标签, "你已到达省城！")
+                return false
+            }
+        }
+        if (存档.当前地点 === '山洞') {
+            存档.其他.山洞进度 += 1;
+        }
+
+        return true
+    }
+    探索条件() {
+        if (获取地区名称() === '县城' && 存档.天数 >= 44) {
+            if (存档.距离 === 100) {
+                存档.按钮.前进 = true
+                this.更新()
+                播放文本(this.标签, "再待下去迟早会被发现，还是去省城看看吧！")
+                return false
+            }
+        }
+        if (获取地区名称() === '山脉' && 存档.天数 >= 80) {
+            if (存档.距离 > 100 && 存档.距离 < 300) {
+                播放文本(this.标签, "还是先去省城整顿一下吧！")
+                return false
+            }
+        }
+
+        return true
+    }
+    点击探索() {
+        if (!this.前置条件() || !this.探索条件()) {
+            return
+        }
+
+        this.基本消耗()
+        this.主要逻辑()
+        执行钩子("探索后")
+
+        if (存档.当前地点 === '山洞') {
+            存档.其他.山洞进度 += 1;
+        }
+        this.更新()
+        保存存档()
+    }
+
+    更新() {
+        执行钩子("主页更新")
+        this.顶部状态栏.getChildByName("天数").getChildByName("标签").getComponent(Label).string = `${获取地区名称()}.${存档.天数}天`;
+        this.顶部状态栏.getChildByName("精力").getChildByName("标签").getComponent(Label).string = `${存档.精力}/${计算最大精力()}`;
+        this.顶部状态栏.getChildByName("饥饿").getChildByName("标签").getComponent(Label).string = `${存档.饥饿}/${计算最大饥饿()}`;
+
+        this.信息栏.getChildByName("健康").getComponent(Label).string = `健康  ${存档.健康}`;
+        let 颜色 = 设置.暗夜模式 ? Color.WHITE : Color.BLACK
+        if (存档.健康 <= 3) {
+            颜色 = Color.RED
+        }
+        this.信息栏.getChildByName("健康").getComponent(Label).color = 颜色;
+        this.信息栏.getChildByName("金钱").getComponent(Label).string = `金钱  ${格式化金钱(存档.金钱)}`;
+        this.信息栏.getChildByName("烟酒").getComponent(Label).string = `烟酒  ${存档.物品.香烟}/${存档.物品.啤酒}`;
+        this.信息栏.getChildByName("生命").getComponent(Label).string = `生命  ${Math.round(存档.生命)}/${计算最大生命()}`;
+        this.信息栏.getChildByName("攻击").getComponent(Label).string = `攻击  ${计算最大攻击()}`;
+        this.信息栏.getChildByName("防御").getComponent(Label).string = `防御  ${计算最大防御()}`;
+        this.信息栏.getChildByName("距离").getComponent(Label).string = `离家  ${存档.距离}km`;
+        this.信息栏.getChildByName("伤药").getComponent(Label).string = `伤药  ${存档.物品.伤药}`;
+        this.信息栏.getChildByName("食物").getComponent(Label).string = `食物  ${存档.物品.果子}+${存档.物品.熟肉}`;
+
+        this.状态栏.getChildByName("状态").getComponent(Label).string = this.计算状态文本();
+        this.状态栏.getChildByName("进度").getComponent(Label).string = this.计算进度文本()
+
+        this.按钮容器.getChildByName("商店").active = 存档.按钮.商店
+        this.按钮容器.getChildByName("挑战").active = 存档.按钮.挑战
+        this.按钮容器.getChildByName("睡觉").active = 存档.按钮.睡觉
+        this.按钮容器.getChildByName("探索").active = 存档.按钮.探索
+        this.按钮容器.getChildByName("前进").active = 存档.按钮.前进
+        this.按钮容器.getChildByName("伙伴").active = 存档.按钮.伙伴
+        this.按钮容器.getChildByName("制作").active = 存档.按钮.制造
+        this.按钮容器.getChildByName("特性").active = 存档.按钮.特性
+        this.按钮容器.getChildByName("进食").active = 存档.按钮.进食
+        this.按钮容器.getChildByName("睡觉").getChildByName("标签").getComponent(Label).string = 存档.剧情.住在桥洞 ? "桥  洞" : "睡  觉";
+    }
+
+    计算状态文本() {
+        let 状态文本 = ""
+        for (let 状态 in 存档.状态) {
+            if (存档.状态[状态]) {
+                状态文本 += `【${状态}】 `
+            }
+        }
+        return 状态文本
+    }
+
+    计算进度文本() {
+        let 位置 = ""
+        if (获取地区名称() === "省城") {
+            位置 = 存档.当前地点 ? `「${存档.当前地点}」` : "";
+            if (存档.当前地点 == "山洞") {
+                位置 = `「山洞${存档.其他.山洞进度}米」`
+            }
+        }
+
+        位置 += `已停留${存档.停留天数[获取地区名称()]}天`
+        return 位置
+    }
+
+}
