@@ -3,7 +3,6 @@ import { 计算最大生命, 计算最大防御 } from "../方法函数/属性�
 import { 按概率抽取 } from "../方法函数/公共函数";
 import { 战斗上下文 } from "../场景脚本/战斗";
 
-
 type 制作定义类型 = {
 	名称: string,
 	等级?: number | (() => number);
