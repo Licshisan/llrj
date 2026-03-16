@@ -25,7 +25,7 @@ export function 获取特性表(): 特性定义类型[] {
 export function 获取特性(特性名: string) {
 	const 特性 = 默认特性表.find(item => item.名称 === 特性名);
 	if (!特性) {
-		console.warn(`特性名${特性名}不存在`);
+		warn(`特性名${特性名}不存在`);
 		return false;
 	}
 	return typeof 特性.条件 === "function" ? 特性.条件() : 特性.条件

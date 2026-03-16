@@ -37,13 +37,13 @@ export class 商店 extends Component {
 		const 商品表 = 获取商品列表()
 
 		if (!商品表 || 商品表.length === 0) {
-			console.warn("商品列表为空，无法创建分页");
+			warn("商品列表为空，无法创建分页");
 			return;
 		}
 		const 总页数 = Math.ceil(商品表.length / this.页大小);
 		const 分页组件 = this.分页视图.getComponent(PageView);
 		if (!分页组件) {
-			console.error("分页视图未挂载PageView组件");
+			error("分页视图未挂载PageView组件");
 			return;
 		}
 		分页组件.removeAllPages();

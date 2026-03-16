@@ -72,17 +72,17 @@ export async function 加载游戏内容() {
 	设置管理器.加载设置()
 	挂载全局变量()
 	注册钩子函数()
-	console.log(钩子管理器.钩子函数对象)
-	console.log("游戏内容加载成功！")
+	log(钩子管理器.钩子函数对象)
+	log("游戏内容加载成功！")
 	加载完成 = true
 
 	// if (sys.isNative) {
 	// 	// 提交异常
 	// 	(window as any).__errorHandler = function (name, line, msg, stack) {
-	// 		console.error(`Error Name: ${name}`);
-	// 		console.error(`Line: ${line}`);
-	// 		console.error(`Message: ${msg}`);
-	// 		console.error(`Stack: ${stack}`);
+	// 		error(`Error Name: ${name}`);
+	// 		error(`Line: ${line}`);
+	// 		error(`Message: ${msg}`);
+	// 		error(`Stack: ${stack}`);
 
 	// 		try {
 	// 			fetch(`${设置.后端地址}/error`, {
@@ -93,12 +93,12 @@ export async function 加载游戏内容() {
 	// 				body: JSON.stringify({ name, line, msg, stack, version: 设置.游戏版本 })
 	// 			});
 	// 		} catch (e) {
-	// 			console.error('错误上报失败:', e);
+	// 			error('错误上报失败:', e);
 	// 		}
 	// 	};
 
 	// 	// 玩家注册
-	// 	const player_string = localStorage.getItem("player");
+	// 	const player_string = sys.localStorage.getItem("player");
 	// 	const player = player_string ? JSON.parse(player_string) : null;
 
 	// 	try {
@@ -116,7 +116,7 @@ export async function 加载游戏内容() {
 
 	// 			const result = await response.json();
 	// 			if (result.success) {
-	// 				localStorage.setItem("player", JSON.stringify(result.data));
+	// 				sys.localStorage.setItem("player", JSON.stringify(result.data));
 	// 			}
 	// 		}
 
@@ -135,11 +135,11 @@ export async function 加载游戏内容() {
 
 	// 			const result = await response.json();
 	// 			if (result.success) {
-	// 				localStorage.setItem("player", JSON.stringify(result.data));
+	// 				sys.localStorage.setItem("player", JSON.stringify(result.data));
 	// 			}
 	// 		}
 	// 	}
 	// 	catch (error) {
-	// 		console.error("玩家初始化失败：", error.message);
+	// 		error("玩家初始化失败：", error.message);
 	// 	}
 }

@@ -9,14 +9,14 @@ interface 成就项目类型 {
 
 export function 更新成就(): 成就项目类型[] {
 	try {
-		const 成就字符串 = localStorage.getItem("成就");
+		const 成就字符串 = sys.localStorage.getItem("成就");
 		let 本地成就表: 成就项目类型[] = [];
 		if (成就字符串) {
 			try {
 				本地成就表 = JSON.parse(成就字符串) as 成就项目类型[];
 				if (!Array.isArray(本地成就表)) 本地成就表 = [];
 			} catch (e) {
-				console.warn("【成就系统】本地成就数据解析失败，重置为空数组：", e);
+				warn("【成就系统】本地成就数据解析失败，重置为空数组：", e);
 				本地成就表 = [];
 			}
 		}
@@ -24,7 +24,7 @@ export function 更新成就(): 成就项目类型[] {
 
 		默认成就表.forEach((全局成就项) => {
 			if (!全局成就项?.名称) {
-				console.warn("【成就系统】全局成就项缺失唯一名称，跳过处理");
+				warn("【成就系统】全局成就项缺失唯一名称，跳过处理");
 				return;
 			}
 			const { 名称: 成就名称, 描述, 条件 } = 全局成就项;
@@ -54,13 +54,13 @@ export function 更新成就(): 成就项目类型[] {
 
 		// 5. 过滤有效成就并保存
 		const 有效成就表 = 新成就表.filter(item => item?.名称);
-		localStorage.setItem("成就", JSON.stringify(有效成就表));
+		sys.localStorage.setItem("成就", JSON.stringify(有效成就表));
 
-		console.log(`【成就系统】更新完成，当前共${有效成就表.length}项成就`);
+		log(`【成就系统】更新完成，当前共${有效成就表.length}项成就`);
 		return 有效成就表;
 
 	} catch (e) {
-		console.error("【成就系统】更新失败：", e);
+		error("【成就系统】更新失败：", e);
 		return [];
 	}
 }

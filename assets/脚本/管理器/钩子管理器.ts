@@ -1,3 +1,5 @@
+import { error, warn } from "cc";
+
 // 使用发布订阅模式 绑定游戏中关键时机
 export let 钩子函数对象: Record<string, Function[]> = {};
 
@@ -8,7 +10,7 @@ export function 注册钩子(时机: string, 函数: Function) {
 	const 目标数组 = 钩子函数对象[时机];
 
 	if (目标数组.includes(函数)) {
-		console.warn(`执行钩子[${时机}]已注册`);
+		warn(`执行钩子[${时机}]已注册`);
 		return () => { };
 	}
 
@@ -39,8 +41,8 @@ export function 执行钩子(时机: string, 参数列表: any[] = []) {
 					结果.push(执行结果);
 				}
 			} catch (e) {
-				console.error(`执行钩子[${时机}]第${索引 + 1}个函数出错:`, e);
-				console.warn(钩子函数)
+				error(`执行钩子[${时机}]第${索引 + 1}个函数出错:`, e);
+				warn(钩子函数)
 			}
 		});
 	}

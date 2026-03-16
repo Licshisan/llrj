@@ -1,11 +1,5 @@
-// 创建对象代理 用于访问对象不存在的属性时 返回默认的安全值
-function 创建对象代理<T extends object>(目标对象: T = {} as T, 默认属性值: any = 0): T & Record<string, any> {
-    return new Proxy(目标对象, {
-        get(obj, key: string) {
-            return key in obj ? obj[key as keyof T] : 默认属性值;
-        }
-    }) as T & Record<string, any>;
-}
+import { error, sys } from "cc";
+import { 创建对象代理 } from "../方法函数/公共函数";
 
 // 游戏默认存档数据
 const 默认存档 = {
@@ -98,16 +92,15 @@ function 创建存档代理(存档) {
     return 存档
 }
 
-
 export function 获取存档列表(): (typeof 存档)[] {
-    const 存档名称列表字符串 = localStorage.getItem("存档名称列表")
+    const 存档名称列表字符串 = sys.localStorage.getItem("存档名称列表")
     const 存档名称列表 = 存档名称列表字符串 ? JSON.parse(存档名称列表字符串) : []
     return 存档名称列表.filter(Boolean).map((存档名称: string) => {
         try {
-            const 存档字符串 = localStorage.getItem(存档名称)
+            const 存档字符串 = sys.localStorage.getItem(存档名称)
             return 存档字符串 ? JSON.parse(存档字符串) : null
         } catch (e) {
-            console.warn(`存档【${存档名称}】损坏，已跳过`, e);
+            error(`存档【${存档名称}】损坏，已跳过`, e);
             return null;
         }
     }).filter(Boolean);
@@ -115,57 +108,57 @@ export function 获取存档列表(): (typeof 存档)[] {
 
 export function 创建存档() {
     const 存档名称 = "存档_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-    const 存档名称列表字符串 = localStorage.getItem("存档名称列表")
+    const 存档名称列表字符串 = sys.localStorage.getItem("存档名称列表")
     const 存档名称列表 = 存档名称列表字符串 ? JSON.parse(存档名称列表字符串) : []
     存档名称列表.push(存档名称)
-    localStorage.setItem("存档名称列表", JSON.stringify(存档名称列表))
+    sys.localStorage.setItem("存档名称列表", JSON.stringify(存档名称列表))
 
     const 新建存档 = { ...默认存档, 存档名称 }
     try {
-        localStorage.setItem(存档名称, JSON.stringify(新建存档))
-        localStorage.setItem("存档名称列表", JSON.stringify(存档名称列表))
+        sys.localStorage.setItem(存档名称, JSON.stringify(新建存档))
+        sys.localStorage.setItem("存档名称列表", JSON.stringify(存档名称列表))
 
         存档 = 创建存档代理(JSON.parse(JSON.stringify(新建存档)))
     } catch (e) {
-        console.error("创建存档失败（容量不足）：", e);
+        error("创建存档失败（容量不足）：", e);
         存档名称列表.pop();
-        localStorage.setItem("存档名称列表", JSON.stringify(存档名称列表))
+        sys.localStorage.setItem("存档名称列表", JSON.stringify(存档名称列表))
     }
 }
 
 export function 删除存档(存档名称: string) {
-    const 存档名称列表字符串 = localStorage.getItem("存档名称列表")
+    const 存档名称列表字符串 = sys.localStorage.getItem("存档名称列表")
     const 存档名称列表 = 存档名称列表字符串 ? JSON.parse(存档名称列表字符串) : []
     const 新存档名称列表 = 存档名称列表.filter((名称: string) => 名称 !== 存档名称)
-    localStorage.setItem("存档名称列表", JSON.stringify(新存档名称列表))
-    localStorage.removeItem(存档名称)
+    sys.localStorage.setItem("存档名称列表", JSON.stringify(新存档名称列表))
+    sys.localStorage.removeItem(存档名称)
     存档 = 默认存档
 }
 
 export function 加载存档(存档名称: string) {
-    const 存档字符串 = localStorage.getItem(存档名称)
+    const 存档字符串 = sys.localStorage.getItem(存档名称)
     const 存档对象 = 存档字符串 ? JSON.parse(存档字符串) : {}
     存档 = 创建存档代理(存档对象)
 }
 
 export function 保存存档() {
-    localStorage.setItem(存档.存档名称, JSON.stringify(存档))
+    sys.localStorage.setItem(存档.存档名称, JSON.stringify(存档))
 }
 
 export function 备份存档(备份名称: string) {
     if (!存档.存档名称) {
-        console.error("请先加载存档再进行备份！");
+        error("请先加载存档再进行备份！");
         return;
     }
-    localStorage.setItem(存档.存档名称 + "_备份" + 备份名称, JSON.stringify(存档))
+    sys.localStorage.setItem(存档.存档名称 + "_备份" + 备份名称, JSON.stringify(存档))
 }
 
 export function 加载备份(备份名称: string) {
     if (!存档.存档名称) {
-        console.error("请先加载原存档再加载备份！");
+        error("请先加载原存档再加载备份！");
         return;
     }
-    const 存档字符串 = localStorage.getItem(存档.存档名称 + "_备份" + 备份名称)
+    const 存档字符串 = sys.localStorage.getItem(存档.存档名称 + "_备份" + 备份名称)
     const 存档对象 = 存档字符串 ? JSON.parse(存档字符串) : {}
     存档 = 创建存档代理(存档对象)
 }

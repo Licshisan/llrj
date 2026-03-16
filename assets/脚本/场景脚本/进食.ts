@@ -30,13 +30,13 @@ export class 进食 extends Component {
 	创建分页() {
 		const 食物表 = 获取食物列表()
 		if (!食物表 || 食物表.length === 0) {
-			console.warn("食物列表为空，无法创建分页");
+			warn("食物列表为空，无法创建分页");
 			return;
 		}
 		const 总页数 = Math.ceil(食物表.length / this.页大小);
 		const 分页组件 = this.分页视图.getComponent(PageView);
 		if (!分页组件) {
-			console.error("分页视图未挂载PageView组件");
+			error("分页视图未挂载PageView组件");
 			return;
 		}
 		分页组件.removeAllPages();
@@ -99,7 +99,7 @@ export class 进食 extends Component {
 						this.创建单页(页码, 分页组件);
 						this.更新属性();
 					} catch (e) {
-						console.error("使用食物失败：", e);
+						error("使用食物失败：", e);
 						播放文本(this.标签, "使用食物时发生错误，请反馈开发者！");
 					}
 				},

@@ -8,9 +8,11 @@ export type 概率类型 = {
 	概率: number,
 	数量?: number,
 }
+
 export function 钳制(number: number, min: number, max: number): number {
 	return Math.min(Math.max(number, min), max);
 }
+
 export function 格式化日期字符串(date: number): string {
 	const d = new Date(date);
 	const year = d.getFullYear();
@@ -21,9 +23,11 @@ export function 格式化日期字符串(date: number): string {
 	const seconds = String(d.getSeconds()).padStart(2, "0");
 	return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
+
 export function 格式化金钱(num: number): string {
 	return `${(num / 10).toFixed(1)}元`;
 }
+
 export function 格式化数字(num: number): string {
 	if (Math.abs(num) >= 100000000) {
 		// 亿单位
@@ -37,7 +41,7 @@ export function 格式化数字(num: number): string {
 	}
 }
 
-
+/* 仅仅抽取第一个物品 */
 export function 按权重抽取(weights: 概率类型[]): string {
 	let total = 0;
 	for (const item of weights) {
@@ -52,18 +56,20 @@ export function 按权重抽取(weights: 概率类型[]): string {
 
 	return weights[0].名称;
 }
-export function 按概率抽取(items: 概率类型[], force = false): string {
+
+/* 抽取物品 */
+export function 按概率抽取(物品表: 概率类型[], 必中 = false): string {
 	const drops = [] as Array<{ 名称: string; 数量: number }>;
 
 	// 按概率抽取物品，如果force且没有掉落就重抽
 	do {
 		drops.length = 0; // 清空之前的掉落
-		for (const item of items) {
+		for (const item of 物品表) {
 			if (Math.random() * 100 < item.概率) {
 				drops.push({ 名称: item.名称, 数量: item.数量 });
 			}
 		}
-	} while (force && drops.length === 0 && items.length > 0); // 强制模式下重抽直到有掉落
+	} while (必中 && drops.length === 0 && 物品表.length > 0); // 强制模式下重抽直到有掉落
 
 	// 处理获得的物品
 	let res = "";
@@ -95,6 +101,7 @@ export function 对象求和(obj: Record<string, number>) {
 	}
 	return sum;
 }
+
 export function 自动进食(进食列表 = ['果子', '熟肉', '干脆面']): boolean {
 	if (存档.饥饿 <= 0) {
 		let 初始饥饿 = 存档.饥饿
@@ -139,4 +146,13 @@ export function 深克隆<T>(target: T): T {
 		}
 	}
 	return cloneObj;
+}
+
+// 创建对象代理 用于访问对象不存在的属性时 返回默认的安全值
+export function 创建对象代理<T extends object>(目标对象: T = {} as T, 默认属性值: any = 0): T & Record<string, any> {
+    return new Proxy(目标对象, {
+        get(obj, key: string) {
+            return key in obj ? obj[key as keyof T] : 默认属性值;
+        }
+    }) as T & Record<string, any>;
 }

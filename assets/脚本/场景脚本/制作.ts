@@ -30,13 +30,13 @@ export class 制作 extends Component {
     创建分页() {
         const 制作表 = 获取制作列表()
         if (!制作表 || 制作表.length === 0) {
-            console.warn("制作列表为空，无法创建分页");
+            warn("制作列表为空，无法创建分页");
             return;
         }
         const 总页数 = Math.ceil(制作表.length / this.页大小);
         const 分页组件 = this.分页视图.getComponent(PageView);
         if (!分页组件) {
-            console.error("分页视图未挂载PageView组件");
+            error("分页视图未挂载PageView组件");
             return;
         }
         分页组件.removeAllPages();

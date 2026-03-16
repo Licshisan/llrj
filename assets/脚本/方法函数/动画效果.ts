@@ -1,8 +1,8 @@
-import { Node, Label, Color, tween, v3, Vec3, UIOpacity, Sprite, UITransform, Widget, find } from "cc";
+import { Node, Label, Color, tween, v3, Vec3, UIOpacity, Sprite, UITransform, find } from "cc";
 import { 设置 } from "../管理器/设置管理器";
 
 // 逐字播放文本效果
-export function 播放文本(目标节点: Node, 文本内容: string, 间隔时间: number = 100): void {
+export function 播放文本(目标节点: Node, 文本内容: string, 间隔时间: number = 120): void {
 	目标节点.active = true;
 
 	const 标签组件 = 目标节点.getComponent(Label);
@@ -30,7 +30,7 @@ export function 播放文本(目标节点: Node, 文本内容: string, 间隔时
 }
 
 // 淡入效果
-export function 淡入(目标节点: Node, 持续时长: number = 2.3): void {
+export function 淡入(目标节点: Node, 持续时长: number = 2.4): void {
 	if (!目标节点) return;
 
 	// 确保有UIOpacity组件
@@ -42,7 +42,7 @@ export function 淡入(目标节点: Node, 持续时长: number = 2.3): void {
 }
 
 // 淡出效果
-export function 淡出(目标节点: Node, 持续时长: number = 2.3): void {
+export function 淡出(目标节点: Node, 持续时长: number = 2.4): void {
 	if (!目标节点) return;
 	let 透明组件 = 目标节点.getComponent(UIOpacity) || 目标节点.addComponent(UIOpacity);
 
@@ -97,7 +97,7 @@ export function 多次闪烁(目标节点: Node): void {
 		blinkCount++;
 
 		if (blinkCount < 8) {
-			setTimeout(blinkAction, 60);
+			labelComp.scheduleOnce(blinkAction, 60);
 		} else {
 			labelComp.color = originalColor;
 		}
@@ -188,7 +188,7 @@ export function 缩小消失(目标节点: Node, 持续时长: number = 0.4): vo
 }
 
 // 创建动画文字
-export function 创建动画文字(布局节点: Node, 文本内容: string, 索引: number, 是否白色: boolean = true) {
+export function 创建动画文字(布局节点: Node, 文本内容: string, 索引: number, 颜色: Color = Color.WHITE) {
 	const 文字节点 = new Node(`lable_${索引}`);
 	const 标签组件 = 文字节点.addComponent(Label);
 
@@ -199,7 +199,7 @@ export function 创建动画文字(布局节点: Node, 文本内容: string, 索
 	标签组件.fontSize = 38;
 	标签组件.lineHeight = 50;
 	标签组件.string = 文本内容;
-	标签组件.color = 是否白色 ? Color.WHITE : Color.BLACK;
+	标签组件.color = 颜色
 
 	const 宽度 = 布局节点.getComponent(UITransform).width || 650
 	文字节点.getComponent(UITransform).setContentSize(宽度, 50);
@@ -208,7 +208,7 @@ export function 创建动画文字(布局节点: Node, 文本内容: string, 索
 }
 
 // 创建普通文字
-export function 创建普通文字(布局节点: Node, 文本内容: string, 索引: number, 是否激活: boolean) {
+export function 创建普通文字(布局节点: Node, 文本内容: string, 索引: number, 颜色: Color = Color.WHITE) {
 	const 文字节点 = new Node(`label_${索引}`);
 	const 标签组件 = 文字节点.addComponent(Label);
 
@@ -217,7 +217,7 @@ export function 创建普通文字(布局节点: Node, 文本内容: string, 索
 	标签组件.lineHeight = 40;
 	标签组件.overflow = Label.Overflow.RESIZE_HEIGHT;
 	标签组件.horizontalAlign = Label.HorizontalAlign.LEFT;
-	标签组件.color = 是否激活 ? new Color(0, 255, 0) : Color.WHITE;
+	标签组件.color = 颜色
 
 	文字节点.setParent(布局节点);
 	文字节点.setPosition(0, 0);

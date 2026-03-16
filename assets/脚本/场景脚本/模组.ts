@@ -15,9 +15,9 @@ export function 加载模组列表() {
 		// const 模组文件夹 = native.fileUtils.getWritablePath() + "mods/";
 
 		const 模组文件夹 = "/storage/emulated/0/LLRJ/mods/"
-		console.log(模组文件夹)
+		log(模组文件夹)
 		if (!native.fileUtils.isDirectoryExist(模组文件夹)) {
-			console.warn("mods 文件夹不存在！");
+			warn("mods 文件夹不存在！");
 			native.fileUtils.createDirectory(模组文件夹);
 			native.fileUtils.createDirectory(native.fileUtils.getWritablePath() + "测试/");
 			return [];
@@ -31,7 +31,7 @@ export function 加载模组列表() {
 			})
 			.filter(名称 => 名称);
 
-		console.log("检测到模组列表:", 模组列表);
+		log("检测到模组列表:", 模组列表);
 		return 模组列表;
 	} catch {
 		return []
@@ -45,7 +45,7 @@ export function 加载模组(模组名称: string) {
 	const 模组路径 = 模组文件夹 + 模组名称 + "/";
 
 	if (!native.fileUtils.isDirectoryExist(模组路径)) {
-		console.warn("模组不存在:", 模组名称);
+		warn("模组不存在:", 模组名称);
 		return;
 	}
 
@@ -59,9 +59,9 @@ export function 加载模组(模组名称: string) {
 			const 对象 = new Function('return ' + 表达式脚本)();
 			const 对象名 = 文件路径.split("/").pop().replace(".js", "");
 			globalThis.模组[对象名] = 对象
-			console.log("加载模组文件:", 对象名, 对象);
+			log("加载模组文件:", 对象名, 对象);
 		} catch (e) {
-			console.error("加载模组文件失败:", 文件路径, e);
+			error("加载模组文件失败:", 文件路径, e);
 		}
 	});
 }
@@ -95,13 +95,13 @@ export class 模组 extends Component {
 	创建分页() {
 		const 模组表 = 加载模组列表()
 		if (!模组表 || 模组表.length === 0) {
-			console.warn("模组列表为空，无法创建分页");
+			warn("模组列表为空，无法创建分页");
 			return;
 		}
 		const 总页数 = Math.ceil(模组表.length / this.页大小);
 		const 分页组件 = this.分页视图.getComponent(PageView);
 		if (!分页组件) {
-			console.error("分页视图未挂载PageView组件");
+			error("分页视图未挂载PageView组件");
 			return;
 		}
 		分页组件.removeAllPages();

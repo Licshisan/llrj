@@ -325,7 +325,7 @@ export const 默认特性表: 特性定义类型[] = [
 						对局.伤害 = Math.floor(对局.伤害 * 伤害倍率);
 						const S = Math.floor(计算最大生命() * 0.08);
 						存档.生命 -= S;
-						console.log('拼命')
+						log('拼命')
 						对局.结果文本.push(`【「拼命」攻击加成${伤害倍率.toFixed(2)}%，损失${S}点生命】`);
 					}
 				}

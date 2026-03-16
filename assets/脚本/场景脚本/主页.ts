@@ -170,7 +170,7 @@ export class 主页 extends Component {
             const 地区事件表 = 获取地区事件()
             执行钩子("计算地区事件表", [地区事件表])
 
-            console.log('事件', 地区事件表)
+            log('事件', 地区事件表)
             this.node.getComponent(事件).触发事件(按权重抽取(地区事件表))
         } else {
             存档.其他.捡道具次数++

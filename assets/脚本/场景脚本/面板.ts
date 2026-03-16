@@ -19,7 +19,7 @@ export class 面板 extends Component {
     start() {
         const 天赋表 = 获取天赋表()
 
-        console.log(天赋表)
+        log(天赋表)
 
         let index = 0
         for (let 天赋名称 in 存档.天赋) {
