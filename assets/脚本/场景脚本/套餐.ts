@@ -1,6 +1,6 @@
-import { Component, Prefab, Button, director, UITransform, Layout, PageView, instantiate, Label, _decorator, Node } from "cc";
+import { Component, Prefab, Button, director, UITransform, Layout, PageView, instantiate, Label, _decorator, Node, Color, Widget } from "cc";
 import { 播放文本, 淡入 } from "../方法函数/动画效果";
-import { 获取套餐列表 } from "../内容加载/套餐";
+import { 获取套餐列表, 套餐项目类型 } from "../内容加载/套餐";
 import { 执行钩子 } from "../管理器/钩子管理器";
 import { 保存存档, 创建存档, 存档 } from "../管理器/存档管理器";
 const { ccclass, property } = _decorator;
@@ -44,13 +44,11 @@ export class 套餐 extends Component {
 		分页组件.removeAllPages();
 
 		for (let 页码 = 0; 页码 < 总页数; 页码++) {
-			this.scheduleOnce(() => this.创建单页(页码, 分页组件), 页码 * 0.01);
+			this.scheduleOnce(() => this.创建单页(页码, 分页组件, 套餐表), 页码 * 0.01);
 		}
 	}
 
-	创建单页(页码: number, 分页组件: PageView) {
-		const 套餐表 = 获取套餐列表()
-
+	创建单页(页码: number, 分页组件: PageView, 套餐表: 套餐项目类型[]) {
 		const 单页 = new Node(`页_${页码 + 1}`);
 		const 页面视图大小 = this.分页视图.getComponent(UITransform)
 		单页.addComponent(UITransform).setContentSize(页面视图大小.width, 页面视图大小.height);
@@ -71,7 +69,7 @@ export class 套餐 extends Component {
 
 			const 套餐名称 = 套餐.名称 || `套餐${套餐序号 + 1}`;
 			const 套餐描述 = 套餐.描述 || `套餐${套餐序号 + 1}`;
-			选项按钮.getChildByName("标签").getComponent(Label).string = `${套餐名称}：${套餐描述}`;
+			选项按钮.getChildByName("标签").getComponent(Label).string = `【${套餐名称}】${套餐描述}`;
 
 			选项按钮.on(Button.EventType.CLICK, () => {
 				创建存档()
