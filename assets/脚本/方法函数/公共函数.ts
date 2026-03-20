@@ -1,16 +1,12 @@
 import { 存档 } from "../管理器/存档管理器";
 import { 获取食物项目 } from "../内容加载/食物"
-import { 计算恢复量, 计算最大生命 } from "./属性计算"
 import { director } from "cc";
+import { 计算数值, 计算最大生命 } from "./属性计算";
 
 export type 概率类型 = {
 	名称: string,
 	概率: number,
 	数量?: number,
-}
-
-export function 钳制(number: number, min: number, max: number): number {
-	return Math.min(Math.max(number, min), max);
 }
 
 export function 格式化日期字符串(date: number): string {
@@ -117,7 +113,7 @@ export function 自动进食(进食列表 = ['果子', '熟肉', '干脆面']): 
 }
 
 export function 自然恢复生命() {
-	const 回复量 = 计算恢复量();
+	const 回复量 = 计算数值("恢复量", 4);
 	存档.生命 += 回复量;
 	if (存档.生命 > 计算最大生命()) {
 		存档.生命 = 计算最大生命();

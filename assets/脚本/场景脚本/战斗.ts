@@ -4,7 +4,7 @@ import { 从0放大缩小, 多次闪烁, 播放文本, 放大出现, 缩小消�
 import { 主页 } from "./主页";
 import { 敌人项目类型, 获取敌人 } from "../内容加载/敌人";
 import { 执行钩子 } from "../管理器/钩子管理器";
-import { 计算压制, 计算最大攻击, 计算最大生命, 计算最大防御, 计算逃跑 } from "../方法函数/属性计算";
+import { 计算最大压制, 计算最大攻击, 计算最大生命, 计算最大防御, 计算最大逃跑 } from "../方法函数/属性计算";
 import { 设置 } from "../管理器/设置管理器";
 import { 按概率抽取, 概率类型 } from "../方法函数/公共函数";
 const { ccclass, property } = _decorator;
@@ -98,8 +98,8 @@ export class 战斗 extends Component {
             攻击: 计算最大攻击(),
             防御: 计算最大防御(),
             最大生命: 计算最大生命(),
-            逃跑: 计算逃跑(),
-            压制: 计算压制(),
+            逃跑: 计算最大逃跑(),
+            压制: 计算最大压制(),
             增加声望: 1,
             增加属性: 5,
             损失健康: 1,
@@ -461,12 +461,12 @@ export class 战斗 extends Component {
     }
 
     计算主角逃跑成功率() {
-        const 逃跑率 = 计算逃跑() + this.对局.逃跑修正 - this.敌人.压制
+        const 逃跑率 = 计算最大逃跑() + this.对局.逃跑修正 - this.敌人.压制
         return Math.min(Math.max(逃跑率, 0), 100);
     }
 
     计算敌人逃跑成功率() {
-        const 敌人逃跑成功率 = this.敌人.逃跑 - 计算压制() - this.对局.压制修正
+        const 敌人逃跑成功率 = this.敌人.逃跑 - 计算最大压制() - this.对局.压制修正
         return Math.min(Math.max(敌人逃跑成功率, 0), 100);
     }
 

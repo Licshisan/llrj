@@ -2,7 +2,7 @@ import { _decorator, Component, Node, Button, director, Label, UITransform } fro
 import { 存档 } from "../管理器/存档管理器";
 import { 创建普通文字, 播放文本 } from "../方法函数/动画效果";
 import { 获取天赋表 } from "../内容加载/天赋";
-import { 计算压制, 计算逃跑 } from "../方法函数/属性计算";
+import { 计算最大压制, 计算最大逃跑 } from "../方法函数/属性计算";
 const { ccclass, property } = _decorator;
 
 @ccclass("面板")
@@ -38,7 +38,7 @@ export class 面板 extends Component {
         const 属性表 = [
             {
                 名称: "逃跑",
-                数值: 计算逃跑(),
+                数值: 计算最大逃跑(),
                 说明: "逃跑基本成功率，初始为50~。",
             },
             {
@@ -65,7 +65,7 @@ export class 面板 extends Component {
 
             {
                 名称: "压制",
-                数值: 计算压制(),
+                数值: 计算最大压制(),
                 说明: "降低敌人逃跑率。",
             },
             {
