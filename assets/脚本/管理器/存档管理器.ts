@@ -10,10 +10,9 @@ const 默认存档 = {
 
     天数: 1,
     距离: 1,
-    地区: "",
     停留天数: { 荒野: 0 } as Record<string, number>,
-    按钮: { 前进: true} as Record<string, boolean>,
-
+    按钮: { 前进: true } as Record<string, boolean>,
+    特殊敌人: {} as Record<string, object>,
     // 玩家
     健康: 30,
 
@@ -36,7 +35,7 @@ const 默认存档 = {
     声望: 0,
 
     罪恶: 0,
-    烟瘾: 0,
+    烟瘾率: 0,
 
     金钱: 5,
     积分: 0,
@@ -45,12 +44,15 @@ const 默认存档 = {
     面经: 0,
 
     物品: { 木材: 0 } as Record<string, number>,
-    架势: { 平衡: 0 } as Record<string, number>,
-
-    效果: { 作者的保护: true }  as Record<string, boolean>, //各种效果的叠加 道具特性/伙伴特性/状态特性/原版特性/天赋特性/特质特性/加成特性/
-
+    当日加成: { } as Record<string, number>,
+    
+    架势: { 平衡: false } as Record<string, boolean>,
+    架势经验: { 平衡: 0 } as Record<string, number>,
+    
+    天赋: { 饥饿: false }as Record<string, boolean>,
     状态: { 饥饿: false } as Record<string, boolean>,
     剧情: { 剧情: false } as Record<string, boolean>,
+    伙伴: {} as Record<string, any>,
     其他: {} as Record<string, number>,
     // 计数器
     事件次数: {} as Record<string, number>,
