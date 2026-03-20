@@ -20,13 +20,9 @@ export interface 敌人项目类型 {
 	攻击前: (上下文: 战斗上下文) => string | void,
 	攻击时: (上下文: 战斗上下文) => string | void,
 	攻击后: (上下文: 战斗上下文) => string | void,
-	被攻击前: (上下文: 战斗上下文) => string | void,
-	被攻击时: (上下文: 战斗上下文) => string | void,
-	被攻击后: (上下文: 战斗上下文) => string | void,
 	胜利效果: (上下文: 战斗上下文) => string | void,
 	失败效果: (上下文: 战斗上下文) => string | void,
-	特殊: boolean,
-	技能点数: number
+	其他: number
 }
 
 function ensureFunction(value: any): (上下文: 战斗上下文) => string | void {
