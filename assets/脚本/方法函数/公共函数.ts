@@ -149,10 +149,28 @@ export function 深克隆<T>(target: T): T {
 }
 
 // 创建对象代理 用于访问对象不存在的属性时 返回默认的安全值
-export function 创建对象代理<T extends object>(目标对象: T = {} as T, 默认属性值: any = 0): T & Record<string, any> {
-    return new Proxy(目标对象, {
-        get(obj, key: string) {
-            return key in obj ? obj[key as keyof T] : 默认属性值;
+export function 创建默认值代理<T extends Record<string, any>>(obj: T): T {
+    return new Proxy(obj, {
+        get(target, key: string) {
+            const value = target[key];
+            if (typeof value !== 'object' || value === null) {
+                return value;
+            }
+            if (Array.isArray(value)) {
+                return value;
+            }
+            const isBooleanMap = Object.values(value).some(v => typeof v === 'boolean');
+            return new Proxy(value, {
+                get(innerTarget, innerKey: string) {
+                    const innerValue = innerTarget[innerKey];
+
+                    if (innerValue !== undefined) {
+                        return innerValue;
+                    }
+
+                    return isBooleanMap ? false : 0;
+                }
+            });
         }
-    }) as T & Record<string, any>;
+    });
 }
