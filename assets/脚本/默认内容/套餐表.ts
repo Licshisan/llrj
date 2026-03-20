@@ -1,5 +1,5 @@
 import { 战斗上下文 } from "../场景脚本/战斗";
-import { 按概率抽取 } from "../方法函数/公共函数";
+import { 抽取物品 } from "../方法函数/公共函数";
 import { 存档 } from "../管理器/存档管理器";
 
 interface 套餐定义类型 {
@@ -43,7 +43,7 @@ export const 默认套餐表: 套餐定义类型[] = [
 			战斗胜利: ({ 敌人, 对局 }) => {
 				if (存档.套餐名称 === '修罗模式') {
 					if (Math.random() * 100 < 存档.天数 + 20) {
-						const dropItems = 按概率抽取(敌人.掉落物, true);
+						const dropItems = 抽取物品(敌人.掉落物, true);
 						if (dropItems) {
 							对局.结果文本.push(`【修罗：${dropItems}】`)
 						}
@@ -53,7 +53,7 @@ export const 默认套餐表: 套餐定义类型[] = [
 			收集材料: ({ 结果文本, 物品表 }) => {
 				if (存档.套餐名称 === '修罗模式') {
 					if (Math.random() * 100 < 存档.天数 + 20) {
-						let 修罗结果 = 按概率抽取(物品表, true);
+						let 修罗结果 = 抽取物品(物品表, true);
 						结果文本.push(`【修罗：${修罗结果}】`);
 					}
 				}

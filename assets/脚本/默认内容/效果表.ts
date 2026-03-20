@@ -1,7 +1,7 @@
 import { 获取伙伴特性 } from "../内容加载/伙伴特性";
 import { 获取地区名称 } from "../内容加载/地区";
 import { 战斗上下文 } from "../场景脚本/战斗";
-import { 按概率抽取, 格式化金钱 } from "../方法函数/公共函数";
+import { 抽取物品, 格式化金钱 } from "../方法函数/公共函数";
 import { 存档 } from "../管理器/存档管理器";
 
 export const 默认效果表 = [

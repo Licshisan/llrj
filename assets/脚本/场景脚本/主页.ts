@@ -2,7 +2,7 @@ import { _decorator, Button, Color, Component, director, Label, Node, Sprite } f
 import { 保存存档, 存档 } from '../管理器/存档管理器';
 import { 获取地区事件, 获取地区名称, 获取地区敌人, 获取地区物品 } from '../内容加载/地区';
 import { 计算前进探索消耗精力, 计算前进探索消耗饥饿, 计算最大攻击, 计算最大生命, 计算最大精力, 计算最大防御, 计算最大饥饿 } from '../方法函数/属性计算';
-import { 按权重抽取, 按概率抽取, 格式化金钱, 自动进食, 自然恢复生命 } from '../方法函数/公共函数';
+import { 抽取项目, 抽取物品, 格式化金钱, 自动进食, 自然恢复生命 } from '../方法函数/公共函数';
 import { 播放文本, 放大缩小 } from '../方法函数/动画效果';
 import { 事件 } from './事件';
 import { 战斗 } from './战斗';
@@ -164,14 +164,14 @@ export class 主页 extends Component {
         if (随机数 < 计算容器.战斗权重) {
             存档.其他.战斗次数++
             const 地区敌人 = 获取地区敌人()
-            this.node.getComponent(战斗).进入战斗(按权重抽取(地区敌人));
+            this.node.getComponent(战斗).进入战斗(抽取项目(地区敌人));
         } else if (随机数 < 计算容器.战斗权重 + 计算容器.事件权重) {
             存档.其他.随机事件次数++
             const 地区事件表 = 获取地区事件()
             执行钩子("计算地区事件表", [地区事件表])
 
             log('事件', 地区事件表)
-            this.node.getComponent(事件).触发事件(按权重抽取(地区事件表))
+            this.node.getComponent(事件).触发事件(抽取项目(地区事件表))
         } else {
             存档.其他.捡道具次数++
 
@@ -179,7 +179,7 @@ export class 主页 extends Component {
             let 结果文本: string[] = []
             执行钩子("收集材料前", [{ 物品表, 结果文本 }])
 
-            const 基本抽取 = 按概率抽取(物品表)
+            const 基本抽取 = 抽取物品(物品表)
             if (!基本抽取) {
                 存档.其他.啥也没找到次数++
             }

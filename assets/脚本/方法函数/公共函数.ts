@@ -37,8 +37,7 @@ export function 格式化数字(num: number): string {
 	}
 }
 
-/* 仅仅抽取第一个物品 */
-export function 按权重抽取(weights: 概率类型[]): string {
+export function 抽取项目(weights: 概率类型[]): string {
 	let total = 0;
 	for (const item of weights) {
 		total += item.概率;
@@ -53,11 +52,10 @@ export function 按权重抽取(weights: 概率类型[]): string {
 	return weights[0].名称;
 }
 
-/* 抽取物品 */
-export function 按概率抽取(物品表: 概率类型[], 必中 = false): string {
+export function 抽取物品(物品表: 概率类型[], 必中 = false): string {
 	const drops = [] as Array<{ 名称: string; 数量: number }>;
 
-	// 按概率抽取物品，如果force且没有掉落就重抽
+	// 抽取物品物品，如果force且没有掉落就重抽
 	do {
 		drops.length = 0; // 清空之前的掉落
 		for (const item of 物品表) {
