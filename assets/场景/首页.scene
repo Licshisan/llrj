@@ -1691,7 +1691,7 @@
     ],
     "value": {
       "__type__": "cc.Size",
-      "width": 166,
+      "width": 166.2265625,
       "height": 78
     }
   },
@@ -1941,7 +1941,7 @@
     ],
     "value": {
       "__type__": "cc.Size",
-      "width": 166,
+      "width": 166.2265625,
       "height": 78
     }
   },
@@ -2188,7 +2188,7 @@
     ],
     "value": {
       "__type__": "cc.Size",
-      "width": 166,
+      "width": 166.2265625,
       "height": 78
     }
   },
