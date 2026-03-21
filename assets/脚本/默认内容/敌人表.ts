@@ -2,8 +2,8 @@ import { 获取特性 } from "../内容加载/特性";
 import { 概率类型, 跳转场景 } from "../方法函数/公共函数";
 import { 计算最大攻击, 计算最大生命, 计算最大防御 } from "../方法函数/属性计算";
 import { 保存存档, 删除存档, 存档 } from "../管理器/存档管理器";
-import { 战斗上下文 } from "../场景脚本/战斗";
 import { 随机分散文本和战斗元素 } from "../方法函数/动画效果";
+import { 对局类型 } from "../场景脚本/战斗";
 
 interface 敌人定义类型 {
 	名称: string,
@@ -21,15 +21,15 @@ interface 敌人定义类型 {
 	损失健康?: number | (() => number),
 	出场语?: string | (() => string),
 	掉落物?: 概率类型[] | (() => 概率类型[]),
-	战斗初始化?: string | ((上下文: 战斗上下文) => string | void),
-	攻击前?: string | ((上下文: 战斗上下文) => string | void),
-	攻击时?: string | ((上下文: 战斗上下文) => string | void),
-	攻击后?: string | ((上下文: 战斗上下文) => string | void),
-	被攻击前?: string | ((上下文: 战斗上下文) => string | void),
-	被攻击时?: string | ((上下文: 战斗上下文) => string | void),
-	被攻击后?: string | ((上下文: 战斗上下文) => string | void),
-	胜利效果?: string | ((上下文: 战斗上下文) => string | void),
-	失败效果?: string | ((上下文: 战斗上下文) => string | void),
+	战斗初始化?: string | ((对局: 对局类型) => string | void),
+	攻击前?: string | ((对局: 对局类型) => string | void),
+	攻击时?: string | ((对局: 对局类型) => string | void),
+	攻击后?: string | ((对局: 对局类型) => string | void),
+	被攻击前?: string | ((对局: 对局类型) => string | void),
+	被攻击时?: string | ((对局: 对局类型) => string | void),
+	被攻击后?: string | ((对局: 对局类型) => string | void),
+	胜利效果?: string | ((对局: 对局类型) => string | void),
+	失败效果?: string | ((对局: 对局类型) => string | void),
 }
 
 export const 默认敌人表: 敌人定义类型[] = [
