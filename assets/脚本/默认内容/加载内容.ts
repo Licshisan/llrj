@@ -72,7 +72,6 @@ export async function 加载游戏内容() {
 	挂载全局变量()
 	注册钩子函数()
 	log(钩子管理器.钩子函数对象)
-	log("游戏内容加载成功！")
 	加载完成 = true
 
 	// if (sys.isNative) {

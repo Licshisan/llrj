@@ -2,11 +2,11 @@ import { _decorator, Component, Node, Label, Button, ProgressBar } from "cc";
 import { 保存存档, 存档 } from "../管理器/存档管理器";
 import { 从0放大缩小, 多次闪烁, 播放文本, 放大出现, 缩小消失, 闪烁一次, 震动 } from "../方法函数/动画效果";
 import { 主页 } from "./主页";
-import { 敌人项目类型, 获取敌人 } from "../内容加载/敌人";
 import { 执行钩子 } from "../管理器/钩子管理器";
 import { 计算最大压制, 计算最大攻击, 计算最大生命, 计算最大防御, 计算最大逃跑 } from "../方法函数/属性计算";
 import { 设置 } from "../管理器/设置管理器";
 import { 抽取物品, 概率类型 } from "../方法函数/公共函数";
+import { 默认敌人表 } from "../默认内容/敌人表";
 const { ccclass, property } = _decorator;
 
 type 战斗角色 = {
@@ -75,7 +75,7 @@ export class 战斗 extends Component {
     对局: 对局类型
 
     进入战斗(敌人名称: string) {
-        const 敌人 = 获取敌人(敌人名称)
+        const 敌人 = 默认敌人表.find(e => e.名称 === 敌人名称);
         if (!敌人) {
             this.结束战斗(`未知的敌人：【${敌人名称}】（请反馈开发者）`)
             return;

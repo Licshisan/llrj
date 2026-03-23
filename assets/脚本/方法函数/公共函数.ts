@@ -1,7 +1,7 @@
 import { 存档 } from "../管理器/存档管理器";
-import { 获取食物项目 } from "../内容加载/食物"
 import { director } from "cc";
 import { 计算数值, 计算最大生命 } from "./属性计算";
+import { 默认食物表 } from "../默认内容/食物表";
 
 export type 概率类型 = {
 	名称: string,
@@ -100,7 +100,8 @@ export function 自动进食(进食列表 = ['果子', '熟肉', '干脆面']): 
 	if (存档.饥饿 <= 0) {
 		let 初始饥饿 = 存档.饥饿
 		for (let i = 0; i <= 进食列表.length; i++) {
-			获取食物项目(进食列表[i])?.使用()
+			const 食物 = 默认食物表.find(f => f.名称 === 进食列表[i]);
+			食物.使用()
 			if (初始饥饿 !== 存档.饥饿) {
 				return true
 			}
