@@ -25,8 +25,11 @@ type 战斗角色 = {
     出场语: string,
     掉落物: 概率类型[],
     攻击前?: (对局: 对局类型) => string | void,
+    被攻击前?: (对局: 对局类型) => string | void,
     攻击时?: (对局: 对局类型) => string | void,
+    被攻击时?: (对局: 对局类型) => string | void,
     攻击后?: (对局: 对局类型) => string | void,
+    被攻击后?: (对局: 对局类型) => string | void,
     胜利效果?: (对局: 对局类型) => string | void,
     失败效果?: (对局: 对局类型) => string | void,
     其他: any
@@ -34,11 +37,9 @@ type 战斗角色 = {
 
 export interface 对局类型 {
     回合数: number,
-    主角回合: boolean,
-    敌人回合: boolean,
 
-    攻击方: 战斗角色,
-    受击方: 战斗角色,    
+    主角: 战斗角色,
+    敌人: 战斗角色,    
 
     方法: string,
     攻击: {
@@ -63,7 +64,6 @@ export interface 对局类型 {
         计算结果: number,
     },
     结果文本: string[]
-    其他: any,
 }
 
 @ccclass("战斗")
@@ -179,17 +179,21 @@ export class 战斗 extends Component {
     点击攻击() {
         this.对局.结果文本 = [];
         this.对局.方法 = "普攻";
+        this.对局.防御.初始值 = this.对局.主角.防御
+        this.对局.攻击.初始值 = this.对局.主角.攻击
 
-        执行钩子("攻击前", [this.对局]) //各种提升！！！
+        执行钩子("攻击前", [this.对局]) //各种提升！！！ 关于 攻击 / 防御
         this.对局.攻击.计算结果 = this.对局.攻击方.攻击 + this.对局.攻击.基础加成 * (1 +  this.对局.攻击.加法乘率) * this.对局.攻击.独立乘区
         this.对局.防御.计算结果 = this.对局.受击方.防御 + this.对局.防御.基础加成 * (1 +  this.对局.防御.加法乘率) * this.对局.防御.独立乘区
-        this.对局.伤害.计算结果 = Math.max(this.对局.攻击.计算结果 - this.对局.防御.计算结果, 0);
-        执行钩子('攻击时', [this.对局]) //各种防御！！1
+        
+        this.对局.伤害.初始值 = Math.max(this.对局.攻击.计算结果 - this.对局.防御.计算结果, 0);
+        执行钩子('攻击时', [this.对局]) //各种防御！！关于 伤害
+        this.对局.伤害.计算结果 = Math.max(this.对局.伤害.初始值 + this.对局.伤害.基础加成 * (1 +  this.对局.伤害.加法乘率) * this.对局.伤害.独立乘区, 0)
         this.对局.受击方.生命 -= this.对局.伤害.计算结果
         this.对局.结果文本.unshift(`${this.对局.攻击方.名称}使用「${this.对局.方法}」`)
         this.对局.结果文本.push(`${this.对局.受击方.名称}受到${this.对局.伤害}点伤害。`)
         this.显示主角文本(this.对局.结果文本.join('\n'));
-        执行钩子('攻击后', [this.对局]) // 各种被动!!!
+        执行钩子('攻击后', [this.对局]) // 各种被动!!! 关于 伤害已经造成后的事情
 
         //更新渲染
         this.更新();
@@ -208,78 +212,78 @@ export class 战斗 extends Component {
             return
         }
         if (this.对局.受击方.生命 > 0 && 存档.生命 > 0) {
-            this.scheduleOnce(() => this.点击攻击(), 1.5 / 设置.播放速度);
+            this.scheduleOnce(() => this.敌人攻击(), 1.5 / 设置.播放速度);
         }
     }
 
-    // 敌人攻击() {
-    //     //逃跑判定
-    //     if (Math.random() * 100 < this.计算敌人逃跑成功率()) {
-    //         执行钩子("敌人逃跑成功", [this.对局])
-    //         this.结束战斗(`${this.敌人.名称}逃跑啦！`);
-    //         return;
-    //     }
+    敌人攻击() {
+        //逃跑判定
+        if (Math.random() * 100 < this.计算敌人逃跑成功率()) {
+            执行钩子("敌人逃跑成功", [this.对局])
+            this.结束战斗(`${this.敌人.名称}逃跑啦！`);
+            return;
+        }
 
-    //     // 攻击准备
-    //     this.对局.结果文本 = [];
-    //     this.对局.方法 = '普攻'
-    //     this.对局.攻击 = this.敌人.攻击
-    //     this.对局.防御 = 计算最大防御() + this.对局.防御修正
-    //     this.对局.伤害 = 0
+        // 攻击准备
+        this.对局.结果文本 = [];
+        this.对局.方法 = '普攻'
+        this.对局.攻击 = this.敌人.攻击
+        this.对局.防御 = 计算最大防御() + this.对局.防御修正
+        this.对局.伤害 = 0
 
-    //     // 敌人攻击前
-    //     const 敌人攻击前文本 = this.敌人.攻击前(this.对局)
-    //     if (敌人攻击前文本) {
-    //         this.对局.结果文本.push(敌人攻击前文本)
-    //     }
-    //     执行钩子("被攻击前", [this.对局])
+        // 敌人攻击前
+        const 敌人攻击前文本 = this.敌人.攻击前(this.对局)
+        if (敌人攻击前文本) {
+            this.对局.结果文本.push(敌人攻击前文本)
+        }
+        执行钩子("被攻击前", [this.对局])
 
-    //     // 造成攻击
-    //     this.对局.伤害 = Math.max(this.对局.攻击 - this.对局.防御, 0);
+        // 造成攻击
+        this.对局.伤害 = Math.max(this.对局.攻击 - this.对局.防御, 0);
 
-    //     // 敌人攻击
-    //     const 敌人攻击文本 = this.敌人.攻击时(this.对局)
-    //     if (敌人攻击文本) {
-    //         this.对局.结果文本.push(敌人攻击文本)
-    //     }
-    //     执行钩子("被攻击时", [this.对局])
+        // 敌人攻击
+        const 敌人攻击文本 = this.敌人.攻击时(this.对局)
+        if (敌人攻击文本) {
+            this.对局.结果文本.push(敌人攻击文本)
+        }
+        执行钩子("被攻击时", [this.对局])
 
-    //     // 伤害结算
-    //     存档.生命 -= this.对局.伤害;
-    //     if (this.对局.攻击) {
-    //         this.对局.结果文本.unshift(`${this.敌人.名称}使用「${this.对局.方法}」`)
-    //     }
-    //     if (this.对局.伤害 > 0) {
-    //         this.对局.结果文本.push(`你受到${this.对局.伤害}点伤害。`);
-    //     }
+        // 伤害结算
+        存档.生命 -= this.对局.伤害;
+        if (this.对局.攻击) {
+            this.对局.结果文本.unshift(`${this.敌人.名称}使用「${this.对局.方法}」`)
+        }
+        if (this.对局.伤害 > 0) {
+            this.对局.结果文本.push(`你受到${this.对局.伤害}点伤害。`);
+        }
 
-    //     const 攻击后文本 = this.敌人.攻击后(this.对局);
-    //     if (攻击后文本) {
-    //         this.对局.结果文本.push(攻击后文本)
-    //     }
-    //     执行钩子('被攻击后', [this.对局])
+        const 攻击后文本 = this.敌人.攻击后(this.对局);
+        if (攻击后文本) {
+            this.对局.结果文本.push(攻击后文本)
+        }
+        执行钩子('被攻击后', [this.对局])
 
 
-    //     this.显示敌人文本(this.对局.结果文本.join('\n'));
+        this.显示敌人文本(this.对局.结果文本.join('\n'));
 
-    //     this.更新();
-    //     this.node.getComponent(主页).更新()
-    //     从0放大缩小(this.标签容器.getChildByName("生命"));
-    //     从0放大缩小(this.标签容器.getChildByName("逃跑率"));
-    //     this.node.getComponent(主页).标签.getComponent(Label).string = "";
-    //     震动(this.node.getChildByName("相机"));
-    //     this.对局.回合数++
+        this.更新();
+        this.node.getComponent(主页).更新()
+        从0放大缩小(this.标签容器.getChildByName("生命"));
+        从0放大缩小(this.标签容器.getChildByName("逃跑率"));
+        this.node.getComponent(主页).标签.getComponent(Label).string = "";
+        震动(this.node.getChildByName("相机"));
+        this.对局.回合数++
 
-    //     if (this.敌人.生命 <= 0) {
-    //         this.胜利结算()
-    //         return
-    //     }
-    //     if (存档.生命 <= 0) {
-    //         this.失败结算()
-    //         return
-    //     }
-    //     this.按钮容器.active = true;
-    // }
+        if (this.敌人.生命 <= 0) {
+            this.胜利结算()
+            return
+        }
+        if (存档.生命 <= 0) {
+            this.失败结算()
+            return
+        }
+        this.按钮容器.active = true;
+    }
 
     胜利结算() {
         this.对局.结果文本 = ['战斗胜利！'];
