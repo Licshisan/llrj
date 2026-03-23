@@ -1,5 +1,5 @@
-import { 获取地区名称 } from "../内容加载/地区";
 import { 存档 } from "../管理器/存档管理器";
+import { 获取地区名称 } from "./地区表";
 
 export const 默认效果表 = [
 	{
