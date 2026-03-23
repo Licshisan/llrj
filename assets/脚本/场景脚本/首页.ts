@@ -1,5 +1,5 @@
 import { _decorator, Button, Component, director, Label, Node } from 'cc';
-import { 加载游戏内容 } from '../内容加载/加载内容';
+import { 加载游戏内容 } from '../默认内容/加载内容';
 import { 设置 } from '../管理器/设置管理器';
 const { ccclass, property } = _decorator;
 

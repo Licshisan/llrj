@@ -2,13 +2,13 @@ import * as 存档管理器 from "../管理器/存档管理器"
 import * as 设置管理器 from "../管理器/设置管理器"
 import * as 钩子管理器 from "../管理器/钩子管理器"
 
-import { 默认套餐表 } from "../默认内容/套餐表";
+import { 默认套餐表 } from "./套餐表";
 import { 注册钩子 } from "../管理器/钩子管理器";
-import { 默认效果表 } from "../默认内容/效果表";
-import { 默认制作表 } from "../默认内容/制作表";
-import { 伙伴特性定义类型, 默认伙伴特性表 } from "../默认内容/伙伴特性表";
-import { 默认特性表 } from "../默认内容/特性表";
-import { 默认天赋表 } from "../默认内容/天赋表";
+import { 默认效果表 } from "./效果表";
+import { 默认制作表 } from "./制作表";
+import { 伙伴特性定义类型, 默认伙伴特性表 } from "./伙伴特性表";
+import { 默认特性表 } from "./特性表";
+import { 默认天赋表 } from "./天赋表";
 import { log, sys } from "cc";
 import { 设置 } from "../管理器/设置管理器";
 
