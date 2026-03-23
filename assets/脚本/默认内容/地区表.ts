@@ -255,6 +255,10 @@ export const 默认地区表: 地区定义类型[] = [
 	}
 ];
 
+export function 获取当前地区() {
+	return 默认地区表.find((地区) => 地区.条件)
+}
+
 export function 获取地区名称() {
 	const 地区 = 默认地区表.find((地区) => 地区.条件)
 	return 地区?.名称 || "未知地区"

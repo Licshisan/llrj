@@ -1,30 +1,24 @@
-import { _decorator, Button, Color, Component, director, Label, Node, Sprite } from 'cc';
+import { _decorator, Button, Color, Component, director, Label, log, Node, Sprite } from 'cc';
 import { 保存存档, 存档 } from '../管理器/存档管理器';
-import { 获取地区事件, 获取地区名称, 获取地区敌人, 获取地区物品 } from '../内容加载/地区';
-import { 计算前进探索消耗精力, 计算前进探索消耗饥饿, 计算最大攻击, 计算最大生命, 计算最大精力, 计算最大防御, 计算最大饥饿 } from '../方法函数/属性计算';
+import { 计算数值, 计算最大攻击, 计算最大生命, 计算最大精力, 计算最大防御, 计算最大饥饿 } from '../方法函数/属性计算';
 import { 抽取项目, 抽取物品, 格式化金钱, 自动进食, 自然恢复生命 } from '../方法函数/公共函数';
 import { 播放文本, 放大缩小 } from '../方法函数/动画效果';
 import { 事件 } from './事件';
 import { 战斗 } from './战斗';
 import { 执行钩子 } from '../管理器/钩子管理器';
-import { 获取当前日记 } from '../内容加载/日记';
 import { 设置 } from '../管理器/设置管理器';
+import { 获取当前日记 } from '../默认内容/日记表';
+import { 获取地区名称, 获取当前地区 } from '../默认内容/地区表';
 const { ccclass, property } = _decorator;
 
 @ccclass('主页')
 export class 主页 extends Component {
-    @property(Node)
-    顶部状态栏: Node = null;
-    @property(Node)
-    信息栏: Node = null;
-    @property(Node)
-    状态栏: Node = null;
-    @property(Node)
-    标签: Node = null;
-    @property(Node)
-    按钮容器: Node = null;
-    @property(Node)
-    背景: Node = null;
+    @property(Node) 顶部状态栏: Node = null;
+    @property(Node) 信息栏: Node = null;
+    @property(Node) 状态栏: Node = null;
+    @property(Node) 标签: Node = null;
+    @property(Node) 按钮容器: Node = null;
+    @property(Node) 背景: Node = null;
 
     start() {
         this.更新()
@@ -129,7 +123,8 @@ export class 主页 extends Component {
             director.loadScene("结局")
             return false
         }
-        if (存档.精力 < 计算前进探索消耗精力()) {
+        const 前进探索消耗精力 = 计算数值("前进探索消耗精力", 10)
+        if (存档.精力 < 前进探索消耗精力) {
             播放文本(this.标签, "精力不足！")
             return false
         }
@@ -137,8 +132,8 @@ export class 主页 extends Component {
     }
 
     基本消耗() {
-        存档.精力 -= 计算前进探索消耗精力();
-        存档.饥饿 -= 计算前进探索消耗饥饿();
+        存档.精力 -= 计算数值("前进探索消耗精力", 10);
+        存档.饥饿 -= 计算数值("前进探索消耗饥饿", 10);
         自动进食()
         if (存档.饥饿 <= 0) {
             if (Math.random() * 100 < 50) {
@@ -163,11 +158,11 @@ export class 主页 extends Component {
 
         if (随机数 < 计算容器.战斗权重) {
             存档.其他.战斗次数++
-            const 地区敌人 = 获取地区敌人()
+            const 地区敌人 = 获取当前地区().敌人
             this.node.getComponent(战斗).进入战斗(抽取项目(地区敌人));
         } else if (随机数 < 计算容器.战斗权重 + 计算容器.事件权重) {
             存档.其他.随机事件次数++
-            const 地区事件表 = 获取地区事件()
+            const 地区事件表 = 获取当前地区().事件
             执行钩子("计算地区事件表", [地区事件表])
 
             log('事件', 地区事件表)
@@ -175,7 +170,7 @@ export class 主页 extends Component {
         } else {
             存档.其他.捡道具次数++
 
-            const 物品表 = 获取地区物品()
+            const 物品表 = 获取当前地区().物品
             let 结果文本: string[] = []
             执行钩子("收集材料前", [{ 物品表, 结果文本 }])
 
