@@ -1,25 +1,19 @@
-import { _decorator, Component, Node, Label, instantiate, Prefab, Button, Color, director, UITransform, Layout, PageView } from "cc";
+import { _decorator, Component, Node, Label, instantiate, Prefab, Button, Color, director, UITransform, Layout, PageView, error } from "cc";
 import { 保存存档, 存档 } from "../管理器/存档管理器";
 import { 计算最大生命, 计算最大精力, 计算最大饥饿 } from "../方法函数/属性计算";
-import { 获取食物列表 } from "../内容加载/食物";
 import { 播放文本 } from "../方法函数/动画效果";
 import { 执行钩子 } from "../管理器/钩子管理器";
+import { 默认食物表 } from "../默认内容/食物表";
 const { ccclass, property } = _decorator;
 
 @ccclass("进食")
 export class 进食 extends Component {
-	@property(Node)
-	标签: Node;
-	@property(Node)
-	属性一: Node;
-	@property(Node)
-	属性二: Node;
-	@property(Prefab)
-	项目预制体: Prefab;
-	@property(PageView)
-	分页视图: PageView;
-	@property(Node)
-	返回按钮: Node;
+	@property(Node) 标签: Node;
+	@property(Node) 属性一: Node;
+	@property(Node) 属性二: Node;
+	@property(Prefab) 项目预制体: Prefab;
+	@property(PageView) 分页视图: PageView;
+	@property(Node) 返回按钮: Node;
 
 	页大小 = 4
 	start() {
@@ -28,27 +22,17 @@ export class 进食 extends Component {
 		this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene("主页"), this);
 	}
 	创建分页() {
-		const 食物表 = 获取食物列表()
-		if (!食物表 || 食物表.length === 0) {
-			warn("食物列表为空，无法创建分页");
-			return;
-		}
-		const 总页数 = Math.ceil(食物表.length / this.页大小);
+		const 总页数 = Math.ceil(默认食物表.length / this.页大小);
 		const 分页组件 = this.分页视图.getComponent(PageView);
-		if (!分页组件) {
-			error("分页视图未挂载PageView组件");
-			return;
-		}
+
 		分页组件.removeAllPages();
 
 		for (let 页码 = 0; 页码 < 总页数; 页码++) {
-			this.scheduleOnce(() => this.创建单页(页码, 分页组件), 页码 * 0.01);
+			this.创建单页(页码, 分页组件)
 		}
 	}
 
 	创建单页(页码: number, 分页组件: PageView) {
-		const 食物表 = 获取食物列表()
-
 		let 单页 = this.分页视图.node.getChildByName('视图').getChildByName('内容').getChildByName(`页_${页码 + 1}`)
 		if (单页) {
 			单页.removeAllChildren()
@@ -65,8 +49,8 @@ export class 进食 extends Component {
 
 		for (let i = 0; i < this.页大小; i++) {
 			const 食物序号 = 页码 * this.页大小 + i;
-			if (食物序号 >= 食物表.length) break;
-			const 食物 = 食物表[食物序号];
+			if (食物序号 >= 默认食物表.length) break;
+			const 食物 = 默认食物表[食物序号];
 
 			const 项目组件 = instantiate(this.项目预制体);
 			项目组件.setParent(单页);
@@ -85,26 +69,22 @@ export class 进食 extends Component {
 
 			项目组件.getChildByName("标签一").getComponent(Label).string = 食物.描述;
 			项目组件.getChildByName("标签二").getComponent(Label).string = 食物.说明;
-			项目组件.getChildByName("选择按钮").on(
-				Button.EventType.CLICK,
-				() => {
-					try {
-						const 进食前存档 = JSON.parse(JSON.stringify(存档))
-						const 文本 = 食物.使用()
-						执行钩子('进食时', [食物, 进食前存档])
-						保存存档()
-						if (文本) {
-							播放文本(this.标签, 文本)
-						}
-						this.创建单页(页码, 分页组件);
-						this.更新属性();
-					} catch (e) {
-						error("使用食物失败：", e);
-						播放文本(this.标签, "使用食物时发生错误，请反馈开发者！");
+			项目组件.getChildByName("选择按钮").on(Button.EventType.CLICK, () => {
+				try {
+					const 进食前存档 = JSON.parse(JSON.stringify(存档))
+					const 文本 = 食物.使用()
+					执行钩子('进食时', [食物, 进食前存档])
+					保存存档()
+					if (文本) {
+						播放文本(this.标签, 文本)
 					}
-				},
-				this,
-			);
+					this.创建单页(页码, 分页组件);
+					this.更新属性();
+				} catch (e) {
+					error("使用食物失败：", e);
+					播放文本(this.标签, "使用食物时发生错误，请反馈开发者！");
+				}
+			},this);
 		}
 	}
 
