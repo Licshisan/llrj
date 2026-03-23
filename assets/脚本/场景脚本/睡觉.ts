@@ -2,24 +2,19 @@ import { _decorator, Component, Node, Label, Color, UITransform, Button, directo
 import { 保存存档, 备份存档, 存档 } from "../管理器/存档管理器";
 import { 淡入 } from "../方法函数/动画效果";
 import { 设置 } from "../管理器/设置管理器";
-import { 获取地区名称 } from "../内容加载/地区";
 import { 计算最大生命, 计算最大精力, 计算最大饥饿 } from "../方法函数/属性计算";
 import { 自动进食 } from "../方法函数/公共函数";
 import { 执行钩子 } from "../管理器/钩子管理器";
-import { 获取剧情 } from "../内容加载/剧情";
-import { 更新成就 } from "../内容加载/成就";
+import { 获取地区名称 } from "../默认内容/地区表";
+import { 默认剧情表 } from "../默认内容/剧情表";
 const { ccclass, property } = _decorator;
 
 @ccclass("睡觉")
 export class 睡觉 extends Component {
-    @property(Node)
-    标签: Node = null!;
-    @property(Node)
-    属性容器: Node = null!;
-    @property(Node)
-    文本容器: Node = null!;
-    @property(Node)
-    继续按钮: Node = null!;
+    @property(Node) 标签: Node = null!;
+    @property(Node) 属性容器: Node = null!;
+    @property(Node) 文本容器: Node = null!;
+    @property(Node) 继续按钮: Node = null!;
 
     start(): void {
         this.标签.active = false;
@@ -39,7 +34,7 @@ export class 睡觉 extends Component {
     }
 
     点击继续() {
-        const 剧情 = 获取剧情()
+        const 剧情 = 默认剧情表.find(剧情 => 剧情.地区 === 获取地区名称())
         if (剧情) {
             存档.当前剧情 = 剧情.名称
             保存存档()
@@ -133,9 +128,6 @@ export class 睡觉 extends Component {
         if (存档.当前地点) {
             存档.当前地点 = ''
         }
-
-        // 刷新成就
-        更新成就()
     }
 
     创建文本(内容列表: string[]) {
