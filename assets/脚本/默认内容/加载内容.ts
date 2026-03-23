@@ -10,7 +10,6 @@ import { 伙伴特性定义类型, 默认伙伴特性表 } from "./伙伴特性�
 import { 默认特性表 } from "./特性表";
 import { 默认天赋表 } from "./天赋表";
 import { log, sys } from "cc";
-import { 设置 } from "../管理器/设置管理器";
 
 
 let 加载完成 = false
