@@ -3,8 +3,8 @@ import { 存档 } from "../管理器/存档管理器";
 
 interface 套餐定义类型 {
 	名称: string,
-	说明: string | (() => string),
-	提示?: string | (() => string),
+	说明: string,
+	提示?: string,
 	颜色?: string,
 	条件?: boolean | (() => boolean),
 	效果?: Record<string, (...参数: any) => any>
@@ -13,7 +13,7 @@ interface 套餐定义类型 {
 export const 默认套餐表: 套餐定义类型[] = [
 	{
 		名称: "新手模式",
-		get 说明: "怪物血量0.5倍，探索必定获得资源，不能打挑战",
+		说明: "怪物血量0.5倍，探索必定获得资源，不能打挑战",
 		效果: {
 			战斗初始化: (敌人) => {
 				敌人.生命 = Math.floor(敌人.生命 * 0.5);
