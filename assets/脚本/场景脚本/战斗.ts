@@ -42,18 +42,21 @@ export interface 对局类型 {
 
     方法: string,
     攻击: {
+        初始值: number,
         基础加成: number,
         加法乘率: number,
         独立乘区: number,
         计算结果: number,
     },
     防御: {
+        初始值: number,
         基础加成: number,
         加法乘率: number,
         独立乘区: number,
         计算结果: number,
     },
     伤害: {
+        初始值: number,
         基础加成: number,
         加法乘率: number,
         独立乘区: number,
@@ -82,7 +85,7 @@ export class 战斗 extends Component {
         }
         存档.当前敌人 = 敌人名称
         存档.遇敌次数[敌人名称]++
-
+ 
         // 记载角色
         const 主角 = {
             名称: "你",
