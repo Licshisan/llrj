@@ -1,11 +1,11 @@
-import { _decorator, Button, Component, director, instantiate, Label, Node, Prefab, tween, Vec3 } from 'cc';
+import { _decorator, Button, Color, Component, director, instantiate, Label, Node, Prefab, tween, Vec3 } from 'cc';
 import { 主页 } from './主页';
 import { 保存存档, 存档 } from '../管理器/存档管理器';
-import { 获取事件 } from '../内容加载/事件';
 import { 播放文本, 创建动画文字, 放大出现, 缩小消失 } from '../方法函数/动画效果';
 import { 战斗 } from './战斗';
 import { 设置 } from '../管理器/设置管理器';
 import { 执行钩子 } from '../管理器/钩子管理器';
+import { 默认事件表 } from '../默认内容/事件表';
 const { ccclass, property } = _decorator;
 
 export interface 事件上下文 {
@@ -18,17 +18,13 @@ export interface 事件上下文 {
 
 @ccclass('事件')
 export class 事件 extends Component {
-    @property(Node)
-    事件: Node = null;
-    @property(Node)
-    文本容器: Node = null;
-    @property(Node)
-    按钮容器: Node = null;
-    @property(Prefab)
-    选项按钮预制体: Prefab = null;
+    @property(Node) 事件: Node = null;
+    @property(Node) 文本容器: Node = null;
+    @property(Node) 按钮容器: Node = null;
+    @property(Prefab) 选项按钮预制体: Prefab = null;
 
     触发事件(事件名称: string): void {
-        const 事件 = 获取事件(事件名称)
+        const 事件 = 默认事件表.find(事件 => 事件.名称 === 事件名称)
         if (!事件) {
             this.结束事件(`未知的事件名【${事件名称}】（请反馈开发者）`)
             return
@@ -81,7 +77,7 @@ export class 事件 extends Component {
 
         const 序列 = tween(this.node)
         for (let i = 0; i < 事件.文本.length; i++) {
-            序列.call(() => 创建动画文字(this.文本容器, 事件.文本[i], i, 设置.暗夜模式)).delay(1.2 / 设置.播放速度);
+            序列.call(() => 创建动画文字(this.文本容器, 事件.文本[i], i, 设置.暗夜模式 ? Color.WHITE : Color.BLACK)).delay(1.2 / 设置.播放速度);
         }
         序列.call(() => 放大出现(this.按钮容器)).start()
     }
