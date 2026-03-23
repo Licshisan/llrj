@@ -5,16 +5,12 @@ const { ccclass, property } = _decorator;
 
 @ccclass('黑市')
 export class 黑市 extends Component {
-	@property(Node)
-	标签: Node;
-	@property(Node)
-	属性一: Node;
-	@property(Node)
-	属性二: Node;
-	@property(Node)
-	按钮容器: Node;
-	@property(Node)
-	返回按钮: Node
+	@property(Node) 标签: Node;
+	@property(Node) 属性一: Node;
+	@property(Node) 属性二: Node;
+	@property(Node) 按钮容器: Node;
+	@property(Node) 返回按钮: Node
+	
 	start() {
 		this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene('主页'), this)
 

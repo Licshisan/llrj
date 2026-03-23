@@ -1,16 +1,14 @@
 import { _decorator, Component, Node, Button, director, Label, UITransform, Color } from 'cc';
-import { 获取伙伴特性表 } from '../内容加载/伙伴特性';
+import { 默认伙伴特性表 } from '../默认内容/伙伴特性表';
 const { ccclass, property } = _decorator;
 
 @ccclass('伙伴特性')
 export class 伙伴特性 extends Component {
-	@property(Node)
-	文本容器: Node = null
-	@property(Node)
-	返回按钮: Node = null
+	@property(Node) 文本容器: Node = null
+	@property(Node) 返回按钮: Node = null
+
 	start() {
-		const 晓月特性列表 = 获取伙伴特性表('晓月')
-		晓月特性列表.forEach((特性, index) => {
+		默认伙伴特性表.小兰.forEach((特性, index) => {
 			this.creatText(index, `【${特性.名称}】${特性.描述} `, 特性.条件)
 		})
 		this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene("主页"), this)

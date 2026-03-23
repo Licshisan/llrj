@@ -1,32 +1,21 @@
-import { _decorator, Component, Node, instantiate, Prefab, Color, director, PageView, Button, Label, UITransform, Layout } from "cc";
+import { _decorator, Component, Node, instantiate, Prefab, Color, director, PageView, Button, Label, UITransform, Layout, error } from "cc";
 import { 播放文本 } from "../方法函数/动画效果";
 import { 保存存档, 存档 } from "../管理器/存档管理器";
-import { 获取商品列表, 商品项目类型 } from "../内容加载/商品";
 import { 执行钩子 } from "../管理器/钩子管理器";
+import { 默认商品表 } from "../默认内容/商品表";
 
 const { ccclass, property } = _decorator;
 
 @ccclass("商店")
 export class 商店 extends Component {
-	@property(Node)
-	标签: Node;
-
-	@property(Node)
-	属性一: Node;
-
-	@property(Node)
-	属性二: Node;
-
-	@property(PageView)
-	分页视图: PageView;
-
-	@property(Prefab)
-	项目预制体: Prefab;
-	@property(Node)
-	返回按钮: Node;
+	@property(Node) 标签: Node;
+	@property(Node) 属性一: Node;
+	@property(Node) 属性二: Node;
+	@property(PageView) 分页视图: PageView;
+	@property(Prefab) 项目预制体: Prefab;
+	@property(Node) 返回按钮: Node;
 
 	页大小 = 4
-
 	start() {
 		this.更新标签();
 		this.创建分页();
@@ -34,13 +23,7 @@ export class 商店 extends Component {
 	}
 
 	创建分页() {
-		const 商品表 = 获取商品列表()
-
-		if (!商品表 || 商品表.length === 0) {
-			warn("商品列表为空，无法创建分页");
-			return;
-		}
-		const 总页数 = Math.ceil(商品表.length / this.页大小);
+		const 总页数 = Math.ceil(默认商品表.length / this.页大小);
 		const 分页组件 = this.分页视图.getComponent(PageView);
 		if (!分页组件) {
 			error("分页视图未挂载PageView组件");
@@ -49,13 +32,11 @@ export class 商店 extends Component {
 		分页组件.removeAllPages();
 
 		for (let 页码 = 0; 页码 < 总页数; 页码++) {
-			this.scheduleOnce(() => this.创建单页(页码, 分页组件), 页码 * 0.01);
+			this.创建单页(页码, 分页组件)
 		}
 	}
 
 	创建单页(页码: number, 分页组件: PageView) {
-		const 商品表 = 获取商品列表()
-
 		let 单页 = this.分页视图.node.getChildByName('视图').getChildByName('内容').getChildByName(`页_${页码 + 1}`)
 		if (单页) {
 			单页.removeAllChildren()
@@ -72,8 +53,8 @@ export class 商店 extends Component {
 
 		for (let i = 0; i < this.页大小; i++) {
 			const 商品序号 = 页码 * this.页大小 + i;
-			if (商品序号 >= 商品表.length) break;
-			const 商品 = 商品表[商品序号];
+			if (商品序号 >= 默认商品表.length) break;
+			const 商品 = 默认商品表[商品序号];
 
 			const 项目组件 = instantiate(this.项目预制体);
 			项目组件.setParent(单页);

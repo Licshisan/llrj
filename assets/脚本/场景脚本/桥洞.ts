@@ -2,28 +2,20 @@ import { _decorator, Component, Node, Button, director, Label } from "cc";
 import { 保存存档, 存档 } from "../管理器/存档管理器";
 import { 播放文本, 放大出现, 缩小消失 } from "../方法函数/动画效果";
 import { 自动进食 } from "../方法函数/公共函数";
-import { 计算最大生命, 计算最大精力, 计算最大饥饿, 计算聊天消耗精力, 计算读书消耗精力, 计算读书消耗饥饿 } from "../方法函数/属性计算";
-import { 获取当前日记 } from "../内容加载/日记";
+import { 计算数值, 计算最大生命, 计算最大精力, 计算最大饥饿 } from "../方法函数/属性计算";
 import { 执行钩子 } from "../管理器/钩子管理器";
+import { 获取当前日记 } from "../默认内容/日记表";
 const { ccclass, property } = _decorator;
 
 @ccclass("桥洞")
 export class 桥洞 extends Component {
-    @property(Node)
-    属性标签: Node;
-    @property(Node)
-    标签: Node;
-
-    @property(Node)
-    桥洞: Node;
-    @property(Node)
-    锻炼: Node;
-    @property(Node)
-    升级: Node;
-    @property(Node)
-    读书: Node;
-    @property(Node)
-    外出: Node;
+    @property(Node) 属性标签: Node;
+    @property(Node) 标签: Node;
+    @property(Node) 桥洞: Node;
+    @property(Node) 锻炼: Node;
+    @property(Node) 升级: Node;
+    @property(Node) 读书: Node;
+    @property(Node) 外出: Node;
 
     start() {
         this.更新桥洞();
@@ -49,7 +41,7 @@ export class 桥洞 extends Component {
                 return;
             }
 
-            const 聊天消耗精力 = 计算聊天消耗精力()
+            const 聊天消耗精力 = 计算数值("聊天消耗精力", 10);
             if (存档.精力 < 聊天消耗精力) {
                 播放文本(this.标签, "精力不足！")
                 return
@@ -414,8 +406,8 @@ export class 桥洞 extends Component {
                 return;
             }
 
-            const 读书消耗精力 = 计算读书消耗精力()
-            const 读书消耗饥饿 = 计算读书消耗饥饿()
+            const 读书消耗精力 = 计算数值("读书消耗精力", 10);
+            const 读书消耗饥饿 = 计算数值("读书消耗饥饿", 20);
 
             自动进食();
             if (存档.精力 < 读书消耗精力 || 存档.饥饿 < 0) {
@@ -446,7 +438,7 @@ export class 桥洞 extends Component {
                 return;
             }
             自动进食();
-            const 读书消耗饥饿 = 计算读书消耗饥饿()
+            const 读书消耗饥饿 = 计算数值("读书消耗饥饿", 20);
             if (存档.饥饿 < 0) {
                 播放文本(this.标签, `肚子饿了，不想看！（需${读书消耗饥饿}点饥饿）`);
                 return;
@@ -491,7 +483,7 @@ export class 桥洞 extends Component {
                 return;
             }
 
-            const 读书消耗精力 = 计算读书消耗精力()
+            const 读书消耗精力 = 计算数值("读书消耗精力", 10);
             if (存档.精力 < 读书消耗精力) {
                 播放文本(this.标签, `精力不足（需${读书消耗精力}点）！`);
                 return;
@@ -547,9 +539,8 @@ export class 桥洞 extends Component {
                 return;
             }
 
-            const 读书消耗精力 = 计算读书消耗精力()
-            const 读书消耗饥饿 = 计算读书消耗饥饿()
-
+            const 读书消耗精力 = 计算数值("读书消耗精力", 10);
+            const 读书消耗饥饿 = 计算数值("读书消耗饥饿", 20);
             自动进食();
             if (存档.精力 < 读书消耗精力 || 存档.饥饿 < 0) {
                 播放文本(this.标签, `状态不好，学不进去！（需${读书消耗饥饿}点精力，${读书消耗饥饿}点饥饿）`);
@@ -608,8 +599,8 @@ export class 桥洞 extends Component {
                 return;
             }
 
-            const 读书消耗精力 = 计算读书消耗精力()
-            const 读书消耗饥饿 = 计算读书消耗饥饿()
+            const 读书消耗精力 = 计算数值("读书消耗精力", 10);
+            const 读书消耗饥饿 = 计算数值("读书消耗饥饿", 20);
 
             自动进食();
             if (存档.精力 < 读书消耗精力 || 存档.饥饿 < 0) {
@@ -641,8 +632,8 @@ export class 桥洞 extends Component {
                 return;
             }
 
-            const 读书消耗精力 = 计算读书消耗精力()
-            const 读书消耗饥饿 = 计算读书消耗饥饿()
+            const 读书消耗精力 = 计算数值("读书消耗精力", 10);
+            const 读书消耗饥饿 = 计算数值("读书消耗饥饿", 20);
 
             自动进食();
             if (存档.精力 < 读书消耗精力 || 存档.饥饿 < 0) {

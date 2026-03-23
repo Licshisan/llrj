@@ -1,21 +1,17 @@
 import { _decorator, Component, Node, Button, director, Label } from 'cc';
 import { 保存存档, 存档 } from '../管理器/存档管理器';
 import { 播放文本 } from '../方法函数/动画效果';
-import { 计算聊天消耗精力 } from '../方法函数/属性计算';
+import { 计算数值 } from '../方法函数/属性计算';
 const { ccclass, property } = _decorator;
 
 @ccclass('小兰')
 export class 小兰 extends Component {
-	@property(Node)
-	标签: Node = null
-	@property(Node)
-	属性: Node = null
-	@property(Node)
-	选择容器: Node = null
-	@property(Node)
-	切换1: Node = null
-	@property(Node)
-	切换2: Node = null
+	@property(Node) 标签: Node = null
+	@property(Node) 属性: Node = null
+	@property(Node) 选择容器: Node = null
+	@property(Node) 切换1: Node = null
+	@property(Node) 切换2: Node = null
+	
 	start() {
 		this.更新()
 		播放文本(this.标签, '')
@@ -37,7 +33,7 @@ export class 小兰 extends Component {
 	}
 
 	talk() {
-		const 聊天消耗精力 = 计算聊天消耗精力()
+		const 聊天消耗精力 = 计算数值("聊天消耗精力", 10);
 		if (存档.精力 < 聊天消耗精力) {
 			播放文本(this.标签, "精力不足！")
 			return

@@ -1,21 +1,16 @@
 import { _decorator, Button, Color, Component, director, Label, Node, UITransform } from 'cc';
 import { 存档 } from '../管理器/存档管理器';
-import { 获取伙伴特性表 } from '../内容加载/伙伴特性';
+import { 默认伙伴特性表 } from '../默认内容/伙伴特性表';
 const { ccclass, property } = _decorator;
 
 @ccclass('伙伴特性2')
 export class 伙伴特性2 extends Component {
-    @property(Node)
-    特性容器: Node = null
-    @property(Node)
-    返回: Node = null
-    @property(Node)
-    好感: Node = null
+    @property(Node) 特性容器: Node = null
+    @property(Node) 返回: Node = null
+    @property(Node) 好感: Node = null
+
     start() {
-        const 碧瑶特性描述列表 = 获取伙伴特性表("碧瑶")
-
-
-        碧瑶特性描述列表.forEach((特性, index) => {
+        默认伙伴特性表.碧瑶.forEach((特性, index) => {
             this.创建文本(index, `【${特性.名称}】${特性.描述}`, 特性.条件)
         })
 

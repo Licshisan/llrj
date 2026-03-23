@@ -65,20 +65,12 @@ export interface 对局类型 {
 
 @ccclass("战斗")
 export class 战斗 extends Component {
-    @property(Node)
-    战斗: Node;
-    @property(Node)
-    敌人标签: Node;
-    @property(Node)
-    血量条: Node;
-
-    @property(Node)
-    文本容器: Node;
-    @property(Node)
-    标签容器: Node;
-
-    @property(Node)
-    按钮容器: Node;
+    @property(Node) 战斗: Node;
+    @property(Node) 敌人标签: Node;
+    @property(Node) 血量条: Node;
+    @property(Node) 文本容器: Node;
+    @property(Node) 标签容器: Node;
+    @property(Node) 按钮容器: Node;
 
     对局: 对局类型
 

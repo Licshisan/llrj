@@ -1,17 +1,14 @@
 import { _decorator, Component, Label, Node, Button, director, UITransform, Color } from "cc";
 import { 播放文本, 淡入 } from "../方法函数/动画效果";
 import { 保存存档, 存档 } from "../管理器/存档管理器";
-import { 计算聊天消耗精力 } from "../方法函数/属性计算";
+import { 计算数值 } from "../方法函数/属性计算";
 const { ccclass, property } = _decorator;
 
 @ccclass("伙伴")
 export class 伙伴 extends Component {
-	@property(Node)
-	标签: Node = null;
-	@property(Node)
-	文本容器: Node = null;
-	@property(Node)
-	属性: Node = null;
+	@property(Node) 标签: Node = null;
+	@property(Node) 文本容器: Node = null;
+	@property(Node) 属性: Node = null;
 	@property(Node)
 	按钮容器: Node = null;
 
@@ -53,7 +50,7 @@ export class 伙伴 extends Component {
 		this.属性.getComponent(Label).string = `晓月好感：${存档.伙伴.晓月好感}`;
 	}
 	聊天() {
-		const 聊天消耗精力 = 计算聊天消耗精力()
+		const 聊天消耗精力 = 计算数值("聊天消耗精力", 10);
 		if (存档.精力 < 聊天消耗精力) {
 			播放文本(this.标签, "精力不足！")
 			return

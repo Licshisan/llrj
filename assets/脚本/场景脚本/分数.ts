@@ -7,16 +7,11 @@ const { ccclass, property } = _decorator;
 
 @ccclass('分数')
 export class 分数 extends Component {
-	@property(Node)
-	标签: Node = null
-	@property(Node)
-	文本容器: Node = null
-	@property(Node)
-	输入框: Node = null
-	@property(Node)
-	选项容器: Node = null
-
-	loading = false
+	@property(Node) 标签: Node = null
+	@property(Node) 文本容器: Node = null
+	@property(Node) 输入框: Node = null
+	@property(Node) 选项容器: Node = null
+	加载中 = false
 
 	start() {
 		播放文本(this.标签, '')
@@ -75,8 +70,7 @@ export class 分数 extends Component {
 				播放文本(this.标签, '你的名字太长了！')
 				return
 			}
-
-			if (this.loading) {
+			if (this.加载中) {
 				播放文本(this.标签, '请等待上传。。。')
 				return
 			}

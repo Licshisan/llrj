@@ -1,16 +1,13 @@
 import { _decorator, Button, Component, director, Label, Node } from "cc";
-const { ccclass, property } = _decorator;
-import * as 设置管理器 from '../管理器/设置管理器'
 import { 播放文本 } from "../方法函数/动画效果";
+import * as 设置管理器 from '../管理器/设置管理器'
+const { ccclass, property } = _decorator;
 
 @ccclass("设置")
 export class 设置 extends Component {
-  @property(Node)
-  标签: Node;
-  @property(Node)
-  按钮容器: Node;
-  @property(Node)
-  返回按钮: Node;
+  @property(Node) 标签: Node;
+  @property(Node) 按钮容器: Node;
+  @property(Node) 返回按钮: Node;
 
   速度表 = { 1: "一般", 2: "快速", 6: "极速" }
   start() {

@@ -6,14 +6,11 @@ const { ccclass, property } = _decorator;
 
 @ccclass("大楼")
 export class 大楼 extends Component {
-	@property(Node)
-	属性: Node = null;
-	@property(Node)
-	标签: Node = null;
-	@property(Node)
-	大楼: Node = null;
-	@property(Node)
-	餐厅: Node = null;
+	@property(Node) 属性: Node = null;
+	@property(Node) 标签: Node = null;
+	@property(Node) 大楼: Node = null;
+	@property(Node) 餐厅: Node = null;
+	
 	start() {
 		this.更新()
 		this.大楼.getChildByName("返回按钮").on(Button.EventType.CLICK, () => director.loadScene("主页"), this);

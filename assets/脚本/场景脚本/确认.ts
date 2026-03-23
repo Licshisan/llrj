@@ -4,12 +4,10 @@ const { ccclass, property } = _decorator;
 
 @ccclass('确认')
 export class 确认 extends Component {
-    @property(Node)
-    标签: Node = null;
-    @property(Node)
-    按钮容器: Node = null;
-    @property(Prefab)
-    选项按钮预制体: Prefab = null;
+    @property(Node) 标签: Node = null;
+    @property(Node) 按钮容器: Node = null;
+    @property(Prefab) 选项按钮预制体: Prefab = null;
+    
     start() {
         const 文本 = globalThis.确认参数?.文本
         const 按钮 = globalThis.确认参数?.按钮

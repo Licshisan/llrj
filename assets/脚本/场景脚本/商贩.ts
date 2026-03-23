@@ -10,19 +10,13 @@ type PeddlerListType = {
 
 @ccclass("商贩")
 export class 商贩 extends Component {
-	@property(Node)
-	标签: Node = null;
-	@property(Node)
-	属性一: Node = null;
-	@property(Node)
-	属性二: Node = null;
+	@property(Node) 标签: Node = null;
+	@property(Node) 属性一: Node = null;
+	@property(Node) 属性二: Node = null;
 
-	@property(Node)
-	按钮容器: Node = null;
-	@property(Node)
-	返回按钮: Node = null;
-	@property(Prefab)
-	选择按钮预制体: Prefab = null;
+	@property(Node) 按钮容器: Node = null;
+	@property(Node) 返回按钮: Node = null;
+	@property(Prefab) 选择按钮预制体: Prefab = null;
 
 	// 商贩相关属性
 	sellOut: boolean = false;

@@ -1,35 +1,17 @@
 import { _decorator, Component, Node, Button, director, Label, UITransform } from "cc";
 import { 存档 } from "../管理器/存档管理器";
 import { 创建普通文字, 播放文本 } from "../方法函数/动画效果";
-import { 获取天赋表 } from "../内容加载/天赋";
 import { 计算最大压制, 计算最大逃跑 } from "../方法函数/属性计算";
 const { ccclass, property } = _decorator;
 
 @ccclass("面板")
 export class 面板 extends Component {
-    @property(Node)
-    标签: Node = null;
-    @property(Node)
-    信息框: Node = null;
-    @property(Node)
-    内容: Node = null;
-    @property(Node)
-    返回按钮: Node = null;
+    @property(Node) 标签: Node = null;
+    @property(Node) 信息框: Node = null;
+    @property(Node) 内容: Node = null;
+    @property(Node) 返回按钮: Node = null;
 
     start() {
-        const 天赋表 = 获取天赋表()
-
-        log(天赋表)
-
-        let index = 0
-        for (let 天赋名称 in 存档.天赋) {
-            if (存档.天赋[天赋名称]) {
-                const 天赋项目 = 天赋表.find((天赋) => 天赋.名称 == 天赋名称)
-                创建普通文字(this.内容, `【${天赋名称}】${天赋项目.说明}`, index, !天赋项目.负面);
-                index++
-            }
-        }
-
         this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene("主页"), this);
         this.创建标签()
     }

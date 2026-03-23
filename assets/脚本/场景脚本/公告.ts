@@ -5,6 +5,7 @@ const { ccclass, property } = _decorator;
 export class 公告 extends Component {
     @property(Node)
     返回按钮: Node
+    
     start() {
         this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene("设置"), this)
     }

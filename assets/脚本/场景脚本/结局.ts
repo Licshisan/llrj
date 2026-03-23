@@ -1,8 +1,8 @@
 import { _decorator, Component, Label, Node, Button, director, Prefab, instantiate, Tween, tween } from "cc";
-import { 获取地区名称 } from "../内容加载/地区";
 import { 存档 } from "../管理器/存档管理器";
 import { 保存设置, 设置 } from "../管理器/设置管理器";
 import { 创建动画文字, 淡入 } from "../方法函数/动画效果";
+import { 获取地区名称 } from "../默认内容/地区表";
 const { ccclass, property } = _decorator;
 
 @ccclass('结局')
