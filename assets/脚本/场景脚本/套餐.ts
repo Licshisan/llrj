@@ -1,4 +1,4 @@
-import { Component, Prefab, Button, director, UITransform, Layout, PageView, instantiate, Label, _decorator, Node, Color, Widget } from "cc";
+import { Component, Prefab, Button, director, UITransform, Layout, PageView, instantiate, Label, _decorator, Node, Color, Widget, warn, error, log } from "cc";
 import { 播放文本, 淡入 } from "../方法函数/动画效果";
 import { 获取套餐列表, 套餐项目类型 } from "../内容加载/套餐";
 import { 执行钩子 } from "../管理器/钩子管理器";
@@ -15,9 +15,11 @@ export class 套餐 extends Component {
 	选项按钮预制体: Prefab = null;
 	@property(Node)
 	返回按钮: Node = null;
+	@property(Node)
+	难度按钮: Node = null;
 
-	页大小 = 8;
-
+	页大小 = 7;
+	当前难度: "普通"
 	start() {
 		播放文本(this.标签, "请选择一种初始道具套餐...");
 
@@ -25,6 +27,7 @@ export class 套餐 extends Component {
 		this.创建分页()
 
 		this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene("存档"), this);
+		this.难度按钮.on(Button.EventType.CLICK, () => this.点击选择难度(), this);
 		淡入(this.分页视图)
 		淡入(this.返回按钮);
 	}
@@ -67,18 +70,31 @@ export class 套餐 extends Component {
 			const 选项按钮 = instantiate(this.选项按钮预制体);
 			选项按钮.setParent(单页);
 
-			const 套餐名称 = 套餐.名称 || `套餐${套餐序号 + 1}`;
-			const 套餐描述 = 套餐.描述 || `套餐${套餐序号 + 1}`;
-			选项按钮.getChildByName("标签").getComponent(Label).string = `【${套餐名称}】${套餐描述}`;
 
-			选项按钮.on(Button.EventType.CLICK, () => {
-				创建存档()
-				存档.创建时间 = Date.now();
-				存档.套餐名称 = 套餐名称
-				执行钩子("新建游戏")
-				保存存档()
-				director.loadScene("开场");
-			}, this);
+			选项按钮.getChildByName("标签").getComponent(Label).string = `【${套餐.名称}】${套餐.说明}`;
+			const 颜色 = 套餐.颜色 ? new Color(套餐.颜色) : Color.WHITE
+			选项按钮.getChildByName("标签").getComponent(Label).color = 颜色
+			if(套餐.条件){
+				选项按钮.on(Button.EventType.CLICK, () => {
+					创建存档()
+					存档.创建时间 = Date.now();
+					存档.套餐名称 = 套餐.名称
+					执行钩子("新建游戏")
+					保存存档()
+					director.loadScene("开场");
+				}, this);
+			}else{
+				log(套餐)
+				选项按钮.on(Button.EventType.CLICK, () => {
+					播放文本(this.标签, 套餐.提示 || "暂未解锁");
+				}, this);
+			}
+
+
 		}
+	}
+
+	点击选择难度() {
+
 	}
 }
