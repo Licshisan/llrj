@@ -5,10 +5,9 @@ const { ccclass, property } = _decorator;
 
 @ccclass('首页')
 export class 首页 extends Component {
-    @property(Node)
-    按钮容器: Node = null;
-    @property(Node)
-    游戏信息: Node = null;
+    @property(Node) 按钮容器: Node = null;
+    @property(Node) 游戏信息: Node = null;
+
     start() {
         this.按钮容器.getChildByName("开始").on(Button.EventType.CLICK, () => director.loadScene("存档"), this);
         this.按钮容器.getChildByName("成就").on(Button.EventType.CLICK, () => director.loadScene("成就"), this);

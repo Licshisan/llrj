@@ -2,21 +2,16 @@ import { _decorator, Component, Node, Prefab, instantiate, Label, Button, direct
 import { 播放文本 } from "../方法函数/动画效果";
 import * as 存档管理器 from '../管理器/存档管理器'
 import { 格式化日期字符串 } from "../方法函数/公共函数";
-import { 获取地区名称 } from "../内容加载/地区";
+import { 获取地区名称 } from "../默认内容/地区表";
 const { ccclass, property } = _decorator;
 
 @ccclass("存档")
 export class 存档 extends Component {
-    @property(Node)
-    标签: Node = null;
-    @property(Node)
-    存档容器: Node = null;
-    @property(Prefab)
-    存档项目预制件: Prefab = null;
-    @property(Prefab)
-    选择按钮预制件: Prefab = null;
-    @property(Node)
-    返回按钮: Node = null;
+    @property(Node) 标签: Node = null;
+    @property(Node) 存档容器: Node = null;
+    @property(Prefab) 存档项目预制件: Prefab = null;
+    @property(Prefab) 选择按钮预制件: Prefab = null;
+    @property(Node) 返回按钮: Node = null;
 
     start() {
         播放文本(this.标签, "选择你要继续的存档...");
@@ -39,7 +34,6 @@ export class 存档 extends Component {
 
             存档项目节点.getChildByName("按钮容器").getChildByName("黑色按钮1").on(Button.EventType.CLICK, () => this.点击删除(存档.存档名称), this);
             存档项目节点.getChildByName("按钮容器").getChildByName("黑色按钮2").on(Button.EventType.CLICK, () => this.点击进入(存档.存档名称), this);
-
         })
 
         if (存档名称列表.length < 4) {
