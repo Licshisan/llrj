@@ -2,8 +2,8 @@ import { 存档 } from "../管理器/存档管理器";
 
 interface 难度定义类型 {
 	名称: string,
-	说明: string | (() => string),
-	提示?: string | (() => string),
+	说明: string,
+	提示?: string,
 	颜色?: string,
 	效果?: Record<string, (x?) => any>,
 	条件: boolean,
