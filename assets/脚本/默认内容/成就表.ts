@@ -1,14 +1,15 @@
+import { error, log, sys, warn } from "cc";
 import { 存档 } from "../管理器/存档管理器";
 import { 设置 } from "../管理器/设置管理器";
 
-interface 成就定义类型 {
+export interface 成就项目类型 {
 	名称: string,
 	get 描述(): string,
 	get 条件(): boolean,
 	达成时间?: number
 }
 
-export const 默认成就表: 成就定义类型[] = [
+export const 默认成就表: 成就项目类型[] = [
 	// 战斗类
 	{
 		名称: "第一次",
@@ -222,3 +223,48 @@ export const 默认成就表: 成就定义类型[] = [
 		},
 	},
 ];
+
+export function 更新成就(): 成就项目类型[] {
+	try {
+		const 成就字符串 = sys.localStorage.getItem("成就");
+		let 本地成就表: 成就项目类型[] = [];
+		if (成就字符串) {
+			try {
+				本地成就表 = JSON.parse(成就字符串) as 成就项目类型[];
+				if (!Array.isArray(本地成就表)) 本地成就表 = [];
+			} catch (e) {
+				warn("【成就系统】本地成就数据解析失败，重置为空数组：", e);
+				本地成就表 = [];
+			}
+		}
+	
+		const 新成就表: 成就项目类型[] = [];
+
+		默认成就表.forEach((全局成就项) => {
+			const 本地成就项 = 本地成就表.find(item => item?.名称 === 全局成就项.名称);
+
+			if (本地成就项) {
+				新成就表.push({
+					...本地成就项,
+					描述: 全局成就项.描述,
+					条件: 全局成就项.条件,
+					...(全局成就项.条件 && !本地成就项.达成时间 && { 达成时间: Date.now() }) // 仅首次达成时记录时间
+				});
+			} else {
+				新成就表.push({
+					名称: 全局成就项.名称,
+					描述: 全局成就项.描述,
+					条件: 全局成就项.条件,
+					达成时间: 全局成就项.条件 ? Date.now() : undefined
+				});
+			}
+		});
+
+		sys.localStorage.setItem("成就", JSON.stringify(新成就表));
+		log(`【成就系统】更新完成，当前共${新成就表.length}项成就`);
+		return 新成就表;
+	} catch (e) {
+		error("【成就系统】更新失败：", e);
+		return [];
+	}
+}

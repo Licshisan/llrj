@@ -1,6 +1,5 @@
 import { _decorator, Button, Component, director, EditBox, Node, tween } from "cc";
 import { 删除存档, 存档 } from "../管理器/存档管理器";
-import { 计算最大攻击, 计算最大生命, 计算最大防御 } from "../方法函数/属性计算";
 import { 创建动画文字, 播放文本, 淡入 } from "../方法函数/动画效果";
 import { 设置 } from "../管理器/设置管理器";
 const { ccclass, property } = _decorator;
@@ -19,41 +18,42 @@ export class 分数 extends Component {
 		this.输入框.active = false
 		this.选项容器.active = false
 
-		let 剧情得分 =
-			Number(存档.剧情.打扫老爷爷房间) * 300 +
-			Number(存档.剧情.堂主捐钱) * 200 +
-			Number(存档.剧情.帮助胖女人) * 200 +
-			Number(存档.剧情.再次帮助胖女人) * 300 +
-			Number(存档.剧情.归还礼物) * 200 +
-			Number(存档.剧情.帮助小兰) * 200 +
-			Number(存档.剧情.住在桥洞) * 200 +
-			Number(存档.剧情.借钱给中年大叔) * 100 +
-			Number(存档.剧情.面试交钱) * 50 +
-			Number(存档.剧情.愿意回家) * 50 +
-			Number(存档.剧情.地质队吃饭) * 50 +
-			(存档.伙伴.碧瑶分成 - 5) * 150 +
-			Math.floor(存档.伙伴.晓月好感 / 5) +
-			Math.floor(存档.伙伴.碧瑶好感 * 1.2) -
-			存档.罪恶 * 20;
-		if (剧情得分 < 0) {
-			剧情得分 = 0
-		}
+		let 得分 =
+			Number(存档.剧情.愿意回家) +
+			Number(存档.剧情.住在桥洞) +
+			Number(存档.剧情.完成挑战) +
 
-		let 战斗得分 = 计算最大攻击() / 3 + (计算最大防御()) * 2 + 计算最大生命() / 20
-		战斗得分 = Math.floor(战斗得分)
+			Number(存档.剧情.击败壮汉) +
+			Number(存档.剧情.击败西装男) +
+			Number(存档.剧情.击败醉汉) +
+			Number(存档.剧情.击败刀疤) +
+			Number(存档.剧情.击败看守者) +
+			Number(存档.剧情.击败追杀者) +
+			Number(存档.剧情.击败劫匪) +
+			Number(存档.剧情.击败不干净的流浪汉) +
+			Number(存档.剧情.击败通缉犯) +
+			Number(存档.剧情.击败城中村大佬) +
+			Number(存档.剧情.击败治安小队) +
+			Number(存档.剧情.击败皮衣男) +
 
-		let 资历得分 = 存档.健康 * 5 +
-			存档.声望 * 2 +
-			存档.阅历 * 2 +
-			存档.面经 * 2
-		资历得分 = Math.floor(资历得分)
+			Number(存档.剧情.面试交钱) +
+			Number(存档.剧情.打扫老爷爷房间) +
+			Number(存档.剧情.结认晓月) +
+			Number(存档.剧情.堂主捐钱) +
+			Number(存档.剧情.地质队吃饭) +
+			Number(存档.剧情.借钱给中年大叔) +
+			Number(存档.剧情.归还礼物) +
+			Number(存档.剧情.帮助小兰) +
+			Number(存档.剧情.帮助胖女人) +
+			Number(存档.剧情.再次帮助胖女人) +
 
-		const 总得分 = 剧情得分 + 战斗得分 + 资历得分
+			存档.物品.好人卡 +
+			存档.物品.眼泪 +
+			(存档.伙伴.碧瑶分成 - 5) -
+			Math.floor(存档.罪恶 * 0.1);
+
 		const texts = [
-			`剧情评分为：${剧情得分}（与你在游戏中的选择有关！占总分约40%）。这部分是考察你游戏的策略性和你的性格（游戏性格，不必较真）`,
-			`战斗得分为：${战斗得分}（攻防血属性越高分数越高！占总分约60%）`,
-			`资历得分为：${资历得分}（和游戏中物品和其他属性有关！占总分约10%）`,
-			`总得分为：${总得分}`,
+			`你的评分为：${得分}（与你在游戏中的选择有关！占总分约40%）。这部分是考察你游戏的策略性和你的性格（游戏性格，不必较真）`,
 		]
 
 		this.选项容器.getChildByName('选择按钮1').on(Button.EventType.CLICK, () => {
@@ -76,7 +76,7 @@ export class 分数 extends Component {
 			}
 			const mode = 存档.套餐名称
 
-			this.提交分数(name, mode, 总得分)
+			this.提交分数(name, mode, 得分)
 		}, this)
 
 		this.选项容器.getChildByName('选择按钮2').on(Button.EventType.CLICK, () => {
