@@ -24,8 +24,8 @@ export function 计算数值(计算名称, 初始值 = 0) {
 
 export const 计算最大攻击 = () => Math.floor(计算数值("最大攻击", 存档.攻击))
 export const 计算最大防御 = () => Math.floor(计算数值("最大防御", 存档.防御))
-export const 计算最大生命 = () => Math.floor(计算数值("最大生命", 存档.生命))
-export const 计算最大精力 = () => Math.floor(计算数值("最大精力", 存档.精力))
-export const 计算最大饥饿 = () => Math.floor(计算数值("最大饥饿", 存档.饥饿))
+export const 计算最大生命 = () => Math.floor(计算数值("最大生命", 存档.最大生命))
+export const 计算最大精力 = () => Math.floor(计算数值("最大精力", 存档.最大精力))
+export const 计算最大饥饿 = () => Math.floor(计算数值("最大饥饿", 存档.最大饥饿))
 export const 计算最大逃跑 = () => Math.floor(计算数值("最大逃跑", 存档.逃跑))
 export const 计算最大压制 = () => Math.floor(计算数值("最大压制", 存档.压制))

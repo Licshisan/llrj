@@ -10,8 +10,10 @@ export interface 剧情定义类型 {
 	条件?: boolean ,
 	选项一?: string,
 	选项二?: string ,
-	结果一?:  ((上下文: 剧情上下文) => void),
+	选项三?: string ,
+	结果一?: ((上下文: 剧情上下文) => void),
 	结果二?: ((上下文: 剧情上下文) => void),
+	结果三?: ((上下文: 剧情上下文) => void),
 }
 
 export const 默认剧情表: 剧情定义类型[] = [

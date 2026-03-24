@@ -1,4 +1,4 @@
-import { _decorator, Component, director, Node, Label, tween, Button, Vec3, SafeArea } from "cc";
+import { _decorator, Component, director, Node, Label, tween, Button, Vec3 } from "cc";
 import { 保存存档, 存档 } from "../管理器/存档管理器";
 import { 创建动画文字, 播放文本, 放大出现, 淡入 } from "../方法函数/动画效果";
 import { 设置 } from "../管理器/设置管理器";
@@ -43,6 +43,7 @@ export class 剧情 extends Component {
 
 		const 选项一 = this.按钮容器.getChildByName("选项一");
 		const 选项二 = this.按钮容器.getChildByName("选项二");
+		const 选项三 = this.按钮容器.getChildByName("选项三");
 
 		this.上下文 = {
 			提示: (text: string) => this.提示标签.getComponent(Label).string = text,
@@ -66,14 +67,38 @@ export class 剧情 extends Component {
 
 		选项一.getChildByName("标签").getComponent(Label).string = 剧情.选项一;
 		选项一.targetOff(this)
-		选项一.on(Button.EventType.CLICK, () => 剧情.结果一(this.上下文), this);
+		选项一.on(Button.EventType.CLICK, () => {
+			if(剧情.结果一){
+				剧情.结果一(this.上下文)
+			}else{
+				this.结束剧情()
+			}
+		}, this);
 		选项一.active = !!剧情.选项一;
 
 
 		选项二.getChildByName("标签").getComponent(Label).string = 剧情.选项二;
 		选项二.targetOff(this)
-		选项二.on(Button.EventType.CLICK, () => 剧情.结果二(this.上下文), this);
+		选项二.on(Button.EventType.CLICK, () => {
+			if(剧情.结果二){
+				剧情.结果二(this.上下文)
+			}else{
+				this.结束剧情()
+			}
+		}, this);
 		选项二.active = !!剧情.选项二;
+
+		选项三.getChildByName("标签").getComponent(Label).string = 剧情.选项三;
+		选项三.targetOff(this)
+		选项三.on(Button.EventType.CLICK, () => {
+			if(剧情.结果二){
+				剧情.结果二(this.上下文)
+			}else{
+				this.结束剧情()
+			}
+		}, this);
+		选项三.active = !!剧情.选项三;
+
 
 		const sequence = tween(this.node).delay(1 / 设置.播放速度);
 		for (let i = 0; i < 剧情.文本.length; i++) {
