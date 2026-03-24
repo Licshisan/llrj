@@ -58,10 +58,6 @@ export class 进食 extends Component {
 			项目组件.name = `食物_${食物.名称}`;
 
 			let 名称 = 食物.名称
-			if (食物.拥有) {
-				名称 += `（已拥有：${食物.拥有}）`
-			}
-
 			项目组件.getChildByName("选择按钮").getChildByName("标签").getComponent(Label).string = 名称
 			if (食物.条件) {
 				项目组件.getChildByName("选择按钮").getChildByName("标签").getComponent(Label).color = new Color(0, 255, 0);
@@ -71,13 +67,15 @@ export class 进食 extends Component {
 			项目组件.getChildByName("标签二").getComponent(Label).string = 食物.说明;
 			项目组件.getChildByName("选择按钮").on(Button.EventType.CLICK, () => {
 				try {
-					const 进食前存档 = JSON.parse(JSON.stringify(存档))
-					const 文本 = 食物.使用()
-					执行钩子('进食时', [食物, 进食前存档])
+					执行钩子('进食时', [食物])
+					食物.使用({
+						提示:(文本) => 播放文本(this.标签, 文本),
+						食用成功:(文本) => {
+							执行钩子('进食成功', [食物])
+							播放文本(this.标签, 文本)
+						},
+					})
 					保存存档()
-					if (文本) {
-						播放文本(this.标签, 文本)
-					}
 					this.创建单页(页码, 分页组件);
 					this.更新属性();
 				} catch (e) {

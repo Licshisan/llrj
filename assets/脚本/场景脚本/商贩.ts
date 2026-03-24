@@ -3,7 +3,7 @@ import { 存档, 保存存档 } from "../管理器/存档管理器";
 import { 播放文本 } from "../方法函数/动画效果";
 const { ccclass, property } = _decorator;
 
-type 商贩项目类型 = {
+export type 商贩项目类型 = {
 	名称: string | ((peddler: 商贩) => string);
 	购买: (peddler: 商贩) => string;
 };
@@ -235,4 +235,3 @@ const 黑市列表: 商贩项目类型[] = [
 		}
 	}
 ]
-
