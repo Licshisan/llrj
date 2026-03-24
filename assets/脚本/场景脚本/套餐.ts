@@ -36,6 +36,7 @@ export class 套餐 extends Component {
 	}
 
 	创建套餐分页() {
+		this.分页视图.active = false;
 		const 总页数 = Math.ceil(默认套餐表.length / this.页大小);
 		const 分页组件 = this.分页视图.getComponent(PageView);
 		分页组件.removeAllPages();
@@ -75,11 +76,12 @@ export class 套餐 extends Component {
 				}
 			}
 		}
-		this.分页视图.active = false;
-		淡入(this.分页视图);
+
+		淡入(this.分页视图)
 	}
 
 	创建难度分页() {
+		this.分页视图.active = false;
 		const 总页数 = Math.ceil(默认难度表.length / this.页大小);
 		const 分页组件 = this.分页视图.getComponent(PageView);
 		分页组件.removeAllPages();
@@ -108,6 +110,7 @@ export class 套餐 extends Component {
 						this.显示难度页 = false
 						播放文本(this.标签, 难度.说明)
 						this.当前难度 = 难度.名称
+						this.难度按钮.getComponent(Label).string = `当前难度：${难度.名称}`
 						this.创建套餐分页()
 					}, this);
 				} else {
@@ -116,7 +119,7 @@ export class 套餐 extends Component {
 				}
 			}
 		}
-		this.分页视图.active = false;
-		淡入(this.分页视图);
+		
+		淡入(this.分页视图)
 	}
 }

@@ -1,4 +1,4 @@
-import { Node, Label, Color, tween, v3, Vec3, UIOpacity, Sprite, UITransform, find } from "cc";
+import { Node, Label, Color, tween, v3, Vec3, UIOpacity, Sprite, UITransform, find, log, Tween } from "cc";
 import { 设置 } from "../管理器/设置管理器";
 
 // 逐字播放文本效果
@@ -32,7 +32,7 @@ export function 播放文本(目标节点: Node, 文本内容: string, 间隔时
 // 淡入效果
 export function 淡入(目标节点: Node, 持续时长: number = 2.4): void {
 	if (!目标节点) return;
-
+	Tween.stopAllByTarget(目标节点.getComponent(UIOpacity));
 	// 确保有UIOpacity组件
 	let 透明组件 = 目标节点.getComponent(UIOpacity) || 目标节点.addComponent(UIOpacity);
 	目标节点.active = true;
