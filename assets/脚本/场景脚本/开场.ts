@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, director, tween, Button, Color } from "cc";
+import { _decorator, Component, Node, director, tween, Button, Color, log, UIOpacity } from "cc";
 import { 设置 } from "../管理器/设置管理器";
 import { 创建动画文字, 淡入, 淡出 } from "../方法函数/动画效果";
 import { 保存存档, 存档 } from "../管理器/存档管理器";
@@ -21,7 +21,7 @@ export class 开场 extends Component {
 		for (let i = 0; i < this.开场文本.length; i++) {
 			序列.call(() => 创建动画文字(this.文本容器, this.开场文本[i], i)).delay(1.5 / 设置.播放速度);
 		}
-		序列.call(() =>淡出(this.文本容器)).delay(2.5 / 设置.播放速度);
+		序列.delay(2.5 / 设置.播放速度);
 		序列.call(() =>this.点击刷新()).delay(2.5 / 设置.播放速度);
 		序列.start();
 
@@ -49,42 +49,61 @@ export class 开场 extends Component {
 		const 抽取的正面天赋 = 随机抽取(默认天赋表.filter(i => !i.负面), 正面天赋数量)
 		const 抽取的负面天赋 = 随机抽取(默认天赋表.filter(i => i.负面), 负面天赋数量)
 
+		const 颜色对应 = {
+			"普通": Color.WHITE,
+			"稀有": Color.YELLOW,
+			"传说": Color.MAGENTA
+		}
 
 		const 显示文本 = []
 		抽取的特质.forEach(特质 => {
 			显示文本.push({
 				文本: `你天生拥有特质「${特质?.名称 || ""}」\n效果：${特质?.说明 || ""}`,
-				颜色: Color.WHITE
+				颜色: 颜色对应[特质.品质]
 			})
 		})
 		抽取的正面天赋.forEach(天赋 => {
 			显示文本.push({
 				文本: `你同时拥有天赋「${天赋?.名称 || ""}」\n效果：${天赋?.说明 || ""}`,
-				颜色: Color.WHITE
+				颜色: 颜色对应[天赋.品质]
 			})
 		})
 		抽取的负面天赋.forEach(天赋 => {
 			显示文本.push({
 				文本: `你得到负面天赋「${天赋?.名称 || ""}」\n效果：${天赋?.说明 || ""}`,
-				颜色: Color.WHITE
+				颜色: Color.RED
 			})
 		})
 
-		const 序列 = tween(this.node).delay(0.5);
+		const 序列 = tween(this.node)
+		.call(()=> 淡出(this.文本容器))
+		.delay(2.5 / 设置.播放速度)
+		.call(() => {
+			this.文本容器.removeAllChildren()
+			this.文本容器.active = true
+			this.文本容器.getComponent(UIOpacity).opacity = 255
+		})
 		for (let i = 0; i < 显示文本.length; i++) {
-			序列.call(() => 创建动画文字(this.文本容器, 显示文本[i].文本, i, 显示文本[i].颜色)).delay(1.5 / 设置.播放速度);
+			序列.call(() => {
+				创建动画文字(this.文本容器, 显示文本[i].文本, i, 显示文本[i].颜色)
+			})
+			.delay(1.5 / 设置.播放速度);
 		}
-		序列.call(() => 淡出(this.文本容器)).delay(2.5 / 设置.播放速度);
+		序列.delay(1.5 / 设置.播放速度);
 		序列.call(() =>{
 			淡入(this.继续按钮)
 			淡入(this.刷新按钮)
-		}).delay(2.5 / 设置.播放速度);
+		})
 		序列.start();
 	}
 
 	点击确定() {
+		this.当前特质.forEach(特质 => {
+			执行钩子("激活特质", [特质])
+			存档.特质[特质] = true
+		})
 		this.当前天赋.forEach(天赋 => {
-			执行钩子(天赋)
+			执行钩子("激活天赋", [天赋])
 			存档.天赋[天赋] = true
 		})
 		保存存档()

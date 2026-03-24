@@ -1,4 +1,4 @@
-import { Component, Prefab, Button, director, UITransform, Layout, PageView, instantiate, Label, _decorator, Node, Color } from "cc";
+import { Component, Prefab, Button, director, UITransform, Layout, PageView, instantiate, Label, _decorator, Node, Color, log, UIOpacity } from "cc";
 import { 播放文本, 淡入 } from "../方法函数/动画效果";
 import { 执行钩子 } from "../管理器/钩子管理器";
 import { 保存存档, 创建存档, 存档 } from "../管理器/存档管理器";
@@ -15,6 +15,7 @@ export class 套餐 extends Component {
 	@property(Node) 难度按钮: Node = null;
 
 	页大小 = 7;
+	显示难度页 = false
 	当前难度 = "普通"
 	start() {
 		播放文本(this.标签, "请选择一种初始道具套餐...");
@@ -24,12 +25,17 @@ export class 套餐 extends Component {
 
 		this.创建套餐分页()
 		this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene("存档"), this);
-		this.难度按钮.on(Button.EventType.CLICK, () => this.创建难度分页(), this);
+		this.难度按钮.on(Button.EventType.CLICK, () => {
+			if(!this.显示难度页){
+				this.创建难度分页()
+			}else{
+				this.创建套餐分页()
+			}
+			this.显示难度页 = !this.显示难度页
+		}, this);
 	}
 
 	创建套餐分页() {
-		this.分页视图.active = false;
-		淡入(this.分页视图);
 		const 总页数 = Math.ceil(默认套餐表.length / this.页大小);
 		const 分页组件 = this.分页视图.getComponent(PageView);
 		分页组件.removeAllPages();
@@ -47,6 +53,7 @@ export class 套餐 extends Component {
 
 			for (let i = 0; i < this.页大小; i++) {
 				const 套餐 = 默认套餐表[页码 * this.页大小 + i];
+				if(!套餐) break
 				const 选项按钮 = instantiate(this.选项按钮预制体);
 				选项按钮.setParent(单页);
 
@@ -57,20 +64,22 @@ export class 套餐 extends Component {
 						创建存档()
 						存档.创建时间 = Date.now();
 						存档.套餐名称 = 套餐.名称
+						存档.游戏难度 = this.当前难度
 						执行钩子("新建游戏")
 						保存存档()
 						director.loadScene("开场");
 					}, this);
 				} else {
+					选项按钮.getChildByName("标签").addComponent(UIOpacity).opacity = 100
 					选项按钮.on(Button.EventType.CLICK, () => 播放文本(this.标签, 套餐.提示 || "暂未解锁"), this);
 				}
 			}
 		}
+		this.分页视图.active = false;
+		淡入(this.分页视图);
 	}
 
 	创建难度分页() {
-		this.分页视图.active = false;
-		淡入(this.分页视图);
 		const 总页数 = Math.ceil(默认难度表.length / this.页大小);
 		const 分页组件 = this.分页视图.getComponent(PageView);
 		分页组件.removeAllPages();
@@ -88,6 +97,7 @@ export class 套餐 extends Component {
 
 			for (let i = 0; i < this.页大小; i++) {
 				const 难度 = 默认难度表[页码 * this.页大小 + i];
+				if(!难度) break
 				const 选项按钮 = instantiate(this.选项按钮预制体);
 				选项按钮.setParent(单页);
 
@@ -95,13 +105,18 @@ export class 套餐 extends Component {
 				选项按钮.getChildByName("标签").getComponent(Label).color = 难度.颜色 ? new Color(难度.颜色) : Color.WHITE
 				if (难度.条件) {
 					选项按钮.on(Button.EventType.CLICK, () => {
+						this.显示难度页 = false
+						播放文本(this.标签, 难度.说明)
 						this.当前难度 = 难度.名称
 						this.创建套餐分页()
 					}, this);
 				} else {
+					选项按钮.getChildByName("标签").addComponent(UIOpacity).opacity = 100
 					选项按钮.on(Button.EventType.CLICK, () => 播放文本(this.标签, 难度.提示 || "暂未解锁"), this);
 				}
 			}
 		}
+		this.分页视图.active = false;
+		淡入(this.分页视图);
 	}
 }

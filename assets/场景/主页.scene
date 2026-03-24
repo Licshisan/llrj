@@ -468,7 +468,7 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -322.5,
+      "x": -320,
       "y": 0,
       "z": 0
     },
@@ -713,7 +713,7 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -100,
+      "x": -80,
       "y": 0,
       "z": 0
     },
@@ -987,7 +987,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "饥饿",
+    "_name": "标签",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -9229,7 +9229,7 @@
     "node": {
       "__id__": 287
     },
-    "_enabled": true,
+    "_enabled": false,
     "__prefab": null,
     "_resizeMode": 1,
     "_layoutType": 3,

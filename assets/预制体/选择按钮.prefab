@@ -133,7 +133,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 580,
+      "width": 590,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -172,8 +172,8 @@
     "_string": "嗯，这边挺好的...",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 33,
-    "_fontSize": 32,
+    "_actualFontSize": 29,
+    "_fontSize": 28,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
     "_overflow": 2,
@@ -416,6 +416,7 @@
       "__id__": 0
     },
     "fileId": "e1b6ob4UJBvqA92e6TNlkC",
-    "instance": null
+    "instance": null,
+    "targetOverrides": null
   }
 ]
