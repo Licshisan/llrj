@@ -3,7 +3,7 @@ import { 存档, 保存存档 } from "../管理器/存档管理器";
 import { 播放文本 } from "../方法函数/动画效果";
 const { ccclass, property } = _decorator;
 
-type PeddlerListType = {
+type 商贩项目类型 = {
 	名称: string | ((peddler: 商贩) => string);
 	购买: (peddler: 商贩) => string;
 };
@@ -29,25 +29,39 @@ export class 商贩 extends Component {
 		this.按钮容器.removeAllChildren()
 		this.重置()
 
+		if (globalThis.商贩名称 === '商贩') {
+			商贩列表.forEach((商贩项目) => {
+				const 名称 = typeof 商贩项目.名称 === 'function' ? 商贩项目.名称(this) : 商贩项目.名称;
 
-		商贩列表.forEach((商贩项目) => {
-			const 名称 = typeof 商贩项目.名称 === 'function' ? 商贩项目.名称(this) : 商贩项目.名称;
+				const 选项按钮 = instantiate(this.选择按钮预制体);
+				选项按钮.getChildByName('标签').getComponent(Label).string = 名称;
+				选项按钮.on(Button.EventType.CLICK, () => {
+					const text = 商贩项目.购买(this);
+					播放文本(this.标签, text);
+					const newName = typeof 商贩项目.名称 === 'function' ? 商贩项目.名称(this) : 商贩项目.名称;
+					选项按钮.getChildByName('标签').getComponent(Label).string = newName;
+					this.更新();
+					保存存档();
+				}, this);
+				选项按钮.setParent(this.按钮容器);
+			})
+		} else if (globalThis.商贩名称 === '黑市') {
+			黑市列表.forEach((黑市项目) => {
+				const 名称 = typeof 黑市项目.名称 === 'function' ? 黑市项目.名称(this) : 黑市项目.名称;
 
-			const 选项按钮 = instantiate(this.选择按钮预制体);
-			选项按钮.getChildByName('标签').getComponent(Label).string = 名称;
-			选项按钮.on(Button.EventType.CLICK, () => {
-				const text = 商贩项目.购买(this);
-				播放文本(this.标签, text);
-				const newName = typeof 商贩项目.名称 === 'function' ? 商贩项目.名称(this) : 商贩项目.名称;
-				选项按钮.getChildByName('标签').getComponent(Label).string = newName;
-				this.更新();
-				保存存档();
-			}, this);
-			选项按钮.setParent(this.按钮容器);
-		})
-
-
-
+				const 选项按钮 = instantiate(this.选择按钮预制体);
+				选项按钮.getChildByName('标签').getComponent(Label).string = 名称;
+				选项按钮.on(Button.EventType.CLICK, () => {
+					const text = 黑市项目.购买(this);
+					播放文本(this.标签, text);
+					const newName = typeof 黑市项目.名称 === 'function' ? 黑市项目.名称(this) : 黑市项目.名称;
+					选项按钮.getChildByName('标签').getComponent(Label).string = newName;
+					this.更新();
+					保存存档();
+				}, this);
+				选项按钮.setParent(this.按钮容器);
+			})
+		}
 		this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene("主页"), this);
 	}
 
@@ -73,12 +87,12 @@ export class 商贩 extends Component {
 	}
 
 	更新() {
-		this.属性一.getComponent(Label).string = `金钱：${(存档.金钱 / 10).toFixed(1)}`;
-		this.属性二.getComponent(Label).string = ``;
+		this.属性一.getComponent(Label).string = 存档.物品.白色粉末 ? `白色粉末：${存档.物品.白色粉末}` : ''
+		this.属性二.getComponent(Label).string = `金钱：${(存档.金钱 / 10).toFixed(1)}元`;
 	}
 }
 
-const 商贩列表: PeddlerListType[] = [
+const 商贩列表: 商贩项目类型[] = [
 	{
 		名称: () => `出售伤药（每个1毛，已拥有${存档.物品.伤药 || 0}）`,
 		购买: () => {
@@ -126,4 +140,99 @@ const 商贩列表: PeddlerListType[] = [
 		},
 	},
 ];
+
+const 黑市列表: 商贩项目类型[] = [
+	{
+		名称: "白色粉末换1元",
+		购买: (self) => {
+			if (存档.物品.白色粉末 < 1) {
+				return "白色粉末不足！";
+			}
+			存档.物品.白色粉末 -= 1;
+			存档.金钱 += 10;
+			return "获得10元！";
+		}
+	},
+	{
+		名称: "《少妇白洁》（需4白色粉末）",
+		购买: (self) => {
+			if (存档.其他.少妇白洁 !== 0) {
+				return "你已拥有此书！";
+			}
+			if (存档.物品.白色粉末 < 4) {
+				return "白色粉末不足！";
+			}
+			存档.物品.白色粉末 -= 4;
+			存档.其他.少妇白洁 = 1;
+			return "获得《少妇白洁》！请到看书界面使用。";
+		}
+	},
+	{
+		名称: "《搬砖，从入门到放弃》（需6元）",
+		购买: (self) => {
+			if (存档.其他.搬砖从入门到放弃 !== 0) {
+				return "你已拥有此书！";
+			}
+			if (存档.金钱 < 60) {
+				return "金钱不足！";
+			}
+			存档.金钱 -= 60;
+			存档.其他.搬砖从入门到放弃 = 1;
+			return "获得《搬砖，从入门到放弃》！请到看书界面使用。";
+		}
+	},
+
+	{
+		名称: "《中国居民膳食指南1997版》（需6元）",
+		购买: (self) => {
+			if (存档.其他.中国居民膳食指南1997版 !== 0) {
+				return "你已拥有此书！";
+			}
+			if (存档.金钱 < 60) {
+				return "金钱不足！";
+			}
+			存档.金钱 -= 60;
+			存档.其他.中国居民膳食指南1997版 = 1;
+			return "获得《中国居民膳食指南1997版》！请到看书界面使用。";
+		}
+	},
+	{
+		名称: (self) => `枪（需${存档.物品.枪 * 10 + 10}个白色粉末）`,
+		购买: (self) => {
+			const need = 存档.物品.枪 * 10 + 10;
+			if (存档.物品.白色粉末 < need) {
+				return "白色粉末不足！";
+			}
+			存档.物品.白色粉末 -= need;
+			存档.物品.枪 += 1;
+			self.按钮容器.getChildByName("选择按钮5").getChildByName("标签").getComponent(Label).string = `枪（需${存档.物品.枪 * 10 + 10}个白色粉末）`;
+			return "获得「枪」！";
+		}
+	},
+	{
+		名称: "购买子弹（5元/个）",
+		购买: (self) => {
+			if (存档.金钱 < 5) {
+				return "钱不够！";
+			}
+			存档.金钱 -= 5;
+			存档.物品.子弹 += 1;
+			return "获得「子弹」*1";
+		}
+	},
+	{
+		名称: (self) => `出售所有漂亮石头（每个1毛，已有${存档.物品.漂亮石头}个）`,
+		购买: (self) => {
+			const count = 存档.物品.漂亮石头;
+			if (count <= 0) {
+				return "你身上没有漂亮石头~";
+			}
+			const money = count;
+			存档.金钱 += money;
+			存档.物品.漂亮石头 = 0;
+			self.按钮容器.getChildByName("选择按钮7").getChildByName("标签").getComponent(Label).string = `出售所有漂亮石头（每个1毛，已有${存档.物品.漂亮石头}个）`;
+			return `${count}个漂亮石头出售成功，获得${(count / 10).toFixed(1)}元！`;
+		}
+	}
+]
 
