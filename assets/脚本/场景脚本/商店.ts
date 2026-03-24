@@ -61,13 +61,8 @@ export class 商店 extends Component {
 
 			项目组件.name = `商品_${商品.名称}`;
 
-			let 名称 = 商品.名称;
-			if (商品.拥有) {
-				名称 += `（已拥有${商品.拥有} ）`;
-			}
-			if (商品.等级) {
-				名称 += `（LV${商品.等级} ）`;
-			}
+			let 名称 = 商品.显示名称 || 商品.名称;
+
 			项目组件.getChildByName("选择按钮").getChildByName("标签").getComponent(Label).string = 名称;
 			if (商品.条件) {
 				项目组件.getChildByName("选择按钮").getChildByName("标签").getComponent(Label).color = new Color(0, 255, 0);

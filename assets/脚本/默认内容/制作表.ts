@@ -1,7 +1,12 @@
 import { 存档 } from "../管理器/存档管理器";
-import { 计算容器类型, 计算数值, 计算最大生命, 计算最大防御 } from "../方法函数/属性计算";
+import { 计算容器类型, 计算数值, 计算最大生命 } from "../方法函数/属性计算";
 import { 抽取物品 } from "../方法函数/公共函数";
 import { 对局类型 } from "../场景脚本/战斗";
+
+interface 制作上下文 {
+	制作成功:  (string) => void,
+	提示: (提示: string) => void
+}
 
 export interface 制作类型 {
 	名称: string,
@@ -10,7 +15,7 @@ export interface 制作类型 {
 	说明: string;
 	显示: boolean;
 	条件: boolean;
-	制作: (制作上下文: { 制作成功: (string) => void, 提示: (提示: string) => void }) => void;
+	制作: (制作上下文: 制作上下文) => void;
 	效果?: Record<string, (x: any) => void>;
 }
 
@@ -165,7 +170,7 @@ export const 默认制作表: 制作类型[] = [
 			制作成功("讨厌的蚊子减少啦~");
 		},
 		效果: {
-			计算睡觉回复生命: (计算容器: 计算容器类型) => {
+			计算睡觉恢复生命: (计算容器: 计算容器类型) => {
 				计算容器.固定加成 += 30 * 存档.物品.驱蚊工具
 			}
 		},
