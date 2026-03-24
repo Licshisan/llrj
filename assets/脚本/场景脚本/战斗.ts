@@ -206,6 +206,23 @@ export class 战斗 extends Component {
                     }
                 }
             },
+
+            失败效果: (对局: 对局类型) => {
+                if (敌人.失败效果) {
+                    const 失败效果 = 敌人.失败效果(对局)
+                    if (失败效果) {
+                        对局.结果文本.push(失败效果)
+                    }
+                }
+            },
+            胜利效果: (对局: 对局类型) => {
+                if (敌人.胜利效果) {
+                    const 胜利效果 = 敌人.胜利效果(对局)
+                    if (胜利效果) {
+                        对局.结果文本.push(胜利效果)
+                    }
+                }
+            },
             其他: {}
         }
 
@@ -296,7 +313,7 @@ export class 战斗 extends Component {
         if (this.对局.主角.方法) {
             this.对局.结果文本.unshift(`${this.对局.主角.名称}使用「${this.对局.主角.方法}」`)
         }
-        this.对局.结果文本.push(`${this.对局.主角.名称}受到${this.对局.伤害}点伤害。`)
+        this.对局.结果文本.push(`${this.对局.敌人.名称}受到${this.对局.伤害.计算结果}点伤害。`)
         this.显示主角文本(this.对局.结果文本.join('\n'));
         this.对局.主角.攻击后(this.对局)
         this.对局.敌人.被攻击后(this.对局)
@@ -343,11 +360,12 @@ export class 战斗 extends Component {
         this.对局.敌人.攻击时(this.对局)
         this.对局.主角.被攻击时(this.对局)
         this.对局.伤害.计算结果 = Math.max(this.对局.伤害.初始值 + this.对局.伤害.基础加成 * (1 + this.对局.伤害.加法乘率) * this.对局.伤害.独立乘区, 0)
-        this.对局.敌人.生命 -= this.对局.伤害.计算结果
+        this.对局.主角.生命 -= this.对局.伤害.计算结果
         存档.生命 = this.对局.主角.生命
         if (this.对局.敌人.方法) {
             this.对局.结果文本.unshift(`${this.对局.敌人.名称}使用「${this.对局.敌人.方法}」`)
         }
+        this.对局.结果文本.push(`${this.对局.主角.名称}受到${this.对局.伤害.计算结果}点伤害。`)
         this.显示敌人文本(this.对局.结果文本.join('\n'));
         this.对局.敌人.攻击后(this.对局)
         this.对局.主角.被攻击后(this.对局)
@@ -416,23 +434,23 @@ export class 战斗 extends Component {
         }
 
         // 架势熟练度
-        let maxKey = "";
-        let maxValue = 0;
-        const 架势使用次数 = this.对局.主角.其他.架势使用次数 as Record<string, number>
-        for (const [key, value] of Object.entries(架势使用次数)) {
-            if (value > maxValue) {
-                maxValue = value;
-                maxKey = key;
-            }
-        }
-        if (maxKey) {
-            if (存档.架势经验[maxKey] < 150) {
-                存档.架势经验[maxKey] += 1;
-                this.对局.结果文本.push(`${maxKey}架势熟练度+1！`)
-            } else {
-                this.对局.结果文本.push(`${maxKey}架势熟练度已达最大值！`)
-            }
-        }
+        // let maxKey = "";
+        // let maxValue = 0;
+        // const 架势使用次数 = this.对局.主角.其他.架势使用次数 as Record<string, number>
+        // for (const [key, value] of Object.entries(架势使用次数)) {
+        //     if (value > maxValue) {
+        //         maxValue = value;
+        //         maxKey = key;
+        //     }
+        // }
+        // if (maxKey) {
+        //     if (存档.架势经验[maxKey] < 150) {
+        //         存档.架势经验[maxKey] += 1;
+        //         this.对局.结果文本.push(`${maxKey}架势熟练度+1！`)
+        //     } else {
+        //         this.对局.结果文本.push(`${maxKey}架势熟练度已达最大值！`)
+        //     }
+        // }
 
         //敌人失败
         this.对局.敌人.失败效果(this.对局)
