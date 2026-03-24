@@ -53,7 +53,7 @@ const 默认存档 = {
     状态: { 饥饿: false } as Record<string, boolean>,
     剧情: { 剧情: false } as Record<string, boolean>,
     伙伴: {} as Record<string, any>,
-    其他: {} as Record<string, number>,
+    其他: {} as Record<string, any>,
     // 计数器
     事件次数: {} as Record<string, number>,
     遇敌次数: {} as Record<string, number>,
