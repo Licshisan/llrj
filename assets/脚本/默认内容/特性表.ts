@@ -604,3 +604,7 @@ export const 默认特性表: 特性定义类型[] = [
 		展示: true,
 	},
 ];
+
+export function 获取特性(特性名称) {
+	return 默认特性表.find(x => x.名称 === 特性名称).条件
+}
