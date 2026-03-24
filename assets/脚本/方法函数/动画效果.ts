@@ -15,18 +15,15 @@ export function 播放文本(目标节点: Node, 文本内容: string, 间隔时
 	标签组件.string = "";
 
 	// 使用节点的 schedule
-	标签组件.schedule(
-		() => {
-			if (当前索引 <= 文本内容.length) {
+	标签组件.schedule(() => {
+			if (文本内容?.length && 当前索引 <= 文本内容.length) {
 				const 显示文本 = 文本内容.slice(0, 当前索引++);
 				标签组件.string = 显示文本;
 			} else {
 				// 播放完成，自动停止
 				标签组件.unscheduleAllCallbacks();
 			}
-		},
-		(间隔时间 / 1000) / 设置.播放速度,
-	);
+		}, (间隔时间 / 1000) / 设置.播放速度);
 }
 
 // 淡入效果

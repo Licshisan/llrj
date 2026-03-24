@@ -27,7 +27,7 @@ export class 开场 extends Component {
 
 		this.继续按钮.active = false
 		this.刷新按钮.active = false
-		this.继续按钮.on(Button.EventType.CLICK, () => director.loadScene("主页"), this);
+		this.继续按钮.on(Button.EventType.CLICK, () => this.点击确定(), this);
 		this.刷新按钮.on(Button.EventType.CLICK, () => this.点击刷新(), this);
 	}
 
@@ -36,7 +36,7 @@ export class 开场 extends Component {
 		this.刷新按钮.active = false
 		const 特质数量 = 1
 		const 正面天赋数量 = 2
-		const 负面天赋数量 = 1
+		const 负面天赋数量 = 2
 
 		this.当前特质 = []
 		this.当前天赋 = []
@@ -55,6 +55,9 @@ export class 开场 extends Component {
 			"传说": Color.MAGENTA
 		}
 
+		this.当前特质.push(...抽取的特质.map(x => x.名称))
+		this.当前天赋.push(...抽取的正面天赋.map(x=> x.名称))
+		this.当前天赋.push(...抽取的负面天赋.map(x=> x.名称))
 		const 显示文本 = []
 		抽取的特质.forEach(特质 => {
 			显示文本.push({
@@ -107,6 +110,7 @@ export class 开场 extends Component {
 			存档.天赋[天赋] = true
 		})
 		保存存档()
+		log(this.当前天赋)
 		director.loadScene("主页")
 	}
 }

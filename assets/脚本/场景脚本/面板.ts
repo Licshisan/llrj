@@ -1,7 +1,9 @@
-import { _decorator, Component, Node, Button, director, Label, UITransform } from "cc";
+import { _decorator, Component, Node, Button, director, Label, UITransform, Color } from "cc";
 import { 存档 } from "../管理器/存档管理器";
 import { 创建普通文字, 播放文本 } from "../方法函数/动画效果";
 import { 计算最大压制, 计算最大逃跑 } from "../方法函数/属性计算";
+import { 默认特质表 } from "../默认内容/特质表";
+import { 默认天赋表 } from "../默认内容/天赋表";
 const { ccclass, property } = _decorator;
 
 @ccclass("面板")
@@ -13,6 +15,37 @@ export class 面板 extends Component {
 
     start() {
         this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene("主页"), this);
+        
+		const 颜色对应 = {
+			"普通": Color.WHITE,
+			"稀有": Color.YELLOW,
+			"传说": Color.MAGENTA
+        }
+
+        let index = 0
+        for(let 特质名 in 存档.特质){
+            if(存档.特质[特质名]){
+                const 特质 = 默认特质表.find(x => x.名称 === 特质名)
+                if(特质){
+                    const 文字 = `【${特质名}】${特质.说明}`
+                    创建普通文字(this.内容,文字, index, 颜色对应[特质.品质])
+                    index ++
+                }
+            }
+        }
+
+        for(let 天赋名 in 存档.天赋){
+            if(存档.天赋[天赋名]){
+                const 天赋 = 默认天赋表.find(x => x.名称 === 天赋名)
+                if(天赋){
+                    const 文字 = `【${天赋名}】${天赋.说明}`
+                    const 颜色 = 天赋.负面 ? Color.RED :颜色对应[天赋.品质] 
+                    创建普通文字(this.内容,文字, index, 颜色)
+                    index ++
+                }
+            }
+        }
+        
         this.创建标签()
     }
 
@@ -89,6 +122,7 @@ export class 面板 extends Component {
             })
         }
 
+        this.信息框.removeAllChildren()
         属性表.forEach((属性) => {
             const 新节点 = new Node(属性.名称)
             const 标签 = 新节点.addComponent(Label)
