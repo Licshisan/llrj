@@ -1,7 +1,7 @@
 import { 存档 } from "../管理器/存档管理器";
 import { 执行钩子 } from "../管理器/钩子管理器";
 
-export interface 计算容器 {
+export interface 计算容器类型 {
 	初始值: number,
 	固定加成: number,
 	百分比加成: number,
@@ -10,7 +10,7 @@ export interface 计算容器 {
 }
 
 export function 计算数值(计算名称, 初始值 = 0) {
-	const 计算容器: 计算容器 = {
+	const 计算容器: 计算容器类型 = {
 		初始值: 初始值,
 		固定加成: 0,
 		百分比加成: 0,
