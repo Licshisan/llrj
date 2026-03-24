@@ -1,20 +1,25 @@
-import { _decorator, Component, Node, Button, director, Label, UITransform, Color } from 'cc';
+import { _decorator, Button, Color, Component, director, Label, Node, UITransform } from 'cc';
+import { 存档 } from '../管理器/存档管理器';
 import { 默认伙伴特性表 } from '../默认内容/伙伴特性表';
 const { ccclass, property } = _decorator;
 
-@ccclass('伙伴特性')
-export class 伙伴特性 extends Component {
-	@property(Node) 文本容器: Node = null
-	@property(Node) 返回按钮: Node = null
+@ccclass('伙伴特性2')
+export class 伙伴特性2 extends Component {
+    @property(Node) 文本容器: Node = null
+    @property(Node) 返回: Node = null
+    @property(Node) 好感: Node = null
 
-	start() {
-		默认伙伴特性表.小兰.forEach((特性, index) => {
-			this.creatText(index, `【${特性.名称}】${特性.描述} `, 特性.条件)
-		})
-		this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene("主页"), this)
-	}
+    start() {
+		const 伙伴名称 = globalThis.伙伴特性伙伴名称
+        默认伙伴特性表[伙伴名称].forEach((特性, index) => {
+            this.创建文本(index, `【${特性.名称}】${特性.描述}`, 特性.条件)
+        })
 
-	creatText(index: number, content: string, activated: boolean) {
+        this.好感.getComponent(Label).string = `当前好感：${存档.伙伴[伙伴名称+"好感"]}`
+        this.返回.on(Button.EventType.CLICK, () => director.loadScene("主页"), this)
+    }
+
+	创建文本(index: number, content: string, activated: boolean) {
 		const feature = new Node(`feature${index}`);
 		const label = feature.addComponent(Label)
 
