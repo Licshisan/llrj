@@ -3,8 +3,8 @@ import { 存档 } from '../管理器/存档管理器';
 import { 默认伙伴特性表 } from '../默认内容/伙伴特性表';
 const { ccclass, property } = _decorator;
 
-@ccclass('伙伴特性2')
-export class 伙伴特性2 extends Component {
+@ccclass('伙伴特性')
+export class 伙伴特性 extends Component {
     @property(Node) 文本容器: Node = null
     @property(Node) 返回: Node = null
     @property(Node) 好感: Node = null

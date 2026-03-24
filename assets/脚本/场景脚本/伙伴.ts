@@ -20,7 +20,8 @@ export class 伙伴 extends Component {
 	onLoad(): void {
 		if (!存档.伙伴.晓月关系) {
 			if (存档.伙伴.碧瑶关系) {
-				director.loadScene('伙伴特性2')
+				globalThis.伙伴特性伙伴名称 = '碧瑶'
+				director.loadScene('伙伴特性')
 			} else if (存档.伙伴.小兰特性) {
 				director.loadScene('小兰')
 			}
@@ -35,12 +36,18 @@ export class 伙伴 extends Component {
 		this.按钮容器.getChildByName("选择按钮1").on(Button.EventType.CLICK, this.聊天, this);
 		this.按钮容器.getChildByName("选择按钮2").on(Button.EventType.CLICK, this.喂食, this);
 		this.按钮容器.getChildByName("选择按钮3").on(Button.EventType.CLICK, this.喂药, this);
-		this.按钮容器.getChildByName("选择按钮4").on(Button.EventType.CLICK, () => director.loadScene("伙伴特性"), this);
+		this.按钮容器.getChildByName("选择按钮4").on(Button.EventType.CLICK, () => {
+			globalThis.伙伴特性伙伴名称 = '晓月'
+			director.loadScene("伙伴特性")
+		}, this);
 		this.按钮容器.getChildByName("选择按钮5").on(Button.EventType.CLICK, () => director.loadScene("主页"), this);
 
 		// 其他伙伴
 		this.切换1.active = 存档.伙伴.碧瑶关系;
-		this.切换1.on(Button.EventType.CLICK, () => director.loadScene("伙伴特性2"));
+		this.切换1.on(Button.EventType.CLICK, () => {
+			globalThis.伙伴特性伙伴名称 = '碧瑶'
+			director.loadScene("伙伴特性")
+		});
 
 		this.切换2.active = 存档.伙伴.小兰关系;
 		this.切换2.on(Button.EventType.CLICK, () => director.loadScene("小兰"));
