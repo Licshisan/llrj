@@ -9,8 +9,7 @@ import { 默认制作表 } from "./制作表";
 import { 伙伴特性定义类型, 默认伙伴特性表 } from "./伙伴特性表";
 import { 默认特性表 } from "./特性表";
 import { 默认天赋表 } from "./天赋表";
-import { log, sys } from "cc";
-
+import { log } from "cc";
 
 let 加载完成 = false
 export function 挂载全局变量() {
@@ -23,6 +22,14 @@ export function 挂载全局变量() {
 
 
 export function 注册钩子函数() {
+	// 难度
+	// 套餐
+	// 特质
+	// 天赋
+	// 效果
+	// 特性
+	// 伙伴特性
+	// 制作
 
 	默认套餐表.forEach((天赋项) => {
 		const 效果 = 天赋项.效果
