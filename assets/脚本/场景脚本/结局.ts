@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node, Button, director, Prefab, instantiate, Tween, tween } from "cc";
+import { _decorator, Component, Node, Button, director, tween } from "cc";
 import { 存档 } from "../管理器/存档管理器";
 import { 保存设置, 设置 } from "../管理器/设置管理器";
 import { 创建动画文字, 淡入 } from "../方法函数/动画效果";
@@ -51,7 +51,6 @@ export class 结局 extends Component {
 			}
 		}
 		保存设置()
-
 
 		this.继续.active = false
 		const 序列 = tween(this.node).delay(0.8)
