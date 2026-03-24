@@ -8,8 +8,10 @@ interface 事件定义类型 {
 	文本: string[],
 	选项一: string,
 	选项二?: string,
+	选项三?: string,
 	结果一: ((上下文: 事件上下文) => void),
 	结果二?: ((上下文: 事件上下文) => void),
+	结果三?: ((上下文: 事件上下文) => void),
 }
 
 export const 默认事件表: 事件定义类型[] = [

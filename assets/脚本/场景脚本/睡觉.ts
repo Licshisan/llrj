@@ -2,7 +2,7 @@ import { _decorator, Component, Node, Label, Color, UITransform, Button, directo
 import { 保存存档, 备份存档, 存档 } from "../管理器/存档管理器";
 import { 淡入 } from "../方法函数/动画效果";
 import { 设置 } from "../管理器/设置管理器";
-import { 计算最大生命, 计算最大精力, 计算最大饥饿 } from "../方法函数/属性计算";
+import { 计算数值, 计算最大生命, 计算最大精力, 计算最大饥饿 } from "../方法函数/属性计算";
 import { 自动进食 } from "../方法函数/公共函数";
 import { 执行钩子 } from "../管理器/钩子管理器";
 import { 获取地区名称 } from "../默认内容/地区表";
@@ -45,27 +45,25 @@ export class 睡觉 extends Component {
     }
 
     恢复() {
-        let 精力恢复 = 计算最大精力() - 存档.精力;
-        let 饥饿消耗 = 20
-        let 生命恢复 = 0
-        const 计算容器 = { 精力恢复, 饥饿消耗, 生命恢复 }
-        执行钩子("睡觉恢复", [计算容器])
+        const 精力恢复 = 计算数值("睡觉恢复精力", 计算最大精力() - 存档.精力)
+        const 饥饿消耗 = 计算数值("睡觉消耗饥饿", 20)
+        const 生命恢复 = 计算数值("睡觉恢复生命", 0)
 
-        存档.精力 += 计算容器.精力恢复;
-        存档.饥饿 -= 计算容器.饥饿消耗;
-        存档.生命 += 计算容器.生命恢复;
+        存档.精力 += 精力恢复;
+        存档.饥饿 -= 饥饿消耗;
+        存档.生命 += 生命恢复;
         自动进食();
 
         const 最大精力 = 计算最大精力()
         const 最大饥饿 = 计算最大饥饿()
         const 最大生命 = 计算最大生命();
 
-        this.属性容器.getChildByName("精力").active = 计算容器.精力恢复 > 0
-        this.属性容器.getChildByName("饥饿").active = 计算容器.饥饿消耗 > 0
-        this.属性容器.getChildByName("生命").active = 计算容器.生命恢复 > 0
-        this.属性容器.getChildByName("精力").getChildByName("标签").getComponent(Label).string = `精力 +${计算容器.精力恢复}（${存档.精力}/${最大精力}）`;
-        this.属性容器.getChildByName("饥饿").getChildByName("标签").getComponent(Label).string = `饥饿 -${计算容器.饥饿消耗}（${存档.饥饿}/${最大饥饿}）`;
-        this.属性容器.getChildByName("生命").getChildByName("标签").getComponent(Label).string = `生命 +${计算容器.生命恢复}（${存档.生命}/${最大生命}）`;
+        this.属性容器.getChildByName("精力").active = 精力恢复 > 0
+        this.属性容器.getChildByName("饥饿").active = 饥饿消耗 > 0
+        this.属性容器.getChildByName("生命").active = 生命恢复 > 0
+        this.属性容器.getChildByName("精力").getChildByName("标签").getComponent(Label).string = `精力 +${精力恢复}（${存档.精力}/${最大精力}）`;
+        this.属性容器.getChildByName("饥饿").getChildByName("标签").getComponent(Label).string = `饥饿 -${饥饿消耗}（${存档.饥饿}/${最大饥饿}）`;
+        this.属性容器.getChildByName("生命").getChildByName("标签").getComponent(Label).string = `生命 +${生命恢复}（${存档.生命}/${最大生命}）`;
 
         const 结算前存档 = JSON.parse(JSON.stringify(存档))
         const 结果文本 = [];

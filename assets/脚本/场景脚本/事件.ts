@@ -37,15 +37,19 @@ export class 事件 extends Component {
 
         const 选项一 = instantiate(this.选项按钮预制体)
         const 选项二 = instantiate(this.选项按钮预制体)
+        const 选项三 = instantiate(this.选项按钮预制体)
 
         选项一.name = "选项一"
         选项二.name = "选项二"
+        选项三.name = "选项三"
 
         选项一.active = !!事件.选项一
         选项二.active = !!事件.选项二
+        选项三.active = !!事件.选项三
 
         选项一.getChildByName("标签").getComponent(Label).string = 事件.选项一;
         选项二.getChildByName("标签").getComponent(Label).string = 事件.选项二;
+        选项三.getChildByName("标签").getComponent(Label).string = 事件.选项三;
 
         const 上下文1: 事件上下文 = {
             进入战斗: (名称) => this.进入战斗(名称),
@@ -69,11 +73,24 @@ export class 事件 extends Component {
             },
         }
 
+        const 上下文3: 事件上下文 = {
+            进入战斗: (名称) => this.进入战斗(名称),
+            进入事件: (名称) => this.触发事件(名称),
+            更改选项: (文本) => 选项三.getChildByName("标签").getComponent(Label).string = 文本,
+            结束事件: (名称) => this.结束事件(名称),
+            跳转场景: (名称) => {
+                this.结束事件(名称)
+                director.loadScene(名称)
+            },
+        }
+
         选项一.on(Button.EventType.CLICK, () => 事件.结果一(上下文1), this)
         选项二.on(Button.EventType.CLICK, () => 事件.结果二(上下文2), this)
+        选项三.on(Button.EventType.CLICK, () => 事件.结果二(上下文3), this)
 
         选项一.setParent(this.按钮容器)
         选项二.setParent(this.按钮容器)
+        选项三.setParent(this.按钮容器)
 
         const 序列 = tween(this.node)
         for (let i = 0; i < 事件.文本.length; i++) {
@@ -81,6 +98,7 @@ export class 事件 extends Component {
         }
         序列.call(() => 放大出现(this.按钮容器)).start()
     }
+
     初始化() {
         this.node.getComponent(主页).更新()
         缩小消失(this.node.getComponent(主页).按钮容器)
