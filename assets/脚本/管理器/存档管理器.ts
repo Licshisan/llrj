@@ -12,7 +12,7 @@ const 默认存档 = {
     距离: 1,
     停留天数: { 荒野: 0 } as Record<string, number>,
     按钮: { 前进: true } as Record<string, boolean>,
-    特殊敌人: {} as Record<string, object>,
+    特殊敌人: {} as Record<string, any>,
     // 玩家
     健康: 30,
 
