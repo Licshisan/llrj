@@ -10,8 +10,11 @@ import { 伙伴特性定义类型, 默认伙伴特性表 } from "./伙伴特性�
 import { 默认特性表 } from "./特性表";
 import { 默认天赋表 } from "./天赋表";
 import { log } from "cc";
+import { 默认难度表 } from "./难度表";
+import { 默认特质表 } from "./特质表";
 
 let 加载完成 = false
+
 export function 挂载全局变量() {
 	globalThis.存档 = 存档管理器.存档;
 	globalThis.存档管理器 = 存档管理器;
@@ -20,16 +23,13 @@ export function 挂载全局变量() {
 	globalThis.设置管理器 = 设置管理器;
 }
 
-
 export function 注册钩子函数() {
-	// 难度
-	// 套餐
-	// 特质
-	// 天赋
-	// 效果
-	// 特性
-	// 伙伴特性
-	// 制作
+	默认难度表.forEach((难度项) => {
+		const 效果 = 难度项.效果
+		for (let 时机 in 效果) {
+			注册钩子(时机, 效果[时机])
+		}
+	})
 
 	默认套餐表.forEach((天赋项) => {
 		const 效果 = 天赋项.效果
@@ -64,6 +64,13 @@ export function 注册钩子函数() {
 			}
 		});
 	}
+
+	默认特质表.forEach((特质项) => {
+		const 效果 = 特质项.效果
+		for (let 时机 in 效果) {
+			注册钩子(时机, 效果[时机])
+		}
+	});
 
 	默认天赋表.forEach((天赋项) => {
 		const 效果 = 天赋项.效果
