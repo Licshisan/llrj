@@ -9,7 +9,7 @@ import { 抽取物品, 概率类型 } from "../方法函数/公共函数";
 import { 默认敌人表 } from "../默认内容/敌人表";
 const { ccclass, property } = _decorator;
 
-type 战斗角色 = {
+export type 战斗角色 = {
     名称: string,
     显示名称: string,
     等级: number,
@@ -132,7 +132,9 @@ export class 战斗 extends Component {
             失败效果: (对局: 对局类型) => {
                 执行钩子('战斗失败', [对局])
             },
-            其他: {}
+            其他: {
+                技能点数: 0
+            }
         }
 
         const 战斗敌人: 战斗角色 = {
@@ -223,7 +225,9 @@ export class 战斗 extends Component {
                     }
                 }
             },
-            其他: {}
+            其他: {
+                技能点数: 0
+            }
         }
 
         // 重置变量
@@ -302,11 +306,13 @@ export class 战斗 extends Component {
         this.对局.结果文本 = [];
         this.对局.主角.攻击前(this.对局)
         this.对局.敌人.被攻击前(this.对局)
+        存档.生命 = this.对局.主角.生命
         this.对局.攻击.计算结果 = Math.max(this.对局.攻击.初始值 + this.对局.攻击.基础加成 * (1 + this.对局.攻击.加法乘率) * this.对局.攻击.独立乘区, 0)
         this.对局.防御.计算结果 = Math.max(this.对局.防御.初始值 + this.对局.防御.基础加成 * (1 + this.对局.防御.加法乘率) * this.对局.防御.独立乘区, 0)
         this.对局.伤害.初始值 = Math.max(this.对局.攻击.计算结果 - this.对局.防御.计算结果, 0);
         this.对局.主角.攻击时(this.对局)
         this.对局.敌人.被攻击时(this.对局)
+        存档.生命 = this.对局.主角.生命
         this.对局.伤害.计算结果 = Math.max(this.对局.伤害.初始值 + this.对局.伤害.基础加成 * (1 + this.对局.伤害.加法乘率) * this.对局.伤害.独立乘区, 0)
         this.对局.敌人.生命 -= this.对局.伤害.计算结果
         存档.生命 = this.对局.主角.生命
@@ -317,7 +323,7 @@ export class 战斗 extends Component {
         this.显示主角文本(this.对局.结果文本.join('\n'));
         this.对局.主角.攻击后(this.对局)
         this.对局.敌人.被攻击后(this.对局)
-
+        存档.生命 = this.对局.主角.生命
         //更新渲染
         this.更新();
         this.node.getComponent(主页).更新()
@@ -354,11 +360,13 @@ export class 战斗 extends Component {
         this.对局.结果文本 = [];
         this.对局.敌人.攻击前(this.对局)
         this.对局.主角.被攻击前(this.对局)
+        存档.生命 = this.对局.主角.生命
         this.对局.攻击.计算结果 = Math.max(this.对局.攻击.初始值 + this.对局.攻击.基础加成 * (1 + this.对局.攻击.加法乘率) * this.对局.攻击.独立乘区, 0)
         this.对局.防御.计算结果 = Math.max(this.对局.防御.初始值 + this.对局.防御.基础加成 * (1 + this.对局.防御.加法乘率) * this.对局.防御.独立乘区, 0)
         this.对局.伤害.初始值 = Math.max(this.对局.攻击.计算结果 - this.对局.防御.计算结果, 0);
         this.对局.敌人.攻击时(this.对局)
         this.对局.主角.被攻击时(this.对局)
+        存档.生命 = this.对局.主角.生命
         this.对局.伤害.计算结果 = Math.max(this.对局.伤害.初始值 + this.对局.伤害.基础加成 * (1 + this.对局.伤害.加法乘率) * this.对局.伤害.独立乘区, 0)
         this.对局.主角.生命 -= this.对局.伤害.计算结果
         存档.生命 = this.对局.主角.生命
@@ -369,7 +377,7 @@ export class 战斗 extends Component {
         this.显示敌人文本(this.对局.结果文本.join('\n'));
         this.对局.敌人.攻击后(this.对局)
         this.对局.主角.被攻击后(this.对局)
-
+        存档.生命 = this.对局.主角.生命
         //更新渲染
         this.更新();
         this.node.getComponent(主页).更新()
