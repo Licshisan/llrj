@@ -104,7 +104,7 @@ export class 战斗 extends Component {
             出场语: '我是要成为海贼王的男人！',
             掉落物: [] as 概率类型[],
             战斗初始化: (对局: 对局类型) => {
-                执行钩子('攻击前', [对局])
+                执行钩子('战斗初始化', [对局])
             },
             攻击前: (对局: 对局类型) => {
                 执行钩子('攻击前', [对局])
@@ -135,6 +135,7 @@ export class 战斗 extends Component {
             其他: {
                 技能点数: 0,
                 枪开关: false,
+                架势使用次数: {}
             }
         }
 
@@ -308,13 +309,13 @@ export class 战斗 extends Component {
         this.对局.主角.攻击前(this.对局)
         this.对局.敌人.被攻击前(this.对局)
         存档.生命 = this.对局.主角.生命
-        this.对局.攻击.计算结果 = Math.max(this.对局.攻击.初始值 + this.对局.攻击.基础加成 * (1 + this.对局.攻击.加法乘率) * this.对局.攻击.独立乘区, 0)
-        this.对局.防御.计算结果 = Math.max(this.对局.防御.初始值 + this.对局.防御.基础加成 * (1 + this.对局.防御.加法乘率) * this.对局.防御.独立乘区, 0)
+        this.对局.攻击.计算结果 = Math.max((this.对局.攻击.初始值 + this.对局.攻击.基础加成) * (1 + this.对局.攻击.加法乘率) * this.对局.攻击.独立乘区, 0)
+        this.对局.防御.计算结果 = Math.max((this.对局.防御.初始值 + this.对局.防御.基础加成) * (1 + this.对局.防御.加法乘率) * this.对局.防御.独立乘区, 0)
         this.对局.伤害.初始值 = Math.max(this.对局.攻击.计算结果 - this.对局.防御.计算结果, 0);
         this.对局.主角.攻击时(this.对局)
         this.对局.敌人.被攻击时(this.对局)
         存档.生命 = this.对局.主角.生命
-        this.对局.伤害.计算结果 = Math.max(this.对局.伤害.初始值 + this.对局.伤害.基础加成 * (1 + this.对局.伤害.加法乘率) * this.对局.伤害.独立乘区, 0)
+        this.对局.伤害.计算结果 = Math.max((this.对局.伤害.初始值 + this.对局.伤害.基础加成) * (1 + this.对局.伤害.加法乘率) * this.对局.伤害.独立乘区, 0)
         this.对局.敌人.生命 -= this.对局.伤害.计算结果
         存档.生命 = this.对局.主角.生命
         this.对局.主角.攻击后(this.对局)
@@ -331,15 +332,16 @@ export class 战斗 extends Component {
         从0放大缩小(this.敌人标签);
         this.文本容器.getChildByName("标签2").getComponent(Label).string = "";
         this.按钮容器.active = false;
-        //todo
-        this.对局.主角.其他?.架势使用次数[存档.当前架势]
+        if(存档.当前架势){
+            this.对局.主角.其他.架势使用次数[存档.当前架势] ++
+        }
 
         // 结算
-        if (this.对局.主角.生命 <= 0) {
+        if (this.对局.敌人.生命 <= 0) {
             this.胜利结算()
             return
         }
-        if (存档.生命 <= 0) {
+        if (this.对局.主角.生命 <= 0) {
             this.失败结算()
             return
         }
@@ -364,13 +366,13 @@ export class 战斗 extends Component {
         this.对局.敌人.攻击前(this.对局)
         this.对局.主角.被攻击前(this.对局)
         存档.生命 = this.对局.主角.生命
-        this.对局.攻击.计算结果 = Math.max(this.对局.攻击.初始值 + this.对局.攻击.基础加成 * (1 + this.对局.攻击.加法乘率) * this.对局.攻击.独立乘区, 0)
-        this.对局.防御.计算结果 = Math.max(this.对局.防御.初始值 + this.对局.防御.基础加成 * (1 + this.对局.防御.加法乘率) * this.对局.防御.独立乘区, 0)
+        this.对局.攻击.计算结果 = Math.max((this.对局.攻击.初始值 + this.对局.攻击.基础加成) * (1 + this.对局.攻击.加法乘率) * this.对局.攻击.独立乘区, 0)
+        this.对局.防御.计算结果 = Math.max((this.对局.防御.初始值 + this.对局.防御.基础加成) * (1 + this.对局.防御.加法乘率) * this.对局.防御.独立乘区, 0)
         this.对局.伤害.初始值 = Math.max(this.对局.攻击.计算结果 - this.对局.防御.计算结果, 0);
         this.对局.敌人.攻击时(this.对局)
         this.对局.主角.被攻击时(this.对局)
         存档.生命 = this.对局.主角.生命
-        this.对局.伤害.计算结果 = Math.max(this.对局.伤害.初始值 + this.对局.伤害.基础加成 * (1 + this.对局.伤害.加法乘率) * this.对局.伤害.独立乘区, 0)
+        this.对局.伤害.计算结果 = Math.max((this.对局.伤害.初始值 + this.对局.伤害.基础加成) * (1 + this.对局.伤害.加法乘率) * this.对局.伤害.独立乘区, 0)
         this.对局.主角.生命 -= this.对局.伤害.计算结果
         存档.生命 = this.对局.主角.生命
         this.对局.敌人.攻击后(this.对局)
@@ -424,7 +426,6 @@ export class 战斗 extends Component {
                 this.对局.结果文本.push(`攻击提高${this.对局.敌人.增加属性}点！`)
             } else {
                 存档.最大生命 += this.对局.敌人.增加属性 * 5;
-                this.对局.结果文本
                 this.对局.结果文本.push(`最大生命值提高${this.对局.敌人.增加属性 * 5}点！`)
             }
         }
@@ -569,8 +570,8 @@ export class 战斗 extends Component {
     }
 
     计算主角逃跑成功率() {
-        var e = Math.round(100 * (1 - this.对局.主角.生命 / this.对局.主角.最大生命))
-        const 逃跑率 = this.对局.主角.逃跑 - this.对局.敌人.压制 + e
+        const e = Math.round(100 * (1 - this.对局.主角.生命 / this.对局.主角.最大生命))
+        const 逃跑率 = 50 + this.对局.主角.逃跑 - this.对局.敌人.压制 + e
         return Math.min(Math.max(逃跑率, 0), 100);
     }
 
@@ -582,7 +583,6 @@ export class 战斗 extends Component {
     结束战斗(text: string) {
         存档.当前敌人 = "";
         this.战斗.active = false;
-        this.对局.敌人 = null
         this.对局 = null
 
         this.node.getComponent(主页).更新()

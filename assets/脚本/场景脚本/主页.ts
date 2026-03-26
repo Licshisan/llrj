@@ -153,7 +153,7 @@ export class 主页 extends Component {
 
 
     前置条件() {
-        if (存档.健康 <= 0 || 存档.天数 >= 180) {
+        if (存档.健康 <= 0) {
             director.loadScene("结局")
             return false
         }
@@ -277,6 +277,11 @@ export class 主页 extends Component {
                 播放文本(this.标签, "还是先去省城整顿一下吧！")
                 return false
             }
+        }
+
+        if(存档.天数 >= 180){
+            director.loadScene('结局')
+            return false
         }
 
         return true
