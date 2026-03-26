@@ -6,6 +6,7 @@ import { 战斗 } from './战斗';
 import { 设置 } from '../管理器/设置管理器';
 import { 执行钩子 } from '../管理器/钩子管理器';
 import { 默认事件表 } from '../默认内容/事件表';
+import { 深克隆 } from '../方法函数/公共函数';
 const { ccclass, property } = _decorator;
 
 export interface 事件上下文 {
@@ -24,7 +25,7 @@ export class 事件 extends Component {
     @property(Prefab) 选项按钮预制体: Prefab = null;
 
     触发事件(事件名称: string): void {
-        const 事件 = 默认事件表.find(事件 => 事件.名称 === 事件名称)
+        const 事件 = 深克隆(默认事件表.find(事件 => 事件.名称 === 事件名称))
         if (!事件) {
             this.结束事件(`未知的事件名【${事件名称}】（请反馈开发者）`)
             return

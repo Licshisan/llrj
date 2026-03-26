@@ -316,7 +316,7 @@ export class 战斗 extends Component {
         this.对局.敌人.被攻击时(this.对局)
         存档.生命 = this.对局.主角.生命
         this.对局.伤害.计算结果 = Math.max((this.对局.伤害.初始值 + this.对局.伤害.基础加成) * (1 + this.对局.伤害.加法乘率) * this.对局.伤害.独立乘区, 0)
-        this.对局.敌人.生命 -= this.对局.伤害.计算结果
+        this.对局.敌人.生命 -= Math.floor(this.对局.伤害.计算结果)
         存档.生命 = this.对局.主角.生命
         this.对局.主角.攻击后(this.对局)
         this.对局.敌人.被攻击后(this.对局)
@@ -373,7 +373,7 @@ export class 战斗 extends Component {
         this.对局.主角.被攻击时(this.对局)
         存档.生命 = this.对局.主角.生命
         this.对局.伤害.计算结果 = Math.max((this.对局.伤害.初始值 + this.对局.伤害.基础加成) * (1 + this.对局.伤害.加法乘率) * this.对局.伤害.独立乘区, 0)
-        this.对局.主角.生命 -= this.对局.伤害.计算结果
+        this.对局.主角.生命 -= Math.floor(this.对局.伤害.计算结果)
         存档.生命 = this.对局.主角.生命
         this.对局.敌人.攻击后(this.对局)
         this.对局.主角.被攻击后(this.对局)
