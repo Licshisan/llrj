@@ -133,7 +133,8 @@ export class 战斗 extends Component {
                 执行钩子('战斗失败', [对局])
             },
             其他: {
-                技能点数: 0
+                技能点数: 0,
+                枪开关: false,
             }
         }
 
@@ -316,20 +317,22 @@ export class 战斗 extends Component {
         this.对局.伤害.计算结果 = Math.max(this.对局.伤害.初始值 + this.对局.伤害.基础加成 * (1 + this.对局.伤害.加法乘率) * this.对局.伤害.独立乘区, 0)
         this.对局.敌人.生命 -= this.对局.伤害.计算结果
         存档.生命 = this.对局.主角.生命
+        this.对局.主角.攻击后(this.对局)
+        this.对局.敌人.被攻击后(this.对局)
+        存档.生命 = this.对局.主角.生命
+        //更新渲染
         if (this.对局.主角.方法) {
             this.对局.结果文本.unshift(`${this.对局.主角.名称}使用「${this.对局.主角.方法}」`)
         }
         this.对局.结果文本.push(`${this.对局.敌人.名称}受到${this.对局.伤害.计算结果}点伤害。`)
         this.显示主角文本(this.对局.结果文本.join('\n'));
-        this.对局.主角.攻击后(this.对局)
-        this.对局.敌人.被攻击后(this.对局)
-        存档.生命 = this.对局.主角.生命
-        //更新渲染
         this.更新();
         this.node.getComponent(主页).更新()
         从0放大缩小(this.敌人标签);
         this.文本容器.getChildByName("标签2").getComponent(Label).string = "";
         this.按钮容器.active = false;
+        //todo
+        this.对局.主角.其他?.架势使用次数[存档.当前架势]
 
         // 结算
         if (this.对局.主角.生命 <= 0) {
@@ -370,15 +373,15 @@ export class 战斗 extends Component {
         this.对局.伤害.计算结果 = Math.max(this.对局.伤害.初始值 + this.对局.伤害.基础加成 * (1 + this.对局.伤害.加法乘率) * this.对局.伤害.独立乘区, 0)
         this.对局.主角.生命 -= this.对局.伤害.计算结果
         存档.生命 = this.对局.主角.生命
+        this.对局.敌人.攻击后(this.对局)
+        this.对局.主角.被攻击后(this.对局)
+        存档.生命 = this.对局.主角.生命
+        //更新渲染
         if (this.对局.敌人.方法) {
             this.对局.结果文本.unshift(`${this.对局.敌人.名称}使用「${this.对局.敌人.方法}」`)
         }
         this.对局.结果文本.push(`${this.对局.主角.名称}受到${this.对局.伤害.计算结果}点伤害。`)
         this.显示敌人文本(this.对局.结果文本.join('\n'));
-        this.对局.敌人.攻击后(this.对局)
-        this.对局.主角.被攻击后(this.对局)
-        存档.生命 = this.对局.主角.生命
-        //更新渲染
         this.更新();
         this.node.getComponent(主页).更新()
         从0放大缩小(this.标签容器.getChildByName("生命"));
@@ -441,24 +444,25 @@ export class 战斗 extends Component {
             this.对局.结果文本.push(`经验+${this.对局.敌人.等级}！`)
         }
 
-        // 架势熟练度
-        // let maxKey = "";
-        // let maxValue = 0;
-        // const 架势使用次数 = this.对局.主角.其他.架势使用次数 as Record<string, number>
-        // for (const [key, value] of Object.entries(架势使用次数)) {
-        //     if (value > maxValue) {
-        //         maxValue = value;
-        //         maxKey = key;
-        //     }
-        // }
-        // if (maxKey) {
-        //     if (存档.架势经验[maxKey] < 150) {
-        //         存档.架势经验[maxKey] += 1;
-        //         this.对局.结果文本.push(`${maxKey}架势熟练度+1！`)
-        //     } else {
-        //         this.对局.结果文本.push(`${maxKey}架势熟练度已达最大值！`)
-        //     }
-        // }
+        if(this.对局.主角.其他?.架势使用次数){
+            let maxKey = "";
+            let maxValue = 0;
+            const 架势使用次数 = this.对局.主角.其他.架势使用次数 as Record<string, number>
+            for (const [key, value] of Object.entries(架势使用次数)) {
+                if (value > maxValue) {
+                    maxValue = value;
+                    maxKey = key;
+                }
+            }
+            if (maxKey) {
+                if (存档.架势经验[maxKey] < 150) {
+                    存档.架势经验[maxKey] += 1;
+                    this.对局.结果文本.push(`${maxKey}架势熟练度+1！`)
+                } else {
+                    this.对局.结果文本.push(`${maxKey}架势熟练度已达最大值！`)
+                }
+            }
+        }
 
         //敌人失败
         this.对局.敌人.失败效果(this.对局)
@@ -559,19 +563,19 @@ export class 战斗 extends Component {
     }
 
     点击枪() {
-        this.对局.主角.其他.枪开关 = !this.对局.主角.其他.枪开关
+        this.对局.主角.其他.枪开关 = !this.对局.主角.其他?.枪开关
         const 枪械按钮 = this.按钮容器.getChildByName("枪");
         枪械按钮.getComponent(Label).string = `（${存档.物品.子弹}）\n【${["关", "开"][Number(this.对局.主角.其他.枪开关)]}】`;
-        // todo
     }
 
     计算主角逃跑成功率() {
-        const 逃跑率 = 计算最大逃跑() - this.对局.敌人.压制
+        var e = Math.round(100 * (1 - this.对局.主角.生命 / this.对局.主角.最大生命))
+        const 逃跑率 = this.对局.主角.逃跑 - this.对局.敌人.压制 + e
         return Math.min(Math.max(逃跑率, 0), 100);
     }
 
     计算敌人逃跑成功率() {
-        const 敌人逃跑成功率 = this.对局.敌人.逃跑 - 计算最大压制()
+        const 敌人逃跑成功率 = this.对局.敌人.逃跑 - this.对局.主角.压制
         return Math.min(Math.max(敌人逃跑成功率, 0), 100);
     }
 
@@ -610,3 +614,4 @@ export class 战斗 extends Component {
         从0放大缩小(t)
     }
 }
+

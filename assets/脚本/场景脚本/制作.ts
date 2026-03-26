@@ -71,13 +71,13 @@ export class 制作 extends Component {
             项目组件.getChildByName("选择按钮").on(Button.EventType.CLICK, () => {
                 制作.制作({
                     提示: (文本) => {
+                        执行钩子('制作后', [制作])
                         播放文本(this.标签, 文本)
                     },
                     制作成功: (文本) => {
                         播放文本(this.标签, 文本)
                     },
                 })
-                执行钩子('制作物品', [制作])
                 保存存档()
                 this.创建单页(页码, 分页组件);
                 this.更新属性();

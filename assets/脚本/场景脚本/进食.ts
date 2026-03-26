@@ -67,11 +67,10 @@ export class 进食 extends Component {
 			项目组件.getChildByName("标签二").getComponent(Label).string = 食物.说明;
 			项目组件.getChildByName("选择按钮").on(Button.EventType.CLICK, () => {
 				try {
-					执行钩子('进食时', [食物])
 					食物.使用({
 						提示:(文本) => 播放文本(this.标签, 文本),
 						食用成功:(文本) => {
-							执行钩子('进食成功', [食物])
+							执行钩子('进食后', [食物])
 							播放文本(this.标签, 文本)
 						},
 					})
@@ -79,7 +78,6 @@ export class 进食 extends Component {
 					this.创建单页(页码, 分页组件);
 					this.更新属性();
 				} catch (e) {
-					error("使用食物失败：", e);
 					播放文本(this.标签, "使用食物时发生错误，请反馈开发者！");
 				}
 			},this);

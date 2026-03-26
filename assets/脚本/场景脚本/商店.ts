@@ -77,11 +77,10 @@ export class 商店 extends Component {
 
 			// 购买按钮
 			项目组件.getChildByName("按钮容器").getChildByName("黑色按钮1").on(Button.EventType.CLICK, () => {
-				执行钩子('购买商品', [商品])
 				商品.选项一效果({
 					提示: (文本) => 播放文本(this.标签, 文本),
 					购买成功: (文本) => {
-						执行钩子('购买成功', [商品])
+						执行钩子('购买后', [商品])
 						播放文本(this.标签, 文本)
 					},
 				})
@@ -92,11 +91,10 @@ export class 商店 extends Component {
 
 			// 出售按钮
 			项目组件.getChildByName("按钮容器").getChildByName("黑色按钮2").on(Button.EventType.CLICK, () => {
-				执行钩子('购买商品', [商品])
 				商品.选项二效果({
 					提示: (文本) => 播放文本(this.标签, 文本),
 					购买成功: (文本) => {
-						执行钩子('购买成功', [商品])
+						执行钩子('购买后', [商品])
 						播放文本(this.标签, 文本)
 					},
 				})
