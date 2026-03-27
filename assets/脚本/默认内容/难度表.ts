@@ -7,7 +7,7 @@ interface 难度定义类型 {
 	提示?: string,
 	颜色?: string,
 	条件: boolean,
-	效果?: Record<string, (x?) => any>,
+	效果?: Record<string, (...参数: any) => any>,
 }
 
 export const 默认难度表: 难度定义类型[] = [
