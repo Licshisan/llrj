@@ -3,7 +3,7 @@ import { 设置 } from "../管理器/设置管理器";
 import { 创建动画文字, 淡入, 淡出 } from "../方法函数/动画效果";
 import { 保存存档, 存档 } from "../管理器/存档管理器";
 import { 执行钩子 } from "../管理器/钩子管理器";
-import { 天赋项目类型, 默认天赋表 } from "../默认内容/天赋表";
+import { 默认天赋表 } from "../默认内容/天赋表";
 import { 默认特质表 } from "../默认内容/特质表";
 const { ccclass, property } = _decorator;
 
@@ -41,7 +41,7 @@ export class 开场 extends Component {
 		this.当前特质 = []
 		this.当前天赋 = []
 
-		const 随机抽取 = (列表: 天赋项目类型[], 抽取数量: number): 天赋项目类型[] => {
+		const 随机抽取 = <T>(列表: T[], 抽取数量: number): T[] => {
 			const 打乱后的列表 = [...列表].sort(() => Math.random() - 0.5);
 			return 打乱后的列表.slice(0, 抽取数量);
 		};
@@ -49,11 +49,6 @@ export class 开场 extends Component {
 		const 抽取的正面天赋 = 随机抽取(默认天赋表.filter(i => !i.负面), 正面天赋数量)
 		const 抽取的负面天赋 = 随机抽取(默认天赋表.filter(i => i.负面), 负面天赋数量)
 
-		const 颜色对应 = {
-			"普通": Color.WHITE,
-			"稀有": Color.YELLOW,
-			"传说": Color.MAGENTA
-		}
 
 		this.当前特质.push(...抽取的特质.map(x => x.名称))
 		this.当前天赋.push(...抽取的正面天赋.map(x=> x.名称))
@@ -62,19 +57,19 @@ export class 开场 extends Component {
 		抽取的特质.forEach(特质 => {
 			显示文本.push({
 				文本: `你天生拥有特质「${特质?.名称 || ""}」\n效果：${特质?.说明 || ""}`,
-				颜色: 颜色对应[特质.品质]
+				颜色: 特质.颜色
 			})
 		})
 		抽取的正面天赋.forEach(天赋 => {
 			显示文本.push({
 				文本: `你同时拥有天赋「${天赋?.名称 || ""}」\n效果：${天赋?.说明 || ""}`,
-				颜色: 颜色对应[天赋.品质]
+				颜色: 天赋.颜色
 			})
 		})
 		抽取的负面天赋.forEach(天赋 => {
 			显示文本.push({
 				文本: `你得到负面天赋「${天赋?.名称 || ""}」\n效果：${天赋?.说明 || ""}`,
-				颜色: Color.RED
+				颜色: 天赋.颜色
 			})
 		})
 

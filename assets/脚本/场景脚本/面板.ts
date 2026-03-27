@@ -16,19 +16,13 @@ export class 面板 extends Component {
     start() {
         this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene("主页"), this);
         
-		const 颜色对应 = {
-			"普通": Color.WHITE,
-			"稀有": Color.YELLOW,
-			"传说": Color.MAGENTA
-        }
-
         let index = 0
         for(let 特质名 in 存档.特质){
             if(存档.特质[特质名]){
                 const 特质 = 默认特质表.find(x => x.名称 === 特质名)
                 if(特质){
                     const 文字 = `【${特质名}】${特质.说明}`
-                    创建普通文字(this.内容,文字, index, 颜色对应[特质.品质])
+                    创建普通文字(this.内容,文字, index, 特质.颜色)
                     index ++
                 }
             }
@@ -39,8 +33,7 @@ export class 面板 extends Component {
                 const 天赋 = 默认天赋表.find(x => x.名称 === 天赋名)
                 if(天赋){
                     const 文字 = `【${天赋名}】${天赋.说明}`
-                    const 颜色 = 天赋.负面 ? Color.RED :颜色对应[天赋.品质] 
-                    创建普通文字(this.内容,文字, index, 颜色)
+                    创建普通文字(this.内容,文字, index, 天赋.颜色)
                     index ++
                 }
             }
