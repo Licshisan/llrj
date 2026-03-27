@@ -4,6 +4,7 @@ import { 创建默认值代理 } from "../方法函数/公共函数";
 const 默认设置 = {
 	通关次数: 0,
 	安装时间: Date.now(),
+	唯一标识:  Math.random().toString(36).slice(2, 8),
 	播放速度: 1,
 	播放音乐: false,
 	暗夜模式: false,

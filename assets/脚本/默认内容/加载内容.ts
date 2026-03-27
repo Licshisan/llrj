@@ -9,7 +9,7 @@ import { 默认制作表 } from "./制作表";
 import { 伙伴特性定义类型, 默认伙伴特性表 } from "./伙伴特性表";
 import { 默认特性表 } from "./特性表";
 import { 默认天赋表 } from "./天赋表";
-import { log } from "cc";
+import { error, log, sys } from "cc";
 import { 默认难度表 } from "./难度表";
 import { 默认特质表 } from "./特质表";
 
@@ -88,70 +88,47 @@ export async function 加载游戏内容() {
 	log(钩子管理器.钩子函数对象)
 	加载完成 = true
 
-	// if (sys.isNative) {
-	// 	// 提交异常
-	// 	(window as any).__errorHandler = function (name, line, msg, stack) {
-	// 		error(`Error Name: ${name}`);
-	// 		error(`Line: ${line}`);
-	// 		error(`Message: ${msg}`);
-	// 		error(`Stack: ${stack}`);
+	if (sys.isNative) {
+		const SERVER_URL = 'http://47.93.223.212:3000';
+		// 提交异常
+		(window as any).__errorHandler = function (name, line, msg, stack) {
+			error(`Error Name: ${name}`);
+			error(`Line: ${line}`);
+			error(`Message: ${msg}`);
+			error(`Stack: ${stack}`);
 
-	// 		try {
-	// 			fetch(`${设置.后端地址}/error`, {
-	// 				method: 'POST',
-	// 				headers: {
-	// 					'Content-Type': 'application/json'
-	// 				},
-	// 				body: JSON.stringify({ name, line, msg, stack, version: 设置.游戏版本 })
-	// 			});
-	// 		} catch (e) {
-	// 			error('错误上报失败:', e);
-	// 		}
-	// 	};
+			try {
+				fetch(`${SERVER_URL}/error`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ name, line, msg, stack, setting: 设置管理器.设置, save: 存档管理器.存档 })
+				});
+			} catch (e) {
+				error('错误上报失败:', e);
+			}
+		};
+		// 玩家登录
+		try {
+			const response = await fetch(`${SERVER_URL}/login`, {
+				method: 'post',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ uid: 设置管理器.设置.唯一标识 })
+			});
+			if (!response.ok) {
+				return
+			}
 
-	// 	// 玩家注册
-	// 	const player_string = sys.localStorage.getItem("player");
-	// 	const player = player_string ? JSON.parse(player_string) : null;
-
-	// 	try {
-	// 		if (!player.id) {
-	// 			const response = await fetch(`${设置.后端地址}/player/create`, {
-	// 				method: 'post',
-	// 				headers: {
-	// 					'Content-Type': 'application/json'
-	// 				},
-	// 			});
-
-	// 			if (!response.ok) {
-	// 				return
-	// 			}
-
-	// 			const result = await response.json();
-	// 			if (result.success) {
-	// 				sys.localStorage.setItem("player", JSON.stringify(result.data));
-	// 			}
-	// 		}
-
-	// 		else {
-	// 			const response = await fetch(`${设置.后端地址}/player/login`, {
-	// 				method: 'post',
-	// 				headers: {
-	// 					'Content-Type': 'application/json'
-	// 				},
-	// 				body: JSON.stringify({ id: player.id })
-	// 			});
-
-	// 			if (!response.ok) {
-	// 				return
-	// 			}
-
-	// 			const result = await response.json();
-	// 			if (result.success) {
-	// 				sys.localStorage.setItem("player", JSON.stringify(result.data));
-	// 			}
-	// 		}
-	// 	}
-	// 	catch (error) {
-	// 		error("玩家初始化失败：", error.message);
-	// 	}
+			const result = await response.json();
+			if (result.success) {
+				设置管理器.设置.账号 = result.data
+			}
+		}
+		catch (error) {
+			error("玩家初始化失败：", error.message);
+		}
+	}
 }

@@ -3,7 +3,7 @@ import { 保存存档, 备份存档, 存档 } from "../管理器/存档管理器
 import { 淡入 } from "../方法函数/动画效果";
 import { 设置 } from "../管理器/设置管理器";
 import { 计算数值, 计算最大生命, 计算最大精力, 计算最大饥饿 } from "../方法函数/属性计算";
-import { 自动进食 } from "../方法函数/公共函数";
+import { 上传存档, 自动进食 } from "../方法函数/公共函数";
 import { 执行钩子 } from "../管理器/钩子管理器";
 import { 获取地区名称 } from "../默认内容/地区表";
 import { 默认剧情表 } from "../默认内容/剧情表";
@@ -17,6 +17,7 @@ export class 睡觉 extends Component {
     @property(Node) 继续按钮: Node = null!;
 
     start(): void {
+        上传存档()
         this.标签.active = false;
         this.属性容器.active = false;
         this.文本容器.active = false;
@@ -64,11 +65,6 @@ export class 睡觉 extends Component {
         this.属性容器.getChildByName("精力").getChildByName("标签").getComponent(Label).string = `精力 +${精力恢复}（${存档.精力}/${最大精力}）`;
         this.属性容器.getChildByName("饥饿").getChildByName("标签").getComponent(Label).string = `饥饿 -${饥饿消耗}（${存档.饥饿}/${最大饥饿}）`;
         this.属性容器.getChildByName("生命").getChildByName("标签").getComponent(Label).string = `生命 +${生命恢复}（${存档.生命}/${最大生命}）`;
-
-        const 结算前存档 = JSON.parse(JSON.stringify(存档))
-        const 结果文本 = [];
-        执行钩子("睡觉结算", [结果文本, 结算前存档])
-        this.创建文本(结果文本);
     }
 
     结算() {
@@ -107,10 +103,10 @@ export class 睡觉 extends Component {
             }
 
             if (存档.天数 >= 21 && 获取地区名称() == "荒野") {
-                存档.当前敌人 = "蒙面人";
+                存档.当前敌人 = "蒙面人2";
             }
             if (存档.天数 >= 83 && 获取地区名称() == "山脉") {
-                存档.当前敌人 = "蒙面人2";
+                存档.当前敌人 = "蒙面人";
             }
             if (Math.random() * 100 < (存档.物品.枪 - 1) * 10 + 1) {
                 存档.当前敌人 = "陈晓（大大）2";
@@ -127,6 +123,9 @@ export class 睡觉 extends Component {
         if (存档.当前地点) {
             存档.当前地点 = ''
         }
+        const 结果文本 = [];
+        执行钩子("睡觉结算", [结果文本])
+        this.创建文本(结果文本);
     }
 
     创建文本(内容列表: string[]) {
