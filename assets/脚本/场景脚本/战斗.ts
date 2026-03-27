@@ -266,7 +266,7 @@ export class 战斗 extends Component {
         战斗主角.战斗初始化(this.对局)
 
         this.界面初始化();
-        播放文本(this.node.getComponent(主页).标签, 敌人.出场语)
+        播放文本(this.node.getComponent(主页).标签, this.对局.敌人.出场语)
     }
 
     界面初始化() {

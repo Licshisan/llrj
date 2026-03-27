@@ -16,13 +16,20 @@ export class 制作 extends Component {
     @property(Node) 返回按钮: Node;
 
     页大小 = 4
+    制作表 = []
+    所有项目节点: Node[] = [] 
+
     start() {
         this.更新属性();
         this.创建分页();
         this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene("主页"), this);
     }
+
     创建分页() {
-        const 总页数 = Math.ceil(默认制作表.length / this.页大小);
+        this.制作表 = 默认制作表.filter((制作) => 制作.显示)
+        this.所有项目节点 = []
+
+        const 总页数 = Math.ceil(this.制作表.length / this.页大小);
         const 分页组件 = this.分页视图.getComponent(PageView);
         分页组件.removeAllPages();
 
@@ -45,43 +52,59 @@ export class 制作 extends Component {
 
             分页组件.addPage(单页);
         }
-
-        // if (页码 >= 2 && 存档.距离 < 100) {
-        //     this.创建文字(单页, `※第${页码 + 1}页内容，将在到达县城后解锁！`);
-        //     return;
-        // }
-
+        
         for (let i = 0; i < this.页大小; i++) {
             const 制作序号 = 页码 * this.页大小 + i;
-            if (制作序号 >= 默认制作表.length) break;
-            const 制作 = 默认制作表[制作序号];
+            if (制作序号 >= this.制作表.length) break;
+            const 制作 = this.制作表[制作序号];
 
             const 项目组件 = instantiate(this.项目预制体);
             项目组件.setParent(单页);
-
             项目组件.name = `制作_${制作.名称}`;
 
-            项目组件.getChildByName("选择按钮").getChildByName("标签").getComponent(Label).string = 制作.显示名称 || 制作.名称;
-            if (制作.条件) {
-                项目组件.getChildByName("选择按钮").getChildByName("标签").getComponent(Label).color = new Color(0, 255, 0);
-            }
+            this.所有项目节点.push(项目组件);
 
-            项目组件.getChildByName("标签一").getComponent(Label).string = 制作.描述;
-            项目组件.getChildByName("标签二").getComponent(Label).string = 制作.说明;
+            this.更新项目UI(项目组件, 制作);
+            
             项目组件.getChildByName("选择按钮").on(Button.EventType.CLICK, () => {
                 制作.制作({
                     提示: (文本) => {
-                        执行钩子('制作后', [制作])
                         播放文本(this.标签, 文本)
                     },
                     制作成功: (文本) => {
+                        执行钩子('制作后', [制作])
                         播放文本(this.标签, 文本)
+                        保存存档()
+                        this.更新属性();
+                        this.刷新所有项目状态();
                     },
                 })
-                保存存档()
-                this.创建单页(页码, 分页组件);
-                this.更新属性();
             }, this);
+        }
+    }
+
+    更新项目UI(项目组件: Node, 制作: any) {
+        const 标签组件 = 项目组件.getChildByName("选择按钮").getChildByName("标签").getComponent(Label);
+        标签组件.string = 制作.显示名称 || 制作.名称;
+        
+        if (制作.条件) {
+            标签组件.color = new Color(0, 255, 0);
+        } else {
+             标签组件.color = Color.WHITE; 
+        }
+
+        项目组件.getChildByName("标签一").getComponent(Label).string = 制作.描述;
+        项目组件.getChildByName("标签二").getComponent(Label).string = 制作.说明;
+    }
+
+    刷新所有项目状态() {
+        const 当前制作表 = 默认制作表.filter((制作) => 制作.显示);
+        for (let i = 0; i < this.所有项目节点.length; i++) {
+            const 节点 = this.所有项目节点[i];
+            if (i < 当前制作表.length) {
+                const 制作数据 = 当前制作表[i];
+                this.更新项目UI(节点, 制作数据);
+            }
         }
     }
 
@@ -89,24 +112,4 @@ export class 制作 extends Component {
         this.属性一.getComponent(Label).string = `饥饿：${存档.饥饿}/${计算最大饥饿()}  精力：${存档.精力}/${计算最大精力()}  `;
         this.属性二.getComponent(Label).string = `生命：${存档.生命}/${计算最大生命()}`
     }
-
-    创建文字(page: Node, content: string) {
-        const node = new Node(`notify`);
-        const label = node.addComponent(Label);
-
-        label.string = content;
-        label.fontSize = 38;
-        label.lineHeight = 60;
-        label.overflow = Label.Overflow.RESIZE_HEIGHT;
-        label.horizontalAlign = Label.HorizontalAlign.LEFT;
-        label.color = new Color(0, 255, 0);
-
-        node.setParent(page);
-        node.setPosition(0, -300);
-
-        const 宽度 = page.getComponent(UITransform).width || 650
-        label.getComponent(UITransform).setContentSize(宽度, 50);
-    }
 }
-
-

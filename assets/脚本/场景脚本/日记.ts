@@ -25,7 +25,7 @@ export class 日记 extends Component {
 			}
 			sequence.call(() => 创建动画文字(this.文本容器, 日记.文本[i], i)).delay(2 / 设置.播放速度);
 		}
-		sequence.call(() => 淡入(this.返回按钮)).start();
+		sequence.start();
 		this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene("睡觉"), this);
 	}
 }
