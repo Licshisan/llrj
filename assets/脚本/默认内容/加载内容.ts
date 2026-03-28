@@ -9,7 +9,7 @@ import { 默认制作表 } from "./制作表";
 import { 伙伴特性定义类型, 默认伙伴特性表 } from "./伙伴特性表";
 import { 默认特性表 } from "./特性表";
 import { 默认天赋表 } from "./天赋表";
-import { error, log, sys } from "cc";
+import { error, log } from "cc";
 import { 默认难度表 } from "./难度表";
 import { 默认特质表 } from "./特质表";
 
@@ -88,47 +88,45 @@ export async function 加载游戏内容() {
 	log(钩子管理器.钩子函数对象)
 	加载完成 = true
 
-	if (sys.isNative) {
-		const SERVER_URL = 'http://47.93.223.212:3000';
-		// 提交异常
-		(window as any).__errorHandler = function (name, line, msg, stack) {
-			error(`Error Name: ${name}`);
-			error(`Line: ${line}`);
-			error(`Message: ${msg}`);
-			error(`Stack: ${stack}`);
+	const SERVER_URL = 'http://47.93.223.212:3000';
+	// 提交异常
+	(window as any).__errorHandler = function (name, line, msg, stack) {
+		error(`Error Name: ${name}`);
+		error(`Line: ${line}`);
+		error(`Message: ${msg}`);
+		error(`Stack: ${stack}`);
 
-			try {
-				fetch(`${SERVER_URL}/error`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({ name, line, msg, stack, setting: 设置管理器.设置, save: 存档管理器.存档 })
-				});
-			} catch (e) {
-				error('错误上报失败:', e);
-			}
-		};
-		// 玩家登录
 		try {
-			const response = await fetch(`${SERVER_URL}/login`, {
-				method: 'post',
+			fetch(`${SERVER_URL}/error`, {
+				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ uid: 设置管理器.设置.唯一标识 })
+				body: JSON.stringify({ name, line, msg, stack, setting: 设置管理器.设置, save: 存档管理器.存档 })
 			});
-			if (!response.ok) {
-				return
-			}
+			log("错误上报成功")
+		} catch (e) {
+			error('错误上报失败:', e);
+		}
+	};
+	// 玩家登录
+	try {
+		const response = await fetch(`${SERVER_URL}/login`, {
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ uid: 设置管理器.设置.唯一标识 })
+		});
+		if (!response.ok) {
+			return
+		}
 
-			const result = await response.json();
-			if (result.success) {
-				设置管理器.设置.账号 = result.data
-			}
-		}
-		catch (error) {
-			error("玩家初始化失败：", error.message);
-		}
+		const result = await response.json();
+		设置管理器.设置.账号 = result
+		设置管理器.保存设置()
+	}
+	catch (e) {
+		error("玩家初始化失败：", e.message);
 	}
 }

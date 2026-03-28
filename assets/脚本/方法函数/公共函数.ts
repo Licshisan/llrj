@@ -177,27 +177,23 @@ export function 创建默认值代理<T extends Record<string, any>>(obj: T): T 
 }
 
 export function 上传信息(msg: string) {
-	if (sys.isNative) {
-		const server = 'http://47.93.223.212:3000';
-		try {
-			fetch(server + '/error', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({msg, account: 设置.账号})
-			});
-		} catch (e) {}
-	}
+	const server = 'http://47.93.223.212:3000';
+	try {
+		fetch(server + '/error', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({msg, account: 设置.账号})
+		});
+	} catch (e) {}
 }
 
 export function 上传存档() {
-	if (sys.isNative) {
-		const server = 'http://47.93.223.212:3000';
-		try {
-			fetch(server + '/save', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({save: 存档, setting: 设置})
-			});
-		} catch (e) {}
-	}
+	const server = 'http://47.93.223.212:3000';
+	try {
+		fetch(server + '/save', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({save: 存档, setting: 设置})
+		});
+	} catch (e) {}
 }

@@ -8,6 +8,7 @@ export class 设置 extends Component {
   @property(Node) 标签: Node;
   @property(Node) 按钮容器: Node;
   @property(Node) 返回按钮: Node;
+  @property(Node) 账号信息: Node;
 
   速度表 = { 1: "一般", 2: "快速", 6: "极速" }
   start() {
@@ -16,6 +17,8 @@ export class 设置 extends Component {
     this.按钮容器.getChildByName("暗夜").on(Button.EventType.CLICK, this.点击暗夜, this);
     this.按钮容器.getChildByName("公告").on(Button.EventType.CLICK, () => director.loadScene("公告"), this);
     this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene("首页"), this);
+
+    this.账号信息.getComponent(Label).string = `昵称：${设置管理器.设置.账号.nickname || '暂无'}\nid:${设置管理器.设置.账号.id || '暂无'}`
   }
 
   点击速度() {
