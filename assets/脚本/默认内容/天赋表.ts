@@ -1,6 +1,6 @@
 import { 对局类型 } from "../场景脚本/战斗";
 import { 抽取物品 } from "../方法函数/公共函数";
-import { 计算容器类型, 计算最大生命, 计算最大精力, 计算最大饥饿 } from "../方法函数/属性计算"
+import { 计算容器类型, 计算最大生命, 计算最大精力 } from "../方法函数/属性计算"
 import { 存档 } from "../管理器/存档管理器"
 import { 获取地区名称 } from "./地区表";
 import { Color } from "cc";

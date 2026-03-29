@@ -35,8 +35,7 @@ export class 开场 extends Component {
 		this.继续按钮.active = false;
 		this.刷新按钮.active = false;
 		const 特质数量 = 1
-		const 正面天赋数量 = 2
-		const 负面天赋数量 = 2
+		const 天赋数量 = 2
 
 		this.当前特质 = []
 		this.当前天赋 = []
@@ -45,18 +44,21 @@ export class 开场 extends Component {
 			const 打乱后的列表 = [...列表].sort(() => Math.random() - 0.5);
 			return 打乱后的列表.slice(0, 抽取数量);
 		};
-		const 抽取的特质 = 随机抽取(默认特质表, 特质数量)
-		const 抽取的正面天赋 = 随机抽取(默认天赋表.filter(i => !i.负面), 正面天赋数量)
-		const 抽取的负面天赋 = 随机抽取(默认天赋表.filter(i => i.负面), 负面天赋数量)
 
+		const 抽取特质表 = 默认特质表.filter(i => 设置.特质[i.名称])
+		const 抽取的特质 = 随机抽取(抽取特质表, 特质数量)
+
+		const 抽取的正面天赋 = 随机抽取(默认天赋表.filter(i => !i.负面), 天赋数量)
+		const 抽取的负面天赋 = 随机抽取(默认天赋表.filter(i => i.负面), 天赋数量)
 
 		this.当前特质.push(...抽取的特质.map(x => x.名称))
 		this.当前天赋.push(...抽取的正面天赋.map(x => x.名称))
 		this.当前天赋.push(...抽取的负面天赋.map(x => x.名称))
 		const 显示文本 = []
 		抽取的特质.forEach(特质 => {
+			const 特质名称 = 特质.显示名称 || 特质.名称 || ""
 			显示文本.push({
-				文本: `你天生拥有特质「${特质?.名称 || ""}」\n效果：${特质?.说明 || ""}`,
+				文本: `你天生拥有特质「${特质名称}」\n效果：${特质?.说明 || ""}`,
 				颜色: 特质.颜色
 			})
 		})

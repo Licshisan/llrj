@@ -31,7 +31,7 @@ export class 面板 extends Component {
             if(存档.特质[特质名]){
                 const 特质 = 默认特质表.find(x => x.名称 === 特质名)
                 if(特质){
-                    const 文字 = `【${特质名}】${特质.说明}`
+                    const 文字 = `【${特质.显示名称 || 特质.名称 || ""}】${特质.说明}`
                     创建普通文字(this.内容,文字, index, 特质.颜色)
                     index ++
                 }
