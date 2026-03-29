@@ -8,7 +8,7 @@ const 默认设置 = {
 	播放速度: 1,
 	播放音乐: false,
 	暗夜模式: false,
-	游戏版本: "0.5.8",
+	游戏版本: "0.6.0",
 
 	按钮: { 普通: true } as Record<string, boolean>,
 	成就: { 打开成就: true} as Record<string, boolean>,

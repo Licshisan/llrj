@@ -13,17 +13,20 @@ export class 公告 extends Component {
 
 
     设置公告内容(内容?: string, 标题?: string) {
-        const 默认内容 = '<color=#FFD700>【更新公告】</color>\n\n' +
-            '<color=#FFFFFF>各位冒险者：</color>\n\n' +
+        const 默认内容 = '<color=#FFFFFF>各位流浪者：</color>\n\n' +
             '<color=#CCCCCC>感谢大家对《流浪日记》的支持！本次更新内容如下：</color>\n\n' +
             '<color=#90EE90>【新增内容】</color>\n' +
-            '• 新增"荒野求生"挑战模式\n' +
-            '• 新增5种野外食谱\n' +
-            '• 新增角色外观装扮系统\n\n' +
+            '• 新增多种挑战难度\n' +
+            '• 新增多种初始套餐\n' +
+            '• 新增特质系统\n\n' +
+            '• 新增成就系统\n\n' +
+            '• 新增账号系统\n\n' +
+            '• ...\n\n' +
             '<color=#87CEEB>【优化调整】</color>\n' +
-            '• 优化战斗动画流畅度\n' +
-            '• 调整部分道具掉落概率\n' +
-            '• 修复已知BUG\n\n' +
+            '• 优化战斗系统\n' +
+            '• 优化分页显示\n' +
+            '• 优化场景UI\n\n' +
+            '• ...\n\n' +
             '<color=#FFA07A>【活动预告】</color>\n' +
             '限时活动"春日探险"即将开启，敬请期待！\n\n' +
             '<color=#888888>——流浪日记制作组</color>\n' +
