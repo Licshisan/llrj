@@ -12,6 +12,10 @@ export class 大楼 extends Component {
 	@property(Node) 餐厅: Node = null;
 	
 	start() {
+		if(!存档.其他.电疗店开店){
+			存档.其他.电疗店开店 = 1;
+			存档.其他.电疗店资产 = 800;
+		}
 		this.更新()
 		this.大楼.getChildByName("返回按钮").on(Button.EventType.CLICK, () => director.loadScene("主页"), this);
 
@@ -64,7 +68,7 @@ export class 大楼 extends Component {
 
 		const 五层按钮 = this.大楼.getChildByName("按钮容器").getChildByName("选择按钮5")
 		if (Math.random() * 100 < 50) {
-			if (存档.其他.电疗店资产 > 800) {
+			if (存档.其他.电疗店资产 < 0) {
 				五层按钮.getChildByName("标签").getComponent(Label).string = "关门大吉！转行啦~"
 				五层按钮.on(Button.EventType.CLICK, () => 播放文本(this.标签, "由于经济不景气，公司倒闭，老板转行卖土鸡蛋去啦~"), this);
 			} else {

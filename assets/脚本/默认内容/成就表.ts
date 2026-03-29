@@ -6,6 +6,7 @@ export interface 成就项目类型 {
 	名称: string,
 	get 描述(): string,
 	get 条件(): boolean,
+	奖励?: string,
 	达成时间?: number
 }
 
