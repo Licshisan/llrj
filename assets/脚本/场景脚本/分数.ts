@@ -4,6 +4,7 @@ import { 创建动画文字, 播放文本, 淡入 } from "../方法函数/动画
 import { 设置 } from "../管理器/设置管理器";
 import { 计算最大攻击, 计算最大生命, 计算最大防御 } from "../方法函数/属性计算";
 import { 更新成就 } from "../默认内容/成就表";
+import { 默认套餐表 } from "../默认内容/套餐表";
 const { ccclass, property } = _decorator;
 
 @ccclass('分数')
@@ -41,20 +42,21 @@ export class 分数 extends Component {
 		存档.其他.最终得分 = 得分;
 
 		const texts = [`你的评分为：${得分}（剧情得分:${剧情得分}，属性得分:${属性得分}，其他得分:${其他得分}。满分约60分。）`]
-		const 完成成就 = 更新成就()
-		完成成就.forEach(成就 => {
-			let 成就文本 = `新完成成就【${成就.名称}】：${成就.描述}！`
-			if(成就.奖励){
-				成就文本 += `奖励：${成就.奖励}`
-			}
-			texts.push(成就文本)
-		});
-
-		this.选项容器.getChildByName('选择按钮2').on(Button.EventType.CLICK, () => {
-			删除存档(存档.存档名称)
-			director.loadScene('首页')
-		}, this)
-
+		
+		const 套餐 = 默认套餐表.find(套餐 => 套餐.名称 === 存档.套餐名称)
+		if(套餐 && 套餐.娱乐){
+			texts.push(`娱乐套餐【${套餐.名称}】，无法完成成就。`)
+		}else{
+			const 完成成就 = 更新成就()
+			完成成就.forEach(成就 => {
+				let 成就文本 = `新完成成就【${成就.名称}】：${成就.描述}！`
+				if(成就.奖励){
+					成就文本 += `奖励：${成就.奖励}`
+				}
+				texts.push(成就文本)
+			});
+		}
+		
 		const 序列 = tween(this.node).delay(1)
 		for (let 索引 = 0; 索引 < texts.length; 索引++) {
 			序列.call(() => 创建动画文字(this.文本容器, texts[索引], 索引)).delay(2.2 / 设置.播放速度);
@@ -62,5 +64,11 @@ export class 分数 extends Component {
 		序列.call(() => 淡入(this.输入框)).delay(1);
 		序列.call(() => 淡入(this.选项容器)).delay(1);
 		序列.start();
+
+
+		this.选项容器.getChildByName('选择按钮2').on(Button.EventType.CLICK, () => {
+			删除存档(存档.存档名称)
+			director.loadScene('首页')
+		}, this)
 	}
 }
