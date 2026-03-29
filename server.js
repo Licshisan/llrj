@@ -23,82 +23,133 @@ function 生成随机昵称() {
   return `${形容词}的${角色}`;
 }
 
-
 const express = require('express');
 const mysql = require('mysql2/promise');
-const cors = require('cors'); 
+const cors = require('cors');
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-
-// ===================== MySQL 连接配置（改成你宝塔的） =====================
+// ===================== MySQL 连接 =====================
 const db = mysql.createPool({
   host: 'localhost',
-  user: 'llrj',         // 你的数据库用户名
-  password: '100235',   // 你的密码
-  database: 'llrj',     // 库名
+  user: 'llrj',
+  password: '100235',
+  database: 'llrj',
   waitForConnections: true,
   connectionLimit: 10
 });
 
-// 自动建表（第一次运行自动创建）
+// ===================== 自动建表（修复版） =====================
 (async () => {
-  await db.query(`
-    CREATE TABLE IF NOT EXISTS players (
-      id INT PRIMARY KEY AUTO_INCREMENT,
-      uid VARCHAR(255) UNIQUE NOT NULL,
-      nickname VARCHAR(255)
-    )
-  `);
-  await db.query(`CREATE TABLE IF NOT EXISTS errors (id INT PRIMARY KEY AUTO_INCREMENT, data TEXT, time DATETIME)`);
-  await db.query(`CREATE TABLE IF NOT EXISTS messages (id INT PRIMARY KEY AUTO_INCREMENT, data TEXT, time DATETIME)`);
-  await db.query(`CREATE TABLE IF NOT EXISTS saves (user_id INT, save_id VARCHAR(255), save TEXT, setting TEXT, time DATETIME, PRIMARY KEY (user_id, save_id))`);
-  console.log('✅ MySQL 连接成功 & 表已创建');
+  try {
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS players (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        uid VARCHAR(255) UNIQUE NOT NULL,
+        nickname VARCHAR(255)
+      )
+    `);
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS errors (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        data TEXT,
+        time DATETIME
+      )
+    `);
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS messages (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        data TEXT,
+        time DATETIME
+      )
+    `);
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS saves (
+        user_id INT NOT NULL,
+        save_id VARCHAR(255) NOT NULL,
+        save TEXT,
+        setting TEXT,
+        time DATETIME,
+        PRIMARY KEY (user_id, save_id)
+      )
+    `);
+
+    console.log('✅ MySQL 连接成功 & 表已创建');
+  } catch (err) {
+    console.error('❌ 建表失败', err);
+  }
 })();
 
 // ===================== 1. 登录 =====================
 app.post('/login', async (req, res) => {
-  const { uid } = req.body;
-  if (!uid) return res.status(400).json({ code: 400, msg: '缺少uid' });
+  try {
+    const { uid } = req.body;
+    if (!uid) return res.status(400).json({ code: 400, msg: '缺少uid' });
 
-  const [rows] = await db.query('SELECT * FROM players WHERE uid = ?', [uid]);
-  if (rows.length > 0) {
-    const user = rows[0];
-    return res.json({ nickname: user.nickname, id: user.id });
+    const [rows] = await db.query('SELECT * FROM players WHERE uid = ?', [uid]);
+    if (rows.length > 0) {
+      const user = rows[0];
+      return res.json({ code: 200, nickname: user.nickname, id: user.id });
+    }
+
+    const nickname = 生成随机昵称();
+    const [result] = await db.query('INSERT INTO players (uid, nickname) VALUES (?, ?)', [uid, nickname]);
+    res.json({ code: 200, nickname, id: result.insertId });
+
+  } catch (err) {
+    res.status(500).json({ code: 500, msg: '登录失败', error: err.message });
   }
-
-  const nickname = 生成随机昵称();
-  const [result] = await db.query('INSERT INTO players (uid, nickname) VALUES (?, ?)', [uid, nickname]);
-  res.json({ nickname, id: result.insertId });
 });
 
 // ===================== 2. 异常上报 =====================
 app.post('/error', async (req, res) => {
-  await db.query('INSERT INTO errors (data, time) VALUES (?, NOW())', [JSON.stringify(req.body)]);
-  res.json({ code: 200, msg: '异常上报成功' });
+  try {
+    await db.query('INSERT INTO errors (data, time) VALUES (?, NOW())', [JSON.stringify(req.body)]);
+    res.json({ code: 200, msg: '异常上报成功' });
+  } catch (err) {
+    res.json({ code: 500, msg: '异常上报失败' });
+  }
 });
 
 // ===================== 3. 普通消息 =====================
 app.post('/msg', async (req, res) => {
-  await db.query('INSERT INTO messages (data, time) VALUES (?, NOW())', [JSON.stringify(req.body)]);
-  res.json({ code: 200, msg: '消息上传成功' });
+  try {
+    await db.query('INSERT INTO messages (data, time) VALUES (?, NOW())', [JSON.stringify(req.body)]);
+    res.json({ code: 200, msg: '消息上传成功' });
+  } catch (err) {
+    res.json({ code: 500, msg: '消息上传失败' });
+  }
 });
 
-// ===================== 4. 上传存档 =====================
+// ===================== 4. 上传存档（已修复所有bug） =====================
 app.post('/save', async (req, res) => {
-  const { save, setting } = req.body;
-  const user_id = setting?.账号?.id || 'unknown';
-  const save_id = setting?.uid || setting?.唯一标识 || 'unknown';
+  try {
+    const { save, setting } = req.body;
+    if (!save || !setting) return res.status(400).json({ code: 400, msg: '缺少存档数据' });
 
-  await db.query(`
-    REPLACE INTO saves (user_id, save_id, save, setting, time)
-    VALUES (?, ?, ?, ?, NOW())
-  `, [user_id, save_id, JSON.stringify(save), JSON.stringify(setting)]);
+    // ✅ 修复：user_id 必须转数字，表是 INT 类型
+    const user_id = parseInt(setting?.账号?.id) || 0;
+    // ✅ 修复：save_id 不能为空
+    const save_id = setting?.uid || setting?.唯一标识 || 'default';
 
-  res.json({ code: 200, msg: '存档上传成功' });
+    await db.query(`
+      REPLACE INTO saves (user_id, save_id, save, setting, time)
+      VALUES (?, ?, ?, ?, NOW())
+    `, [user_id, save_id, JSON.stringify(save), JSON.stringify(setting)]);
+
+    res.json({ code: 200, msg: '存档上传成功' });
+
+  } catch (err) {
+    res.status(500).json({ code: 500, msg: '存档失败', error: err.message });
+  }
 });
 
+// ===================== 启动服务 =====================
 app.listen(3000, () => {
   console.log('🚀 服务启动成功 端口：3000');
 });
