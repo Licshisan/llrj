@@ -45,11 +45,11 @@ export class 开场 extends Component {
 			return 打乱后的列表.slice(0, 抽取数量);
 		};
 
-		const 抽取特质表 = 默认特质表.filter(i => 设置.特质[i.名称])
+		const 抽取特质表 = 默认特质表.filter(i => i.条件)
 		const 抽取的特质 = 随机抽取(抽取特质表, 特质数量)
 
-		const 抽取的正面天赋 = 随机抽取(默认天赋表.filter(i => !i.负面), 天赋数量)
-		const 抽取的负面天赋 = 随机抽取(默认天赋表.filter(i => i.负面), 天赋数量)
+		const 抽取的正面天赋 = 随机抽取(默认天赋表.filter(i => !i.负面 && i.条件), 天赋数量)
+		const 抽取的负面天赋 = 随机抽取(默认天赋表.filter(i => i.负面 && i.条件), 天赋数量)
 
 		this.当前特质.push(...抽取的特质.map(x => x.名称))
 		this.当前天赋.push(...抽取的正面天赋.map(x => x.名称))
