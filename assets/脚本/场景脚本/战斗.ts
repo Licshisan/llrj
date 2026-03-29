@@ -85,7 +85,10 @@ export class 战斗 extends Component {
             return;
         }
         存档.当前敌人 = 敌人名称
-        存档.遇敌次数[敌人名称]++
+        if (!存档.遇敌次数) {
+            存档.遇敌次数 = {};
+        }
+        存档.遇敌次数[敌人名称] = (存档.遇敌次数[敌人名称] || 0) + 1
 
         const 战斗主角: 战斗角色 = {
             名称: "你",
@@ -279,8 +282,8 @@ export class 战斗 extends Component {
         this.文本容器.getChildByName("标签2").getComponent(Label).string = "";
         // 按钮初始化
         this.按钮容器.getChildByName("架势").active = !!存档.当前架势;
-        this.按钮容器.getChildByName("架势").getChildByName("标签").getComponent(Label).string = 存档.当前架势[0] + "  " + 存档.当前架势[1];
-        this.按钮容器.getChildByName("枪").active = !!存档.物品.枪;
+        this.按钮容器.getChildByName("架势").getChildByName("标签").getComponent(Label).string = 存档.当前架势 ? 存档.当前架势[0] + "  " + 存档.当前架势[1] : "";
+        this.按钮容器.getChildByName("枪").active = !!(存档.物品?.枪);
         this.按钮容器.active = true;
 
         // 绑定事件
@@ -333,7 +336,7 @@ export class 战斗 extends Component {
         this.文本容器.getChildByName("标签2").getComponent(Label).string = "";
         this.按钮容器.active = false;
         if(存档.当前架势){
-            this.对局.主角.其他.架势使用次数[存档.当前架势] ++
+            this.对局.主角.其他.架势使用次数[存档.当前架势] = (this.对局.主角.其他.架势使用次数[存档.当前架势] || 0) + 1
         }
 
         // 结算
@@ -446,15 +449,10 @@ export class 战斗 extends Component {
         }
 
         if(this.对局.主角.其他?.架势使用次数){
-            let maxKey = "";
-            let maxValue = 0;
             const 架势使用次数 = this.对局.主角.其他.架势使用次数 as Record<string, number>
-            for (const [key, value] of Object.entries(架势使用次数)) {
-                if (value > maxValue) {
-                    maxValue = value;
-                    maxKey = key;
-                }
-            }
+            const maxKey = Object.entries(架势使用次数).reduce((max, [key, value]) => {
+                return value > max.value ? { key, value } : max;
+            }, { key: "", value: 0 }).key;
             if (maxKey) {
                 if (存档.架势经验[maxKey] < 150) {
                     存档.架势经验[maxKey] += 1;
@@ -473,7 +471,10 @@ export class 战斗 extends Component {
         }
 
         存档.其他.胜利次数 += 1;
-        存档.击败次数[this.对局.敌人.名称]++
+        if (!存档.击败次数) {
+            存档.击败次数 = {};
+        }
+        存档.击败次数[this.对局.敌人.名称] = (存档.击败次数[this.对局.敌人.名称] || 0) + 1;
         this.scheduleOnce(() => this.结束战斗(this.对局.结果文本.join('\n')), 1.8 / 设置.播放速度);
     }
 
@@ -506,7 +507,10 @@ export class 战斗 extends Component {
             存档.生命 = 1;
         }
         存档.其他.战败次数++
-        存档.战败次数[this.对局.敌人.名称]++
+        if (!存档.战败次数) {
+            存档.战败次数 = {};
+        }
+        存档.战败次数[this.对局.敌人.名称] = (存档.战败次数[this.对局.敌人.名称] || 0) + 1;
         this.scheduleOnce(() => this.结束战斗(this.对局.结果文本.join('\n')), 1.8);
     }
 
@@ -560,13 +564,13 @@ export class 战斗 extends Component {
 
         存档.当前架势 = 架势列表[下一架势序号];
 
-        this.按钮容器.getChildByName("架势").getChildByName("标签").getComponent(Label).string = `${存档.当前架势?.[0] || ''}  ${存档.当前架势?.[1] || ''}`;
+        this.按钮容器.getChildByName("架势").getChildByName("标签").getComponent(Label).string = 存档.当前架势 ? `${存档.当前架势[0]}  ${存档.当前架势[1]}` : "";
     }
 
     点击枪() {
-        this.对局.主角.其他.枪开关 = !this.对局.主角.其他?.枪开关
+        this.对局.主角.其他.枪开关 = !this.对局.主角.其他.枪开关
         const 枪械按钮 = this.按钮容器.getChildByName("枪");
-        枪械按钮.getComponent(Label).string = `（${存档.物品.子弹}）\n【${["关", "开"][Number(this.对局.主角.其他.枪开关)]}】`;
+        枪械按钮.getComponent(Label).string = `（${存档.物品?.子弹 || 0}）\n【${["关", "开"][Number(this.对局.主角.其他.枪开关)]}】`;
     }
 
     计算主角逃跑成功率() {
@@ -598,10 +602,10 @@ export class 战斗 extends Component {
         this.标签容器.getChildByName("生命").getComponent(Label).string = `HP${存档.生命}/${计算最大生命()}`;
         this.标签容器.getChildByName("逃跑率").getComponent(Label).string = `${this.计算主角逃跑成功率()}%`;
 
-        if (存档.物品.枪 > 0) {
-            this.按钮容器.getChildByName("枪").getComponent(Label).string = `（${存档.物品.子弹}）\n【${["关", "开"][Number(this.对局.主角.其他.枪开关)]}】`;
+        if (存档.物品?.枪 > 0) {
+            this.按钮容器.getChildByName("枪").getComponent(Label).string = `（${存档.物品?.子弹 || 0}）\n【${["关", "开"][Number(this.对局.主角.其他.枪开关)]}】`;
         }
-        this.按钮容器.getChildByName("架势").getChildByName("标签").getComponent(Label).string = 存档.当前架势[0] + "  " + 存档.当前架势[1];
+        this.按钮容器.getChildByName("架势").getChildByName("标签").getComponent(Label).string = 存档.当前架势 ? 存档.当前架势[0] + "  " + 存档.当前架势[1] : "";
     }
     显示主角文本(text: string) {
         const t = this.文本容器.getChildByName("标签1");
