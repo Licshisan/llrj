@@ -1,9 +1,11 @@
-import { _decorator, Component, Node, Button, director, Label, UITransform, Color } from "cc";
+import { _decorator, Component, Node, Button, director, Label, UITransform } from "cc";
 import { 存档 } from "../管理器/存档管理器";
-import { 创建普通文字, 播放文本 } from "../方法函数/动画效果";
+import { 创建普通文字 } from "../方法函数/动画效果";
 import { 计算最大压制, 计算最大逃跑 } from "../方法函数/属性计算";
 import { 默认特质表 } from "../默认内容/特质表";
 import { 默认天赋表 } from "../默认内容/天赋表";
+import { 默认难度表 } from "../默认内容/难度表";
+import { 默认套餐表 } from "../默认内容/套餐表";
 const { ccclass, property } = _decorator;
 
 @ccclass("面板")
@@ -15,8 +17,16 @@ export class 面板 extends Component {
 
     start() {
         this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene("主页"), this);
-        
+
         let index = 0
+
+        const 难度说明 = 默认难度表.find(x => x.名称 === 存档.游戏难度)?.说明 || ""
+        创建普通文字(this.内容, `难度【${存档.游戏难度}】${难度说明}`, index)
+        index ++
+        const 套餐说明 = 默认套餐表.find(x => x.名称 === 存档.套餐名称)?.说明 || ""
+        创建普通文字(this.内容, `套餐【${存档.套餐名称}】${套餐说明}`, index)
+        index ++
+
         for(let 特质名 in 存档.特质){
             if(存档.特质[特质名]){
                 const 特质 = 默认特质表.find(x => x.名称 === 特质名)
@@ -47,71 +57,50 @@ export class 面板 extends Component {
             {
                 名称: "逃跑",
                 数值: 计算最大逃跑(),
-                说明: "逃跑基本成功率，初始为50~。",
             },
             {
                 名称: "罪恶",
                 数值: 存档.罪恶,
-                说明: "做坏事时，增加罪恶，过高的罪恶会导致失眠。",
             },
             {
                 名称: "阅历",
                 数值: 存档.阅历,
-                说明: "社会阅历，提高打工报酬。",
             },
             {
                 名称: "烟瘾",
                 数值: 存档.烟瘾率,
-                说明: "吸烟增加烟瘾。",
             },
             {
                 名称: "胜次",
                 数值: 存档.其他.胜利次数,
-                说明: "胜利次数。",
             },
-
-
             {
                 名称: "压制",
                 数值: 计算最大压制(),
-                说明: "降低敌人逃跑率。",
             },
             {
                 名称: "声望",
                 数值: 存档.声望,
-                说明: "声望系统暂未开发。",
             },
 
             {
                 名称: "面经",
                 数值: 存档.面经,
-                说明: "面试经验，提高打工成功率。",
             },
             {
                 名称: "经验",
                 数值: 存档.经验,
-                说明: "战斗经验。",
             },
             {
                 名称: "败次",
                 数值: 存档.其他.战败次数,
-                说明: "战斗胜利次数。",
             },
         ]
-
-        for (let 架势 in 存档.架势) {
-            属性表.push({
-                名称: 架势 + '架势',
-                数值: 存档.架势经验[架势],
-                说明: 架势 + "架势经验，满级150~",
-            })
-        }
 
         if (存档.其他.网吧进度) {
             属性表.push({
                 名称: '网吧段位',
                 数值: 存档.其他.网吧进度,
-                说明: "亡者农药进阶之路~",
             })
         }
 
@@ -125,7 +114,6 @@ export class 面板 extends Component {
             标签.overflow = Label.Overflow.SHRINK
             标签.getComponent(UITransform).width = 150
             标签.getComponent(UITransform).height = 50
-            新节点.on(Node.EventType.TOUCH_END, () => 播放文本(this.标签, 属性.说明), this)
             this.信息框.addChild(新节点)
         })
     }

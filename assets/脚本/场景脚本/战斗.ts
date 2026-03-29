@@ -305,6 +305,7 @@ export class 战斗 extends Component {
     }
 
     点击攻击() {
+        this.对局.主角.方法 = this.对局.主角.方法 || "普攻";
         this.对局.攻击 = { 初始值: this.对局.主角.攻击, 基础加成: 0, 加法乘率: 0, 独立乘区: 1, 计算结果: 0 }
         this.对局.防御 = { 初始值: this.对局.敌人.防御, 基础加成: 0, 加法乘率: 0, 独立乘区: 1, 计算结果: 0 }
         this.对局.伤害 = { 初始值: 0, 基础加成: 0, 加法乘率: 0, 独立乘区: 1, 计算结果: 0 }
@@ -362,6 +363,7 @@ export class 战斗 extends Component {
         }
 
         // 攻击准备
+        this.对局.敌人.方法 = this.对局.敌人.方法 || "";
         this.对局.攻击 = { 初始值: this.对局.敌人.攻击, 基础加成: 0, 加法乘率: 0, 独立乘区: 1, 计算结果: 0, }
         this.对局.防御 = { 初始值: this.对局.主角.防御, 基础加成: 0, 加法乘率: 0, 独立乘区: 1, 计算结果: 0, }
         this.对局.伤害 = { 初始值: 0, 基础加成: 0, 加法乘率: 0, 独立乘区: 1, 计算结果: 0,  }
@@ -596,7 +598,11 @@ export class 战斗 extends Component {
     }
 
     更新() {
-        this.敌人标签.getComponent(Label).string = `${this.对局.敌人.显示名称 || this.对局.敌人.名称}LV${this.对局.敌人.等级}\nHP${this.对局.敌人.生命} ATT${this.对局.敌人.攻击} DEF${this.对局.敌人.防御}`;
+        const 名称 = this.对局.敌人.显示名称 || this.对局.敌人.名称;
+        if(this.对局.敌人.等级){
+            this.node.getComponent(主页).标签.getComponent(Label).string = `${名称} LV${this.对局.敌人.等级}`;
+        }
+        this.敌人标签.getComponent(Label).string = `${名称}\nHP${this.对局.敌人.生命} ATT${this.对局.敌人.攻击} DEF${this.对局.敌人.防御}`;
         this.血量条.getComponent(ProgressBar).progress = this.对局.敌人.生命 / this.对局.敌人.最大生命;
 
         this.标签容器.getChildByName("生命").getComponent(Label).string = `HP${存档.生命}/${计算最大生命()}`;

@@ -368,7 +368,7 @@ export class 主页 extends Component {
         this.按钮容器.getChildByName("探索").active = 存档.按钮.探索
         this.按钮容器.getChildByName("前进").active = 存档.按钮.前进
         this.按钮容器.getChildByName("伙伴").active = 存档.按钮.伙伴
-        this.按钮容器.getChildByName("制作").active = 存档.按钮.制造
+        this.按钮容器.getChildByName("制作").active = 存档.按钮.制作
         this.按钮容器.getChildByName("特性").active = 存档.按钮.特性
         this.按钮容器.getChildByName("进食").active = 存档.按钮.进食
         this.按钮容器.getChildByName("睡觉").getChildByName("标签").getComponent(Label).string = 存档.剧情.住在桥洞 ? "桥  洞" : "睡  觉";
