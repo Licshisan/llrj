@@ -70,12 +70,12 @@ const db = mysql.createPool({
 
     await db.query(`
       CREATE TABLE IF NOT EXISTS saves (
+        id INT PRIMARY KEY AUTO_INCREMENT,
         user_id INT NOT NULL,
         save_id VARCHAR(255) NOT NULL,
         save TEXT,
         setting TEXT,
-        time DATETIME,
-        PRIMARY KEY (user_id, save_id)
+        time DATETIME
       )
     `);
 
@@ -138,7 +138,7 @@ app.post('/save', async (req, res) => {
     const save_id = setting?.uid || setting?.唯一标识 || 'default';
 
     await db.query(`
-      REPLACE INTO saves (user_id, save_id, save, setting, time)
+      INSERT INTO saves (user_id, save_id, save, setting, time)
       VALUES (?, ?, ?, ?, NOW())
     `, [user_id, save_id, JSON.stringify(save), JSON.stringify(setting)]);
 
