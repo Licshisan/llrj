@@ -1,7 +1,36 @@
+function 生成随机昵称() {
+  const 形容词列表 = [
+    "呆萌", "勇敢", "调皮", "温柔", "疯狂",
+    "慵懒", "帅气", "神秘", "暴躁", "可爱",
+    "潇洒", "憨厚", "傲娇", "勇猛", "佛系",
+    "沙雕", "冷酷", "阳光", "忧郁", "无敌"
+  ];
+
+  const 角色列表 = [
+    "小蚊", "小小兔", "小小蛇", "小青", "蚊媛", "巨蟒",
+    "蚊乐队", "小混混", "丐帮弟子", "恶霸", "女警", "煤老板", "城管",
+    "皮皮猴", "野猪", "药贩", "流浪剑客", "黑熊", "果树", "火狐", "山岭巨人",
+    "熊孩子", "阿宾", "卖片老板", "阿龙", "站街妹",
+    "金环蛇", "铃女", "流浪大叔", "古树", "再生虫",
+    "喵妹", "高级金融分析师", "胖虎", "龙啸天", "排球少女",
+    "流浪汉", "女贼", "西装男", "醉汉", "刀疤男",
+    "看守者", "追杀者", "劫匪", "通缉犯",
+    "草带男孩", "女流氓", "女汉子", "壮汉",
+    "电锯男", "蒙面人", "流浪者", "萌新"
+  ];
+  const 形容词 = 形容词列表[Math.floor(Math.random() * 形容词列表.length)];
+  const 角色 = 角色列表[Math.floor(Math.random() * 角色列表.length)];
+  return `${形容词}的${角色}`;
+}
+
+
 const express = require('express');
 const mysql = require('mysql2/promise');
+const cors = require('cors'); 
 const app = express();
+app.use(cors());
 app.use(express.json());
+
 
 // ===================== MySQL 连接配置（改成你宝塔的） =====================
 const db = mysql.createPool({
@@ -40,7 +69,7 @@ app.post('/login', async (req, res) => {
   }
 
   const [result] = await db.query('INSERT INTO players (uid, nickname) VALUES (?, ?)', [uid, '玩家']);
-  res.json({ nickname: '玩家', id: result.insertId });
+  res.json({ nickname: 生成随机昵称(), id: result.insertId });
 });
 
 // ===================== 2. 异常上报 =====================
