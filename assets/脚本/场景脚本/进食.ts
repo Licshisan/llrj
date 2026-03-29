@@ -66,6 +66,7 @@ export class 进食 extends Component {
 
 			项目组件.getChildByName("选择按钮").on(Button.EventType.CLICK, () => {
 				try {
+					执行钩子('进食前', [食物])
 					食物.使用({
 						提示: (文本) => 播放文本(this.标签, 文本),
 						食用成功: (文本) => {

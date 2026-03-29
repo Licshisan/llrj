@@ -3,7 +3,7 @@ import { 事件上下文 } from '../场景脚本/事件'
 import { 计算数值, 计算最大生命, 计算最大饥饿 } from "../方法函数/属性计算";
 import { 自动进食 } from "../方法函数/公共函数";
 
-interface 事件定义类型 {
+export interface 事件项目类型 {
 	名称: string,
 	文本: string[],
 	选项一: string,
@@ -14,7 +14,7 @@ interface 事件定义类型 {
 	结果三?: ((上下文: 事件上下文) => void),
 }
 
-export const 默认事件表: 事件定义类型[] = [
+export const 默认事件表: 事件项目类型[] = [
 	// 公共事件
 	{
 		名称: "女流氓",
