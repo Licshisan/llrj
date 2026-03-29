@@ -5,6 +5,7 @@ import { 保存存档, 存档 } from "../管理器/存档管理器";
 import { 执行钩子 } from "../管理器/钩子管理器";
 import { 默认天赋表 } from "../默认内容/天赋表";
 import { 默认特质表 } from "../默认内容/特质表";
+import { 计算最大生命, 计算最大精力, 计算最大饥饿 } from "../方法函数/属性计算";
 const { ccclass, property } = _decorator;
 
 @ccclass("开场")
@@ -106,6 +107,10 @@ export class 开场 extends Component {
 			执行钩子("激活天赋", [天赋])
 			存档.天赋[天赋] = true
 		})
+
+		存档.精力 = 计算最大精力()
+		存档.饥饿 = 计算最大饥饿()
+		存档.生命 = 计算最大生命()
 		保存存档()
 		log(this.当前天赋)
 		director.loadScene("主页");
