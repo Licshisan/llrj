@@ -1,4 +1,4 @@
-import { 概率类型 } from "../方法函数/公共函数";
+import { 概率类型, 深克隆 } from "../方法函数/公共函数";
 import { 存档 } from "../管理器/存档管理器";
 
 interface 地区定义类型 {
@@ -256,7 +256,11 @@ export const 默认地区表: 地区定义类型[] = [
 ];
 
 export function 获取当前地区() {
-	return 默认地区表.find((地区) => 地区.条件)
+	const 地区 = 默认地区表.find((地区) => 地区.条件)
+	if(!地区) {
+		return null
+	}
+	return 深克隆(地区)
 }
 
 export function 获取地区名称() {
