@@ -19,8 +19,11 @@ export class 日记 extends Component {
 
 		this.返回按钮.active = false
 		const sequence = tween(this.node);
+		if (日记.文本.length === 0) {
+			sequence.call(() => 淡入(this.返回按钮));
+		}
 		for (let i = 0; i < 日记.文本.length; i++) {
-			if (i == 日记.文本.length - 1) {
+			if (i === 日记.文本.length - 1) {
 				sequence.call(() => 淡入(this.返回按钮));
 			}
 			sequence.call(() => 创建动画文字(this.文本容器, 日记.文本[i], i)).delay(2 / 设置.播放速度);

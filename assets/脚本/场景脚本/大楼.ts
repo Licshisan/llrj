@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Label, director, tween, Button } from "cc";
+import { _decorator, Component, Node, Label, director, Button } from "cc";
 import { 保存存档, 存档 } from "../管理器/存档管理器";
 import { 播放文本, 放大出现, 缩小消失 } from "../方法函数/动画效果";
 import { 计算最大精力, 计算最大饥饿 } from "../方法函数/属性计算";
@@ -53,7 +53,7 @@ export class 大楼 extends Component {
 
 		const 四层按钮 = this.大楼.getChildByName("按钮容器").getChildByName("选择按钮4")
 		if (Math.random() * 100 < 70) {
-			存档.其他.游戏时长 = 0
+			存档.其他.游戏时长 = 存档.其他.游戏时长 || 0
 			const 胜率 = Math.min(存档.其他.网吧进度 / 10 + 40, 75).toFixed(1);
 			四层按钮.getChildByName("标签").getComponent(Label).string = `四楼：晓风网咖（属性+${存档.其他.全属性加成}%,胜率${胜率}%）`
 			四层按钮.on(Button.EventType.CLICK, () => this.点击四楼(), this);
@@ -68,11 +68,12 @@ export class 大楼 extends Component {
 				五层按钮.getChildByName("标签").getComponent(Label).string = "关门大吉！转行啦~"
 				五层按钮.on(Button.EventType.CLICK, () => 播放文本(this.标签, "由于经济不景气，公司倒闭，老板转行卖土鸡蛋去啦~"), this);
 			} else {
+				const 电疗成功率 = Math.min(存档.停留天数.省城, 95);
 				存档.其他.电疗店次数 = 0
 				存档.其他.电疗店资产 += Math.floor(Math.random() * 15 + 5);
 
-				五层按钮.getChildByName("标签").getComponent(Label).string = `五楼：小风电疗（资产${(存档.其他.电疗店资产 / 10).toFixed(1)}元,成功率${存档.停留天数.省城}%）`
-				五层按钮.on(Button.EventType.CLICK, () => this.点击五楼(), this);
+				五层按钮.getChildByName("标签").getComponent(Label).string = `五楼：小风电疗（资产${(存档.其他.电疗店资产 / 10).toFixed(1)}元,成功率${电疗成功率}%）`
+				五层按钮.on(Button.EventType.CLICK, () => this.点击五楼(电疗成功率), this);
 			}
 		} else {
 			五层按钮.getChildByName("标签").getComponent(Label).string = "？？？？（晓风电疗放假中...）"
@@ -221,19 +222,21 @@ export class 大楼 extends Component {
 		this.更新()
 	}
 
-	点击五楼() {
+	点击五楼(电疗成功率: number) {
 		if (存档.其他.电疗店次数 >= 3) {
-			return 播放文本(this.标签, '"啊哈哈哈哈哈~有些累了...下次再来哈~"');
+			播放文本(this.标签, '"啊哈哈哈哈哈~有些累了...下次再来哈~"');
+			return
 		}
 		if (存档.金钱 < 10) {
-			return 播放文本(this.标签, "没钱！");
+			播放文本(this.标签, "没钱！");
+			return
 		}
 
 		存档.金钱 -= 10;
 		存档.其他.电疗店资产 += 10;
 		存档.其他.电疗店次数 += 1;
 
-		if (Math.random() * 100 < 存档.停留天数.省城) {
+		if (Math.random() * 100 < 电疗成功率) {
 			存档.烟瘾率 -= 1;
 			播放文本(this.标签, "电疗成功！烟瘾减少1%，电疗店总资产+1元");
 		} else {
@@ -241,7 +244,7 @@ export class 大楼 extends Component {
 			播放文本(this.标签, "电疗失败...健康减1点...电疗店总资产+1元");
 		}
 
-		this.大楼.getChildByName("按钮容器").getChildByName("选择按钮5").getChildByName("标签").getComponent(Label).string = `五楼：小风电疗（资产${(存档.其他.电疗店资产 / 10).toFixed(1)}元,成功率${存档.停留天数.省城}%）`
+		this.大楼.getChildByName("按钮容器").getChildByName("选择按钮5").getChildByName("标签").getComponent(Label).string = `五楼：小风电疗（资产${(存档.其他.电疗店资产 / 10).toFixed(1)}元,成功率${电疗成功率}%）`
 		this.更新()
 	}
 

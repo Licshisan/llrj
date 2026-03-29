@@ -49,18 +49,18 @@ export class 剧情 extends Component {
 			提示: (text: string) => this.提示标签.getComponent(Label).string = text,
 			结束剧情: (text?: string) => {
 				if (!text) {
-					this.结束剧情()
+					this.结束剧情();
 				} else {
-					this.显示结果(text)
+					this.显示结果(text);
 				}
 			},
 			进入剧情: (name: string) => this.触发剧情(name),
 			进入战斗: (name: string, text?: string) => {
 				存档.当前敌人 = name
 				if (!text) {
-					this.结束剧情()
+					this.结束剧情();
 				} else {
-					this.显示结果(text)
+					this.显示结果(text);
 				}
 			},
 		}
@@ -68,10 +68,10 @@ export class 剧情 extends Component {
 		选项一.getChildByName("标签").getComponent(Label).string = 剧情.选项一;
 		选项一.targetOff(this)
 		选项一.on(Button.EventType.CLICK, () => {
-			if(剧情.结果一){
+			if (剧情.结果一){
 				剧情.结果一(this.上下文)
 			}else{
-				this.结束剧情()
+				this.结束剧情();
 			}
 		}, this);
 		选项一.active = !!剧情.选项一;
@@ -80,10 +80,10 @@ export class 剧情 extends Component {
 		选项二.getChildByName("标签").getComponent(Label).string = 剧情.选项二;
 		选项二.targetOff(this)
 		选项二.on(Button.EventType.CLICK, () => {
-			if(剧情.结果二){
+			if (剧情.结果二){
 				剧情.结果二(this.上下文)
 			}else{
-				this.结束剧情()
+				this.结束剧情();
 			}
 		}, this);
 		选项二.active = !!剧情.选项二;
@@ -91,10 +91,10 @@ export class 剧情 extends Component {
 		选项三.getChildByName("标签").getComponent(Label).string = 剧情.选项三;
 		选项三.targetOff(this)
 		选项三.on(Button.EventType.CLICK, () => {
-			if(剧情.结果二){
-				剧情.结果二(this.上下文)
+			if (剧情.结果三){
+				剧情.结果三(this.上下文)
 			}else{
-				this.结束剧情()
+				this.结束剧情();
 			}
 		}, this);
 		选项三.active = !!剧情.选项三;
@@ -119,7 +119,7 @@ export class 剧情 extends Component {
 
 	结束剧情() {
 		存档.当前剧情 = "";
-		保存存档()
+		保存存档();
 		director.loadScene("主页");
 	}
 }

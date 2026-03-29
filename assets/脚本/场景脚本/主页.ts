@@ -176,7 +176,7 @@ export class 主页 extends Component {
             存档.按钮.进食 = true;
         }
         if (存档.距离 == 6) {
-            存档.按钮.制造 = true;
+            存档.按钮.制作 = true;
         }
         if (存档.距离 == 44) {
             存档.按钮.挑战 = true;
@@ -393,7 +393,7 @@ export class 主页 extends Component {
             }
         }
 
-        位置 += `已停留${存档.停留天数[获取地区名称()]}天`
+        位置 += `已停留${存档.停留天数[获取地区名称()] || 0}天`
         return 位置
     }
 

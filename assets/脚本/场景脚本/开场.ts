@@ -12,7 +12,7 @@ export class 开场 extends Component {
 	@property(Node) 文本容器: Node = null;
 	@property(Node) 继续按钮: Node = null;
 	@property(Node) 刷新按钮: Node = null;
-	开场文本: string[] = ["昨天，", "和父亲大吵一架后，", "我双手空空的逃了出来。", "我决定离开这个家，", "再也不回去了..."]
+	开场文本: string[] = ["昨天，", "和父亲大吵一架后，", "我双手空空的逃了出来。", "我决定离开这个家，", "再也不回去了..."];
 	
 	当前特质: string[] = []
 	当前天赋: string[] = []
@@ -22,18 +22,18 @@ export class 开场 extends Component {
 			序列.call(() => 创建动画文字(this.文本容器, this.开场文本[i], i)).delay(1.5 / 设置.播放速度);
 		}
 		序列.delay(2.5 / 设置.播放速度);
-		序列.call(() =>this.点击刷新()).delay(2.5 / 设置.播放速度);
+		序列.call(() => this.点击刷新()).delay(2.5 / 设置.播放速度);
 		序列.start();
 
-		this.继续按钮.active = false
-		this.刷新按钮.active = false
+		this.继续按钮.active = false;
+		this.刷新按钮.active = false;
 		this.继续按钮.on(Button.EventType.CLICK, () => this.点击确定(), this);
 		this.刷新按钮.on(Button.EventType.CLICK, () => this.点击刷新(), this);
 	}
 
 	点击刷新() {
-		this.继续按钮.active = false
-		this.刷新按钮.active = false
+		this.继续按钮.active = false;
+		this.刷新按钮.active = false;
 		const 特质数量 = 1
 		const 正面天赋数量 = 2
 		const 负面天赋数量 = 2
@@ -51,8 +51,8 @@ export class 开场 extends Component {
 
 
 		this.当前特质.push(...抽取的特质.map(x => x.名称))
-		this.当前天赋.push(...抽取的正面天赋.map(x=> x.名称))
-		this.当前天赋.push(...抽取的负面天赋.map(x=> x.名称))
+		this.当前天赋.push(...抽取的正面天赋.map(x => x.名称))
+		this.当前天赋.push(...抽取的负面天赋.map(x => x.名称))
 		const 显示文本 = []
 		抽取的特质.forEach(特质 => {
 			显示文本.push({
@@ -74,7 +74,7 @@ export class 开场 extends Component {
 		})
 
 		const 序列 = tween(this.node)
-		.call(()=> 淡出(this.文本容器))
+		.call(() => 淡出(this.文本容器))
 		.delay(2.5 / 设置.播放速度)
 		.call(() => {
 			this.文本容器.removeAllChildren()
@@ -88,7 +88,7 @@ export class 开场 extends Component {
 			.delay(1.5 / 设置.播放速度);
 		}
 		序列.delay(1.5 / 设置.播放速度);
-		序列.call(() =>{
+		序列.call(() => {
 			淡入(this.继续按钮)
 			淡入(this.刷新按钮)
 		})
@@ -106,6 +106,6 @@ export class 开场 extends Component {
 		})
 		保存存档()
 		log(this.当前天赋)
-		director.loadScene("主页")
+		director.loadScene("主页");
 	}
 }

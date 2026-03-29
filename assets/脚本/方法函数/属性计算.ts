@@ -9,7 +9,7 @@ export interface 计算容器类型 {
 	最后修正: number
 }
 
-export function 计算数值(计算名称, 初始值 = 0) {
+export function 计算数值(计算名称: string, 初始值 = 0): number {
 	const 计算容器: 计算容器类型 = {
 		初始值: 初始值,
 		固定加成: 0,

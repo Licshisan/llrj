@@ -13,6 +13,10 @@ import { error, log } from "cc";
 import { 默认难度表 } from "./难度表";
 import { 默认特质表 } from "./特质表";
 
+interface WindowWithErrorHandler extends Window {
+	__errorHandler?: (name: string, line: number, msg: string, stack: string) => void;
+}
+
 let 加载完成 = false
 
 export function 挂载全局变量() {
@@ -56,10 +60,10 @@ export function 注册钩子函数() {
 		}
 	});
 
-	for (let 伙伴特性 in 默认伙伴特性表) {
-		默认伙伴特性表[伙伴特性].forEach((伙伴特性: 伙伴特性定义类型) => {
-			const 效果 = 伙伴特性.效果
-			for (let 时机 in 效果) {
+	for (const 伙伴特性 in 默认伙伴特性表) {
+		默认伙伴特性表[伙伴特性].forEach((伙伴特性项) => {
+			const 效果 = 伙伴特性项.效果
+			for (const 时机 in 效果) {
 				注册钩子(时机, 效果[时机])
 			}
 		});
@@ -90,34 +94,39 @@ export async function 加载游戏内容() {
 
 	const SERVER_URL = 'http://47.93.223.212:3000';
 	// 提交异常
-	(window as any).__errorHandler = function (name, line, msg, stack) {
+	(window as WindowWithErrorHandler).__errorHandler = function (name, line, msg, stack) {
 		error(`Error Name: ${name}`);
 		error(`Line: ${line}`);
 		error(`Message: ${msg}`);
 		error(`Stack: ${stack}`);
 
-		try {
-			fetch(`${SERVER_URL}/error`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ name, line, msg, stack, setting: 设置管理器.设置, save: 存档管理器.存档 })
-			});
-			log("错误上报成功")
-		} catch (e) {
-			error('错误上报失败:', e);
-		}
-	};
-	// 玩家登录
-	try {
-		const response = await fetch(`${SERVER_URL}/login`, {
-			method: 'post',
+		fetch(`${SERVER_URL}/error`, {
+			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ uid: 设置管理器.设置.唯一标识 })
+			body: JSON.stringify({ name, line, msg, stack, setting: 设置管理器.设置, save: 存档管理器.存档 })
+		}).then(() => {
+			log("错误上报成功");
+		}).catch((e) => {
+			error('错误上报失败:', e);
 		});
+	};
+	// 玩家登录
+	try {
+		const controller = new AbortController();
+		const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+		const response = await fetch(`${SERVER_URL}/login`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ uid: 设置管理器.设置.唯一标识 }),
+			signal: controller.signal
+		});
+		clearTimeout(timeoutId);
+
 		if (!response.ok) {
 			return
 		}
@@ -127,6 +136,7 @@ export async function 加载游戏内容() {
 		设置管理器.保存设置()
 	}
 	catch (e) {
-		error("玩家初始化失败：", e.message);
+		const errorMessage = e instanceof Error ? e.message : String(e);
+		error("玩家初始化失败：", errorMessage);
 	}
 }

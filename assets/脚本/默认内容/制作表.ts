@@ -4,8 +4,8 @@ import { 抽取物品 } from "../方法函数/公共函数";
 import { 对局类型 } from "../场景脚本/战斗";
 
 interface 制作上下文 {
-	制作成功: (string: string) => void,
-	提示: (string: string) => void
+	制作成功: (文本: string) => void,
+	提示: (文本: string) => void
 }
 
 export interface 制作类型 {

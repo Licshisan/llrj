@@ -186,7 +186,7 @@ export function 缩小消失(目标节点: Node, 持续时长: number = 0.4): vo
 
 // 创建动画文字
 export function 创建动画文字(布局节点: Node, 文本内容: string, 索引: number, 颜色: Color = Color.WHITE) {
-	const 文字节点 = new Node(`lable_${索引}`);
+	const 文字节点 = new Node(`label_${索引}`);
 	const 标签组件 = 文字节点.addComponent(Label);
 
 	文字节点.setParent(布局节点);

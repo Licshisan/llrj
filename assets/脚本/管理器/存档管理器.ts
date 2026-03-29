@@ -49,8 +49,8 @@ const 默认存档 = {
     架势: { 平衡: false } as Record<string, boolean>,
     架势经验: { 平衡: 0 } as Record<string, number>,
     
-    天赋: { 饥饿: false }as Record<string, boolean>,
-    特质: { 饥饿: false }as Record<string, boolean>,
+    天赋: { 饥饿: false } as Record<string, boolean>,
+    特质: { 饥饿: false } as Record<string, boolean>,
     状态: { 饥饿: false } as Record<string, boolean>,
     剧情: { 剧情: false } as Record<string, boolean>,
     伙伴: {} as Record<string, any>,
@@ -132,7 +132,7 @@ export function 删除存档(存档名称: string) {
         sys.localStorage.setItem("存档名称列表", JSON.stringify(新存档名称列表))
         sys.localStorage.removeItem(存档名称)
 
-        创建默认值代理(JSON.parse(JSON.stringify(默认存档)))
+        存档 = 创建默认值代理(JSON.parse(JSON.stringify(默认存档)))
     } catch (e) {
         error("删除存档失败", e);
     }
@@ -161,7 +161,7 @@ export function 保存存档() {
         const 存档字符串 = JSON.stringify(存档)
         sys.localStorage.setItem(存档.存档名称, 存档字符串)
     } catch (e) {
-        error("加载存档失败", e);
+        error("保存存档失败", e);
     }
 }
 
@@ -204,8 +204,8 @@ export function 新建外部存档(data: string | object) {
         return;
     }
 
-    if(!存档对象.名称){
-        error("外部存档数据错误");
+    if(!存档对象.存档名称){
+        error("外部存档数据错误: 缺少存档名称");
         return;
     }
     
@@ -220,9 +220,9 @@ export function 新建外部存档(data: string | object) {
     const 存档名称列表: string[] = 存档名称列表字符串 ? JSON.parse(存档名称列表字符串) : [];
 
     try {
-        sys.localStorage.setItem(存档对象.名称, JSON.stringify(存档对象));
+        sys.localStorage.setItem(存档对象.存档名称, JSON.stringify(存档对象));
 
-        存档名称列表.push(存档对象.名称);
+        存档名称列表.push(存档对象.存档名称);
         sys.localStorage.setItem("存档名称列表", JSON.stringify(存档名称列表));
 
         存档 = 创建默认值代理(JSON.parse(JSON.stringify(存档对象)));

@@ -48,9 +48,9 @@ export class 事件 extends Component {
         选项二.active = !!事件.选项二
         选项三.active = !!事件.选项三
 
-        选项一.getChildByName("标签").getComponent(Label).string = 事件.选项一;
-        选项二.getChildByName("标签").getComponent(Label).string = 事件.选项二;
-        选项三.getChildByName("标签").getComponent(Label).string = 事件.选项三;
+        选项一.getChildByName("标签").getComponent(Label).string = 事件.选项一 || "";
+        选项二.getChildByName("标签").getComponent(Label).string = 事件.选项二 || "";
+        选项三.getChildByName("标签").getComponent(Label).string = 事件.选项三 || "";
 
         const 上下文1: 事件上下文 = {
             进入战斗: (名称) => this.进入战斗(名称),
@@ -87,7 +87,7 @@ export class 事件 extends Component {
 
         选项一.on(Button.EventType.CLICK, () => 事件.结果一(上下文1), this)
         选项二.on(Button.EventType.CLICK, () => 事件.结果二(上下文2), this)
-        选项三.on(Button.EventType.CLICK, () => 事件.结果二(上下文3), this)
+        选项三.on(Button.EventType.CLICK, () => 事件.结果三(上下文3), this)
 
         选项一.setParent(this.按钮容器)
         选项二.setParent(this.按钮容器)

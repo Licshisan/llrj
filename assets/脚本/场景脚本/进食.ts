@@ -16,16 +16,20 @@ export class 进食 extends Component {
 	@property(Node) 返回按钮: Node;
 
 	页大小 = 4
+	所有项目节点: Node[] = []
+
 	start() {
 		this.更新属性();
 		this.创建分页();
 		this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene("主页"), this);
 	}
+
 	创建分页() {
 		const 总页数 = Math.ceil(默认食物表.length / this.页大小);
 		const 分页组件 = this.分页视图.getComponent(PageView);
 
 		分页组件.removeAllPages();
+		this.所有项目节点 = []
 
 		for (let 页码 = 0; 页码 < 总页数; 页码++) {
 			this.创建单页(页码, 分页组件)
@@ -33,7 +37,7 @@ export class 进食 extends Component {
 	}
 
 	创建单页(页码: number, 分页组件: PageView) {
-		let 单页 = this.分页视图.node.getChildByName('视图').getChildByName('内容').getChildByName(`页_${页码 + 1}`)
+		let 单页 = this.分页视图.node.getChildByName('视图')?.getChildByName('内容')?.getChildByName(`页_${页码 + 1}`)
 		if (单页) {
 			单页.removeAllChildren()
 		} else {
@@ -56,31 +60,50 @@ export class 进食 extends Component {
 			项目组件.setParent(单页);
 
 			项目组件.name = `食物_${食物.名称}`;
+			this.所有项目节点.push(项目组件);
 
-			let 名称 = 食物.名称
-			项目组件.getChildByName("选择按钮").getChildByName("标签").getComponent(Label).string = 名称
-			if (食物.条件) {
-				项目组件.getChildByName("选择按钮").getChildByName("标签").getComponent(Label).color = new Color(0, 255, 0);
-			}
+			this.更新项目UI(项目组件, 食物);
 
-			项目组件.getChildByName("标签一").getComponent(Label).string = 食物.描述;
-			项目组件.getChildByName("标签二").getComponent(Label).string = 食物.说明;
 			项目组件.getChildByName("选择按钮").on(Button.EventType.CLICK, () => {
 				try {
 					食物.使用({
-						提示:(文本) => 播放文本(this.标签, 文本),
-						食用成功:(文本) => {
+						提示: (文本) => 播放文本(this.标签, 文本),
+						食用成功: (文本) => {
 							执行钩子('进食后', [食物])
 							播放文本(this.标签, 文本)
+							保存存档()
+							this.更新属性();
+							this.刷新所有项目状态();
 						},
 					})
-					保存存档()
-					this.创建单页(页码, 分页组件);
-					this.更新属性();
 				} catch (e) {
 					播放文本(this.标签, "使用食物时发生错误，请反馈开发者！");
 				}
-			},this);
+			}, this);
+		}
+	}
+
+	更新项目UI(项目组件: Node, 食物: any) {
+		const 标签组件 = 项目组件.getChildByName("选择按钮").getChildByName("标签").getComponent(Label);
+		标签组件.string = 食物.名称;
+
+		if (食物.条件) {
+			标签组件.color = new Color(0, 255, 0);
+		} else {
+			标签组件.color = Color.WHITE;
+		}
+
+		项目组件.getChildByName("标签一").getComponent(Label).string = 食物.描述;
+		项目组件.getChildByName("标签二").getComponent(Label).string = 食物.说明;
+	}
+
+	刷新所有项目状态() {
+		for (let i = 0; i < this.所有项目节点.length; i++) {
+			const 节点 = this.所有项目节点[i];
+			if (i < 默认食物表.length) {
+				const 食物数据 = 默认食物表[i];
+				this.更新项目UI(节点, 食物数据);
+			}
 		}
 	}
 
@@ -89,5 +112,3 @@ export class 进食 extends Component {
 		this.属性二.getComponent(Label).string = `生命：${存档.生命}/${计算最大生命()}`
 	}
 }
-
-

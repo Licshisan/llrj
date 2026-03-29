@@ -51,13 +51,13 @@ export class 桥洞 extends Component {
             const e = Math.floor(存档.伙伴.碧瑶聊天成功率 + 存档.其他.流浪猫篷等级 * 2);
             if (Math.random() * 100 < e) {
                 const c = ["liao ♂ 得不错", "“瑶酱~今天也要元气满满喔~”", "“嘿~嘿嘿~”", "“(｡･∀･)ﾉﾞ嗨！~上午好呀！”", "一波调戏", "一波求教", "“早上好呀！”", "“卡哇咿滴斯勒” “？”"];
-                const i = Math.floor(Math.random() * 7.9);
+                const i = Math.floor(Math.random() * c.length);
                 存档.伙伴.碧瑶好感 += 1;
                 存档.伙伴.碧瑶聊天成功率 += Math.floor(Math.random() * 3 + 1);
                 播放文本(this.标签, `${c[i]}，好感+1\n（当前好感：${存档.伙伴.碧瑶好感}）\n（下次成功率为${存档.伙伴.碧瑶聊天成功率}%+${存档.其他.流浪猫篷等级 * 2}）`);
             } else {
                 const c = ["寒暄", "吹逼", "赞美", "沉默", "鸡汤", "分析", "吐槽", "倾听", "安慰", "调侃", "共情", "八卦"];
-                const i = Math.floor(Math.random() * 5.9);
+                const i = Math.floor(Math.random() * c.length);
                 存档.伙伴.碧瑶聊天成功率 -= Math.floor(Math.random() * 3 + 1);
                 播放文本(this.标签, `一顿${c[i]}，好感+0\n（下次聊天成功率${存档.伙伴.碧瑶聊天成功率}%+${存档.其他.流浪猫篷等级 * 2}%）`);
             }
@@ -411,7 +411,7 @@ export class 桥洞 extends Component {
 
             自动进食();
             if (存档.精力 < 读书消耗精力 || 存档.饥饿 < 0) {
-                播放文本(this.标签, `状态不好，学不进去！（需${读书消耗饥饿}点精力，${读书消耗饥饿}点饥饿）`);
+                播放文本(this.标签, `状态不好，学不进去！（需${读书消耗精力}点精力，${读书消耗饥饿}点饥饿）`);
                 return;
             }
 
@@ -474,7 +474,7 @@ export class 桥洞 extends Component {
 
         //儿童手工DIY
         this.读书.getChildByName("按钮容器").getChildByName("选择按钮3").on(Button.EventType.CLICK, () => {
-            if (存档.其他.儿童手工DIY == 0) {
+            if (存档.其他.儿童手工DIY === 0) {
                 播放文本(this.标签, "你还没有获得本书！");
                 return;
             }
@@ -543,7 +543,7 @@ export class 桥洞 extends Component {
             const 读书消耗饥饿 = 计算数值("读书消耗饥饿", 20);
             自动进食();
             if (存档.精力 < 读书消耗精力 || 存档.饥饿 < 0) {
-                播放文本(this.标签, `状态不好，学不进去！（需${读书消耗饥饿}点精力，${读书消耗饥饿}点饥饿）`);
+                播放文本(this.标签, `状态不好，学不进去！（需${读书消耗精力}点精力，${读书消耗饥饿}点饥饿）`);
                 return;
             }
 
@@ -604,7 +604,7 @@ export class 桥洞 extends Component {
 
             自动进食();
             if (存档.精力 < 读书消耗精力 || 存档.饥饿 < 0) {
-                播放文本(this.标签, `状态不好，学不进去！（需${读书消耗饥饿}点精力，${读书消耗饥饿}点饥饿）`);
+                播放文本(this.标签, `状态不好，学不进去！（需${读书消耗精力}点精力，${读书消耗饥饿}点饥饿）`);
                 return;
             }
 
@@ -637,7 +637,7 @@ export class 桥洞 extends Component {
 
             自动进食();
             if (存档.精力 < 读书消耗精力 || 存档.饥饿 < 0) {
-                播放文本(this.标签, `状态不好，学不进去！（需${读书消耗饥饿}点精力，${读书消耗饥饿}点饥饿）`);
+                播放文本(this.标签, `状态不好，学不进去！（需${读书消耗精力}点精力，${读书消耗饥饿}点饥饿）`);
                 return;
             }
 
@@ -678,7 +678,7 @@ export class 桥洞 extends Component {
             保存存档();
             this.更新读书();
             执行钩子("读书")
-        }, this,);
+        }, this);
     }
 
 
@@ -761,37 +761,37 @@ export class 桥洞 extends Component {
     更新读书() {
         this.属性标签.getComponent(Label).string = `精力 ${存档.精力} \n饥饿 ${存档.饥饿} \n`;
 
-        if (存档.其他.搬砖从入门到放弃 == 0) {
+        if (存档.其他.搬砖从入门到放弃 === 0) {
             this.读书.getChildByName("按钮容器").getChildByName("选择按钮1").getChildByName("标签").getComponent(Label).string = "？？？？";
         } else {
             this.读书.getChildByName("按钮容器").getChildByName("选择按钮1").getChildByName("标签").getComponent(Label).string = `《搬砖，从入门到放弃》（已看${Math.max(存档.其他.搬砖从入门到放弃 - 1)}%，阅历${存档.阅历}）`;
         }
-        if (存档.其他.伯恩斯情绪疗法 == 0) {
+        if (存档.其他.伯恩斯情绪疗法 === 0) {
             this.读书.getChildByName("按钮容器").getChildByName("选择按钮2").getChildByName("标签").getComponent(Label).string = "？？？？";
         } else {
             this.读书.getChildByName("按钮容器").getChildByName("选择按钮2").getChildByName("标签").getComponent(Label).string = `《伯恩斯情绪疗法》（已看${Math.max(存档.其他.伯恩斯情绪疗法 - 1)}%）`;
         }
-        if (存档.其他.儿童手工DIY == 0) {
+        if (存档.其他.儿童手工DIY === 0) {
             this.读书.getChildByName("按钮容器").getChildByName("选择按钮3").getChildByName("标签").getComponent(Label).string = "？？？？";
         } else {
             this.读书.getChildByName("按钮容器").getChildByName("选择按钮3").getChildByName("标签").getComponent(Label).string = `《儿童手工DIY》（已看${Math.max(存档.其他.儿童手工DIY - 1)}%）`;
         }
-        if (存档.其他.中国居民膳食指南1997版 == 0) {
+        if (存档.其他.中国居民膳食指南1997版 === 0) {
             this.读书.getChildByName("按钮容器").getChildByName("选择按钮4").getChildByName("标签").getComponent(Label).string = "？？？？";
         } else {
             this.读书.getChildByName("按钮容器").getChildByName("选择按钮4").getChildByName("标签").getComponent(Label).string = `《中国居民膳食指南1997版》（已看${Math.max(存档.其他.中国居民膳食指南1997版 - 1)}%）`;
         }
-        if (存档.其他.坎贝尔骨科手术学 == 0) {
+        if (存档.其他.坎贝尔骨科手术学 === 0) {
             this.读书.getChildByName("按钮容器").getChildByName("选择按钮5").getChildByName("标签").getComponent(Label).string = "？？？？";
         } else {
             this.读书.getChildByName("按钮容器").getChildByName("选择按钮5").getChildByName("标签").getComponent(Label).string = `《坎贝尔骨科手术学》（已看${Math.max(存档.其他.坎贝尔骨科手术学 - 1)}%）`;
         }
-        if (存档.其他.如来神掌 == 0) {
+        if (存档.其他.如来神掌 === 0) {
             this.读书.getChildByName("按钮容器").getChildByName("选择按钮6").getChildByName("标签").getComponent(Label).string = "？？？？";
         } else {
             this.读书.getChildByName("按钮容器").getChildByName("选择按钮6").getChildByName("标签").getComponent(Label).string = `《如来神掌》（已看${Math.max(存档.其他.如来神掌 - 1)}%）`;
         }
-        if (存档.其他.少妇白洁 == 0) {
+        if (存档.其他.少妇白洁 === 0) {
             this.读书.getChildByName("按钮容器").getChildByName("选择按钮7").getChildByName("标签").getComponent(Label).string = "？？？？";
         } else {
             this.读书.getChildByName("按钮容器").getChildByName("选择按钮7").getChildByName("标签").getComponent(Label).string = `《少妇白洁》（已看${Math.max(存档.其他.少妇白洁 - 1)}%）`;

@@ -8,11 +8,11 @@ const { ccclass, property } = _decorator;
 @ccclass('结局')
 export class 结局 extends Component {
 	@property(Node)
-	文本容器: Node = null
+	文本容器: Node = null;
 	@property(Node)
-	继续: Node = null
+	继续: Node = null;
 
-	结局文本: string[]
+	结局文本: string[];
 	start() {
 		if (存档.健康 <= 0) {
 			const 地区名 = 获取地区名称()
@@ -28,14 +28,14 @@ export class 结局 extends Component {
 					this.结局文本 = ["你在一栋水泥骨架的顶层找到避风处，", "用粉笔在墙上写下‘到此一游’，", "却想不出下一个该通知谁。", "结局——", "【无名的留言】"]
 				} else if (存档.当前地点 === '郊外') {
 					this.结局文本 = ["你倒在郊外废弃的塑料大棚里，", "手里攥着一把野草，", "恍惚中以为那是家里田埂上熟悉的稻穗。", "结局——", "【相似的绿色】"]
-				} else if (存档.当前地点 == '城中村') {
+				} else if (存档.当前地点 === '城中村') {
 					this.结局文本 = ["你在城中村最喧闹的大排档后巷停止了呼吸，", "前街的碰杯声、欢呼声，", "为你奏响了最后一支嘈杂的安魂曲。", "结局——", "【喧嚣的孤独】"]
-				} else if (存档.当前地点 == '山洞') {
+				} else if (存档.当前地点 === '山洞') {
 					this.结局文本 = ["搜救队发现这个山洞时，", "你在最深处睡着了。", "石壁上满是指甲划出的‘正’字，停在第七个的最后一笔。", "结局——", "【未完成的计数】"]
 				}
 			}
 		} else {
-			设置.通关次数 += 1
+			设置.通关次数 += 1;
 			if (存档.剧情.愿意回家) {
 				this.结局文本 = ["推开栅栏，院子里长满了杂草，似乎很久没人居住...（地点：家）", "门是开着的，屋里没有灯火，静悄悄的；", "青灰色的屋顶、几颗新绿色的嫩芽，", "在夕阳的余晖下，显得格外的安静。", "一只猫咪在门前的阳光下打着哈欠（地点：家）", "一个满头白发的老人，忽然呆在了门口...."]
 			} else {
@@ -50,15 +50,15 @@ export class 结局 extends Component {
 				}
 			}
 		}
-		保存设置()
+		保存设置();
 
-		this.继续.active = false
+		this.继续.active = false;
 		const 序列 = tween(this.node).delay(0.8)
 		for (let 索引 = 0; 索引 < this.结局文本.length; 索引++) {
 			序列.call(() => 创建动画文字(this.文本容器, this.结局文本[索引], 索引)).delay(1.8 / 设置.播放速度).delay(1);
 		}
 		序列.call(() => 淡入(this.继续))
 		序列.start();
-		this.继续.on(Button.EventType.CLICK, () => director.loadScene('分数'), this)
+		this.继续.on(Button.EventType.CLICK, () => director.loadScene('分数'), this);
 	}
 }

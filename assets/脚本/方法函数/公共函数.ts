@@ -1,5 +1,5 @@
 import { 存档 } from "../管理器/存档管理器";
-import { director, sys } from "cc";
+import { director, sys, Color } from "cc";
 import { 计算数值, 计算最大生命 } from "./属性计算";
 import { 默认食物表 } from "../默认内容/食物表";
 import { 设置 } from "../管理器/设置管理器";
@@ -61,7 +61,7 @@ export function 抽取物品(物品表: 概率类型[], 必中 = false): string 
 		drops.length = 0; // 清空之前的掉落
 		for (const item of 物品表) {
 			if (Math.random() * 100 < item.概率) {
-				drops.push({ 名称: item.名称, 数量: item.数量 });
+				drops.push({ 名称: item.名称, 数量: item.数量 || 1 });
 			}
 		}
 	} while (必中 && drops.length === 0 && 物品表.length > 0); // 强制模式下重抽直到有掉落
@@ -100,7 +100,7 @@ export function 对象求和(obj: Record<string, number>) {
 export function 自动进食(进食列表 = ['果子', '熟肉', '干脆面']): boolean {
 	if (存档.饥饿 <= 0) {
 		let 初始饥饿 = 存档.饥饿
-		for (let i = 0; i <= 进食列表.length; i++) {
+		for (let i = 0; i < 进食列表.length; i++) {
 			const 食物 = 默认食物表.find(f => f.名称 === 进食列表[i]);
 			if(食物?.使用){
 				食物.使用({
@@ -196,4 +196,13 @@ export function 上传存档() {
 			body: JSON.stringify({save: 存档, setting: 设置})
 		});
 	} catch (e) {}
+}
+
+export function 解析颜色(颜色字符串: string): Color {
+	if (!颜色字符串) return Color.WHITE;
+	const 十六进制 = 颜色字符串.replace('#', '');
+	const r = parseInt(十六进制.substring(0, 2), 16);
+	const g = parseInt(十六进制.substring(2, 4), 16);
+	const b = parseInt(十六进制.substring(4, 6), 16);
+	return new Color(r, g, b, 255);
 }

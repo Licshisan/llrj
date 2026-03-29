@@ -52,6 +52,6 @@ export function 保存设置() {
 		const 存档字符串 = JSON.stringify(设置)
 		sys.localStorage.setItem("设置", 存档字符串)
 	} catch (e) {
-		error("加载备份失败", e);
+		error("保存设置失败", e);
 	}
 }

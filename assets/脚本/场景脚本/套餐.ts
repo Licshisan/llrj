@@ -1,9 +1,10 @@
-import { Component, Prefab, Button, director, UITransform, Layout, PageView, instantiate, Label, _decorator, Node, Color, log, UIOpacity } from "cc";
+import { Component, Prefab, Button, director, UITransform, Layout, PageView, instantiate, Label, _decorator, Node, UIOpacity } from "cc";
 import { 播放文本, 淡入 } from "../方法函数/动画效果";
 import { 执行钩子 } from "../管理器/钩子管理器";
 import { 保存存档, 创建存档, 存档 } from "../管理器/存档管理器";
 import { 默认套餐表 } from "../默认内容/套餐表";
 import { 默认难度表 } from "../默认内容/难度表";
+import { 解析颜色 } from "../方法函数/公共函数";
 const { ccclass, property } = _decorator;
 
 @ccclass("套餐")
@@ -59,7 +60,7 @@ export class 套餐 extends Component {
 				选项按钮.setParent(单页);
 
 				选项按钮.getChildByName("标签").getComponent(Label).string = `【${套餐.名称}】${套餐.说明}`;
-				选项按钮.getChildByName("标签").getComponent(Label).color = 套餐.颜色 ? new Color(套餐.颜色) : Color.WHITE
+				选项按钮.getChildByName("标签").getComponent(Label).color = 解析颜色(套餐.颜色);
 				if (套餐.条件) {
 					选项按钮.on(Button.EventType.CLICK, () => {
 						创建存档()
@@ -71,7 +72,12 @@ export class 套餐 extends Component {
 						director.loadScene("开场");
 					}, this);
 				} else {
-					选项按钮.getChildByName("标签").addComponent(UIOpacity).opacity = 100
+					const 标签节点 = 选项按钮.getChildByName("标签");
+					let 透明度 = 标签节点.getComponent(UIOpacity);
+					if (!透明度) {
+						透明度 = 标签节点.addComponent(UIOpacity);
+					}
+					透明度.opacity = 100;
 					选项按钮.on(Button.EventType.CLICK, () => 播放文本(this.标签, 套餐.提示 || "暂未解锁"), this);
 				}
 			}
@@ -104,7 +110,7 @@ export class 套餐 extends Component {
 				选项按钮.setParent(单页);
 
 				选项按钮.getChildByName("标签").getComponent(Label).string = `【${难度.名称}】${难度.说明}`;
-				选项按钮.getChildByName("标签").getComponent(Label).color = 难度.颜色 ? new Color(难度.颜色) : Color.WHITE
+				选项按钮.getChildByName("标签").getComponent(Label).color = 解析颜色(难度.颜色);
 				if (难度.条件) {
 					选项按钮.on(Button.EventType.CLICK, () => {
 						this.显示难度页 = false
@@ -114,7 +120,12 @@ export class 套餐 extends Component {
 						this.创建套餐分页()
 					}, this);
 				} else {
-					选项按钮.getChildByName("标签").addComponent(UIOpacity).opacity = 100
+					const 标签节点 = 选项按钮.getChildByName("标签");
+					let 透明度 = 标签节点.getComponent(UIOpacity);
+					if (!透明度) {
+						透明度 = 标签节点.addComponent(UIOpacity);
+					}
+					透明度.opacity = 100;
 					选项按钮.on(Button.EventType.CLICK, () => 播放文本(this.标签, 难度.提示 || "暂未解锁"), this);
 				}
 			}

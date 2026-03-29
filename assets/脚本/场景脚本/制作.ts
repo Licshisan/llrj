@@ -3,7 +3,7 @@ import { 保存存档, 存档 } from "../管理器/存档管理器";
 import { 计算最大生命, 计算最大精力, 计算最大饥饿 } from "../方法函数/属性计算";
 import { 播放文本 } from "../方法函数/动画效果";
 import { 执行钩子 } from "../管理器/钩子管理器";
-import { 默认制作表 } from "../默认内容/制作表";
+import { 默认制作表, 制作类型 } from "../默认内容/制作表";
 const { ccclass, property } = _decorator;
 
 @ccclass("制作")
@@ -30,7 +30,7 @@ export class 制作 extends Component {
         this.所有项目节点 = []
 
         const 总页数 = Math.ceil(this.制作表.length / this.页大小);
-        const 分页组件 = this.分页视图.getComponent(PageView);
+        const 分页组件 = this.分页视图;
         分页组件.removeAllPages();
 
         for (let 页码 = 0; 页码 < 总页数; 页码++) {
@@ -83,7 +83,7 @@ export class 制作 extends Component {
         }
     }
 
-    更新项目UI(项目组件: Node, 制作: any) {
+    更新项目UI(项目组件: Node, 制作: 制作类型) {
         const 标签组件 = 项目组件.getChildByName("选择按钮").getChildByName("标签").getComponent(Label);
         标签组件.string = 制作.显示名称 || 制作.名称;
         

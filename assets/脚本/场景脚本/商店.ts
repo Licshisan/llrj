@@ -16,6 +16,8 @@ export class 商店 extends Component {
 	@property(Node) 返回按钮: Node;
 
 	页大小 = 4
+	所有项目节点: Node[] = []
+
 	start() {
 		this.更新标签();
 		this.创建分页();
@@ -30,6 +32,7 @@ export class 商店 extends Component {
 			return;
 		}
 		分页组件.removeAllPages();
+		this.所有项目节点 = []
 
 		for (let 页码 = 0; 页码 < 总页数; 页码++) {
 			this.创建单页(页码, 分页组件)
@@ -60,20 +63,9 @@ export class 商店 extends Component {
 			项目组件.setParent(单页);
 
 			项目组件.name = `商品_${商品.名称}`;
+			this.所有项目节点.push(项目组件);
 
-			let 名称 = 商品.显示名称 || 商品.名称;
-
-			项目组件.getChildByName("选择按钮").getChildByName("标签").getComponent(Label).string = 名称;
-			if (商品.条件) {
-				项目组件.getChildByName("选择按钮").getChildByName("标签").getComponent(Label).color = new Color(0, 255, 0);
-			}
-			项目组件.getChildByName("标签").getComponent(Label).string = 商品.描述;
-
-			项目组件.getChildByName("按钮容器").getChildByName("黑色按钮1").active = !!商品.选项一文本;
-			项目组件.getChildByName("按钮容器").getChildByName("黑色按钮2").active = !!商品.选项二文本;
-
-			项目组件.getChildByName("按钮容器").getChildByName("黑色按钮1").getChildByName("标签").getComponent(Label).string = 商品.选项一文本;
-			项目组件.getChildByName("按钮容器").getChildByName("黑色按钮2").getChildByName("标签").getComponent(Label).string = 商品.选项二文本;
+			this.更新项目UI(项目组件, 商品);
 
 			// 购买按钮
 			项目组件.getChildByName("按钮容器").getChildByName("黑色按钮1").on(Button.EventType.CLICK, () => {
@@ -82,11 +74,11 @@ export class 商店 extends Component {
 					购买成功: (文本) => {
 						执行钩子('购买后', [商品])
 						播放文本(this.标签, 文本)
+						保存存档()
+						this.更新标签();
+						this.刷新所有项目状态();
 					},
 				})
-				保存存档()
-				this.创建单页(页码, 分页组件);
-				this.更新标签();
 			}, this);
 
 			// 出售按钮
@@ -96,11 +88,11 @@ export class 商店 extends Component {
 					购买成功: (文本) => {
 						执行钩子('购买后', [商品])
 						播放文本(this.标签, 文本)
+						保存存档()
+						this.更新标签();
+						this.刷新所有项目状态();
 					},
 				})
-				保存存档()
-				this.创建单页(页码, 分页组件);
-				this.更新标签();
 			}, this);
 		}
 	}
@@ -108,5 +100,35 @@ export class 商店 extends Component {
 	更新标签() {
 		this.属性一.getComponent(Label).string = `金钱：${(存档.金钱 / 10).toFixed(1)}元`;
 		this.属性二.getComponent(Label).string = `积分：${存档.积分}`;
+	}
+
+	更新项目UI(项目组件: Node, 商品: any) {
+		const 名称 = 商品.显示名称 || 商品.名称;
+		const 标签组件 = 项目组件.getChildByName("选择按钮").getChildByName("标签").getComponent(Label);
+		标签组件.string = 名称;
+
+		if (商品.条件) {
+			标签组件.color = new Color(0, 255, 0);
+		} else {
+			标签组件.color = Color.WHITE;
+		}
+
+		项目组件.getChildByName("标签").getComponent(Label).string = 商品.描述;
+
+		项目组件.getChildByName("按钮容器").getChildByName("黑色按钮1").active = !!商品.选项一文本;
+		项目组件.getChildByName("按钮容器").getChildByName("黑色按钮2").active = !!商品.选项二文本;
+
+		项目组件.getChildByName("按钮容器").getChildByName("黑色按钮1").getChildByName("标签").getComponent(Label).string = 商品.选项一文本 || "";
+		项目组件.getChildByName("按钮容器").getChildByName("黑色按钮2").getChildByName("标签").getComponent(Label).string = 商品.选项二文本 || "";
+	}
+
+	刷新所有项目状态() {
+		for (let i = 0; i < this.所有项目节点.length; i++) {
+			const 节点 = this.所有项目节点[i];
+			if (i < 默认商品表.length) {
+				const 商品数据 = 默认商品表[i];
+				this.更新项目UI(节点, 商品数据);
+			}
+		}
 	}
 }
