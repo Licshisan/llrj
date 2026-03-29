@@ -27,6 +27,9 @@ export class 成就 extends Component {
       if (成就.条件) {
         文本 += `\n完成时间：${格式化日期字符串(成就.达成时间)}`
       }
+      if(成就.奖励) {
+        文本 += `\n奖励：${成就.奖励}`
+      }
       const 颜色 = 成就.条件 ? Color.GREEN : Color.GRAY
       创建普通文字(this.内容节点, 文本, 序号, 颜色)
     })

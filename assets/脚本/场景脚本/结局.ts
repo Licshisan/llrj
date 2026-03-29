@@ -1,5 +1,5 @@
 import { _decorator, Component, Node, Button, director, tween } from "cc";
-import { 存档 } from "../管理器/存档管理器";
+import { 保存存档, 存档 } from "../管理器/存档管理器";
 import { 保存设置, 设置 } from "../管理器/设置管理器";
 import { 创建动画文字, 淡入 } from "../方法函数/动画效果";
 import { 获取地区名称 } from "../默认内容/地区表";
@@ -15,6 +15,7 @@ export class 结局 extends Component {
 	结局文本: string[];
 	start() {
 		if (存档.健康 <= 0) {
+            存档.剧情.通关 = false
 			const 地区名 = 获取地区名称()
 			if (地区名 === '荒野') {
 				this.结局文本 = ["几天后，", "你在草丛中被人发现，", "全身浮肿，面目全非。", "结局——", "【客死他乡】"]
@@ -36,6 +37,7 @@ export class 结局 extends Component {
 			}
 		} else {
 			设置.通关次数 += 1;
+            存档.剧情.通关 = true
 			if (存档.剧情.愿意回家) {
 				this.结局文本 = ["推开栅栏，院子里长满了杂草，似乎很久没人居住...（地点：家）", "门是开着的，屋里没有灯火，静悄悄的；", "青灰色的屋顶、几颗新绿色的嫩芽，", "在夕阳的余晖下，显得格外的安静。", "一只猫咪在门前的阳光下打着哈欠（地点：家）", "一个满头白发的老人，忽然呆在了门口...."]
 			} else {
@@ -51,6 +53,7 @@ export class 结局 extends Component {
 			}
 		}
 		保存设置();
+		保存存档();
 
 		this.继续.active = false;
 		const 序列 = tween(this.node).delay(0.8)

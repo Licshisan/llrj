@@ -1,5 +1,6 @@
 import { 对局类型 } from "../场景脚本/战斗";
 import { 存档 } from "../管理器/存档管理器";
+import { 设置 } from "../管理器/设置管理器";
 
 interface 难度定义类型 {
 	名称: string,
@@ -47,7 +48,7 @@ export const 默认难度表: 难度定义类型[] = [
 				}
 			}
 		},
-		条件: false,
+		get 条件() { return 设置.成就.一战成名 },
 	},
 	{
 		名称: "炼狱",
@@ -64,6 +65,6 @@ export const 默认难度表: 难度定义类型[] = [
 				}
 			}
 		},
-		条件: false,
+		get 条件() { return 设置.成就.二战成名 },
 	},
 ]
