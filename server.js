@@ -53,7 +53,7 @@ const db = mysql.createPool({
   `);
   await db.query(`CREATE TABLE IF NOT EXISTS errors (id INT PRIMARY KEY AUTO_INCREMENT, data TEXT, time DATETIME)`);
   await db.query(`CREATE TABLE IF NOT EXISTS messages (id INT PRIMARY KEY AUTO_INCREMENT, data TEXT, time DATETIME)`);
-  await db.query(`CREATE TABLE IF NOT EXISTS saves (uid VARCHAR(255) PRIMARY KEY, save TEXT, setting TEXT, time DATETIME)`);
+  await db.query(`CREATE TABLE IF NOT EXISTS saves (user_id INT, save_id VARCHAR(255), save TEXT, setting TEXT, time DATETIME, PRIMARY KEY (user_id, save_id))`);
   console.log('✅ MySQL 连接成功 & 表已创建');
 })();
 
@@ -68,8 +68,9 @@ app.post('/login', async (req, res) => {
     return res.json({ nickname: user.nickname, id: user.id });
   }
 
-  const [result] = await db.query('INSERT INTO players (uid, nickname) VALUES (?, ?)', [uid, '玩家']);
-  res.json({ nickname: 生成随机昵称(), id: result.insertId });
+  const nickname = 生成随机昵称();
+  const [result] = await db.query('INSERT INTO players (uid, nickname) VALUES (?, ?)', [uid, nickname]);
+  res.json({ nickname, id: result.insertId });
 });
 
 // ===================== 2. 异常上报 =====================
@@ -87,12 +88,13 @@ app.post('/msg', async (req, res) => {
 // ===================== 4. 上传存档 =====================
 app.post('/save', async (req, res) => {
   const { save, setting } = req.body;
-  const uid = setting?.uid || setting?.唯一标识 || 'unknown';
+  const user_id = setting?.账号?.id || 'unknown';
+  const save_id = setting?.uid || setting?.唯一标识 || 'unknown';
 
   await db.query(`
-    REPLACE INTO saves (uid, save, setting, time)
-    VALUES (?, ?, ?, NOW())
-  `, [uid, JSON.stringify(save), JSON.stringify(setting)]);
+    REPLACE INTO saves (user_id, save_id, save, setting, time)
+    VALUES (?, ?, ?, ?, NOW())
+  `, [user_id, save_id, JSON.stringify(save), JSON.stringify(setting)]);
 
   res.json({ code: 200, msg: '存档上传成功' });
 });
