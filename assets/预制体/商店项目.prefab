@@ -45,7 +45,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -0.10000000000002274,
+      "x": 0,
       "y": 0,
       "z": 0
     },
@@ -149,7 +149,7 @@
     "value": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 83,
+      "y": 80.5,
       "z": 0
     }
   },
@@ -208,7 +208,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": -292,
-      "y": 15.8,
+      "y": 13.3,
       "z": 0
     },
     "_lrot": {
@@ -376,8 +376,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -162.8,
-      "y": -59.4,
+      "x": -162.981,
+      "y": -58,
       "z": 0
     },
     "_lrot": {
@@ -482,7 +482,7 @@
     ],
     "value": {
       "__type__": "cc.Vec3",
-      "x": 66.4,
+      "x": 66.49062500000001,
       "y": 0,
       "z": 0
     }
@@ -612,7 +612,7 @@
     ],
     "value": {
       "__type__": "cc.Vec3",
-      "x": 259.20000000000005,
+      "x": 259.471875,
       "y": 0,
       "z": 0
     }
@@ -677,7 +677,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 325.6,
+      "width": 325.96250000000003,
       "height": 100
     },
     "_anchorPoint": {
@@ -699,7 +699,7 @@
     "node": {
       "__id__": 16
     },
-    "_enabled": true,
+    "_enabled": false,
     "__prefab": {
       "__id__": 38
     },
@@ -747,7 +747,7 @@
     "_right": 0,
     "_top": 134.4,
     "_bottom": 0,
-    "_horizontalCenter": 0,
+    "_horizontalCenter": 0.00025000000002251,
     "_verticalCenter": 0,
     "_isAbsLeft": true,
     "_isAbsRight": true,
@@ -793,7 +793,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 584,
-      "height": 250
+      "height": 245
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -814,7 +814,7 @@
     "node": {
       "__id__": 1
     },
-    "_enabled": true,
+    "_enabled": false,
     "__prefab": {
       "__id__": 45
     },
@@ -858,8 +858,8 @@
     },
     "_alignFlags": 40,
     "_target": null,
-    "_left": 67.89999999999998,
-    "_right": 68.10000000000002,
+    "_left": 68,
+    "_right": 68,
     "_top": 0,
     "_bottom": 0,
     "_horizontalCenter": 0,

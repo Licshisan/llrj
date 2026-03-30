@@ -1,7 +1,7 @@
 import { _decorator, Button, Color, Component, director, instantiate, Label, Node, Prefab, tween, Vec3 } from 'cc';
 import { 主页 } from './主页';
 import { 保存存档, 存档 } from '../管理器/存档管理器';
-import { 播放文本, 创建动画文字, 放大出现, 缩小消失 } from '../方法函数/动画效果';
+import { 创建动画文字, 放大出现, 缩小消失 } from '../方法函数/动画效果';
 import { 战斗 } from './战斗';
 import { 设置 } from '../管理器/设置管理器';
 import { 执行钩子 } from '../管理器/钩子管理器';
@@ -59,7 +59,7 @@ export class 事件 extends Component {
             更改选项: (文本) => 选项一.getChildByName("标签").getComponent(Label).string = 文本,
             结束事件: (名称) => this.结束事件(名称),
             跳转场景: (名称) => {
-                this.结束事件(名称)
+                this.结束事件()
                 director.loadScene(名称)
             },
         }
@@ -70,7 +70,7 @@ export class 事件 extends Component {
             更改选项: (文本) => 选项二.getChildByName("标签").getComponent(Label).string = 文本,
             结束事件: (名称) => this.结束事件(名称),
             跳转场景: (名称) => {
-                this.结束事件(名称)
+                this.结束事件()
                 director.loadScene(名称)
             },
         }
@@ -81,7 +81,7 @@ export class 事件 extends Component {
             更改选项: (文本) => 选项三.getChildByName("标签").getComponent(Label).string = 文本,
             结束事件: (名称) => this.结束事件(名称),
             跳转场景: (名称) => {
-                this.结束事件(名称)
+                this.结束事件()
                 director.loadScene(名称)
             },
         }
@@ -104,7 +104,7 @@ export class 事件 extends Component {
     初始化() {
         this.node.getComponent(主页).更新()
         缩小消失(this.node.getComponent(主页).按钮容器)
-        播放文本(this.node.getComponent(主页).标签, '')
+        this.node.getComponent(主页).播放文本("")
 
         this.事件.active = true
         this.文本容器.removeAllChildren()
@@ -127,7 +127,7 @@ export class 事件 extends Component {
         this.事件.active = false
 
         放大出现(this.node.getComponent(主页).按钮容器)
-        播放文本(this.node.getComponent(主页).标签, 描述)
+        this.node.getComponent(主页).播放文本(描述)
         保存存档()
     }
 }

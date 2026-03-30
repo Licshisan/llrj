@@ -1,6 +1,6 @@
 import { 存档 } from "../管理器/存档管理器";
 import { director, sys, Color } from "cc";
-import { 计算数值, 计算最大生命 } from "./属性计算";
+import { 计算数值, 计算最大生命, 计算最大饥饿 } from "./属性计算";
 import { 默认食物表 } from "../默认内容/食物表";
 import { 设置 } from "../管理器/设置管理器";
 
@@ -98,7 +98,7 @@ export function 对象求和(obj: Record<string, number>) {
 }
 
 export function 自动进食(进食列表 = ['果子', '熟肉', '干脆面']): boolean {
-	if (存档.饥饿 <= 0) {
+	if (存档.饥饿 < 计算最大饥饿()) {
 		let 初始饥饿 = 存档.饥饿
 		for (let i = 0; i < 进食列表.length; i++) {
 			const 食物 = 默认食物表.find(f => f.名称 === 进食列表[i]);

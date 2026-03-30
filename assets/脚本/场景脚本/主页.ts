@@ -51,8 +51,7 @@ export class 主页 extends Component {
             } else if (存档.当前事件) {
                 this.node.getComponent(事件).触发事件(存档.当前事件)
             } else if (存档.当前文本) {
-                播放文本(this.标签, 存档.当前文本)
-                存档.当前文本 = ""
+                this.标签.getComponent(Label).string = 存档.当前文本;
             }
         }, 0)
     }
@@ -100,7 +99,7 @@ export class 主页 extends Component {
 
     点击挑战() {
         if (存档.精力 < 10) {
-            播放文本(this.标签, "挑战需10点精力！")
+            this.播放文本("挑战需10点精力！")
             return
         }
         const 挑战组 = ["眼镜王蛇（精英）", "逃犯（精英）", "深渊巨蟒", "机械人（被害妄想症）", 
@@ -111,7 +110,7 @@ export class 主页 extends Component {
             if (!存档.剧情.完成挑战) {
                 this.node.getComponent(事件).触发事件("完成挑战")
             }
-            播放文本(this.标签, "你已经天下无敌了...")
+            this.播放文本("你已经天下无敌了...")
             return
         }
         存档.精力 -= 10;
@@ -120,12 +119,14 @@ export class 主页 extends Component {
 
     点击前进() {
         if (!this.前置条件() || !this.前进条件()) {
+            this.更新()
+            保存存档()
             return
         }
         执行钩子("前进前")
         this.基本消耗()
         this.主要逻辑()
-        存档.距离 += 1;
+        存档.距离 ++;
         放大缩小(this.信息栏.getChildByName("距离"));
         执行钩子("前进后")
         if (存档.距离 >= 300) {
@@ -137,6 +138,8 @@ export class 主页 extends Component {
 
     点击探索() {
         if (!this.前置条件() || !this.探索条件()) {
+            this.更新()
+            保存存档()
             return
         }
         执行钩子("探索前")
@@ -162,7 +165,7 @@ export class 主页 extends Component {
         }
         const 前进探索消耗精力 = 计算数值("前进探索消耗精力", 10)
         if (存档.精力 < 前进探索消耗精力) {
-            播放文本(this.标签, "精力不足！")
+            this.播放文本("精力不足！")
             return false
         }
         return true
@@ -171,31 +174,37 @@ export class 主页 extends Component {
     前进条件() {
         if (存档.距离 == 1) {
             存档.按钮.特性 = true;
+            return true
         }
         if (存档.距离 == 2) {
             存档.按钮.睡觉 = true;
+            return true
         }
         if (存档.距离 == 3) {
             存档.按钮.进食 = true;
+            return true
         }
         if (存档.距离 == 6) {
             存档.按钮.制作 = true;
+            return true
         }
         if (存档.距离 == 44) {
             存档.按钮.挑战 = true;
+            return true
         }
         // 进入县城
         if (存档.距离 == 99) {
             存档.按钮.前进 = false;
             存档.按钮.探索 = true;
             存档.按钮.商店 = true;
-            存档.距离 ++
-            播放文本(this.标签, "你已到达县城！开始探索吧~")
+            存档.距离++
+            this.播放文本("你已到达县城！开始探索吧~")
             return false
         }
         //离开县城
         if (存档.距离 == 101) {
             存档.按钮.商店 = false
+            return true
         }
         // 晓月剧情
         if (存档.距离 == 289) {
@@ -217,10 +226,9 @@ export class 主页 extends Component {
                 存档.当前剧情 = "告别晓月";
                 director.loadScene('剧情');
                 return false
-            } else {
-                播放文本(this.标签, "你已到达省城！")
-                return false
-            }
+            } 
+            this.播放文本("你已到达省城！")
+            return false
         }
 
         if (存档.天数 >= 180) {
@@ -252,7 +260,7 @@ export class 主页 extends Component {
                 "「感谢您能陪我看到最后！我是晓风，再会啦~」"
             ]
             if (回家结局[存档.其他.回家剧情]) {
-                播放文本(this.标签, 回家结局[存档.其他.回家剧情])
+                this.播放文本(回家结局[存档.其他.回家剧情])
                 存档.其他.回家剧情 ++
                 if (存档.距离 > 0) {
                     存档.距离 -= 20
@@ -272,13 +280,13 @@ export class 主页 extends Component {
             if (存档.距离 === 100) {
                 存档.按钮.前进 = true
                 this.更新()
-                播放文本(this.标签, "再待下去迟早会被发现，还是去省城看看吧！")
+                this.播放文本("再待下去迟早会被发现，还是去省城看看吧！")
                 return false
             }
         }
         if (获取地区名称() === '山脉' && 存档.天数 >= 80) {
             if (存档.距离 > 100 && 存档.距离 < 300) {
-                播放文本(this.标签, "还是先去省城整顿一下吧！")
+                this.播放文本("还是先去省城整顿一下吧！")
                 return false
             }
         }
@@ -337,8 +345,13 @@ export class 主页 extends Component {
             结果文本.push(基本抽取 ? `发现：${基本抽取}` : '什么也没发现！')
 
             执行钩子("收集材料", [{ 物品表, 结果文本 }])
-            播放文本(this.标签, 结果文本.join('\n'))
+            this.播放文本(结果文本.join('\n'))
         }
+    }
+
+    播放文本(文本: string) {
+        存档.当前文本 = 文本;
+        播放文本(this.标签, 文本)
     }
 
     更新() {

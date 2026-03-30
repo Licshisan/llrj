@@ -25,7 +25,7 @@ export class 商店 extends Component {
 	}
 
 	创建分页() {
-		const 所有商品 = 默认商品表.filter(i => !i.显示);
+		const 所有商品 = 默认商品表.filter(i => i.显示);
 		const 总页数 = Math.ceil(所有商品.length / this.页大小);
 		const 分页组件 = this.分页视图.getComponent(PageView);
 		if (!分页组件) {
@@ -57,7 +57,7 @@ export class 商店 extends Component {
 
 		for (let i = 0; i < this.页大小; i++) {
 			const 商品序号 = 页码 * this.页大小 + i;
-			const 所有商品 = 默认商品表.filter(i => !i.显示);
+			const 所有商品 = 默认商品表.filter(i => i.显示);
 			if (商品序号 >= 所有商品.length) break;
 			const 商品 = 所有商品[商品序号];
 
@@ -127,7 +127,7 @@ export class 商店 extends Component {
 	刷新所有项目状态() {
 		for (let i = 0; i < this.所有项目节点.length; i++) {
 			const 节点 = this.所有项目节点[i];
-			const 所有商品 = 默认商品表.filter(i => !i.显示);
+			const 所有商品 = 默认商品表.filter(i => i.显示);
 			if (i < 所有商品.length) {
 				const 商品数据 = 所有商品[i];
 				this.更新项目UI(节点, 商品数据);

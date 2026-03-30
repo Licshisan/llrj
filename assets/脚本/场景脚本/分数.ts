@@ -11,14 +11,12 @@ const { ccclass, property } = _decorator;
 export class 分数 extends Component {
 	@property(Node) 标签: Node = null
 	@property(Node) 文本容器: Node = null
-	@property(Node) 输入框: Node = null
 	@property(Node) 选项容器: Node = null
 	加载中 = false
 
 	start() {
 		播放文本(this.标签, '')
 		this.文本容器.removeAllChildren()
-		this.输入框.active = false
 		this.选项容器.active = false
 
 		// 自动计算所有剧情为true的值
@@ -61,7 +59,6 @@ export class 分数 extends Component {
 		for (let 索引 = 0; 索引 < texts.length; 索引++) {
 			序列.call(() => 创建动画文字(this.文本容器, texts[索引], 索引)).delay(2.2 / 设置.播放速度);
 		}
-		序列.call(() => 淡入(this.输入框)).delay(1);
 		序列.call(() => 淡入(this.选项容器)).delay(1);
 		序列.start();
 

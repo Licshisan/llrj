@@ -36,7 +36,7 @@ export class 开场 extends Component {
 		this.继续按钮.active = false;
 		this.刷新按钮.active = false;
 		const 特质数量 = 1
-		const 天赋数量 = 1
+		const 天赋数量 = 2
 
 		this.当前特质 = []
 		this.当前天赋 = []

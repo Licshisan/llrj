@@ -1,6 +1,6 @@
 import { _decorator, Component, Node, Label, Button, ProgressBar } from "cc";
 import { 保存存档, 存档 } from "../管理器/存档管理器";
-import { 从0放大缩小, 播放文本, 放大出现, 缩小消失, 震动 } from "../方法函数/动画效果";
+import { 从0放大缩小, 放大出现, 缩小消失, 震动 } from "../方法函数/动画效果";
 import { 主页 } from "./主页";
 import { 执行钩子 } from "../管理器/钩子管理器";
 import { 计算最大压制, 计算最大攻击, 计算最大生命, 计算最大防御, 计算最大逃跑 } from "../方法函数/属性计算";
@@ -269,7 +269,7 @@ export class 战斗 extends Component {
         战斗主角.战斗初始化(this.对局)
 
         this.界面初始化();
-        播放文本(this.node.getComponent(主页).标签, this.对局.敌人.出场语)
+        this.node.getComponent(主页).播放文本(this.对局.敌人.出场语)
     }
 
     界面初始化() {
@@ -329,7 +329,7 @@ export class 战斗 extends Component {
         if (this.对局.主角.方法) {
             this.对局.结果文本.unshift(`${this.对局.主角.名称}使用「${this.对局.主角.方法}」`)
         }
-        this.对局.结果文本.push(`${this.对局.敌人.名称}受到${this.对局.伤害.计算结果}点伤害。`)
+        this.对局.结果文本.push(`${this.对局.敌人.名称}受到${this.对局.伤害.计算结果.toFixed(1)}点伤害。`)
         this.显示主角文本(this.对局.结果文本.join('\n'));
         this.更新();
         this.node.getComponent(主页).更新()
@@ -387,7 +387,7 @@ export class 战斗 extends Component {
         if (this.对局.敌人.方法) {
             this.对局.结果文本.unshift(`${this.对局.敌人.名称}使用「${this.对局.敌人.方法}」`)
         }
-        this.对局.结果文本.push(`${this.对局.主角.名称}受到${this.对局.伤害.计算结果}点伤害。`)
+        this.对局.结果文本.push(`${this.对局.主角.名称}受到${this.对局.伤害.计算结果.toFixed(1)}点伤害。`)
         this.显示敌人文本(this.对局.结果文本.join('\n'));
         this.更新();
         this.node.getComponent(主页).更新()
@@ -541,7 +541,7 @@ export class 战斗 extends Component {
             执行钩子("逃跑失败", [this.对局])
             this.文本容器.getChildByName("标签1").getComponent(Label).string = "";
             this.文本容器.getChildByName("标签2").getComponent(Label).string = "";
-            播放文本(this.node.getComponent(主页).标签, this.对局.结果文本.join('\n'))
+            this.node.getComponent(主页).播放文本(this.对局.结果文本.join('\n'))
 
             this.scheduleOnce(() => this.敌人攻击(), 0.8);
             return
@@ -593,14 +593,14 @@ export class 战斗 extends Component {
 
         this.node.getComponent(主页).更新()
         放大出现(this.node.getComponent(主页).按钮容器)
-        播放文本(this.node.getComponent(主页).标签, text)
+        this.node.getComponent(主页).播放文本(text)
         保存存档();
     }
 
     更新() {
-        const 名称 = this.对局.敌人.显示名称 || this.对局.敌人.名称;
+        let 名称 = this.对局.敌人.显示名称 || this.对局.敌人.名称;
         if(this.对局.敌人.等级){
-            this.node.getComponent(主页).标签.getComponent(Label).string = `${名称} LV${this.对局.敌人.等级}`;
+            名称 += ` LV${this.对局.敌人.等级}`;
         }
         this.敌人标签.getComponent(Label).string = `${名称}\nHP${this.对局.敌人.生命} ATT${this.对局.敌人.攻击} DEF${this.对局.敌人.防御}`;
         this.血量条.getComponent(ProgressBar).progress = this.对局.敌人.生命 / this.对局.敌人.最大生命;

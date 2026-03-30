@@ -14,10 +14,6 @@ import { 默认难度表 } from "./难度表";
 import { 默认特质表 } from "./特质表";
 import { 默认藏品表 } from "./藏品表";
 
-interface WindowWithErrorHandler extends Window {
-	__errorHandler?: (name: string, line: number, msg: string, stack: string) => void;
-}
-
 let 加载完成 = false
 
 export function 挂载全局变量() {
@@ -102,25 +98,6 @@ export async function 加载游戏内容() {
 	加载完成 = true
 
 	const SERVER_URL = 'http://47.93.223.212:3000';
-	// 提交异常
-	(window as WindowWithErrorHandler).__errorHandler = function (name, line, msg, stack) {
-		error(`Error Name: ${name}`);
-		error(`Line: ${line}`);
-		error(`Message: ${msg}`);
-		error(`Stack: ${stack}`);
-
-		fetch(`${SERVER_URL}/error`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ name, line, msg, stack, setting: 设置管理器.设置, save: 存档管理器.存档 })
-		}).then(() => {
-			log("错误上报成功");
-		}).catch((e) => {
-			error('错误上报失败:', e);
-		});
-	};
 	// 玩家登录
 	try {
 		const controller = new AbortController();
