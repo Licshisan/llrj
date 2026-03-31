@@ -238,6 +238,7 @@ export class 主页 extends Component {
         if (存档.天数 >= 180) {
             // 不回家结局
             if (!存档.剧情.愿意回家) {
+                //todo 答题
                 director.loadScene('结局')
                 return false
             }
