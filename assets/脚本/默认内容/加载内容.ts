@@ -98,30 +98,54 @@ export async function 加载游戏内容() {
 	加载完成 = true
 
 	const SERVER_URL = 'http://47.93.223.212:3000';
-	// 玩家登录
-	try {
-		const controller = new AbortController();
-		const timeoutId = setTimeout(() => controller.abort(), 5000);
+	(window as any).__errorHandler = function (name, line, msg, stack) {
+		error(`Error Name: ${name}`);
+		error(`Line: ${line}`);
+		error(`Message: ${msg}`);
+		error(`Stack: ${stack}`);
 
-		const response = await fetch(`${SERVER_URL}/login`, {
+		fetch(`${SERVER_URL}/error`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ uid: 设置管理器.设置.唯一标识 }),
-			signal: controller.signal
+			body: JSON.stringify({ name, line, msg, stack, setting: 设置管理器.设置, save: 存档管理器.存档 })
+		}).then(() => {
+			log("错误上报成功");
+		}).catch((e) => {
+			error('错误上报失败:', e);
 		});
-		clearTimeout(timeoutId);
+	};
 
-		if (!response.ok) {
-			return
-		}
-
-		const result = await response.json();
-		设置管理器.设置.账号 = result
-		设置管理器.保存设置()
-	}
-	catch (e) {
+	// 玩家登录
+	try {
+		const xhr = new XMLHttpRequest();
+		xhr.open("POST", `${SERVER_URL}/login`, true);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.timeout = 5000;
+		xhr.onload = () => {
+			if (xhr.status >= 200 && xhr.status < 300) {
+				try {
+					const result = JSON.parse(xhr.responseText);
+					设置管理器.设置.账号 = result;
+					设置管理器.保存设置();
+				} catch (e) {
+					error("解析返回数据失败");
+				}
+			} else {
+				error("请求失败，状态码：" + xhr.status);
+			}
+		};
+		xhr.ontimeout = () => {
+			error("请求超时（5秒）");
+		};
+		xhr.onerror = () => {
+			error("网络请求失败");
+		};
+		xhr.send(JSON.stringify({
+			uid: 设置管理器.设置.唯一标识
+		}));
+	} catch (e) {
 		const errorMessage = e instanceof Error ? e.message : String(e);
 		error("玩家初始化失败：", errorMessage);
 	}

@@ -1,5 +1,5 @@
 import { 存档 } from "../管理器/存档管理器";
-import { director, sys, Color } from "cc";
+import { director, Color } from "cc";
 import { 计算数值, 计算最大生命, 计算最大饥饿 } from "./属性计算";
 import { 默认食物表 } from "../默认内容/食物表";
 import { 设置 } from "../管理器/设置管理器";
@@ -147,33 +147,6 @@ export function 深克隆<T>(target: T): T {
 		}
 	}
 	return cloneObj;
-}
-
-// 创建对象代理 用于访问对象不存在的属性时 返回默认的安全值
-export function 创建默认值代理<T extends Record<string, any>>(obj: T): T {
-    return new Proxy(obj, {
-        get(target, key: string) {
-            const value = target[key];
-            if (typeof value !== 'object' || value === null) {
-                return value;
-            }
-            if (Array.isArray(value)) {
-                return value;
-            }
-            const isBooleanMap = Object.values(value).some(v => typeof v === 'boolean');
-            return new Proxy(value, {
-                get(innerTarget, innerKey: string) {
-                    const innerValue = innerTarget[innerKey];
-
-                    if (innerValue !== undefined) {
-                        return innerValue;
-                    }
-
-                    return isBooleanMap ? false : 0;
-                }
-            });
-        }
-    });
 }
 
 export function 上传信息(msg: string) {
