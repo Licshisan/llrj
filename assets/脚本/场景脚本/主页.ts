@@ -1,7 +1,7 @@
 import { _decorator, Button, Color, Component, director, Label, Node, Sprite } from 'cc';
 import { 保存存档, 存档 } from '../管理器/存档管理器';
 import { 计算数值, 计算最大攻击, 计算最大生命, 计算最大精力, 计算最大防御, 计算最大饥饿 } from '../方法函数/属性计算';
-import { 抽取项目, 抽取物品, 格式化金钱, 自然恢复生命 } from '../方法函数/公共函数';
+import { 抽取项目, 抽取物品, 格式化金钱, 自然恢复生命, 自动进食 } from '../方法函数/公共函数';
 import { 播放文本, 放大缩小 } from '../方法函数/动画效果';
 import { 事件 } from './事件';
 import { 战斗 } from './战斗';
@@ -159,6 +159,10 @@ export class 主页 extends Component {
 
 
     前置条件() {
+        if(存档.当前事件 || 存档.当前敌人){
+            return
+        }
+        自动进食()
         if (存档.健康 <= 0) {
             director.loadScene("结局")
             return false
@@ -311,7 +315,7 @@ export class 主页 extends Component {
 
         let 前进探索战斗权重 = 计算数值('前进探索战斗权重', 20)
         let 前进探索事件权重 = 计算数值('前进探索事件权重', 20)
-        let 前进探索收集权重 = 计算数值('前进探索收集权重', 20)
+        let 前进探索收集权重 = 计算数值('前进探索收集权重', 60)
 
         if (存档.距离 <= 3) 前进探索战斗权重 = 0;
         if (存档.距离 <= 5) 前进探索事件权重 = 0;
@@ -324,14 +328,12 @@ export class 主页 extends Component {
             const 敌人表 = 获取当前地区().敌人
             执行钩子("计算地区敌人表", [敌人表])
             this.node.getComponent(战斗).进入战斗(抽取项目(敌人表));
-        } 
-        else if (随机数 < 前进探索战斗权重 + 前进探索事件权重) {
+        } else if (随机数 < 前进探索战斗权重 + 前进探索事件权重) {
             存档.其他.随机事件次数++
             const 事件表 = 获取当前地区().事件
             执行钩子("计算地区事件表", [事件表])
             this.node.getComponent(事件).触发事件(抽取项目(事件表))
-        } 
-        else {
+        } else {
             存档.其他.捡道具次数++
 
             const 物品表 = 获取当前地区().物品
