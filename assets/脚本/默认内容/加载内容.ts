@@ -98,7 +98,14 @@ export async function 加载游戏内容() {
 	加载完成 = true
 
 	const SERVER_URL = 'http://47.93.223.212:3000';
+
+	let lastErrorKey = '';
 	(window as any).__errorHandler = function (name, line, msg, stack) {
+		const currentKey = `${name}|${line}|${msg}`;
+		if (currentKey === lastErrorKey) {
+			return;
+		}
+
 		error(`Error Name: ${name}`);
 		error(`Line: ${line}`);
 		error(`Message: ${msg}`);
@@ -109,7 +116,7 @@ export async function 加载游戏内容() {
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ name, line, msg, stack, setting: 设置管理器.设置, save: 存档管理器.存档 })
+			body: JSON.stringify({ name, line, msg, stack, setting: 设置管理器.设置 })
 		}).then(() => {
 			log("错误上报成功");
 		}).catch((e) => {

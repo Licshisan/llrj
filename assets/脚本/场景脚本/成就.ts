@@ -2,6 +2,7 @@ import { _decorator, Button, Color, Component, director, Node, sys, warn } from 
 import { 创建普通文字 } from '../方法函数/动画效果';
 import { 格式化日期字符串 } from '../方法函数/公共函数';
 import { 成就项目类型, 默认成就表 } from '../默认内容/成就表';
+import { 设置 } from '../管理器/设置管理器';
 const { ccclass, property } = _decorator;
 
 @ccclass("成就")
@@ -26,7 +27,7 @@ export class 成就 extends Component {
       let 文本 = `【${成就.名称}】`
 
       const 本地成就 = 本地成就表.find(c => c.名称 === 成就.名称)
-      if (本地成就 && 本地成就.条件) {
+      if (本地成就 && 设置.成就[成就.名称]) {
         文本 += 本地成就.描述
         文本 += `\n完成时间：${格式化日期字符串(本地成就.达成时间)}`
       } else {

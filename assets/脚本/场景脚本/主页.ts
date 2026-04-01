@@ -85,7 +85,7 @@ export class 主页 extends Component {
 
         // 没打过boss
         if (存档.天数 >= 180 && !存档.剧情.通关 && 存档.健康 > 0) {
-            存档.当前剧情 = "普通结局"
+            存档.当前剧情 = "往事如烟"
             director.loadScene("剧情")
         }
 

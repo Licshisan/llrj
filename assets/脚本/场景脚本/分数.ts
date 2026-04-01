@@ -19,13 +19,12 @@ export class 分数 extends Component {
 		this.文本容器.removeAllChildren()
 		this.选项容器.active = false
 
-		// 自动计算所有剧情为true的值
 		let 剧情得分 = 0
 		for (const key in 存档.剧情) {
 			if (存档.剧情[key] === true) {
 				剧情得分++
 			}
-		} // 26
+		}
 
 		let 属性得分 = Math.floor(21 - 6 * 计算最大生命() / 10000 - 6 * 计算最大攻击() / 2000 - 6 * 计算最大防御() / 1000);
 		属性得分 = Math.min(Math.max(属性得分, 0), 18); // 18
@@ -55,7 +54,6 @@ export class 分数 extends Component {
 		}
 		序列.call(() => 淡入(this.选项容器)).delay(1);
 		序列.start();
-
 
 		this.选项容器.getChildByName('选择按钮2').on(Button.EventType.CLICK, () => {
 			删除存档(存档.存档名称)

@@ -27,7 +27,7 @@ export class 事件 extends Component {
     当前事件: 事件项目类型 = null;
     触发事件(事件名称: string): void {
         this.当前事件 = 深克隆(默认事件表.find(事件 => 事件.名称 === 事件名称))
-        if (!事件) {
+        if (!this.当前事件) {
             this.结束事件(`未知的事件名【${事件名称}】（请反馈开发者）`)
             return
         }
