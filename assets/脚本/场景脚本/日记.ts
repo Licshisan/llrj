@@ -18,7 +18,7 @@ export class 日记 extends Component {
 		}
 
 		this.返回按钮.active = false
-		const sequence = tween(this.node);
+		const sequence = tween(this.node).delay(1 / 设置.播放速度);
 		if (日记.文本.length === 0) {
 			sequence.call(() => 淡入(this.返回按钮));
 		}

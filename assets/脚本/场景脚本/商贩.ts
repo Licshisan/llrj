@@ -43,6 +43,7 @@ export class 商贩 extends Component {
 					this.更新();
 					保存存档();
 				}, this);
+				播放文本(this.标签, "看看有什么你需要的")
 				选项按钮.setParent(this.按钮容器);
 			})
 		} else if (globalThis.商贩名称 === '黑市') {
@@ -210,7 +211,7 @@ const 黑市列表: 商贩项目类型[] = [
 		}
 	},
 	{
-		名称: "购买子弹（5元/个）",
+		名称: "购买子弹（0.5元/个）",
 		购买: (self) => {
 			if (存档.金钱 < 5) {
 				return "钱不够！";

@@ -1140,7 +1140,7 @@
     "propertyPath": [
       "_string"
     ],
-    "value": "返回"
+    "value": "返  回"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1158,7 +1158,7 @@
     ],
     "value": {
       "__type__": "cc.Size",
-      "width": 80,
+      "width": 102.2265625,
       "height": 50.4
     }
   },
@@ -1178,7 +1178,7 @@
     ],
     "value": {
       "__type__": "cc.Size",
-      "width": 144,
+      "width": 166.2265625,
       "height": 78
     }
   },

@@ -200,7 +200,7 @@ export const 默认商品表: 商品定义类型[] = [
 		名称: "匕首",
 		get 显示名称() {
 			const level = 存档.物品.匕首;
-			return level === 0 ? "匕首" : `匕首（LV${level}）`;
+			return level === 0 ? "匕首" : `匕首LV${level}`;
 		},
 		get 描述() { return `价格：${((32 + 3 * 存档.物品.匕首) / 10).toFixed(1)}元`; },
 		get 条件() { return 存档.金钱 >= 32 + 3 * 存档.物品.匕首; },
@@ -222,7 +222,7 @@ export const 默认商品表: 商品定义类型[] = [
 		名称: "皮衣",
 		get 显示名称() {
 			const level = 存档.物品.皮衣;
-			return level === 0 ? "皮衣" : `皮衣（LV${level}）`;
+			return level === 0 ? "皮衣" : `皮衣LV${level}`;
 		},
 		get 描述() { return `价格：${((20 + 2 * 存档.物品.皮衣) / 10).toFixed(1)}元`; },
 		get 条件() { return 存档.金钱 >= 20 + 2 * 存档.物品.皮衣; },

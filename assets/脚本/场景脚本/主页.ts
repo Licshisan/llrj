@@ -1,7 +1,7 @@
 import { _decorator, Button, Color, Component, director, Label, Node, Sprite } from 'cc';
 import { 保存存档, 存档 } from '../管理器/存档管理器';
 import { 计算数值, 计算最大攻击, 计算最大生命, 计算最大精力, 计算最大防御, 计算最大饥饿 } from '../方法函数/属性计算';
-import { 抽取项目, 抽取物品, 格式化金钱, 自然恢复生命, 自动进食 } from '../方法函数/公共函数';
+import { 抽取项目, 抽取物品, 格式化金钱, 自然恢复生命 } from '../方法函数/公共函数';
 import { 播放文本, 放大缩小 } from '../方法函数/动画效果';
 import { 事件 } from './事件';
 import { 战斗 } from './战斗';
@@ -107,9 +107,6 @@ export class 主页 extends Component {
             "一块黑色的石头", "机甲少女", "炮击少女", "吾王", "晓风"];
         const 敌人名称 = 挑战组[存档.其他.挑战进度]
         if (!敌人名称) {
-            if (!存档.剧情.完成挑战) {
-                this.node.getComponent(事件).触发事件("完成挑战")
-            }
             this.播放文本("你已经天下无敌了...")
             return
         }
@@ -162,7 +159,6 @@ export class 主页 extends Component {
         if(存档.当前事件 || 存档.当前敌人){
             return
         }
-        自动进食()
         if (存档.健康 <= 0) {
             director.loadScene("结局")
             return false

@@ -11,6 +11,7 @@ export class 小兰 extends Component {
 	@property(Node) 选择容器: Node = null
 	@property(Node) 切换1: Node = null
 	@property(Node) 切换2: Node = null
+	@property(Node) 退出按钮: Node = null
 	
 	start() {
 		this.更新()
@@ -28,6 +29,10 @@ export class 小兰 extends Component {
 		this.切换2.on(Button.EventType.CLICK, () => {
 			globalThis.伙伴特性伙伴名称 = '碧瑶'
 			director.loadScene('伙伴特性')
+		}, this)
+
+		this.退出按钮.on(Button.EventType.CLICK, () => {
+			director.loadScene('主页')
 		}, this)
 	}
 

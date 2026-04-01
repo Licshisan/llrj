@@ -602,7 +602,15 @@ export class 战斗 extends Component {
         if(this.对局.敌人.等级){
             名称 += ` LV${this.对局.敌人.等级}`;
         }
-        this.敌人标签.getComponent(Label).string = `${名称}\nHP${this.对局.敌人.生命} ATT${this.对局.敌人.攻击} DEF${this.对局.敌人.防御}`;
+        名称 += `\nHP${this.对局.敌人.生命}/${this.对局.敌人.最大生命}`
+        if(this.对局.敌人.攻击 !== 0){
+            名称 += `ATT${this.对局.敌人.攻击}`
+        }
+        if(this.对局.敌人.防御 !== 0){
+            名称 += `DEF${this.对局.敌人.防御}`
+        }
+        
+        this.敌人标签.getComponent(Label).string = 名称;
         this.血量条.getComponent(ProgressBar).progress = this.对局.敌人.生命 / this.对局.敌人.最大生命;
 
         this.标签容器.getChildByName("生命").getComponent(Label).string = `HP${存档.生命}/${计算最大生命()}`;

@@ -9,13 +9,11 @@ export class 伙伴 extends Component {
 	@property(Node) 标签: Node = null;
 	@property(Node) 文本容器: Node = null;
 	@property(Node) 属性: Node = null;
-	@property(Node)
-	按钮容器: Node = null;
+	@property(Node) 按钮容器: Node = null;
 
-	@property(Node)
-	切换1: Node = null;
-	@property(Node)
-	切换2: Node = null;
+	@property(Node) 切换1: Node = null;
+	@property(Node) 切换2: Node = null;
+	@property(Node) 退出按钮: Node = null;
 
 	onLoad(): void {
 		if (!存档.伙伴.晓月关系) {
@@ -51,6 +49,8 @@ export class 伙伴 extends Component {
 
 		this.切换2.active = 存档.伙伴.小兰关系;
 		this.切换2.on(Button.EventType.CLICK, () => director.loadScene("小兰"));
+
+		this.退出按钮.on(Button.EventType.CLICK, () => director.loadScene("主页"));
 	}
 
 	更新() {
