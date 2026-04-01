@@ -115,6 +115,7 @@ export class 大楼 extends Component {
 		const 赢钱数 = Math.floor((存档.金钱 * 赢钱率) / 100);
 		if (Math.random() * 100 < 存档.其他.金融赢钱率) {
 			存档.金钱 += 赢钱数;
+			存档.其他.投资累计收益 += 赢钱数
 			播放文本(this.标签, `投资成功！金钱增加${赢钱率.toFixed(1)}%(+${(赢钱数 / 10).toFixed(1)})`);
 		} else {
 			存档.金钱 -= 赢钱数;
