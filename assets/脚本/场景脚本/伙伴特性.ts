@@ -1,6 +1,6 @@
-import { _decorator, Button, Color, Component, director, Label, Node, UITransform } from 'cc';
+import { _decorator, Button, Color, Component, director, error, Label, Node, UITransform } from 'cc';
 import { 存档 } from '../管理器/存档管理器';
-import { 默认伙伴特性表 } from '../默认内容/伙伴特性表';
+import { 伙伴特性定义类型, 默认伙伴特性表 } from '../默认内容/伙伴特性表';
 const { ccclass, property } = _decorator;
 
 @ccclass('伙伴特性')
@@ -11,11 +11,16 @@ export class 伙伴特性 extends Component {
 
     start() {
 		const 伙伴名称 = globalThis.伙伴特性伙伴名称
-        默认伙伴特性表[伙伴名称].forEach((特性, index) => {
-            this.创建文本(index, `【${特性.名称}】${特性.描述}`, 特性.条件)
-        })
-
-        this.好感.getComponent(Label).string = `当前好感：${存档.伙伴[伙伴名称+"好感"]}`
+		if(!伙伴名称 || !默认伙伴特性表[伙伴名称]){
+			error("无效的伙伴名称")
+			return
+		} else {
+			默认伙伴特性表[伙伴名称].forEach((特性: 伙伴特性定义类型, index) => {
+				this.创建文本(index, `【${特性.名称}】${特性.描述}`, 特性.条件)
+			})
+	
+			this.好感.getComponent(Label).string = `当前好感：${存档.伙伴[伙伴名称+"好感"]}`
+		}
         this.返回.on(Button.EventType.CLICK, () => director.loadScene("主页"), this)
     }
 
