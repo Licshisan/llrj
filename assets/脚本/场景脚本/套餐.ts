@@ -5,6 +5,7 @@ import { 保存存档, 创建存档, 存档 } from "../管理器/存档管理器
 import { 默认套餐表 } from "../默认内容/套餐表";
 import { 默认难度表 } from "../默认内容/难度表";
 import { 解析颜色 } from "../方法函数/公共函数";
+import { 设置 } from "../管理器/设置管理器";
 const { ccclass, property } = _decorator;
 
 @ccclass("套餐")
@@ -24,7 +25,7 @@ export class 套餐 extends Component {
 		淡入(this.难度按钮);
 		淡入(this.返回按钮);
 
-		this.创建套餐分页()
+		this.scheduleOnce(this.创建套餐分页, 1.2 / 设置.播放速度)
 		this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene("存档"), this);
 		this.难度按钮.on(Button.EventType.CLICK, () => {
 			if(!this.显示难度页){
@@ -109,7 +110,7 @@ export class 套餐 extends Component {
 				const 选项按钮 = instantiate(this.选项按钮预制体);
 				选项按钮.setParent(单页);
 
-				选项按钮.getChildByName("标签").getComponent(Label).string = `【${难度.名称}】${难度.说明}`;
+				选项按钮.getChildByName("标签").getComponent(Label).string = `${难度.名称}：${难度.说明}`;
 				选项按钮.getChildByName("标签").getComponent(Label).color = 解析颜色(难度.颜色);
 				if (难度.条件) {
 					选项按钮.on(Button.EventType.CLICK, () => {

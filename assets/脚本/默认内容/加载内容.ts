@@ -100,11 +100,19 @@ export async function 加载游戏内容() {
 	const SERVER_URL = 'http://47.93.223.212:3000';
 
 	let lastErrorKey = '';
+	let lastReportTime = 0;
+	const ERROR_REPORT_COOLDOWN = 3000;
+
 	(window as any).__errorHandler = function (name, line, msg, stack) {
+		const now = Date.now();
 		const currentKey = `${name}|${line}|${msg}`;
-		if (currentKey === lastErrorKey) {
+
+		if (currentKey === lastErrorKey || now - lastReportTime < ERROR_REPORT_COOLDOWN) {
 			return;
 		}
+
+		lastErrorKey = currentKey;
+		lastReportTime = now;
 
 		error(`Error Name: ${name}`);
 		error(`Line: ${line}`);

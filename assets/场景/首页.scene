@@ -2306,7 +2306,7 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 220,
+      "x": 206.11,
       "y": 600,
       "z": 0
     },
@@ -2345,7 +2345,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 228.935546875,
+      "width": 274.72265625,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -2378,8 +2378,8 @@
     "_string": "游戏引擎：Cocos Creator",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 20,
-    "_fontSize": 20,
+    "_actualFontSize": 24,
+    "_fontSize": 24,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
     "_overflow": 0,
@@ -2477,7 +2477,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 170.0390625,
+      "width": 204.046875,
       "height": 90.39999999999999
     },
     "_anchorPoint": {
@@ -2510,8 +2510,8 @@
     "_string": "版本：重制版 0.5.1\n原作：晓风游戏",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
-    "_actualFontSize": 20,
-    "_fontSize": 20,
+    "_actualFontSize": 24,
+    "_fontSize": 24,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
     "_overflow": 0,
