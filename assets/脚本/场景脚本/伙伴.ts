@@ -45,12 +45,12 @@ export class 伙伴 extends Component {
 		this.切换1.on(Button.EventType.CLICK, () => {
 			globalThis.伙伴特性伙伴名称 = '碧瑶'
 			director.loadScene("伙伴特性")
-		});
+		}, this);
 
 		this.切换2.active = 存档.伙伴.小兰关系;
-		this.切换2.on(Button.EventType.CLICK, () => director.loadScene("小兰"));
+		this.切换2.on(Button.EventType.CLICK, () => director.loadScene("小兰"), this);
 
-		this.退出按钮.on(Button.EventType.CLICK, () => director.loadScene("主页"));
+		this.退出按钮.on(Button.EventType.CLICK, () => director.loadScene("主页"), this);
 	}
 
 	更新() {
