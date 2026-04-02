@@ -107,7 +107,10 @@ export class 主页 extends Component {
             this.状态栏.active = false
             this.按钮容器.getChildByName("前进").getChildByName("标签").getComponent(Label).string = '探  索'
             this.按钮容器.getChildByName("前进").targetOff(this)
-            this.按钮容器.getChildByName("前进").on(Button.EventType.CLICK, this.结局探索, this)
+            this.按钮容器.getChildByName("前进").on(Button.EventType.CLICK, () => {
+                this.结局探索()
+                保存存档()
+            }, this)
         }
     }
 
@@ -150,7 +153,6 @@ export class 主页 extends Component {
         let 得分 = 30 + 剧情得分 + 属性得分;
         存档.其他.最终得分 = 得分;
 
-            
         let 通关文本 = `“总分为${得分}，高于通关所需分数（30分）。你可以过关啦~”`
         if(得分 <= 30){
             通关文本 = `“总分为${得分}，低于通关所需分数（30分）。放心，你的存档不会被我删除。”`

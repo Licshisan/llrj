@@ -16,6 +16,7 @@ export class 大楼 extends Component {
 			存档.其他.电疗店开店 = 1;
 			存档.其他.电疗店资产 = 800;
 		}
+		存档.其他.游戏时长 = 0
 		this.更新()
 		this.大楼.getChildByName("返回按钮").on(Button.EventType.CLICK, () => director.loadScene("主页"), this);
 
@@ -59,7 +60,7 @@ export class 大楼 extends Component {
 		if (Math.random() * 100 < 70) {
 			存档.其他.游戏时长 = 存档.其他.游戏时长 || 0
 			const 胜率 = Math.min(存档.其他.网吧进度 / 10 + 40, 75).toFixed(1);
-			四层按钮.getChildByName("标签").getComponent(Label).string = `四楼：晓风网咖（属性+${存档.其他.全属性加成}%,胜率${胜率}%）`
+			四层按钮.getChildByName("标签").getComponent(Label).string = `四楼：晓风网咖（属性+${存档.其他.全属性加成}%，胜率${胜率}%）`
 			四层按钮.on(Button.EventType.CLICK, () => this.点击四楼(), this);
 		} else {
 			四层按钮.getChildByName("标签").getComponent(Label).string = "？？？？（晓风网咖放假中...）"
