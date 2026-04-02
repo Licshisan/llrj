@@ -88,7 +88,11 @@ export class 商贩 extends Component {
 	}
 
 	更新() {
-		this.属性一.getComponent(Label).string = 存档.物品.白色粉末 ? `白色粉末：${存档.物品.白色粉末}` : ''
+		if(globalThis.商贩名称 === '商贩'){
+			this.属性一.getComponent(Label).string = `白色粉末：${存档.物品.白色粉末}`
+		} else{
+			this.属性一.getComponent(Label).string = ""
+		}
 		this.属性二.getComponent(Label).string = `金钱：${(存档.金钱 / 10).toFixed(1)}元`;
 	}
 }

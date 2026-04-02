@@ -23,6 +23,7 @@ export class 主页 extends Component {
     start() {
         this.更新()
         this.回档()
+        this.游戏结束()
 
         this.按钮容器.getChildByName("睡觉").on(Button.EventType.CLICK, this.点击睡觉, this)
         this.按钮容器.getChildByName("挑战").on(Button.EventType.CLICK, this.点击挑战, this)
@@ -40,7 +41,6 @@ export class 主页 extends Component {
             director.loadScene("面板")
         }, this)
         this.暗夜模式()
-        this.游戏结束()
     }
 
     回档() {
@@ -107,7 +107,7 @@ export class 主页 extends Component {
             this.状态栏.active = false
             this.按钮容器.getChildByName("前进").getChildByName("标签").getComponent(Label).string = '探  索'
             this.按钮容器.getChildByName("前进").targetOff(this)
-            this.按钮容器.getChildByName("前进").on(Button.EventType.CLICK, () => this.结局探索, this)
+            this.按钮容器.getChildByName("前进").on(Button.EventType.CLICK, this.结局探索, this)
         }
     }
 
@@ -261,9 +261,7 @@ export class 主页 extends Component {
             this.播放文本("挑战需10点精力！")
             return
         }
-        const 挑战组 = ["眼镜王蛇（精英）", "逃犯（精英）", "深渊巨蟒", "机械人（被害妄想症）",
-            "女剑士（中二病他姐）", "天下第一乖（么么啾）", "红狼", "8号拳师", "双枪老太婆", "自爆蛋", "晓风基因计划",
-            "一块黑色的石头", "机甲少女", "炮击少女", "吾王", "晓风"];
+        const 挑战组 = ["眼镜王蛇（精英）", "逃犯（精英）", "深渊巨蟒", "机械人（被害妄想症）", "女剑士（中二病他姐）", "天下第一乖（么么啾）", "红狼", "8号拳师", "双枪老太婆", "自爆蛋", "晓风基因计划", "一块黑色的石头", "机甲少女", "炮击少女", "吾王", "晓风"];
         const 敌人名称 = 挑战组[存档.其他.挑战进度]
         if (!敌人名称) {
             this.播放文本("你已经天下无敌了...")
@@ -422,7 +420,7 @@ export class 主页 extends Component {
     基本消耗() {
         存档.精力 -= 计算数值("前进探索消耗精力", 10);
 
-        if (存档.饥饿 > 0) {
+        if (存档.饥饿 >= 0) {
             存档.饥饿 -= 计算数值("前进探索消耗饥饿", 5);
         }
 
