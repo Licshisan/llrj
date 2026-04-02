@@ -125,8 +125,7 @@ export class 睡觉 extends Component {
                 存档.当前敌人 = "陈晓（大大）2";
             }
 
-
-            if(Math.random() * 100 < (计算最大精力() - 1000) / 20){
+            if(Math.random() * 100 < (计算最大精力() - 800) / 20){
                 存档.当前敌人 = "游戏GM";
             }
             if (存档.天数 >= 178) {
