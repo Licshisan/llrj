@@ -1982,7 +1982,7 @@ export const 默认敌人表: 敌人定义类型[] = [
 		名称: "？？？？",
 		get 显示名称() {
 			const count = 存档.击败次数["？？？？"] || 0;
-			const maxCount = Math.min(count, 10);
+			const maxCount = Math.min(Math.floor(count / 5), 12);
 			return '？'.repeat(maxCount);
 		},
 		get 等级() { return 存档.击败次数["？？？？"] * 999 },
