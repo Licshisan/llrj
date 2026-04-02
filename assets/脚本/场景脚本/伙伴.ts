@@ -38,7 +38,6 @@ export class 伙伴 extends Component {
 			globalThis.伙伴特性伙伴名称 = '晓月'
 			director.loadScene("伙伴特性")
 		}, this);
-		this.按钮容器.getChildByName("选择按钮5").on(Button.EventType.CLICK, () => director.loadScene("主页"), this);
 
 		// 其他伙伴
 		this.切换1.active = 存档.伙伴.碧瑶关系;

@@ -23,7 +23,7 @@
     "_active": true,
     "_components": [],
     "_prefab": {
-      "__id__": 71
+      "__id__": 72
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -54,7 +54,7 @@
     },
     "autoReleaseAssets": false,
     "_globals": {
-      "__id__": 74
+      "__id__": 75
     },
     "_id": "fce2b6bf-b19b-4d43-9145-9d79e5e0cf6f"
   },
@@ -92,9 +92,6 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 66
-      },
-      {
         "__id__": 67
       },
       {
@@ -105,6 +102,9 @@
       },
       {
         "__id__": 70
+      },
+      {
+        "__id__": 71
       }
     ],
     "_prefab": null,
@@ -909,6 +909,7 @@
     "instance": {
       "__id__": 37
     },
+    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
@@ -1153,6 +1154,9 @@
       },
       {
         "__id__": 64
+      },
+      {
+        "__id__": 66
       }
     ],
     "removedComponents": []
@@ -1254,6 +1258,16 @@
     "localID": [
       "9fmot5ZOhIG7Hxtd9jSBk/"
     ]
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 58
+    },
+    "propertyPath": [
+      "_active"
+    ],
+    "value": false
   },
   {
     "__type__": "cc.UITransform",
@@ -1363,7 +1377,7 @@
     "instance": null,
     "targetOverrides": [
       {
-        "__id__": 72
+        "__id__": 73
       }
     ],
     "nestedPrefabInstanceRoots": [
@@ -1381,7 +1395,7 @@
   {
     "__type__": "cc.TargetOverrideInfo",
     "source": {
-      "__id__": 69
+      "__id__": 70
     },
     "sourceInfo": null,
     "propertyPath": [
@@ -1391,7 +1405,7 @@
       "__id__": 9
     },
     "targetInfo": {
-      "__id__": 73
+      "__id__": 74
     }
   },
   {
@@ -1403,28 +1417,28 @@
   {
     "__type__": "cc.SceneGlobals",
     "ambient": {
-      "__id__": 75
-    },
-    "shadows": {
       "__id__": 76
     },
-    "_skybox": {
+    "shadows": {
       "__id__": 77
     },
-    "fog": {
+    "_skybox": {
       "__id__": 78
     },
-    "octree": {
+    "fog": {
       "__id__": 79
     },
-    "skin": {
+    "octree": {
       "__id__": 80
     },
-    "lightProbeInfo": {
+    "skin": {
       "__id__": 81
     },
-    "postSettings": {
+    "lightProbeInfo": {
       "__id__": 82
+    },
+    "postSettings": {
+      "__id__": 83
     },
     "bakedWithStationaryMainLight": false,
     "bakedWithHighpLightmap": false

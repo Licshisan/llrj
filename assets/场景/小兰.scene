@@ -645,7 +645,7 @@
     "node": {
       "__id__": 12
     },
-    "_enabled": true,
+    "_enabled": false,
     "__prefab": null,
     "_alignFlags": 9,
     "_target": null,
@@ -847,7 +847,7 @@
     "propertyPath": [
       "_string"
     ],
-    "value": "<小兰>"
+    "value": "<晓月>"
   },
   {
     "__type__": "cc.TargetInfo",

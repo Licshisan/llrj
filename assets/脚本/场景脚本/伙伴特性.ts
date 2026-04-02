@@ -19,7 +19,7 @@ export class 伙伴特性 extends Component {
 				this.创建文本(index, `【${特性.名称}】${特性.描述}`, 特性.条件)
 			})
 	
-			this.好感.getComponent(Label).string = `当前好感：${存档.伙伴[伙伴名称+"好感"]}`
+			this.好感.getComponent(Label).string = `${伙伴名称}当前好感：${存档.伙伴[伙伴名称+"好感"]}`
 		}
         this.返回.on(Button.EventType.CLICK, () => director.loadScene("主页"), this)
     }
