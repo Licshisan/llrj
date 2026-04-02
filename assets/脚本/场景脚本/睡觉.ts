@@ -126,7 +126,7 @@ export class 睡觉 extends Component {
             }
 
 
-            if(Math.random() * 100 < (计算最大精力() - 1000) / 30){
+            if(Math.random() * 100 < (计算最大精力() - 1000) / 20){
                 存档.当前敌人 = "游戏GM";
             }
             if (存档.天数 >= 178) {
@@ -171,6 +171,10 @@ export class 睡觉 extends Component {
         }
 
         执行钩子("睡觉结算", [结果文本])
+
+        if (存档.天数 >= 178) {
+            存档.当前敌人 = "";
+        }
         this.创建文本(结果文本);
     }
 
