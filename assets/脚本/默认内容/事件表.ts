@@ -718,7 +718,8 @@ export const 默认事件表: 事件项目类型[] = [
 			}
 
 			存档.金钱 -= 100;
-			if(Math.random() * 100 < 50){
+			存档.其他.算命次数 ++
+			if(Math.random() * 100 < 50 - 存档.其他.算命次数 * 5){
 				const 新天赋 = 正面天赋[Math.floor(Math.random() * 正面天赋.length)];
 				存档.天赋[新天赋.名称] = true;
 				执行钩子("激活天赋", [新天赋.名称]);
