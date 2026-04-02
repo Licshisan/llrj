@@ -29,6 +29,8 @@ export class 主页 extends Component {
         this.按钮容器.getChildByName("挑战").on(Button.EventType.CLICK, this.点击挑战, this)
         this.按钮容器.getChildByName("前进").on(Button.EventType.CLICK, this.点击前进, this)
         this.按钮容器.getChildByName("探索").on(Button.EventType.CLICK, this.点击探索, this)
+        this.按钮容器.getChildByName("结局").on(Button.EventType.CLICK, this.点击结局, this)
+
         this.按钮容器.getChildByName("伙伴").on(Button.EventType.CLICK, () => director.loadScene("伙伴"), this)
         this.按钮容器.getChildByName("进食").on(Button.EventType.CLICK, () => director.loadScene("进食"), this)
         this.按钮容器.getChildByName("制作").on(Button.EventType.CLICK, () => director.loadScene("制作"), this)
@@ -79,6 +81,7 @@ export class 主页 extends Component {
                     存档.当前剧情 = "未完成的计数"
                 }
             }
+            保存存档()
             director.loadScene("剧情")
             return
         }
@@ -86,35 +89,33 @@ export class 主页 extends Component {
         // 没打过boss
         if (存档.天数 >= 180 && !存档.剧情.通关 && 存档.健康 > 0) {
             存档.当前剧情 = "往事如烟"
+            保存存档()
             director.loadScene("剧情")
+            return
         }
 
         // 通关BOSS
         if (存档.天数 >= 180 && 存档.剧情.通关) {
             存档.按钮.伙伴 = false
             存档.按钮.制作 = false
-            存档.按钮.前进 = true
+            存档.按钮.前进 = false
             存档.按钮.商店 = false
             存档.按钮.挑战 = false
             存档.按钮.探索 = false
             存档.按钮.特性 = false
             存档.按钮.睡觉 = false
             存档.按钮.进食 = false
-            this.更新()
+            存档.按钮.结局 = true
 
             this.顶部状态栏.active = false
             this.信息栏.active = false
             this.状态栏.active = false
-            this.按钮容器.getChildByName("前进").getChildByName("标签").getComponent(Label).string = '探  索'
-            this.按钮容器.getChildByName("前进").targetOff(this)
-            this.按钮容器.getChildByName("前进").on(Button.EventType.CLICK, () => {
-                this.结局探索()
-                保存存档()
-            }, this)
+            this.更新()
+            保存存档()
         }
     }
 
-    结局探索() {
+    点击结局() {
         const 结局 = [
             "整个城市被大雾笼罩，身边的人影开始慢慢消失，周围没有一点声音...",
             "一个男人的身影缓缓浮现，一步步向我走了过来...",
@@ -131,11 +132,13 @@ export class 主页 extends Component {
         if (结局[存档.其他.结局剧情]) {
             this.播放文本(结局[存档.其他.结局剧情])
             存档.其他.结局剧情++
+            保存存档()
             return
         } 
         
         if (!存档.其他.完成问卷) {
             this.node.getComponent(事件).触发事件("问卷1")
+            保存存档()
             return
         } 
         
@@ -158,6 +161,7 @@ export class 主页 extends Component {
             通关文本 = `“总分为${得分}，低于通关所需分数（30分）。放心，你的存档不会被我删除。”`
         }
         const 得分结局 = [
+            `“你的答题评分为30（满分30，与刚才十个题目有关）。\n这部分设计目的、只是想引导你去思考这些问题，你随便怎么选都可以，我不会去要求你必须怎么样”`,
             `“游戏评分为${剧情得分}（满分22，与你在游戏中的选择有关）。\n这部分是考察你游戏的策略性和你的性格（游戏性格，不必较真）”`,
             `“属性评分为${属性得分}（满分18，攻防血属性越「低」分数越高！）\n这里很有必要解释下为何、要这么设计：\n第一，我想让你注重培养伙伴、被动技和某些道具，而不仅是仅用属性碾压 \n第二，低属性通关比可能比高属性通关更具挑战性！”`,
             通关文本,
@@ -166,11 +170,13 @@ export class 主页 extends Component {
         if (得分结局[存档.其他.得分结局]) {
             this.播放文本(得分结局[存档.其他.得分结局])
             存档.其他.得分结局++
+            保存存档()
             return 
         }
 
         if(!存档.其他.选择回家){
             this.node.getComponent(事件).触发事件("选择回家")
+            保存存档()
             return
         }
 
@@ -199,6 +205,7 @@ export class 主页 extends Component {
         if (存档.剧情.愿意回家 && 回家结局[存档.其他.回家结局]) {
             this.播放文本(回家结局[存档.其他.回家结局])
             存档.其他.回家结局++
+            保存存档()
             return
         }
 
@@ -211,6 +218,7 @@ export class 主页 extends Component {
                 存档.当前剧情 = "桥洞结局"
             }
             director.loadScene('剧情')
+            保存存档()
             return
         }
 
@@ -508,6 +516,7 @@ export class 主页 extends Component {
         this.按钮容器.getChildByName("制作").active = 存档.按钮.制作 || 存档.按钮.制造
         this.按钮容器.getChildByName("特性").active = 存档.按钮.特性
         this.按钮容器.getChildByName("进食").active = 存档.按钮.进食
+        this.按钮容器.getChildByName("结局").active = 存档.按钮.结局
         this.按钮容器.getChildByName("睡觉").getChildByName("标签").getComponent(Label).string = 存档.剧情.住在桥洞 ? "桥  洞" : "睡  觉";
     }
 

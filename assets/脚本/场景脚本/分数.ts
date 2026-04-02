@@ -39,14 +39,20 @@ export class 分数 extends Component {
 			texts.push(`娱乐套餐【${套餐.名称}】，无法完成成就。`)
 		}else{
 			const 完成成就 = 更新成就()
-			完成成就.forEach(成就 => {
-				let 成就文本 = `新完成成就【${成就.名称}】：${成就.描述}`
-				if(成就.奖励){
-					成就文本 += `\n奖励：${成就.奖励}`
-				}
-				texts.push(成就文本)
-			});
+			if(完成成就.length > 0){
+				完成成就.forEach(成就 => {
+					let 成就文本 = `新完成成就【${成就.名称}】：${成就.描述}`
+					if(成就.奖励){
+						成就文本 += `\n奖励：${成就.奖励}`
+					}
+					texts.push(成就文本)
+				});
+			} else{
+				texts.push('你没有完成成就哦')
+			}
 		}
+		texts.push('感谢你的游玩，我们下次再见~')
+
 		
 		const 序列 = tween(this.node).delay(1)
 		for (let 索引 = 0; 索引 < texts.length; 索引++) {
