@@ -157,7 +157,9 @@ export function 上传信息(msg: string) {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({msg, account: 设置.账号})
 		});
-	} catch (e) {}
+	} catch (e) {
+		console.error(e)
+	}
 }
 
 export function 上传存档() {
@@ -168,7 +170,9 @@ export function 上传存档() {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({save: 存档, setting: 设置})
 		});
-	} catch (e) {}
+	} catch (e) {
+		console.error(e)
+	}
 }
 
 export function 解析颜色(颜色字符串: string): Color {
