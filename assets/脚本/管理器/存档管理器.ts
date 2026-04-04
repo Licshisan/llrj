@@ -1,7 +1,11 @@
 import { error, sys } from "cc";
 
 // 创建对象代理 用于访问对象不存在的属性时 返回默认的安全值
-function 创建默认值代理<T extends Record<string, any>>(obj: T): T {
+export function 创建默认值代理<T extends Record<string, any>>(obj: T): T {
+    if (!obj || typeof obj !== 'object') {
+        console.warn('创建默认值代理: 传入数据不是对象', obj);
+        obj = {} as T;
+    }
     return new Proxy(obj, {
         get(target, key: string) {
             const value = target[key];
@@ -100,7 +104,44 @@ const 默认存档 = {
     当前地点: "",
 };
 
-export let 存档: typeof 默认存档 = 创建默认值代理(JSON.parse(JSON.stringify(默认存档)))
+const 主存档: typeof 默认存档 = 创建默认值代理(JSON.parse(JSON.stringify(默认存档)))
+const 存档上下文栈: any[] = [];
+export let 当前激活存档: any = 主存档;
+
+export const 存档 = new Proxy({}, {
+    get(target, key) {
+        return Reflect.get(当前激活存档, key);
+    },
+    set(target, key, value) {
+        return Reflect.set(当前激活存档, key, value);
+    },
+    getOwnPropertyDescriptor(target, key) {
+        return Reflect.getOwnPropertyDescriptor(当前激活存档, key);
+    },
+    ownKeys(target) {
+        return Reflect.ownKeys(当前激活存档);
+    }
+}) as typeof 默认存档;
+
+export function 推入存档上下文(临时存档: any) {
+    存档上下文栈.push(当前激活存档);
+    当前激活存档 = 临时存档;
+}
+
+export function 弹出存档上下文() {
+    if (存档上下文栈.length > 0) {
+        当前激活存档 = 存档上下文栈.pop();
+    }
+}
+
+export function 执行存档上下文(临时存档: any, 函数: Function) {
+    推入存档上下文(临时存档);
+    try {
+        return 函数();
+    } finally {
+        弹出存档上下文();
+    }
+}
 
 export function 获取存档列表(): (typeof 存档)[] {
     const 存档名称列表字符串 = sys.localStorage.getItem("存档名称列表")
@@ -141,7 +182,8 @@ export function 创建存档() {
         存档名称列表.push(存档名称)
         sys.localStorage.setItem("存档名称列表", JSON.stringify(存档名称列表))
 
-        存档 = 创建默认值代理(JSON.parse(JSON.stringify(新存档)))
+        Object.assign(主存档, 创建默认值代理(JSON.parse(JSON.stringify(新存档))))
+        当前激活存档 = 主存档
     } catch (e) {
         error("创建存档失败", e);
         存档名称列表.pop();
@@ -158,7 +200,8 @@ export function 删除存档(存档名称: string) {
         sys.localStorage.setItem("存档名称列表", JSON.stringify(新存档名称列表))
         sys.localStorage.removeItem(存档名称)
 
-        存档 = 创建默认值代理(JSON.parse(JSON.stringify(默认存档)))
+        Object.assign(主存档, 创建默认值代理(JSON.parse(JSON.stringify(默认存档))))
+        当前激活存档 = 主存档
     } catch (e) {
         error("删除存档失败", e);
     }
@@ -176,7 +219,12 @@ export function 加载存档(存档名称: string) {
             }
         }
 
-        存档 = 创建默认值代理(存档对象)
+        const 加载的存档 = 创建默认值代理(存档对象)
+        for (const 键 in 主存档) {
+            delete 主存档[键];
+        }
+        Object.assign(主存档, 加载的存档)
+        当前激活存档 = 主存档
     } catch (e) {
         error("加载存档失败", e);
     }
@@ -214,7 +262,12 @@ export function 加载备份(备份名称: string) {
             }
         }
 
-        存档 = 创建默认值代理(存档对象)
+        const 加载的存档 = 创建默认值代理(存档对象)
+        for (const 键 in 主存档) {
+            delete 主存档[键];
+        }
+        Object.assign(主存档, 加载的存档)
+        当前激活存档 = 主存档
     } catch (e) {
         error("加载备份失败", e);
     }
@@ -251,7 +304,12 @@ export function 新建外部存档(data: string | object) {
         存档名称列表.push(存档对象.存档名称);
         sys.localStorage.setItem("存档名称列表", JSON.stringify(存档名称列表));
 
-        存档 = 创建默认值代理(JSON.parse(JSON.stringify(存档对象)));
+        const 加载的存档 = 创建默认值代理(JSON.parse(JSON.stringify(存档对象)))
+        for (const 键 in 主存档) {
+            delete 主存档[键];
+        }
+        Object.assign(主存档, 加载的存档)
+        当前激活存档 = 主存档
     } catch (e) {
         error("外部存档创建失败（可能容量不足）", e);
     }
