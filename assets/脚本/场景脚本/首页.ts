@@ -12,6 +12,7 @@ export class 首页 extends Component {
         this.按钮容器.getChildByName("开始").on(Button.EventType.CLICK, () => director.loadScene("存档"), this);
         this.按钮容器.getChildByName("成就").on(Button.EventType.CLICK, () => director.loadScene("成就"), this);
         this.按钮容器.getChildByName("设置").on(Button.EventType.CLICK, () => director.loadScene("设置"), this);
+        this.按钮容器.getChildByName("图鉴").on(Button.EventType.CLICK, () => director.loadScene("图鉴"), this);
 
         this.游戏信息.getComponent(Label).string = `版本：${设置.游戏版本}\n制作：重置开发组`
         加载游戏内容()
