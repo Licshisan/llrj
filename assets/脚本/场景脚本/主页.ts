@@ -378,6 +378,7 @@ export class 主页 extends Component {
         }
         //离开县城
         if (存档.距离 == 101) {
+            存档.其他.离开县城携带金钱 = 存档.金钱
             存档.按钮.商店 = false
             return true
         }
@@ -392,6 +393,8 @@ export class 主页 extends Component {
         }
         // 进入省城
         if (存档.距离 == 299) {
+            存档.其他.进入省城携带金钱 = 存档.金钱
+            
             存档.按钮.前进 = false;
             存档.按钮.探索 = true;
             存档.按钮.商店 = true;

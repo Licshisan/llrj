@@ -401,7 +401,7 @@ export class 战斗 extends Component {
             压制: 执行存档上下文(敌人存档, () => 计算最大压制()) + 100,
             增加声望: 3,
             增加属性: 2,
-            损失健康: 0,
+            损失健康: 敌人存档名称 == '另一个自己' ? 10 : 1,
             出场语: `【${敌人存档名称}】前来挑战！`,
             掉落物: 掉落物列表,
             战斗初始化: (对局: 对局类型) => {
@@ -741,6 +741,7 @@ export class 战斗 extends Component {
         this.按钮容器.active = false;
         this.更新();
         this.node.getComponent(主页).更新()
+        存档.其他.逃跑次数++;
 
         if (Math.random() * 100 > this.计算主角逃跑成功率()) {
             // 逃跑失败
