@@ -5,10 +5,10 @@ import { 计算最大攻击, 计算最大生命, 计算最大精力, 计算最�
 
 export interface 成就项目类型 {
 	名称: string,
-	get 描述(): string,
-	get 条件(): boolean,
+	描述: string,
+	条件: boolean,
 	奖励?: string,
-	达成时间?: number
+	达成时间?: number,
 }
 
 export const 默认成就表: 成就项目类型[] = [
