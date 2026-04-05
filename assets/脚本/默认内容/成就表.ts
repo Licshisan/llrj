@@ -2,7 +2,6 @@ import { error, log, sys, warn } from "cc";
 import { 存档 } from "../管理器/存档管理器";
 import { 保存设置, 设置 } from "../管理器/设置管理器";
 import { 计算最大攻击, 计算最大生命, 计算最大精力, 计算最大防御 } from "../方法函数/属性计算";
-import { 默认特质表 } from "./特质表";
 
 export interface 成就项目类型 {
 	名称: string,
