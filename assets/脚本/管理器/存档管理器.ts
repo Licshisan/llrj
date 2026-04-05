@@ -33,9 +33,9 @@ export function 创建默认值代理<T extends Record<string, any>>(obj: T): T 
 
 const 默认存档 = {
     // 世界
-    存档名称: "默认存档",
-    游戏难度: "普通",
-    套餐名称: '新手模式',
+    存档名称: "默认存档" as string,
+    游戏难度: "普通" as string,
+    套餐名称: '新手模式' as string,
     创建时间: Date.now(),
 
     天数: 1,

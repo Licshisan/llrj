@@ -35,8 +35,8 @@ export class 开场 extends Component {
 	点击刷新() {
 		this.继续按钮.active = false;
 		this.刷新按钮.active = false;
-		const 特质数量 = 1
-		const 天赋数量 = 2
+		const 天赋数量 = Number(设置.成就["小试牛刀"]) + Number(设置.成就["初试锋芒"]) + Number(设置.成就["一鸣惊人"])
+		const 特质数量 = Number(设置.成就["初出茅庐"]) + Number(设置.成就["声名鹊起"]) + Number(设置.成就["所向披靡"])
 
 		this.当前特质 = []
 		this.当前天赋 = []
@@ -75,6 +75,12 @@ export class 开场 extends Component {
 				颜色: 天赋.颜色
 			})
 		})
+		if(显示文本.length === 0) {
+			显示文本.push({
+				文本: `你平平无奇`,
+				颜色: Color.WHITE
+			})	
+		}
 
 		const 序列 = tween(this.node)
 		.call(() => 淡出(this.文本容器))

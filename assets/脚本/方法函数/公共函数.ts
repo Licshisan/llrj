@@ -78,7 +78,7 @@ export function 抽取物品(物品表: 概率类型[], 必中 = false): string 
 				存档.物品[drop.名称] = 0;
 			}
 			存档.物品[drop.名称] += drop.数量;
-			res += `【${drop.名称}】*${drop.数量}`;
+			res += `「${drop.名称}」*${drop.数量}`;
 		}
 	}
 	return res;
