@@ -36,12 +36,11 @@ const 默认设置 = {
 	暗夜模式: false,
 	游戏版本: "0.6.0",
 
-	按钮: { 普通: true } as Record<string, boolean>,
 	成就: { 打开成就: true} as Record<string, boolean>,
-	藏品: {} as Record<string, number>,
-    其他: {} as Record<string, number>,
-	账号: {} as Record<string, number>,
 	特质: {} as Record<string, number>,
+	藏品: {} as Record<string, number>,
+	账号: {} as Record<string, any>,
+    其他: {} as Record<string, number>, // 冗余字段
 };
 
 export let 设置: typeof 默认设置 = 创建默认值代理(JSON.parse(JSON.stringify(默认设置)))

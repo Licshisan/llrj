@@ -107,7 +107,7 @@ export class 开场 extends Component {
 	点击确定() {
 		this.当前特质.forEach(特质 => {
 			执行钩子("激活特质", [特质])
-			存档.特质[特质] = true
+			存档.特质[特质] = 设置.特质[特质]
 		})
 		this.当前天赋.forEach(天赋 => {
 			执行钩子("激活天赋", [天赋])

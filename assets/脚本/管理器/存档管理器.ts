@@ -80,7 +80,7 @@ const 默认存档 = {
     架势经验: { 平衡: 0 } as Record<string, number>,
     
     天赋: { 饥饿: false } as Record<string, boolean>,
-    特质: { 饥饿: false } as Record<string, boolean>,
+    特质: { 饥饿: 0 } as Record<string, number>,
     状态: { 饥饿: false } as Record<string, boolean>,
     剧情: { 剧情: false } as Record<string, boolean>,
     伙伴: {} as Record<string, any>,
