@@ -132,7 +132,7 @@ export async function 加载游戏内容() {
 		});
 	};
 
-	// 玩家登录
+	// 玩家登录 & 云同步
 	try {
 		const xhr = new XMLHttpRequest();
 		xhr.open("POST", `${SERVER_URL}/login`, true);
@@ -142,20 +142,46 @@ export async function 加载游戏内容() {
 			if (xhr.status >= 200 && xhr.status < 300) {
 				try {
 					const result = JSON.parse(xhr.responseText);
-					设置管理器.设置.账号 = result;
+
+					设置管理器.设置.账号 = {
+						id: result.id,
+						uid: result.uid,
+						nickname: result.nickname,
+						donation: result.donation || 0,
+					};
+
+					const 云端设置 = result.setting;
+					if (云端设置) {
+						if (云端设置.成就) {
+							for (const key in 云端设置.成就) {
+								设置管理器.设置.成就[key] = 设置管理器.设置.成就[key] || 云端设置.成就[key];
+							}
+						}
+						if (云端设置.特质) {
+							for (const key in 云端设置.特质) {
+								设置管理器.设置.特质[key] = Math.max(设置管理器.设置.特质[key] || 0, 云端设置.特质[key] || 0);
+							}
+						}
+						if (云端设置.藏品) {
+							for (const key in 云端设置.藏品) {
+								设置管理器.设置.藏品[key] = Math.max(设置管理器.设置.藏品[key] || 0, 云端设置.藏品[key] || 0);
+							}
+						}
+						log('✅ 云同步完成：成就、特质、藏品已更新');
+					}
 					设置管理器.保存设置();
 				} catch (e) {
-					error("解析返回数据失败");
+					error("解析返回数据失败", e);
 				}
 			} else {
 				error("请求失败，状态码：" + xhr.status);
 			}
 		};
 		xhr.ontimeout = () => {
-			error("请求超时（5秒）");
+			error("请求超时（5秒） - 跳过云同步，使用本地数据");
 		};
 		xhr.onerror = () => {
-			error("网络请求失败");
+			error("网络请求失败 - 跳过云同步，使用本地数据");
 		};
 		xhr.send(JSON.stringify({
 			uid: 设置管理器.设置.唯一标识

@@ -57,6 +57,8 @@ const db = mysql.createPool({
         id INT PRIMARY KEY AUTO_INCREMENT,
         uid VARCHAR(255) UNIQUE NOT NULL,
         nickname VARCHAR(255),
+        setting JSON,
+        donation INT DEFAULT 0,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         last_login DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       )
@@ -112,12 +114,18 @@ app.post('/login', async (req, res) => {
     if (rows.length > 0) {
       const user = rows[0];
       await db.query('UPDATE players SET last_login = NOW() WHERE id = ?', [user.id]);
-      return res.json({ code: 200, nickname: user.nickname, id: user.id });
+      return res.json({ 
+        code: 200, 
+        nickname: user.nickname, 
+        id: user.id,
+        donation: user.donation || 0,
+        setting: user.setting ? JSON.parse(user.setting) : null
+      });
     }
 
     const nickname = 生成随机昵称();
     const [result] = await db.query('INSERT INTO players (uid, nickname, created_at, last_login) VALUES (?, ?, NOW(), NOW())', [uid, nickname]);
-    res.json({ code: 200, nickname, id: result.insertId });
+    res.json({ code: 200, nickname, id: result.insertId, donation: 0, setting: null });
 
   } catch (err) {
     res.status(500).json({ code: 500, msg: '登录失败', error: err.message });
@@ -184,7 +192,11 @@ app.post('/save', async (req, res) => {
       VALUES (?, ?, ?, ?, ?, NOW())
     `, [user_id, save_id, day || 0, JSON.stringify(save), JSON.stringify(setting)]);
 
-    res.json({ code: 200, msg: '存档上传成功' });
+    if (user_id > 0) {
+      await db.query('UPDATE players SET setting = ? WHERE id = ?', [JSON.stringify(setting), user_id]);
+    }
+
+    res.json({ code: 200, msg: '存档上传成功，云同步已更新' });
 
   } catch (err) {
     res.status(500).json({ code: 500, msg: '存档失败', error: err.message });
@@ -254,6 +266,35 @@ function 调度凌晨4点() {
 }
 调度凌晨4点();
 
+
+// ===================== 9. 设置赞助金额 =====================
+app.post('/admin/set-donation', async (req, res) => {
+  try {
+    const { user_id, amount } = req.body;
+    if (!user_id || amount === undefined) {
+      return res.status(400).json({ code: 400, msg: '缺少用户ID或金额' });
+    }
+
+    const [result] = await db.query(
+      'UPDATE players SET donation = ? WHERE id = ?',
+      [parseInt(amount) || 0, user_id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ code: 404, msg: '用户不存在' });
+    }
+
+    res.json({ 
+      code: 200, 
+      msg: `✅ 赞助金额已设置为 ¥${amount}`,
+      user_id,
+      donation: amount
+    });
+
+  } catch (err) {
+    res.status(500).json({ code: 500, msg: '设置失败', error: err.message });
+  }
+});
 
 // ===================== 启动服务 =====================
 app.listen(3000, () => {
