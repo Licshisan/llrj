@@ -62,13 +62,6 @@ const db = mysql.createPool({
       )
     `);
 
-    try {
-      await db.query(`ALTER TABLE players ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP`);
-    } catch (e) {}
-    try {
-      await db.query(`ALTER TABLE players ADD COLUMN last_login DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP`);
-    } catch (e) {}
-
     await db.query(`
       CREATE TABLE IF NOT EXISTS errors (
         id INT PRIMARY KEY AUTO_INCREMENT,
@@ -81,12 +74,6 @@ const db = mysql.createPool({
         time DATETIME
       )
     `);
-
-    try { await db.query(`ALTER TABLE errors ADD COLUMN name VARCHAR(255)`); } catch (e) {}
-    try { await db.query(`ALTER TABLE errors ADD COLUMN line INT`); } catch (e) {}
-    try { await db.query(`ALTER TABLE errors ADD COLUMN msg TEXT`); } catch (e) {}
-    try { await db.query(`ALTER TABLE errors ADD COLUMN stack TEXT`); } catch (e) {}
-    try { await db.query(`ALTER TABLE errors ADD COLUMN setting TEXT`); } catch (e) {}
 
     await db.query(`
       CREATE TABLE IF NOT EXISTS messages (
@@ -107,8 +94,6 @@ const db = mysql.createPool({
         time DATETIME
       )
     `);
-
-    try { await db.query(`ALTER TABLE saves ADD COLUMN day INT`); } catch (e) {}
 
     console.log('✅ MySQL 连接成功 & 表已创建');
   } catch (err) {

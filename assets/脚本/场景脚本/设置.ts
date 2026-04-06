@@ -24,6 +24,12 @@ export class 设置 extends Component {
       }
     }, this);
 
+    this.按钮容器.getChildByName("自动买果子").on(Button.EventType.CLICK, () => {
+      设置管理器.设置.自动买果子 = !设置管理器.设置.自动买果子
+      设置管理器.保存设置();
+      播放文本(this.标签, `已${设置管理器.设置.自动买果子 ? '开启' : '关闭'}自动买果子，在县城如果果子数量低于5自动买5个。`)
+    }, this);
+
     this.账号信息.getComponent(Label).string = `昵称：${设置管理器.设置.账号.nickname || '暂无'}\nid:${设置管理器.设置.账号.id || '暂无'}`
   }
 

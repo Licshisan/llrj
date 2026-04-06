@@ -34,7 +34,8 @@ const 默认设置 = {
 	播放速度: 1,
 	播放音乐: false,
 	暗夜模式: false,
-	游戏版本: "0.6.0",
+	自动买果子: false,
+	游戏版本: "0.7.0",
 
 	成就: { 打开成就: true} as Record<string, boolean>,
 	特质: {} as Record<string, number>,
@@ -60,6 +61,10 @@ export function 加载设置() {
 		}
 	
 		for (const 键 in 默认设置) {
+			if (键 === "游戏版本") {
+				设置对象[键] = 默认设置[键];
+				continue;
+			}
 			if (!设置对象.hasOwnProperty(键) || typeof 设置对象[键] !== typeof 默认设置[键]) {
 				设置对象[键] = 默认设置[键];
 				error(`设置项【${键}】异常，已重置为默认值: ${默认设置[键]}`);
