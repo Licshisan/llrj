@@ -71,14 +71,14 @@ export function 抽取物品(物品表: 概率类型[], 必中 = false): string 
 	for (const drop of drops) {
 		if (drop.名称 === "金钱") {
 			存档.金钱 += drop.数量;
-			res += `「金钱」*${(drop.数量 / 10).toFixed(1)}`;
+			res += `【金钱】*${(drop.数量 / 10).toFixed(1)}`;
 		} else {
 			// 确保物品存在
 			if (!存档.物品[drop.名称]) {
 				存档.物品[drop.名称] = 0;
 			}
 			存档.物品[drop.名称] += drop.数量;
-			res += `「${drop.名称}」*${drop.数量}`;
+			res += `【${drop.名称}】*${drop.数量}`;
 		}
 	}
 	return res;

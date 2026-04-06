@@ -57,7 +57,7 @@ const db = mysql.createPool({
         id INT PRIMARY KEY AUTO_INCREMENT,
         uid VARCHAR(255) UNIQUE NOT NULL,
         nickname VARCHAR(255),
-        setting JSON,
+        setting TEXT,
         donation INT DEFAULT 0,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         last_login DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -114,12 +114,22 @@ app.post('/login', async (req, res) => {
     if (rows.length > 0) {
       const user = rows[0];
       await db.query('UPDATE players SET last_login = NOW() WHERE id = ?', [user.id]);
+      
+      let setting = null;
+      try {
+        if (user.setting && user.setting.trim()) {
+          setting = JSON.parse(user.setting);
+        }
+      } catch (e) {
+        setting = null;
+      }
+
       return res.json({ 
         code: 200, 
         nickname: user.nickname, 
         id: user.id,
         donation: user.donation || 0,
-        setting: user.setting ? JSON.parse(user.setting) : null
+        setting,
       });
     }
 
@@ -174,18 +184,38 @@ app.post('/msg', async (req, res) => {
   }
 });
 
+
+// 判断版本号 是否 小于 0.7.0
+function isBefore070(version) {
+  if (!version) return true; // 空版本当作旧版
+  
+  // 拆分成数字数组
+  const v1 = version.split('.').map(Number);
+  const v2 = [0, 7, 0];
+
+  // 逐位对比
+  for (let i = 0; i < 3; i++) {
+    const a = v1[i] || 0;
+    const b = v2[i] || 0;
+    if (a < b) return true;
+    if (a > b) return false;
+  }
+  return false; // 等于 0.7.0
+}
+
 // ===================== 4. 上传存档（已修复所有bug） =====================
 app.post('/save', async (req, res) => {
   try {
     const { save, setting } = req.body;
     if (!save || !setting) return res.status(400).json({ code: 400, msg: '缺少存档数据' });
 
-    // ✅ 修复：user_id 必须转数字，表是 INT 类型
     const user_id = parseInt(setting?.账号?.id) || 0;
-    // ✅ 修复：save_id 不能为空
-    const save_id = setting?.uid || setting?.唯一标识 || 'default';
-    // ✅ 提取总天数
-    const day = (save?.停留天数?.荒野 || 0) + (save?.停留天数?.县城 || 0) + (save?.停留天数?.山脉 || 0) + (save?.停留天数?.省城 || 0);
+    const save_id = save?.存档名称 || 'default';
+    const day = save.天数
+
+    if(isBefore070(setting.游戏版本)){
+      return res.json({ code: 400, msg: '版本不支持' });
+    }
 
     await db.query(`
       INSERT INTO saves (user_id, save_id, day, save, setting, time)
@@ -225,6 +255,7 @@ app.get('/random-save', async (req, res) => {
     res.json({
       code: 200,
       msg: '获取成功',
+      nickname: randomSave.nickname,
       save: JSON.parse(randomSave.save),
       setting: JSON.parse(randomSave.setting)
     });
