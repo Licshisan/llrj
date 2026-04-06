@@ -253,11 +253,23 @@ app.get('/random-save', async (req, res) => {
 
     const randomSave = rows[0];
     const setting = JSON.parse(randomSave.setting);
+    const player_id = setting?.账号?.id || 0
+
+    let nickname = setting?.账号?.nickname ?? "未知玩家"
+    if (player_id) {
+      const [playerRows] = await db.query(
+        'SELECT nickname FROM players WHERE id = ? LIMIT 1',
+        [player_id]
+      );
+      if (playerRows.length > 0) {
+        nickname = playerRows[0].nickname;
+      }
+    }
 
     res.json({
       code: 200,
       msg: '获取成功',
-      nickname: setting?.账号?.nickname || '未设置昵称',
+      nickname,
       save: JSON.parse(randomSave.save),
     });
 
