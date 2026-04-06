@@ -1,8 +1,9 @@
 import { 存档 } from "../管理器/存档管理器";
 import { director, Color } from "cc";
-import { 计算数值, 计算最大生命, 计算最大饥饿 } from "./属性计算";
+import { 计算数值, 计算最大生命 } from "./属性计算";
 import { 默认食物表 } from "../默认内容/食物表";
 import { 设置 } from "../管理器/设置管理器";
+import { 默认套餐表 } from "../默认内容/套餐表";
 
 export type 概率类型 = {
 	名称: string,
@@ -163,6 +164,10 @@ export function 上传信息(msg: string) {
 }
 
 export function 上传存档() {
+	const 套餐 = 默认套餐表.find(套餐 => 套餐.名称 === 存档.套餐名称)
+	if(套餐 && 套餐.娱乐){
+		return
+	}
 	const server = 'http://47.93.223.212:3000';
 	try {
 		fetch(server + '/save', {

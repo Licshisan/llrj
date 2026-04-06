@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Label, Color, UITransform, Button, director, tween } from "cc";
+import { _decorator, Component, Node, Label, Color, UITransform, Button, director, tween, error } from "cc";
 import { 保存存档, 备份存档, 存档 } from "../管理器/存档管理器";
 import { 淡入 } from "../方法函数/动画效果";
 import { 设置 } from "../管理器/设置管理器";
@@ -132,6 +132,29 @@ export class 睡觉 extends Component {
             if (存档.天数 >= 178) {
                 存档.当前敌人 = "";
             }
+        }
+
+        // 30%概率遇到其他玩家（PVP）
+        if (存档.当前敌人 == "" && 存档.天数 > 1 && 存档.天数 < 178 && Math.random() * 100 < 30) {
+            const SERVER_URL = 'http://47.93.223.212:3000';
+            fetch(`${SERVER_URL}/random-save?day=${存档.天数 - 1}`, {
+                method: 'GET',
+            }).then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('网络请求失败');
+            }).then(result => {
+                if (result.code === 200 && result.save) {
+                    存档.当前敌人 = "时空流浪者";
+                    globalThis.PVP玩家数据 = {
+                        存档: result.save,
+                        昵称: result.nickname || '神秘流浪者'
+                    };
+                }
+            }).catch((e) => {
+                error(e)
+            });
         }
 
         // 其他

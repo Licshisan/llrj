@@ -252,12 +252,13 @@ app.get('/random-save', async (req, res) => {
     }
 
     const randomSave = rows[0];
+    const setting = JSON.parse(randomSave.setting);
+
     res.json({
       code: 200,
       msg: '获取成功',
-      nickname: randomSave.nickname,
+      nickname: setting?.账号?.nickname || '未设置昵称',
       save: JSON.parse(randomSave.save),
-      setting: JSON.parse(randomSave.setting)
     });
 
   } catch (err) {
