@@ -56,6 +56,7 @@ export class 睡觉 extends Component {
         if(存档.其他.电疗店开店){
             存档.其他.电疗店资产 -= Math.floor(15 * Math.random() + 5);
         }
+        存档.当前文本 = ""
 
         const 精力恢复 = 计算数值("睡觉恢复精力", 计算最大精力() - 存档.精力)
         const 饥饿消耗 = 计算数值("睡觉消耗饥饿", 20)
