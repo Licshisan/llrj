@@ -18,7 +18,13 @@ export class 图鉴 extends Component {
   start() {
     this.初始化分类标签();
     this.刷新图鉴列表();
-    this.返回按钮.on(Node.EventType.TOUCH_END, () => director.loadScene("首页"), this);
+    this.返回按钮.on(Node.EventType.TOUCH_END, () => {
+      if (globalThis.页面来源 === "面板") {
+        director.loadScene("面板");
+      } else {
+        director.loadScene("首页");
+      }
+    }, this);
   }
 
   初始化分类标签() {

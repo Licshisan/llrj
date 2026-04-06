@@ -540,7 +540,7 @@
     "value": {
       "__type__": "cc.Size",
       "width": 620,
-      "height": 200
+      "height": 202
     }
   },
   {
@@ -1018,8 +1018,8 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 7.34,
-      "y": 580,
+      "x": 0,
+      "y": 570,
       "z": 0
     },
     "_lrot": {
