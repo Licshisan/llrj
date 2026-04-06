@@ -1,4 +1,4 @@
-import { _decorator, Color, Component, director, Label, Node, sys, warn } from 'cc';
+import { _decorator, Color, Component, director, Label, Node } from 'cc';
 import { 创建普通文字 } from '../方法函数/动画效果';
 import { 默认天赋表 } from '../默认内容/天赋表';
 import { 默认特质表 } from '../默认内容/特质表';

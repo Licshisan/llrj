@@ -34,7 +34,7 @@ export class 主页 extends Component {
         this.按钮容器.getChildByName("伙伴").on(Button.EventType.CLICK, () => director.loadScene("伙伴"), this)
         this.按钮容器.getChildByName("进食").on(Button.EventType.CLICK, () => director.loadScene("进食"), this)
         this.按钮容器.getChildByName("制作").on(Button.EventType.CLICK, () => director.loadScene("制作"), this)
-        this.按钮容器.getChildByName("特性").on(Button.EventType.CLICK, () => director.loadScene("特性"), this)
+        this.按钮容器.getChildByName("特性").on(Button.EventType.CLICK, () => director.loadScene("面板"), this)
         this.按钮容器.getChildByName("商店").on(Button.EventType.CLICK, () => director.loadScene("商店"), this)
         this.信息栏.on(Node.EventType.TOUCH_END, () => {
             if (存档.当前事件 || 存档.当前敌人) {

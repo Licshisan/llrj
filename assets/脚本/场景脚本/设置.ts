@@ -16,7 +16,13 @@ export class 设置 extends Component {
     this.按钮容器.getChildByName("速度").on(Button.EventType.CLICK, this.点击速度, this);
     this.按钮容器.getChildByName("暗夜").on(Button.EventType.CLICK, this.点击暗夜, this);
     this.按钮容器.getChildByName("公告").on(Button.EventType.CLICK, () => director.loadScene("公告"), this);
-    this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene("首页"), this);
+    this.返回按钮.on(Button.EventType.CLICK, () => {
+      if (globalThis.页面来源 === "面板") {
+        director.loadScene("面板");
+      } else {
+        director.loadScene("首页");
+      }
+    }, this);
 
     this.账号信息.getComponent(Label).string = `昵称：${设置管理器.设置.账号.nickname || '暂无'}\nid:${设置管理器.设置.账号.id || '暂无'}`
   }
