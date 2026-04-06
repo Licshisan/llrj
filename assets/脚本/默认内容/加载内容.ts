@@ -145,7 +145,6 @@ export async function 加载游戏内容() {
 
 					设置管理器.设置.账号 = {
 						id: result.id,
-						uid: result.uid,
 						nickname: result.nickname,
 						donation: result.donation || 0,
 					};
