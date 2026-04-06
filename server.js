@@ -222,6 +222,39 @@ app.get('/random-save', async (req, res) => {
   }
 });
 
+// ===================== 6. 定时清理过期存档 =====================
+async function 清理过期存档() {
+  try {
+    const [result] = await db.query(`
+      DELETE FROM saves 
+      WHERE time < DATE_SUB(NOW(), INTERVAL 30 DAY)
+    `);
+    if (result.affectedRows > 0) {
+      console.log(`🧹 已清理 ${result.affectedRows} 个30天以上的过期存档`);
+    }
+  } catch (err) {
+    console.error('❌ 存档清理失败', err.message);
+  }
+}
+
+// 每天凌晨4点执行（低峰期）
+function 调度凌晨4点() {
+  const 现在 = new Date();
+  const 下次执行 = new Date(现在);
+  下次执行.setHours(4, 0, 0, 0);
+  if (下次执行 <= 现在) 下次执行.setDate(下次执行.getDate() + 1);
+  const 延迟毫秒 = 下次执行.getTime() - 现在.getTime();
+
+  setTimeout(() => {
+    清理过期存档();
+    setInterval(清理过期存档, 24 * 60 * 60 * 1000);
+  }, 延迟毫秒);
+
+  console.log(`⏰ 存档清理任务已调度，下次执行：${下次执行.toLocaleString()}`);
+}
+调度凌晨4点();
+
+
 // ===================== 启动服务 =====================
 app.listen(3000, () => {
   console.log('🚀 服务启动成功 端口：3000');
