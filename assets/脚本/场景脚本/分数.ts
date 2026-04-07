@@ -1,10 +1,11 @@
 import { _decorator, Button, Component, director, Node, tween, EditBox } from "cc";
-import { 删除存档, 存档 } from "../管理器/存档管理器";
+import { 保存存档, 删除存档, 存档 } from "../管理器/存档管理器";
 import { 创建动画文字, 播放文本, 淡入 } from "../方法函数/动画效果";
 import { 设置 } from "../管理器/设置管理器";
 import { 计算最大攻击, 计算最大生命, 计算最大防御 } from "../方法函数/属性计算";
 import { 更新成就 } from "../默认内容/成就表";
 import { 默认套餐表 } from "../默认内容/套餐表";
+import { 上传存档 } from "../方法函数/公共函数";
 const { ccclass, property } = _decorator;
 
 @ccclass('分数')
@@ -26,7 +27,7 @@ export class 分数 extends Component {
 			}
 		}
 		剧情得分 += 存档.物品.好人卡
-		剧情得分 += 存档.物品.眼泪
+		
         剧情得分 += Number(存档.剧情.堂主捐钱) * 3
         剧情得分 += Number(存档.剧情.借钱给中年大叔) * 3
         剧情得分 += Number(存档.剧情.帮助胖女人) * 3
@@ -62,7 +63,11 @@ export class 分数 extends Component {
 			}
 		}
 		texts.push('感谢你的游玩，我们下次再见~')
-
+		if(!存档.其他.已上传结局){
+			存档.其他.已上传结局 = true
+			上传存档()
+		}
+		保存存档()
 		
 		const 序列 = tween(this.node).delay(1)
 		for (let 索引 = 0; 索引 < texts.length; 索引++) {
@@ -75,7 +80,8 @@ export class 分数 extends Component {
 			const 新昵称 = this.输入框.getComponent(EditBox).string?.trim()?.substring(0, 50);
 			if (新昵称) {
 				try {
-					await fetch('http://localhost:3000/nickname', {
+					const server = 'http://47.93.223.212:3000';
+					await fetch(`${server}/nickname`, {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
 						body: JSON.stringify({

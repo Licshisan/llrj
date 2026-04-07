@@ -35,7 +35,7 @@ const 默认设置 = {
 	播放音乐: false,
 	暗夜模式: false,
 	自动买果子: false,
-	游戏版本: "0.7.0",
+	游戏版本: "0.7.2",
 
 	成就: { 打开成就: true} as Record<string, boolean>,
 	特质: {} as Record<string, number>,

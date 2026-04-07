@@ -41,7 +41,13 @@ export class 睡觉 extends Component {
             保存存档()
             director.loadScene("剧情");
         } else {
-            director.loadScene("主页");
+            if(globalThis.PVP玩家数据.昵称){
+                存档.当前剧情 = "遇见同行"
+                保存存档()
+                director.loadScene("剧情");
+            } else{
+                director.loadScene("主页");
+            }
         }
     }
 
@@ -135,7 +141,8 @@ export class 睡觉 extends Component {
         }
 
         // 30%概率遇到其他玩家（PVP）
-        if (存档.当前敌人 == "" && 存档.天数 > 1 && 存档.天数 < 178 && Math.random() * 100 < 30) {
+        globalThis.PVP玩家数据 = { 昵称:"", 存档: null}
+        if (存档.当前敌人 == "" && 存档.天数 > 1 && 存档.天数 < 178 && Math.random() * 100 < 20) {
             const SERVER_URL = 'http://47.93.223.212:3000';
             fetch(`${SERVER_URL}/random-save?day=${存档.天数 - 1}`, {
                 method: 'GET',
@@ -146,7 +153,6 @@ export class 睡觉 extends Component {
                 throw new Error('网络请求失败');
             }).then(result => {
                 if (result.code === 200 && result.save) {
-                    存档.当前敌人 = "时空流浪者";
                     globalThis.PVP玩家数据 = {
                         存档: result.save,
                         昵称: result.nickname || '神秘流浪者'

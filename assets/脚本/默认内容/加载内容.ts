@@ -13,6 +13,7 @@ import { error, log } from "cc";
 import { 默认难度表 } from "./难度表";
 import { 默认特质表 } from "./特质表";
 import { 默认藏品表 } from "./藏品表";
+import { 修复成就bug } from "./成就表";
 
 let 加载完成 = false
 
@@ -168,6 +169,8 @@ export async function 加载游戏内容() {
 						}
 						log('✅ 云同步完成：成就、特质、藏品已更新');
 					}
+					
+					修复成就bug()
 					设置管理器.保存设置();
 				} catch (e) {
 					error("解析返回数据失败", e);
