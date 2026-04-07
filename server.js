@@ -24,7 +24,7 @@ function 生成随机昵称() {
     "看守者", "追杀者", "劫匪", "通缉犯",
     "草带男孩", "女流氓", "女汉子", "壮汉", 
     "电锯男", "蒙面人", "流浪者", "萌新", "菜菜", "咸鱼", 
-    "地瓜", "果子", "上药", "熟肉", "生肉", "啤酒", "小男孩",
+    "地瓜", "果子", "伤药", "熟肉", "生肉", "啤酒", "小男孩",
   ];
   const 形容词 = 形容词列表[Math.floor(Math.random() * 形容词列表.length)];
   const 角色 = 角色列表[Math.floor(Math.random() * 角色列表.length)];
@@ -37,8 +37,8 @@ const cors = require('cors');
 const app = express();
 
 app.use(cors());
-app.use(express.json());
-
+app.use(express.json({ limit: '20mb' }));
+app.use(express.urlencoded({ limit: '20mb', extended: true }));
 // ===================== MySQL 连接 =====================
 const db = mysql.createPool({
   host: 'localhost',
@@ -240,7 +240,7 @@ app.get('/random-save', async (req, res) => {
     if (!day) return res.status(400).json({ code: 400, msg: '缺少天数参数' });
 
     const [rows] = await db.query(`
-      SELECT save, setting FROM saves 
+      SELECT save, setting, user_id FROM saves 
       WHERE day = ? 
       AND time >= DATE_SUB(NOW(), INTERVAL 7 DAY)
       ORDER BY RAND()
@@ -252,10 +252,9 @@ app.get('/random-save', async (req, res) => {
     }
 
     const randomSave = rows[0];
-    const setting = JSON.parse(randomSave.setting);
-    const player_id = setting?.账号?.id || 0
+    const player_id = randomSave?.user_id || 0
 
-    let nickname = setting?.账号?.nickname ?? "未知玩家"
+    let nickname = "未知玩家"
     if (player_id) {
       const [playerRows] = await db.query(
         'SELECT nickname FROM players WHERE id = ? LIMIT 1',
