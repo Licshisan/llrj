@@ -20,6 +20,10 @@ export class 分数 extends Component {
 		this.文本容器.removeAllChildren()
 		this.选项容器.active = false
 
+		if(存档.游戏难度 === '炼狱'){
+			存档.游戏难度 = '地狱'
+		}
+
 		let 剧情得分 = 0
 		for (const key in 存档.剧情) {
 			if (存档.剧情[key] === true) {
