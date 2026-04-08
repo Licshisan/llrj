@@ -85,7 +85,7 @@ export class 分数 extends Component {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
 						body: JSON.stringify({
-							uid: 设置.账号.uid,
+							uid: 设置.唯一标识,
 							nickname: 新昵称
 						})
 					});

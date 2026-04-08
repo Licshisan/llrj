@@ -378,10 +378,10 @@ export class 主页 extends Component {
             return false
         }
         //离开县城
-        if (存档.距离 == 101) {
-            存档.其他.离开县城携带金钱 = 存档.金钱
-            存档.按钮.商店 = false
-            return true
+        if (存档.距离 == 100) {
+            存档.当前剧情 = "离开县城";
+            director.loadScene('剧情');
+            return false
         }
         // 晓月剧情
         if (存档.距离 == 289) {
@@ -551,7 +551,11 @@ export class 主页 extends Component {
             }
         }
 
-        位置 += `已停留${存档.停留天数[获取地区名称()] || 0}天`
+        位置 += `已停留${存档.停留天数[获取地区名称()] || 0}天 `
+        if(存档.其他.今日天气){
+            位置 += `${存档.其他.今日天气} ${存档.其他.今日气温}℃`
+        }
+
         return 位置
     }
 

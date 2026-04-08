@@ -15,6 +15,9 @@ export class 伙伴 extends Component {
 	@property(Node) 切换2: Node = null;
 	@property(Node) 退出按钮: Node = null;
 
+	@property(Node) 一键喂果: Node = null;
+	@property(Node) 一键喂药: Node = null;
+
 	onLoad(): void {
 		if (!存档.伙伴.晓月关系) {
 			if (存档.伙伴.碧瑶关系) {
@@ -50,6 +53,41 @@ export class 伙伴 extends Component {
 		this.切换2.on(Button.EventType.CLICK, () => director.loadScene("小兰"), this);
 
 		this.退出按钮.on(Button.EventType.CLICK, () => director.loadScene("主页"), this);
+
+
+		this.一键喂果.on(Button.EventType.CLICK, () => {
+			globalThis.确认参数 = {
+				文本: "确定要一次性投喂所有果子给晓月吗？",
+				按钮: {
+					"确定": () => {
+						存档.伙伴.连续不喂食晓月天数 = 0;
+						存档.伙伴.今日喂食晓月 = true;
+
+						const 投喂果子数 = 存档.物品.果子
+						存档.物品.果子 -= 投喂果子数;
+						存档.伙伴.晓月好感 += 投喂果子数;
+						director.loadScene("伙伴")
+					},
+					"返回": () => director.loadScene("伙伴")
+				}
+			};
+			director.loadScene("确认");
+		}, this);
+		this.一键喂药.on(Button.EventType.CLICK, () => {
+			globalThis.确认参数 = {
+				文本: "确定要一次性投喂所有伤药给晓月吗？",
+				按钮: {
+					"确定": () => {
+						const 投喂伤药数 = 存档.物品.伤药
+						存档.物品.伤药 -= 投喂伤药数;
+						存档.伙伴.晓月好感 += 投喂伤药数 * 2;
+						director.loadScene("伙伴")
+					},
+					"返回": () => director.loadScene("伙伴")
+				}
+			};
+			director.loadScene("确认");
+		}, this);
 	}
 
 	更新() {
