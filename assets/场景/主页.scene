@@ -5414,7 +5414,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 700,
-      "height": 500
+      "height": 42.84
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -5445,12 +5445,12 @@
     },
     "_string": "\"我是要称为第一剑豪的男人！\"",
     "_horizontalAlign": 1,
-    "_verticalAlign": 0,
+    "_verticalAlign": 1,
     "_actualFontSize": 33,
     "_fontSize": 32,
     "_fontFamily": "Arial",
     "_lineHeight": 34,
-    "_overflow": 2,
+    "_overflow": 3,
     "_enableWrapText": true,
     "_font": null,
     "_isSystemFontUsed": true,

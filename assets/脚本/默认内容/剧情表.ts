@@ -1647,10 +1647,10 @@ export const 默认剧情表: 剧情定义类型[] = [
 			const 天赋 = globalThis?.PVP玩家数据?.存档?.天赋
 			const 生命 = globalThis?.PVP玩家数据?.存档?.生命
 
-			if(天赋){
-				const keys = Object.keys(天赋);
-				const filteredKeys = keys.filter(key => key !== "饥饿");
-				const wrappedKeys = filteredKeys.map(key => `【${key}】`);
+			const keys = Object.keys(天赋);
+			const filteredKeys = keys.filter(key => key !== "饥饿");
+			const wrappedKeys = filteredKeys.map(key => `【${key}】`);
+			if(wrappedKeys){
 				a.push(`检测到携带天赋：${wrappedKeys.join('')}`);
 			} if(生命){
 				a.push(`当前生命：${生命}`);
