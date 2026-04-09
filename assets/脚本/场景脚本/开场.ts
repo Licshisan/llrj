@@ -38,11 +38,6 @@ export class 开场 extends Component {
 		let 天赋数量 = Number(设置.成就["小试牛刀"]) + Number(设置.成就["初试锋芒"]) + Number(设置.成就["一鸣惊人"]) + 1
 		let 特质数量 = Number(设置.成就["初出茅庐"]) + Number(设置.成就["声名鹊起"]) + Number(设置.成就["所向披靡"])
 
-		if(Math.random() * 100 < 10){
-			天赋数量 += 1
-		}
-
-
 		this.当前特质 = []
 		this.当前天赋 = []
 
