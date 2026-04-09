@@ -380,8 +380,7 @@ export class 主页 extends Component {
         }
         //离开县城
         if (存档.距离 == 100) {
-            存档.当前剧情 = "离开县城";
-            director.loadScene('剧情');
+            this.node.getComponent(事件).触发事件("离开县城")
             return false
         }
         // 晓月剧情
