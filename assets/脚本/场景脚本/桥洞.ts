@@ -186,7 +186,7 @@ export class 桥洞 extends Component {
 
         //山洞
         this.外出.getChildByName("按钮容器").getChildByName("选择按钮4").on(Button.EventType.CLICK, () => {
-            if (存档.伙伴.碧瑶分成 === 0) {
+            if (!存档.伙伴.碧瑶分成) {
                 播放文本(this.标签, "暂未满足开启条件！加油吧~");
                 return;
             }

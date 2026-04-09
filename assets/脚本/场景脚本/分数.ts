@@ -67,12 +67,7 @@ export class 分数 extends Component {
 			}
 		}
 		texts.push('感谢你的游玩，我们下次再见~')
-		if(!存档.其他.已上传结局){
-			存档.其他.已上传结局 = true
-			上传存档()
-		}
-		保存存档()
-		
+
 		const 序列 = tween(this.node).delay(1)
 		for (let 索引 = 0; 索引 < texts.length; 索引++) {
 			序列.call(() => 创建动画文字(this.文本容器, texts[索引], 索引)).delay(2.2 / 设置.播放速度);

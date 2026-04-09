@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Label, Color, UITransform, Button, director, tween, error } from "cc";
+import { _decorator, Component, Node, Label, Color, UITransform, Button, director, tween } from "cc";
 import { 保存存档, 备份存档, 存档 } from "../管理器/存档管理器";
 import { 淡入 } from "../方法函数/动画效果";
 import { 设置 } from "../管理器/设置管理器";
@@ -41,13 +41,7 @@ export class 睡觉 extends Component {
             保存存档()
             director.loadScene("剧情");
         } else {
-            if(globalThis.PVP玩家数据.昵称){
-                存档.当前剧情 = "遇见同行"
-                保存存档()
-                director.loadScene("剧情");
-            } else{
-                director.loadScene("主页");
-            }
+            director.loadScene("主页");
         }
     }
 
@@ -63,30 +57,6 @@ export class 睡觉 extends Component {
             存档.其他.电疗店资产 -= Math.floor(15 * Math.random() + 5);
         }
         存档.当前文本 = ""
-        // 天气
-        const list = [
-            { n: '晴天', w: 40 },
-            { n: '多云', w: 25 },
-            { n: '阴天', w: 20 },
-            { n: '小雨', w: 10 },
-            { n: '雾', w: 5 },
-            { n: '大风', w: 4 },
-            { n: '小雪', w: 2 },
-            { n: '大雪', w: 1 }
-        ];
-        let total = 0, r = Math.random();
-        list.forEach(i => total += i.w);
-        r *= total;
-        let 随机天气 = "晴天";
-        for (let i of list) {
-            if ((r -= i.w) < 0) {
-                随机天气 = i.n;
-                break;
-            }
-        }
-        const 随机气温 = Math.floor(Math.random() * 36);
-        存档.其他.今日天气 = 随机天气
-        存档.其他.今日气温 = 随机气温
 
         const 精力恢复 = 计算数值("睡觉恢复精力", 计算最大精力() - 存档.精力)
         const 饥饿消耗 = 计算数值("睡觉消耗饥饿", 20)
@@ -140,8 +110,8 @@ export class 睡觉 extends Component {
                 }
             } else {
                 const 蚊子系列 = ["蚊小满", "大毛蚊", "密斯特蚊", "阿蚊", "徐蚊强", "莫斯奇托蚊" ,"蚊女王"];
-                if (蚊子系列[存档.其他.蚊子系列击杀次数]) {
-                    存档.当前敌人 = 蚊子系列[存档.其他.蚊子系列击杀次数]
+                if (蚊子系列[存档.其他.蚊子系列消灭数]) {
+                    存档.当前敌人 = 蚊子系列[存档.其他.蚊子系列消灭数]
                 }
             }
 
@@ -162,29 +132,6 @@ export class 睡觉 extends Component {
             if (存档.天数 >= 178) {
                 存档.当前敌人 = "";
             }
-        }
-
-        // 30%概率遇到其他玩家（PVP）
-        globalThis.PVP玩家数据 = { 昵称:"", 存档: null}
-        if (存档.当前敌人 == "" && 存档.天数 > 1 && 存档.天数 < 178 && Math.random() * 100 < 20) {
-            const SERVER_URL = 'http://47.93.223.212:3000';
-            fetch(`${SERVER_URL}/random-save?day=${存档.天数 - 1}`, {
-                method: 'GET',
-            }).then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('网络请求失败');
-            }).then(result => {
-                if (result.code === 200 && result.save) {
-                    globalThis.PVP玩家数据 = {
-                        存档: result.save,
-                        昵称: result.nickname || '神秘流浪者'
-                    };
-                }
-            }).catch((e) => {
-                error(e)
-            });
         }
 
         // 其他
