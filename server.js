@@ -233,6 +233,21 @@ app.post('/save', async (req, res) => {
   }
 });
 
+// ===================== 4.5 上传设置 =====================
+app.post('/setting', async (req, res) => {
+  try {
+    const { setting } = req.body;
+    if (!setting) return res.status(400).json({ code: 400, msg: '缺少设置数据' });
+    const user_id = parseInt(setting?.账号?.id) || 0;
+    if (user_id <= 0) return res.status(400).json({ code: 400, msg: '用户不存在' });
+    await db.query('UPDATE players SET setting = ? WHERE id = ?', [JSON.stringify(setting), user_id]);
+    res.json({ code: 200, msg: '设置上传成功' });
+  } catch (err) {
+    res.status(500).json({ code: 500, msg: '设置上传失败', error: err.message });
+  }
+});
+
+
 // ===================== 5. 获取随机存档 =====================
 app.get('/random-save', async (req, res) => {
   try {
@@ -255,13 +270,21 @@ app.get('/random-save', async (req, res) => {
     const player_id = randomSave?.user_id || 0
 
     let nickname = "未知玩家"
+    let setting = null;
     if (player_id) {
       const [playerRows] = await db.query(
-        'SELECT nickname FROM players WHERE id = ? LIMIT 1',
+        'SELECT nickname, setting FROM players WHERE id = ? LIMIT 1',
         [player_id]
       );
       if (playerRows.length > 0) {
         nickname = playerRows[0].nickname;
+        try {
+          if (playerRows[0].setting && playerRows[0].setting.trim()) {
+            setting = JSON.parse(playerRows[0].setting);
+          }
+        } catch (e) {
+          setting = null;
+        }
       }
     }
 
@@ -269,6 +292,7 @@ app.get('/random-save', async (req, res) => {
       code: 200,
       msg: '获取成功',
       nickname,
+      setting,
       save: JSON.parse(randomSave.save),
     });
 

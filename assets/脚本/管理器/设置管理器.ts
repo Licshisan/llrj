@@ -42,7 +42,7 @@ const 默认设置 = {
 	特质: {} as Record<string, number>,
 	藏品: {} as Record<string, number>,
 	账号: {} as Record<string, any>,
-    其他: {} as Record<string, number>, // 冗余字段
+    其他: {} as Record<string, any>, // 冗余字段
 };
 
 export let 设置: typeof 默认设置 = 创建默认值代理(JSON.parse(JSON.stringify(默认设置)))
