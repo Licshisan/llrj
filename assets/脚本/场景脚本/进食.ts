@@ -4,6 +4,7 @@ import { 计算最大生命, 计算最大精力, 计算最大饥饿 } from "../�
 import { 播放文本 } from "../方法函数/动画效果";
 import { 执行钩子 } from "../管理器/钩子管理器";
 import { 默认食物表 } from "../默认内容/食物表";
+import { 设置 } from "../管理器/设置管理器";
 const { ccclass, property } = _decorator;
 
 @ccclass("进食")
@@ -17,6 +18,8 @@ export class 进食 extends Component {
 
 	页大小 = 4
 	所有项目节点: Node[] = []
+
+	防误触提示 = true
 
 	start() {
 		this.更新属性();
@@ -66,6 +69,14 @@ export class 进食 extends Component {
 
 			项目组件.getChildByName("选择按钮").on(Button.EventType.CLICK, () => {
 				try {
+					if(食物.名称 === '香烟' || 食物.名称 === '精致香烟'){
+						if(this.防误触提示){
+							this.防误触提示 = false
+							播放文本(this.标签, "系统提示：香烟会损失健康，再次点击确认使用。")
+							return
+						}
+					}
+
 					执行钩子('进食前', [食物])
 					食物.使用({
 						提示: (文本) => 播放文本(this.标签, 文本),

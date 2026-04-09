@@ -15,7 +15,7 @@ export class 设置 extends Component {
     this.标签.getComponent(Label).string = `当前速度为${this.速度表[设置管理器.设置.播放速度]}`;
     this.按钮容器.getChildByName("速度").on(Button.EventType.CLICK, this.点击速度, this);
     this.按钮容器.getChildByName("暗夜").on(Button.EventType.CLICK, this.点击暗夜, this);
-    this.按钮容器.getChildByName("公告").on(Button.EventType.CLICK, () => director.loadScene("公告"), this);
+    // this.按钮容器.getChildByName("公告").on(Button.EventType.CLICK, () => director.loadScene("公告"), this);
     this.返回按钮.on(Button.EventType.CLICK, () => {
       if (globalThis.页面来源 === "面板") {
         director.loadScene("面板");
@@ -28,6 +28,12 @@ export class 设置 extends Component {
       设置管理器.设置.自动买果子 = !设置管理器.设置.自动买果子
       设置管理器.保存设置();
       播放文本(this.标签, `已${设置管理器.设置.自动买果子 ? '开启' : '关闭'}自动买果子，在县城如果果子数量低于5自动买5个。`)
+    }, this);
+
+    this.按钮容器.getChildByName("防误触").on(Button.EventType.CLICK, () => {
+      设置管理器.设置.防误触 = !设置管理器.设置.防误触
+      设置管理器.保存设置();
+      播放文本(this.标签, `已${设置管理器.设置.防误触 ? '开启' : '关闭'}防误触，睡觉总是会显示确定。`)
     }, this);
 
     this.账号信息.getComponent(Label).string = `昵称：${设置管理器.设置.账号.nickname || '暂无'}\nid:${设置管理器.设置.账号.id || '暂无'}`
