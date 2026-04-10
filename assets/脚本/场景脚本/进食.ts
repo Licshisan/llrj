@@ -4,7 +4,6 @@ import { 计算最大生命, 计算最大精力, 计算最大饥饿 } from "../�
 import { 播放文本 } from "../方法函数/动画效果";
 import { 执行钩子 } from "../管理器/钩子管理器";
 import { 默认食物表 } from "../默认内容/食物表";
-import { 设置 } from "../管理器/设置管理器";
 const { ccclass, property } = _decorator;
 
 @ccclass("进食")
@@ -17,6 +16,7 @@ export class 进食 extends Component {
 	@property(Node) 返回按钮: Node;
 
 	页大小 = 4
+    食物表 = []
 	所有项目节点: Node[] = []
 
 	防误触提示 = true
@@ -28,11 +28,12 @@ export class 进食 extends Component {
 	}
 
 	创建分页() {
-		const 总页数 = Math.ceil(默认食物表.length / this.页大小);
-		const 分页组件 = this.分页视图.getComponent(PageView);
-
-		分页组件.removeAllPages();
+		this.食物表 = 默认食物表.filter((食物) => 食物.显示)
 		this.所有项目节点 = []
+
+		const 总页数 = Math.ceil(this.食物表.length / this.页大小);
+		const 分页组件 = this.分页视图.getComponent(PageView);
+		分页组件.removeAllPages();
 
 		for (let 页码 = 0; 页码 < 总页数; 页码++) {
 			this.创建单页(页码, 分页组件)
@@ -56,8 +57,8 @@ export class 进食 extends Component {
 
 		for (let i = 0; i < this.页大小; i++) {
 			const 食物序号 = 页码 * this.页大小 + i;
-			if (食物序号 >= 默认食物表.length) break;
-			const 食物 = 默认食物表[食物序号];
+			if (食物序号 >= this.食物表.length) break;
+			const 食物 = this.食物表[食物序号];
 
 			const 项目组件 = instantiate(this.项目预制体);
 			项目组件.setParent(单页);
@@ -110,10 +111,11 @@ export class 进食 extends Component {
 	}
 
 	刷新所有项目状态() {
+		const 当前食物表 = 默认食物表.filter((食物) => 食物.显示);
 		for (let i = 0; i < this.所有项目节点.length; i++) {
 			const 节点 = this.所有项目节点[i];
-			if (i < 默认食物表.length) {
-				const 食物数据 = 默认食物表[i];
+			if (i < 当前食物表.length) {
+				const 食物数据 = 当前食物表[i];
 				this.更新项目UI(节点, 食物数据);
 			}
 		}

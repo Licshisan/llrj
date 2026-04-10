@@ -335,13 +335,20 @@ export class 桥洞 extends Component {
 
         //居住区
         this.升级.getChildByName("按钮容器").getChildByName("选择按钮1").on(Button.EventType.CLICK, () => {
-            const e = 存档.其他.居住区等级 * 3 + 40;
-            if (存档.金钱 < e) {
+            // 应用精力曲线
+            let 升级金钱 = 存档.其他.居住区等级 * 3 + 40
+            if(存档.游戏难度 === '残酷' || 存档.游戏难度 === '地狱'){
+                if(存档.其他.居住区等级 > 60){
+                    升级金钱 += 存档.其他.居住区等级 - 60
+                }
+            }
+
+            if (存档.金钱 < 升级金钱) {
                 播放文本(this.标签, "没钱！");
                 return;
             }
             存档.其他.居住区等级 += 1;
-            存档.金钱 -= e;
+            存档.金钱 -= 升级金钱;
             播放文本(this.标签, `升级成功！最大精力+10（累计增加${存档.其他.居住区等级 * 10}）`);
             保存存档();
             this.更新升级();
@@ -735,8 +742,15 @@ export class 桥洞 extends Component {
     更新升级() {
         this.属性标签.getComponent(Label).string = `精力 ${存档.精力}\n金钱 ${(存档.金钱 / 10).toFixed(1)} `;
 
+        // 应用精力曲线
+        let 升级金钱 = 存档.其他.居住区等级 * 3 + 40
+        if(存档.游戏难度 === '残酷' || 存档.游戏难度 === '地狱'){
+            if(存档.其他.居住区等级 > 60){
+                升级金钱 += 存档.其他.居住区等级 - 60
+            }
+        }
         this.升级.getChildByName("按钮容器").getChildByName("选择按钮1").getChildByName("标签").getComponent(Label).string =
-            `居住区（LV${存档.其他.居住区等级} 提升需${((存档.其他.居住区等级 * 3 + 40) / 10).toFixed(1)} 元）`;
+            `居住区（LV${存档.其他.居住区等级} 提升需${((升级金钱) / 10).toFixed(1)} 元）`;
         this.升级.getChildByName("按钮容器").getChildByName("选择按钮2").getChildByName("标签").getComponent(Label).string =
             `运动区（LV${存档.其他.运动区等级} 提升需${((存档.其他.运动区等级 * 2 + 2) / 10).toFixed(1)} 元）`;
 

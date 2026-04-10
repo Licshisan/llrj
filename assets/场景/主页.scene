@@ -5375,7 +5375,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 62.15999999999997,
+      "y": 290.73999999999995,
       "z": 0
     },
     "_lrot": {
@@ -5446,7 +5446,7 @@
     "_string": "\"我是要称为第一剑豪的男人！\"",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 33,
+    "_actualFontSize": 32,
     "_fontSize": 32,
     "_fontFamily": "Arial",
     "_lineHeight": 34,

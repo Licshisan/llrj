@@ -120,6 +120,9 @@ export const 存档 = new Proxy({}, {
     },
     ownKeys(target) {
         return Reflect.ownKeys(当前激活存档);
+    },
+    has(target, key) {
+        return Reflect.has(当前激活存档, key);
     }
 }) as typeof 默认存档;
 
