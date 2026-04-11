@@ -5,7 +5,7 @@ import { 保存存档, 创建存档, 存档 } from "../管理器/存档管理器
 import { 默认套餐表 } from "../默认内容/套餐表";
 import { 默认难度表 } from "../默认内容/难度表";
 import { 解析颜色 } from "../方法函数/公共函数";
-import { 设置 } from "../管理器/设置管理器";
+import { 设置, 保存设置 } from "../管理器/设置管理器";
 const { ccclass, property } = _decorator;
 
 @ccclass("套餐")
@@ -18,8 +18,10 @@ export class 套餐 extends Component {
 
 	页大小 = 7;
 	显示难度页 = false
-	当前难度 = "普通"
+	当前难度 = 设置.上次难度 || "普通"
 	start() {
+		this.难度按钮.getComponent(Label).string = `当前难度：${this.当前难度}`
+
 		播放文本(this.标签, "请选择一种初始道具套餐...");
 
 		淡入(this.难度按钮);
@@ -121,6 +123,8 @@ export class 套餐 extends Component {
 						this.显示难度页 = false
 						播放文本(this.标签, 难度.说明)
 						this.当前难度 = 难度.名称
+						设置.上次难度 = 难度.名称
+						保存设置()
 						this.难度按钮.getComponent(Label).string = `当前难度：${难度.名称}`
 						this.创建套餐分页()
 					}, this);
