@@ -46,6 +46,13 @@ export class 主页 extends Component {
     }
 
     回档() {
+        // 兼容
+        if(存档.伙伴.碧瑶存款) {
+            存档.其他.碧瑶存款 = 存档.伙伴.碧瑶存款
+            存档.伙伴.碧瑶存款 = false
+        }
+        保存存档()
+        
         this.scheduleOnce(() => {
             if (存档.当前剧情) {
                 director.loadScene("剧情")
