@@ -23,7 +23,7 @@ export class 伙伴 extends Component {
 			if (存档.伙伴.碧瑶关系) {
 				globalThis.伙伴特性伙伴名称 = '碧瑶'
 				director.loadScene('伙伴特性')
-			} else if (存档.伙伴.小兰特性) {
+			} else if (存档.伙伴.小兰关系) {
 				director.loadScene('小兰')
 			}
 		}
