@@ -72,7 +72,9 @@ export class 套餐 extends Component {
 						存档.游戏难度 = this.当前难度
 						// 注入藏品
 						for(let 藏品名 in 设置.藏品){
+							console.log(藏品名)
 							存档.物品[藏品名] = 设置.藏品[藏品名];
+							console.log(存档.物品[藏品名])
 						}
 						执行钩子("新建游戏")
 						保存存档()
