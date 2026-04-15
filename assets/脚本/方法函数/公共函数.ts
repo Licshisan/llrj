@@ -12,6 +12,7 @@ export type 概率类型 = {
 }
 
 export function 格式化日期字符串(date: number): string {
+	if(!date) return "暂无"
 	const d = new Date(date);
 	const year = d.getFullYear();
 	const month = String(d.getMonth() + 1).padStart(2, "0");

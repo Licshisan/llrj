@@ -1293,7 +1293,7 @@
     "node": {
       "__id__": 2
     },
-    "_enabled": true,
+    "_enabled": false,
     "__prefab": null,
     "_symmetric": true,
     "_id": "64aDjXr4hGWq9IZKtlJ+VO"

@@ -1,7 +1,7 @@
 import { _decorator, Component, Node, Label, director, Button } from "cc";
 import { 保存存档, 存档 } from "../管理器/存档管理器";
 import { 播放文本, 放大出现, 缩小消失 } from "../方法函数/动画效果";
-import { 计算最大精力, 计算最大饥饿 } from "../方法函数/属性计算";
+import { 计算数值, 计算最大精力, 计算最大饥饿 } from "../方法函数/属性计算";
 const { ccclass, property } = _decorator;
 
 @ccclass("大楼")
@@ -23,7 +23,8 @@ export class 大楼 extends Component {
 		// 一层
 		const 一层按钮 = this.大楼.getChildByName("按钮容器").getChildByName("选择按钮1")
 		if (Math.random() * 100 < 70) {
-			存档.其他.金融赢钱率 = parseFloat((Math.random() * 50 + 25).toFixed(1));
+			const 投资成功率 = 计算数值("投资成功率", parseFloat((Math.random() * 50 + 25).toFixed(1)))
+			存档.其他.金融赢钱率 = 投资成功率;
 			一层按钮.getChildByName("标签").getComponent(Label).string = `一楼：晓风金融（赢钱概率${存档.其他.金融赢钱率}%）`
 			一层按钮.on(Button.EventType.CLICK, () => this.点击一楼(), this);
 		} else {

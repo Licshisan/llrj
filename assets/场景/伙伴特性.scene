@@ -591,7 +591,7 @@
     "value": {
       "__type__": "cc.Size",
       "width": 620,
-      "height": 200
+      "height": 202
     }
   },
   {
@@ -1364,7 +1364,7 @@
     "node": {
       "__id__": 2
     },
-    "_enabled": true,
+    "_enabled": false,
     "__prefab": null,
     "_symmetric": true,
     "_id": "eaSYRCUalIEpJSY9vNLceD"

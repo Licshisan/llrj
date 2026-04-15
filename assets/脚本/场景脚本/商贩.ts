@@ -71,12 +71,12 @@ export class 商贩 extends Component {
 
 		const list: [string, number, number][] = [
 			["放大镜", 1, 50],
+			["熟肉", 3, 12],
 			["晓月手链", 1, 50],
 			["幸运石", 1, 50],
-			["伤药", 4, 12],
-			["熟肉", 3, 12],
 			["啤酒", 1, 30],
-			["装避裤", 1, 80],
+			["伤药", 4, 12],
+			["滑稽裤", 1, 60],
 		];
 		const index = Math.floor((存档.天数 || 0)) % list.length;
 		const item = list[index];

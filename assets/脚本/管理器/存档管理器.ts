@@ -115,6 +115,9 @@ export const 存档 = new Proxy({}, {
     set(target, key, value) {
         return Reflect.set(当前激活存档, key, value);
     },
+    deleteProperty(_, k) { 
+        return Reflect.deleteProperty(当前激活存档, k)
+     },
     getOwnPropertyDescriptor(target, key) {
         return Reflect.getOwnPropertyDescriptor(当前激活存档, key);
     },

@@ -388,6 +388,7 @@
     "instance": {
       "__id__": 11
     },
+    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
@@ -1029,7 +1030,7 @@
     "node": {
       "__id__": 2
     },
-    "_enabled": true,
+    "_enabled": false,
     "__prefab": null,
     "_symmetric": true,
     "_id": "18FPyctmRKspz4emNZ1lD3"
