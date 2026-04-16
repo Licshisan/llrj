@@ -26,8 +26,16 @@ export class 存档 extends Component {
         存档名称列表.forEach((存档) => {
             const 存档项目节点 = instantiate(this.存档项目预制件);
             存档项目节点.setParent(this.存档容器);
+            let 地区 = "荒野"
+            if(存档.距离 == 100){
+                地区 = "县城"
+            } else if(存档.距离 > 100 && 存档.距离 < 300){
+                地区 = "山脉"
+            } else {
+                地区 = "省城"
+            }
 
-            存档项目节点.getChildByName("选择按钮").getChildByName("标签").getComponent(Label).string = `${获取地区名称()}第${存档.天数}天 【${存档.套餐名称}】 ${存档.距离}km`;
+            存档项目节点.getChildByName("选择按钮").getChildByName("标签").getComponent(Label).string = `${地区}.${存档.天数}天 【${存档.套餐名称}】 ${存档.距离}km`;
             存档项目节点.getChildByName("标签").getComponent(Label).string = `创建时间：${格式化日期字符串(存档.创建时间)}`;
             存档项目节点.getChildByName("按钮容器").getChildByName("黑色按钮1").getChildByName("标签").getComponent(Label).string = "删  除";
             存档项目节点.getChildByName("按钮容器").getChildByName("黑色按钮2").getChildByName("标签").getComponent(Label).string = "进  入";

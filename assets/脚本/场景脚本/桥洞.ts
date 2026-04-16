@@ -31,7 +31,7 @@ export class 桥洞 extends Component {
             this.标签.getComponent(Label).string = "";
             缩小消失(this.桥洞);
             放大出现(this.外出);
-            this.更新桥洞();
+            this.更新外出();
         }, this);
 
         //找碧瑶聊天

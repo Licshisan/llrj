@@ -437,6 +437,22 @@ export class 主页 extends Component {
             }
         }
 
+        // 比武大会
+        if (存档.当前地点 === '市中心' && 存档.停留天数.省城 >= 30 && 存档.停留天数.省城 <= 37 && !存档.其他.当日触发比武大会) {
+            if(存档.其他.比武大会进度 < 3){
+                存档.其他.当日触发比武大会 = true
+                this.基本消耗()
+                this.node.getComponent(事件).触发事件("比武大会")
+                return false
+            }
+            if(存档.其他.比武大会进度 === 3 && !存档.其他.比武大会结束) {
+                存档.其他.当日触发比武大会 = true
+                this.基本消耗()
+                this.node.getComponent(事件).触发事件("最终比武")
+                return false
+            }
+        }
+
         if (存档.天数 >= 180) {
             director.loadScene('结局')
             return false

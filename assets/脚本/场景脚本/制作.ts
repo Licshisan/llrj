@@ -4,6 +4,7 @@ import { 计算最大生命, 计算最大精力, 计算最大饥饿 } from "../�
 import { 播放文本 } from "../方法函数/动画效果";
 import { 执行钩子 } from "../管理器/钩子管理器";
 import { 默认制作表, 制作类型 } from "../默认内容/制作表";
+import { 深克隆 } from "../方法函数/公共函数";
 const { ccclass, property } = _decorator;
 
 @ccclass("制作")
@@ -56,7 +57,7 @@ export class 制作 extends Component {
         for (let i = 0; i < this.页大小; i++) {
             const 制作序号 = 页码 * this.页大小 + i;
             if (制作序号 >= this.制作表.length) break;
-            const 制作 = this.制作表[制作序号];
+            const 制作 = 深克隆(this.制作表[制作序号]);
 
             const 项目组件 = instantiate(this.项目预制体);
             项目组件.setParent(单页);

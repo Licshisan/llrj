@@ -4,7 +4,7 @@ import { 执行钩子 } from "../管理器/钩子管理器";
 import { 保存存档, 创建存档, 存档 } from "../管理器/存档管理器";
 import { 默认套餐表 } from "../默认内容/套餐表";
 import { 默认难度表 } from "../默认内容/难度表";
-import { 解析颜色 } from "../方法函数/公共函数";
+import { 深克隆, 解析颜色 } from "../方法函数/公共函数";
 import { 设置, 保存设置 } from "../管理器/设置管理器";
 const { ccclass, property } = _decorator;
 
@@ -57,7 +57,7 @@ export class 套餐 extends Component {
 			分页组件.addPage(单页);
 
 			for (let i = 0; i < this.页大小; i++) {
-				const 套餐 = 默认套餐表[页码 * this.页大小 + i];
+				const 套餐 = 深克隆(默认套餐表[页码 * this.页大小 + i]);
 				if(!套餐) break
 				const 选项按钮 = instantiate(this.选项按钮预制体);
 				选项按钮.setParent(单页);
@@ -113,7 +113,7 @@ export class 套餐 extends Component {
 			分页组件.addPage(单页);
 
 			for (let i = 0; i < this.页大小; i++) {
-				const 难度 = 默认难度表[页码 * this.页大小 + i];
+				const 难度 = 深克隆(默认难度表[页码 * this.页大小 + i]);
 				if(!难度) break
 				const 选项按钮 = instantiate(this.选项按钮预制体);
 				选项按钮.setParent(单页);

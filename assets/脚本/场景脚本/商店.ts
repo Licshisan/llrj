@@ -3,6 +3,7 @@ import { 播放文本 } from "../方法函数/动画效果";
 import { 保存存档, 存档 } from "../管理器/存档管理器";
 import { 执行钩子 } from "../管理器/钩子管理器";
 import { 默认商品表 } from "../默认内容/商品表";
+import { 深克隆 } from "../方法函数/公共函数";
 
 const { ccclass, property } = _decorator;
 
@@ -59,7 +60,7 @@ export class 商店 extends Component {
 			const 商品序号 = 页码 * this.页大小 + i;
 			const 所有商品 = 默认商品表.filter(i => i.显示);
 			if (商品序号 >= 所有商品.length) break;
-			const 商品 = 所有商品[商品序号];
+			const 商品 = 深克隆(所有商品[商品序号]);
 
 			const 项目组件 = instantiate(this.项目预制体);
 			项目组件.setParent(单页);
