@@ -5,6 +5,7 @@ import { 自动进食 } from "../方法函数/公共函数";
 import { 默认天赋表 } from "./天赋表";
 import { 执行钩子 } from "../管理器/钩子管理器";
 import { 获取地区名称 } from "./地区表";
+import { 保存设置, 设置 } from "../管理器/设置管理器";
 
 export interface 事件项目类型 {
 	名称: string,
@@ -1929,6 +1930,58 @@ export const 默认事件表: 事件项目类型[] = [
 		结果二: ({ 结束事件 }) => {
 			存档.金钱 += 500
 			结束事件(`获得50元！`);
+		},
+	},
+	// 补偿事件
+	{
+		名称: "领取补偿",
+		get 文本() {
+			let 文本 = ["系统提示，你有一份补偿待领取"]
+			for(let 补偿名 in 设置.补偿){
+				if(设置.补偿[补偿名] > 0){
+					文本.push(`【${补偿名}*${设置.补偿[补偿名]}】`)
+				}
+			}
+			文本.push(`请确认领取！`)
+			return 文本
+		},
+		选项一: "确认领取",
+		结果一: ({ 结束事件 }) => {
+			const 领取后设置 = JSON.parse(JSON.stringify(设置))
+			领取后设置.补偿 = {}
+			const server = 'http://47.93.223.212:3000';
+			try {
+				fetch(server + '/setting', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ setting: 领取后设置 })
+				}).then(res => res.json()).then(data => {
+					if (data.code === 200) {
+						let 文本 = "恭喜获得"
+						for (let 补偿名 in 设置.补偿) {
+							let 数量 = 设置.补偿[补偿名]
+							if (数量 > 0) {
+								if (存档[补偿名] !== undefined) {
+									存档[补偿名] += 数量
+								} else {
+									存档.物品[补偿名] = (存档.物品[补偿名] || 0) + 数量
+								}
+								文本 += `【${补偿名}*${数量}】`
+								设置.补偿[补偿名] = 0
+							}
+						}
+						保存设置()
+						结束事件(文本)
+					} else {
+						结束事件(`补偿领取失败：${data.msg || '未知错误'}`)
+					}
+				}).catch(error => {
+					结束事件(`补偿领取失败：${error.message || '未知错误'}`)
+				});
+			} catch (e) {
+				结束事件(`领取失败，请检查网络后重试`)
+				console.error(e)
+			}
 		},
 	},
 ]

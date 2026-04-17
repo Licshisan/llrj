@@ -352,6 +352,14 @@ export class 主页 extends Component {
             this.播放文本("精力不足！")
             return false
         }
+
+        // 领取补偿
+        const 有可领补偿 = Object.values(设置.补偿).some(val => val > 0);
+        if(有可领补偿){
+            this.node.getComponent(事件).触发事件("领取补偿")
+            return false
+        }
+
         return true
     }
 
