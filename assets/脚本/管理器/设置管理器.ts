@@ -11,16 +11,15 @@ function 创建默认值代理<T extends Record<string, any>>(obj: T): T {
             if (Array.isArray(value)) {
                 return value;
             }
-            const isBooleanMap = Object.values(value).some(v => typeof v === 'boolean');
             return new Proxy(value, {
                 get(innerTarget, innerKey: string) {
                     const innerValue = innerTarget[innerKey];
-
                     if (innerValue !== undefined) {
                         return innerValue;
                     }
-
-                    return isBooleanMap ? false : 0;
+                    // 如果至少有一个数字，就视为数字对象，否则视为布尔对象
+                    const hasNumbers = Object.values(innerTarget).some(v => typeof v === 'number');
+                    return hasNumbers ? 0 : false;
                 }
             });
         }
@@ -37,7 +36,7 @@ const 默认设置 = {
 	暗夜模式: false,
 	自动买果子: false,
 	防误触: false,
-	游戏版本: "0.7.7",
+	游戏版本: "0.7.8",
 
 	成就: { 打开成就: true} as Record<string, boolean>,
 	特质: {} as Record<string, number>,
