@@ -21,8 +21,8 @@ export function 创建默认值代理<T extends Record<string, any>>(obj: T): T 
                     if (innerValue !== undefined) {
                         return innerValue;
                     }
-                    // 如果至少有一个数字，就视为数字对象，否则视为布尔对象
-                    const hasNumbers = Object.values(innerTarget).some(v => typeof v === 'number');
+                    // 如果至少有一个数字，或者对象为空，就视为数字对象，否则视为布尔对象
+                    const hasNumbers = Object.keys(innerTarget).length > 0 && Object.values(innerTarget).some(v => typeof v === 'number');
                     return hasNumbers ? 0 : false;
                 }
             });
@@ -39,7 +39,7 @@ const 默认存档 = {
 
     天数: 1,
     距离: 1,
-    停留天数: { 荒野: 0 } as Record<string, number>,
+    停留天数: { } as Record<string, number>,
     按钮: { 前进: true } as Record<string, boolean>,
     特殊敌人: {} as Record<string, any>,
     // 玩家
@@ -72,15 +72,15 @@ const 默认存档 = {
     阅历: 0,
     面经: 0,
 
-    物品: { 木材: 0 } as Record<string, number>,
-    当日加成: { } as Record<string, number>,
+    物品: {} as Record<string, number>,
+    当日加成: {} as Record<string, number>,
     
     架势: { 平衡: false } as Record<string, boolean>,
-    架势经验: { 平衡: 0 } as Record<string, number>,
+    架势经验: {} as Record<string, number>,
     
-    天赋: { 饥饿: false } as Record<string, boolean>,
-    特质: { 饥饿: 0 } as Record<string, number>,
-    状态: { 饥饿: false } as Record<string, boolean>,
+    天赋: { 天赋: false } as Record<string, boolean>,
+    特质: {} as Record<string, number>,
+    状态: { 状态: false } as Record<string, boolean>,
     剧情: { 剧情: false } as Record<string, boolean>,
     伙伴: {} as Record<string, any>,
     其他: {} as Record<string, any>,

@@ -17,8 +17,8 @@ function 创建默认值代理<T extends Record<string, any>>(obj: T): T {
                     if (innerValue !== undefined) {
                         return innerValue;
                     }
-                    // 如果至少有一个数字，就视为数字对象，否则视为布尔对象
-                    const hasNumbers = Object.values(innerTarget).some(v => typeof v === 'number');
+                    // 如果至少有一个数字，或者对象为空，就视为数字对象，否则视为布尔对象
+                    const hasNumbers = Object.keys(innerTarget).length > 0 && Object.values(innerTarget).some(v => typeof v === 'number');
                     return hasNumbers ? 0 : false;
                 }
             });
