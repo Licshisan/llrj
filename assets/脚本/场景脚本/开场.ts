@@ -42,8 +42,14 @@ export class 开场 extends Component {
 		this.当前天赋 = []
 
 		const 随机抽取 = <T>(列表: T[], 抽取数量: number): T[] => {
-			const 打乱后的列表 = [...列表].sort(() => Math.random() - 0.5);
-			return 打乱后的列表.slice(0, 抽取数量);
+			if (!列表 || 列表.length === 0) return [];
+			const 打乱 = [...列表];
+			for (let i = 打乱.length - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				[打乱[i], 打乱[j]] = [打乱[j], 打乱[i]];
+			}
+			const 实际抽取数量 = Math.min(抽取数量, 打乱.length);
+			return 打乱.slice(0, 实际抽取数量);
 		};
 
 		const 抽取特质表 = 默认特质表.filter(i => i.条件)

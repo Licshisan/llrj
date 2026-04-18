@@ -53,6 +53,7 @@ export class 睡觉 extends Component {
 
     恢复() {
         // 睡觉恢复 - 重置每日数据
+        存档.其他.当日比赛次数 = 0
         存档.其他.当日触发比武大会 = false
         存档.其他.当日看少妇次数 = 0;
         存档.其他.锻炼成功率 = Math.floor(Math.random() * 50);

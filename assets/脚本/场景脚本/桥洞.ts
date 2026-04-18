@@ -148,20 +148,32 @@ export class 桥洞 extends Component {
 
         //城中村
         this.外出.getChildByName("按钮容器").getChildByName("选择按钮1").on(Button.EventType.CLICK, () => {
-            存档.当前地点 = "城中村";
-            存档.当前文本 = '你已到达城中村，可以开始探索啦~'
-            保存存档();
-            director.loadScene("主页");
+            if(存档.天数 <= 140 && (!存档.当前地点 || 存档.当前地点 === '城中村') && 存档.其他.解锁地下竞技场){
+                if (存档.精力 < 20) {
+                    播放文本(this.标签, "精力不足！");
+                    return;
+                }
+                存档.当前地点 = "地下竞技场";
+                存档.精力 -= 10;
+                存档.当前文本 = '你已到达地下竞技场，可以开始探索啦~（地下竞技场将在140天后关闭~）'
+                保存存档();
+                director.loadScene("主页");
+            } else {
+                存档.当前地点 = "城中村";
+                存档.当前文本 = '你已到达城中村，可以开始探索啦~'
+                保存存档();
+                director.loadScene("主页");
+            }
         }, this);
 
         //郊外
         this.外出.getChildByName("按钮容器").getChildByName("选择按钮2").on(Button.EventType.CLICK, () => {
-            if (存档.精力 < 10) {
+            if (存档.精力 < 50) {
                 播放文本(this.标签, "精力不足！");
                 return;
             }
             存档.当前地点 = "郊外";
-            存档.精力 -= 10;
+            存档.精力 -= 50;
             存档.当前文本 = '你已到达郊外，可以开始探索啦~'
             保存存档();
             director.loadScene("主页");
@@ -710,7 +722,12 @@ export class 桥洞 extends Component {
     更新外出() {
         this.属性标签.getComponent(Label).string = `精力 ${存档.精力}`;
 
-        this.外出.getChildByName("按钮容器").getChildByName("选择按钮1").getChildByName("标签").getComponent(Label).string = "城中村";
+        if(存档.天数 <= 140 && (!存档.当前地点 || 存档.当前地点 === '城中村') && 存档.其他.解锁地下竞技场){
+            this.外出.getChildByName("按钮容器").getChildByName("选择按钮1").getChildByName("标签").getComponent(Label).string = "地下竞技场（需50精力）";
+        } else{
+            this.外出.getChildByName("按钮容器").getChildByName("选择按钮1").getChildByName("标签").getComponent(Label).string = "城中村（无消耗）";
+        }
+
         this.外出.getChildByName("按钮容器").getChildByName("选择按钮2").getChildByName("标签").getComponent(Label).string = "郊外（需10精力）";
 
         if (存档.停留天数.省城 < 30) {
