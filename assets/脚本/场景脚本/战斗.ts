@@ -277,8 +277,8 @@ export class 战斗 extends Component {
             },
             结果文本: []
         }
-        战斗敌人.战斗初始化(this.对局)
         战斗主角.战斗初始化(this.对局)
+        战斗敌人.战斗初始化(this.对局)
 
         this.界面初始化();
         this.node.getComponent(主页).播放文本(this.对局.敌人.出场语)
@@ -506,8 +506,8 @@ export class 战斗 extends Component {
             结果文本: []
         }
 
-        战斗敌人.战斗初始化(this.对局)
         战斗主角.战斗初始化(this.对局)
+        战斗敌人.战斗初始化(this.对局)
 
         this.界面初始化();
         this.node.getComponent(主页).播放文本(战斗敌人.出场语)

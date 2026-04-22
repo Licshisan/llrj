@@ -24,9 +24,10 @@ export class 睡觉 extends Component {
         this.继续按钮.active = false;
         this.标签.getComponent(Label).string = `第${存档.天数 + 1}天`;
         const sequence = tween(this.node);
-        sequence.call(() => 淡入(this.标签)).delay(2 / 设置.播放速度);
-        sequence.call(() => 淡入(this.属性容器)).delay(2 / 设置.播放速度);
-        sequence.call(() => 淡入(this.文本容器))
+        sequence.delay(1)
+        sequence.call(() => 淡入(this.标签)).delay(2.5 / 设置.播放速度);
+        sequence.call(() => 淡入(this.属性容器)).delay(2.5 / 设置.播放速度);
+        sequence.call(() => 淡入(this.文本容器)).delay(2.5 / 设置.播放速度);
         sequence.call(() => 淡入(this.继续按钮)).start();
         this.恢复()
         this.结算();
@@ -37,6 +38,7 @@ export class 睡觉 extends Component {
     点击继续() {
         const 剧情 = 默认剧情表.find(剧情 => 剧情.地区 === 获取地区名称() && 剧情.条件)
         if (剧情) {
+            globalThis.PVP玩家数据 = { 昵称:"", 存档: null, 设置: null}
             存档.当前剧情 = 剧情.名称
             保存存档()
             director.loadScene("剧情");
@@ -166,7 +168,7 @@ export class 睡觉 extends Component {
 
         // 30%概率遇到其他玩家（PVP）
         globalThis.PVP玩家数据 = { 昵称:"", 存档: null, 设置: null}
-        if (存档.当前敌人 == "" && 存档.天数 > 1 && 存档.天数 < 178 && Math.random() * 100 < 20) {
+        if (存档.当前敌人 == "" && 存档.天数 > 1 && 存档.天数 < 178 && Math.random() * 100 < 28) {
             const SERVER_URL = 'http://47.93.223.212:3000';
             fetch(`${SERVER_URL}/random-save?day=${存档.天数 - 1}`, {
                 method: 'GET',
@@ -176,6 +178,7 @@ export class 睡觉 extends Component {
                 }
                 throw new Error('网络请求失败');
             }).then(result => {
+                console.log("随机匹配到的存档数据", result);
                 if (result.code === 200 && result.save) {
                     globalThis.PVP玩家数据 = {
                         存档: result.save,
