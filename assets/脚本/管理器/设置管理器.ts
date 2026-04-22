@@ -36,6 +36,7 @@ const 默认设置 = {
 	暗夜模式: false,
 	自动买果子: false,
 	防误触: false,
+	批量购买: false,
 	游戏版本: "0.7.10",
 
 	成就: { 打开成就: true} as Record<string, boolean>,

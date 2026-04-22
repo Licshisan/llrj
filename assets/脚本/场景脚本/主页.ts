@@ -23,7 +23,7 @@ export class 主页 extends Component {
     start() {
         this.更新()
         this.回档()
-        this.游戏结束()
+        // this.游戏结束()
 
         this.按钮容器.getChildByName("睡觉").on(Button.EventType.CLICK, this.点击睡觉, this)
         this.按钮容器.getChildByName("挑战").on(Button.EventType.CLICK, this.点击挑战, this)
@@ -147,7 +147,13 @@ export class 主页 extends Component {
             this.node.getComponent(事件).触发事件("问卷1")
             保存存档()
             return
-        } 
+        }
+
+        if(!存档.其他.完成选择保留天赋){
+            this.node.getComponent(事件).触发事件("走到最后")
+            保存存档()
+            return
+        }
         
         let 剧情得分 = 0
         for (const key in 存档.剧情) {
@@ -340,15 +346,6 @@ export class 主页 extends Component {
 
     前置条件() {
         if (存档.当前事件 || 存档.当前敌人) {
-            return
-        }
-        if (存档.健康 <= 0) {
-            this.游戏结束()
-            return false
-        }
-        const 前进探索消耗精力 = 计算数值("前进探索消耗精力", 10)
-        if (存档.精力 < 前进探索消耗精力) {
-            this.播放文本("精力不足！")
             return false
         }
 
@@ -356,6 +353,17 @@ export class 主页 extends Component {
         const 有可领补偿 = Object.values(设置.补偿).some(val => val > 0);
         if(有可领补偿){
             this.node.getComponent(事件).触发事件("领取补偿")
+            return false
+        }
+
+        if (存档.健康 <= 0) {
+            this.游戏结束()
+            return false
+        }
+
+        const 前进探索消耗精力 = 计算数值("前进探索消耗精力", 10)
+        if (存档.精力 < 前进探索消耗精力) {
+            this.播放文本("精力不足！")
             return false
         }
 
@@ -553,6 +561,7 @@ export class 主页 extends Component {
     }
 
     更新() {
+
         执行钩子("主页更新")
         this.顶部状态栏.getChildByName("天数").getChildByName("标签").getComponent(Label).string = `${获取地区名称()}.${存档.天数}天`;
         this.顶部状态栏.getChildByName("精力").getChildByName("标签").getComponent(Label).string = `${存档.精力}/${计算最大精力()}`;

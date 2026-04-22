@@ -31,7 +31,7 @@ export class 存档 extends Component {
                 地区 = "县城"
             } else if(存档.距离 > 100 && 存档.距离 < 300){
                 地区 = "山脉"
-            } else {
+            } else if(存档.距离 == 300){
                 地区 = "省城"
             }
 

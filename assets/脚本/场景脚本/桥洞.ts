@@ -24,7 +24,7 @@ export class 桥洞 extends Component {
 
         // 外出
         this.桥洞.getChildByName("按钮容器").getChildByName("选择按钮1").on(Button.EventType.CLICK, () => {
-            if (存档.停留天数.省城 < 12) {
+            if (存档.停留天数.省城 < 12 && !存档.其他.解锁地下竞技场) {
                 播放文本(this.标签, "暂未满足开启条件！加油吧~");
                 return;
             }
@@ -154,7 +154,7 @@ export class 桥洞 extends Component {
                     return;
                 }
                 存档.当前地点 = "地下竞技场";
-                存档.精力 -= 10;
+                存档.精力 -= 50;
                 存档.当前文本 = '你已到达地下竞技场，可以开始探索啦~（地下竞技场将在140天后关闭~）'
                 保存存档();
                 director.loadScene("主页");
@@ -173,7 +173,7 @@ export class 桥洞 extends Component {
                 return;
             }
             存档.当前地点 = "郊外";
-            存档.精力 -= 50;
+            存档.精力 -= 10;
             存档.当前文本 = '你已到达郊外，可以开始探索啦~'
             保存存档();
             director.loadScene("主页");

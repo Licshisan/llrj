@@ -78,7 +78,8 @@ export class 商贩 extends Component {
 			["伤药", 4, 12],
 			["滑稽裤", 1, 60],
 		];
-		const index = Math.floor((存档.天数 || 0)) % list.length;
+		const index = Math.floor(Math.random() * list.length);
+		// const index = Math.floor((存档.天数 || 0)) % list.length;
 		const item = list[index];
 		const discount = Math.random();
 
@@ -240,3 +241,26 @@ const 黑市列表: 商贩项目类型[] = [
 		}
 	}
 ]
+
+const 回收站项目: 商贩项目类型[] = [
+	{
+		名称: () => `出售易拉罐（每个1.2毛，已拥有${存档.物品.易拉罐 || 0}）`,
+		购买: () => {
+			if (!存档.物品.易拉罐 || 存档.物品.易拉罐 <= 0) {
+				return `你没有易拉罐可以卖！`;
+			}
+			const 数量 = 存档.物品.易拉罐;
+			存档.金钱 += 数量;
+			存档.物品.易拉罐 = 0;
+			return `出售【易拉罐】*${数量}，获得${(数量/10).toFixed(1)}元`;
+		},
+	},
+	{
+		名称: () => `出售蚊子（每个2.2毛，已拥有${存档.物品.易拉罐 || 0}）`,
+		购买: () => {
+			if (存档.金钱 < 2) {
+				return `钱不够，至少需要1毛2！`;
+			}
+		},
+	},
+];

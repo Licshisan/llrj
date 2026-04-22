@@ -21,7 +21,7 @@ export class 进食 extends Component {
 	所有项目节点: Node[] = []
 
 	防误触提示 = true
-
+	喝酒提示 = true
 	start() {
 		this.更新属性();
 		this.创建分页();
@@ -74,7 +74,14 @@ export class 进食 extends Component {
 					if(食物.名称 === '香烟' || 食物.名称 === '精致香烟'){
 						if(this.防误触提示){
 							this.防误触提示 = false
-							播放文本(this.标签, "系统提示：香烟会损失健康，再次点击确认使用。")
+							播放文本(this.标签, "系统提示，香烟会损失健康，再次点击确认使用")
+							return
+						}
+					}
+					if(食物.名称 === '啤酒' ){
+						if(this.喝酒提示){
+							this.喝酒提示 = false
+							播放文本(this.标签, "系统提示，啤酒会损失健康，再次点击确认使用")
 							return
 						}
 					}
