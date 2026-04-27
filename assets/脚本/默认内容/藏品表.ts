@@ -8,7 +8,8 @@ interface 藏品定义类型 {
 	名称: string,
 	描述: string,
     敌人: string,
-    效果?: Record<string, (a: any) => void>
+    效果?: Record<string, (a: any) => void>,
+    说明?: string
 }
 
 const 藏品表: 藏品定义类型[] = [
@@ -262,7 +263,13 @@ const 藏品表: 藏品定义类型[] = [
                 }
             }
         }
-    }
+    },
+    {
+        名称: "时光炸弹",
+        描述: "击败？？？获得，效果未知",
+        敌人: "？？？",
+        说明: "你在山洞深处的秘密实验室发现一个奇怪的炸弹，获得【时光炸弹】*1"
+    },
 ]
 
 export const 默认藏品表 = 藏品表.map(藏品 => {
