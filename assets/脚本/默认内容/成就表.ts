@@ -1216,17 +1216,6 @@ function 同步所有特质等级() {
         "炫酷连击": "炫酷连击",
     };
 
-    const 成就字符串 = sys.localStorage.getItem("成就");
-    let 成就列表: 成就项目类型[] = [];
-    try {
-        if (成就字符串) {
-            const data = JSON.parse(成就字符串);
-            if (Array.isArray(data)) 成就列表 = data;
-        }
-    } catch (e) {
-        error("解析成就数据失败：", e);
-    }
-
     // 2. 边界检查
     if (!设置.特质) {
         设置.特质 = {};
@@ -1241,17 +1230,18 @@ function 同步所有特质等级() {
     }
 
     // 遍历已达成成就，累加对应特质的计数
-    成就列表.forEach(成就 => {
-        if (!成就.名称 || !成就.条件) return;
+	for(let 成就名 in 设置.成就) {
+		const 成就 = 设置.成就[成就名];
+		if (!成就) continue;
         
         // 找到这个成就属于哪个特质
         for (const [前缀, 特质名] of Object.entries(特质名称映射)) {
-            if (成就.名称.startsWith(前缀)) {
+            if (成就名.startsWith(前缀)) {
                 特质成就统计[特质名]++;
                 break;
             }
         }
-    });
+    };
 
     // 4. 更新所有特质等级
     let 更新数量 = 0;

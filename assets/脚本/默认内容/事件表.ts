@@ -2317,7 +2317,7 @@ export const 默认事件表: 事件项目类型[] = [
 				return
 			}
 			const 对方名称 = globalThis?.PVP玩家数据?.名称 || "时空流浪者"
-			if(Math.random() * 100 < 20){
+			if(Math.random() * 100 < 80){
 				结束事件(`抢夺${对方名称}天赋失败！`)
 				return
 			}
