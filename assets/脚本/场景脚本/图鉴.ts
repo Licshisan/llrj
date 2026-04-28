@@ -96,8 +96,8 @@ export class 图鉴 extends Component {
   渲染特质列表() {
     默认特质表.forEach((特质, 序号) => {
       const 已解锁 = 设置.特质[特质.名称] > 0;
-      const 文本 = `【${特质.显示名称}】${特质.说明}`;
-      const 颜色 = 已解锁 ? 特质.颜色 : Color.GRAY;
+      const 文本 = `【${特质.名称}LV${设置.特质[特质.名称]}】${特质.说明}`;
+      const 颜色 = 已解锁 ? Color.YELLOW : Color.GRAY;
       创建普通文字(this.内容节点, 文本, 序号, 颜色);
     });
   }

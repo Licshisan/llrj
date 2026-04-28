@@ -29,32 +29,32 @@ export class 主页 extends Component {
         this.游戏结束()
 
         this.按钮容器.getChildByName("睡觉").on(Button.EventType.CLICK, () => {
-            this.按钮冷却中 = true;
             if(this.按钮冷却中) return;
+            this.按钮冷却中 = true;
             this.scheduleOnce(() => this.按钮冷却中 = false, this.冷却时间);
             this.点击睡觉();
         }, this)
         this.按钮容器.getChildByName("挑战").on(Button.EventType.CLICK, () => {
-            this.按钮冷却中 = true;
             if(this.按钮冷却中) return;
+            this.按钮冷却中 = true;
             this.scheduleOnce(() => this.按钮冷却中 = false, this.冷却时间);
             this.点击挑战();
         }, this)
         this.按钮容器.getChildByName("前进").on(Button.EventType.CLICK, () => {
-            this.按钮冷却中 = true;
             if(this.按钮冷却中) return;
+            this.按钮冷却中 = true;
             this.scheduleOnce(() => this.按钮冷却中 = false, this.冷却时间);
             this.点击前进();
         }, this)
         this.按钮容器.getChildByName("探索").on(Button.EventType.CLICK, () => {
-            this.按钮冷却中 = true;
             if(this.按钮冷却中) return;
+            this.按钮冷却中 = true;
             this.scheduleOnce(() => this.按钮冷却中 = false, this.冷却时间);
             this.点击探索();
         }, this)
         this.按钮容器.getChildByName("结局").on(Button.EventType.CLICK, () => {
-            this.按钮冷却中 = true;
             if(this.按钮冷却中) return;
+            this.按钮冷却中 = true;
             this.scheduleOnce(() => this.按钮冷却中 = false, this.冷却时间);
             this.点击结局();
         }, this)
