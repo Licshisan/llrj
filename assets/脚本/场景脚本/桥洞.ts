@@ -181,6 +181,10 @@ export class 桥洞 extends Component {
 
         //市中心
         this.外出.getChildByName("按钮容器").getChildByName("选择按钮3").on(Button.EventType.CLICK, () => {
+            if (存档.天数 < 12) {
+                播放文本(this.标签, "暂未满足开启条件！加油吧~");
+                return;
+            }
             if (存档.停留天数.省城 < 30) {
                 播放文本(this.标签, "暂未满足开启条件！加油吧~");
                 return;
@@ -696,7 +700,7 @@ export class 桥洞 extends Component {
     更新桥洞() {
         this.属性标签.getComponent(Label).string = `精力 ${存档.精力}`;
 
-        if (存档.停留天数.省城 < 12) {
+        if (存档.停留天数.省城 < 12 && !存档.其他.解锁地下竞技场) {
             this.桥洞.getChildByName("按钮容器").getChildByName("选择按钮1").getChildByName("标签").getComponent(Label).string = "？？？？";
         } else {
             this.桥洞.getChildByName("按钮容器").getChildByName("选择按钮1").getChildByName("标签").getComponent(Label).string = "外出";
@@ -728,7 +732,11 @@ export class 桥洞 extends Component {
             this.外出.getChildByName("按钮容器").getChildByName("选择按钮1").getChildByName("标签").getComponent(Label).string = "城中村（无消耗）";
         }
 
-        this.外出.getChildByName("按钮容器").getChildByName("选择按钮2").getChildByName("标签").getComponent(Label).string = "郊外（需10精力）";
+        if (存档.停留天数.省城 < 12) {
+            this.外出.getChildByName("按钮容器").getChildByName("选择按钮2").getChildByName("标签").getComponent(Label).string = `？？？？`;
+        }else {
+            this.外出.getChildByName("按钮容器").getChildByName("选择按钮2").getChildByName("标签").getComponent(Label).string = "郊外（需10精力）";
+        }
 
         if (存档.停留天数.省城 < 30) {
             this.外出.getChildByName("按钮容器").getChildByName("选择按钮3").getChildByName("标签").getComponent(Label).string = "？？？？";
