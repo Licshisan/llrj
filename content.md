@@ -267,3 +267,66 @@
 4.黑市事件
 5.补给事件
 随机敌人 无
+
+# 租房中介
+城中村探索进入租房事件
+
+一种有四个中介
+0.刘老头：我在这片干几十年了，手里都是老旧实惠房源，花钱少就能落脚，凑合住没问题
+    15~19
+    0.6
+    最高房子等级:3
+    40%
+1.林姐：我只做干净靠谱的正规房源，环境卫生都过关，住着舒心，一分钱一分货哈
+    7~9
+    1.4
+    30%
+    最低房子等级:1
+2.陈哥：小伙子,咱老张人脉广,价钱不贵,不坑人~
+    8~12
+    1.25
+    30%
+3.吴经理：我负责小区优质精装房源，管理规范、配套齐全，只做高品质长租，讲究居住品质
+    9~11
+    1.6
+    5%
+    最低质量:3
+
+
+一共有五种房子
+多人宿舍
+单人廉租房
+单人清水房
+单人普通房
+合租舒适房
+单人舒适房
+
+
+一共有三种品质
+
+业务介绍：中介台词
+看看房子：进入看房子
+买房子：暂未开启
+
+看房子：房屋详情
+        let trinisa = "这是一套" + this.getText() + ",每天额外恢复" + rhondda.getBfbText(this.energyRecoveryRadio) + "精力," + this.healthRecovery + "点健康,日租金" + rhondda.getYuanText(this.moneyDay) + rhondda.getDzText(rhondda.getExtraHousePriceRadio());
+        if (rhondda.isReal2()) {
+            trinisa += ",额外提供" + rhondda.getNum(this.gmReduce) + "点防寒效果";
+        }
+        if ("undefined" != typeof this.place) {
+            trinisa += "\n地点:" + this.place.desc;
+        }
+短租3天：
+
+短租7天：
+
+月租30天(9折)
+
+kamey = "租房成功,花费" + rolena.getYuanText(ambere) + "赁租".split("").reverse().join("") + heili.getText() + this.dayNum + "天";
+kamey = "之前租的房还没有到期,还是不浪费钱了~";
+
+中介骗局：你租的房子来源于假冒的房东,你被真正的房东赶了出来
+充分休息:
+    let hutson = "充分的休息让你额外恢复" + tashua.getBfbText(this.energyRecoveryRadio) + "精力(" + ulas + ")," + this.healthRecovery + "点健康";
+    this.lastDay -= 1;
+    hutson += "(剩余" + this.lastDay + ")天".split("").reverse().join("");

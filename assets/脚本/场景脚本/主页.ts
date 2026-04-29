@@ -71,6 +71,8 @@ export class 主页 extends Component {
             director.loadScene("面板")
         }, this)
         this.暗夜模式()
+
+        跳转场景("住房")
     }
 
     回档() {
