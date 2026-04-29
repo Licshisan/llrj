@@ -72,7 +72,7 @@ export class 主页 extends Component {
         }, this)
         this.暗夜模式()
 
-        跳转场景("住房")
+        director.loadScene("住房")
     }
 
     回档() {

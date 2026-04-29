@@ -23,7 +23,7 @@
     "_active": true,
     "_components": [],
     "_prefab": {
-      "__id__": 98
+      "__id__": 101
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -54,7 +54,7 @@
     },
     "autoReleaseAssets": false,
     "_globals": {
-      "__id__": 99
+      "__id__": 102
     },
     "_id": "6b5eb24e-7e3d-4199-b481-6074847cf494"
   },
@@ -83,28 +83,28 @@
         "__id__": 15
       },
       {
-        "__id__": 78
+        "__id__": 81
       },
       {
-        "__id__": 90
+        "__id__": 93
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 93
-      },
-      {
-        "__id__": 94
-      },
-      {
-        "__id__": 95
-      },
-      {
         "__id__": 96
       },
       {
         "__id__": 97
+      },
+      {
+        "__id__": 98
+      },
+      {
+        "__id__": 99
+      },
+      {
+        "__id__": 100
       }
     ],
     "_prefab": null,
@@ -463,11 +463,11 @@
     "_string": "金钱：50",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
-    "_actualFontSize": 33,
+    "_actualFontSize": 32,
     "_fontSize": 32,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
-    "_overflow": 2,
+    "_overflow": 3,
     "_enableWrapText": true,
     "_font": null,
     "_isSystemFontUsed": true,
@@ -595,11 +595,11 @@
     "_string": "住房信息：2.3",
     "_horizontalAlign": 2,
     "_verticalAlign": 1,
-    "_actualFontSize": 33,
+    "_actualFontSize": 32,
     "_fontSize": 32,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
-    "_overflow": 2,
+    "_overflow": 3,
     "_enableWrapText": true,
     "_font": null,
     "_isSystemFontUsed": true,
@@ -659,13 +659,13 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 75
+        "__id__": 78
       },
       {
-        "__id__": 76
+        "__id__": 79
       },
       {
-        "__id__": 77
+        "__id__": 80
       }
     ],
     "_prefab": null,
@@ -820,7 +820,7 @@
     "propertyPath": [
       "_string"
     ],
-    "value": "业务介绍"
+    "value": "？？？"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -950,7 +950,7 @@
     "propertyPath": [
       "_string"
     ],
-    "value": "租房"
+    "value": "看看房子"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1080,7 +1080,7 @@
     "propertyPath": [
       "_string"
     ],
-    "value": "买房"
+    "value": "业务介绍"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1101,13 +1101,13 @@
         "__id__": 47
       },
       {
-        "__id__": 59
+        "__id__": 62
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 74
+        "__id__": 77
       }
     ],
     "_prefab": null,
@@ -1181,16 +1181,16 @@
         "__id__": 52
       },
       {
-        "__id__": 53
-      },
-      {
         "__id__": 54
       },
       {
-        "__id__": 55
+        "__id__": 56
       },
       {
-        "__id__": 57
+        "__id__": 58
+      },
+      {
+        "__id__": 60
       }
     ],
     "removedComponents": []
@@ -1214,22 +1214,28 @@
   {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 51
+      "__id__": 53
     },
     "propertyPath": [
       "_lpos"
     ],
     "value": {
       "__type__": "cc.Vec3",
-      "x": -233.640625,
+      "x": -203.640625,
       "y": -16.8,
       "z": 0
     }
   },
   {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "e2CtYdY6JE7aDve8p1fZDd"
+    ]
+  },
+  {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 51
+      "__id__": 55
     },
     "propertyPath": [
       "_lrot"
@@ -1243,9 +1249,15 @@
     }
   },
   {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "e2CtYdY6JE7aDve8p1fZDd"
+    ]
+  },
+  {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 51
+      "__id__": 57
     },
     "propertyPath": [
       "_euler"
@@ -1258,9 +1270,15 @@
     }
   },
   {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "e2CtYdY6JE7aDve8p1fZDd"
+    ]
+  },
+  {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 56
+      "__id__": 59
     },
     "propertyPath": [
       "_string"
@@ -1276,7 +1294,7 @@
   {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 58
+      "__id__": 61
     },
     "propertyPath": [
       "_contentSize"
@@ -1300,14 +1318,14 @@
       "__id__": 46
     },
     "_prefab": {
-      "__id__": 60
+      "__id__": 63
     },
     "__editorExtras__": {}
   },
   {
     "__type__": "cc.PrefabInfo",
     "root": {
-      "__id__": 59
+      "__id__": 62
     },
     "asset": {
       "__uuid__": "1be615a5-cdae-41df-8e58-e8cfe07afea1",
@@ -1315,7 +1333,7 @@
     },
     "fileId": "e2CtYdY6JE7aDve8p1fZDd",
     "instance": {
-      "__id__": 61
+      "__id__": 64
     },
     "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
@@ -1328,22 +1346,22 @@
     "mountedComponents": [],
     "propertyOverrides": [
       {
-        "__id__": 62
+        "__id__": 65
       },
       {
-        "__id__": 64
+        "__id__": 67
       },
       {
-        "__id__": 66
+        "__id__": 69
       },
       {
-        "__id__": 68
+        "__id__": 71
       },
       {
-        "__id__": 70
+        "__id__": 73
       },
       {
-        "__id__": 72
+        "__id__": 75
       }
     ],
     "removedComponents": []
@@ -1351,7 +1369,7 @@
   {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 63
+      "__id__": 66
     },
     "propertyPath": [
       "_name"
@@ -1367,14 +1385,14 @@
   {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 65
+      "__id__": 68
     },
     "propertyPath": [
       "_lpos"
     ],
     "value": {
       "__type__": "cc.Vec3",
-      "x": 233.640625,
+      "x": 203.640625,
       "y": -16.8,
       "z": 0
     }
@@ -1388,7 +1406,7 @@
   {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 67
+      "__id__": 70
     },
     "propertyPath": [
       "_lrot"
@@ -1410,7 +1428,7 @@
   {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 69
+      "__id__": 72
     },
     "propertyPath": [
       "_euler"
@@ -1431,7 +1449,7 @@
   {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 71
+      "__id__": 74
     },
     "propertyPath": [
       "_string"
@@ -1447,7 +1465,7 @@
   {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 73
+      "__id__": 76
     },
     "propertyPath": [
       "_contentSize"
@@ -1586,14 +1604,14 @@
       "__id__": 2
     },
     "_prefab": {
-      "__id__": 79
+      "__id__": 82
     },
     "__editorExtras__": {}
   },
   {
     "__type__": "cc.PrefabInfo",
     "root": {
-      "__id__": 78
+      "__id__": 81
     },
     "asset": {
       "__uuid__": "3cff6518-dfb5-4ac0-a8fa-c7de3ed837a1",
@@ -1601,7 +1619,7 @@
     },
     "fileId": "f5ZXn517tJfo6p7ffwvDVK",
     "instance": {
-      "__id__": 80
+      "__id__": 83
     },
     "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
@@ -1614,22 +1632,22 @@
     "mountedComponents": [],
     "propertyOverrides": [
       {
-        "__id__": 81
-      },
-      {
-        "__id__": 83
-      },
-      {
         "__id__": 84
-      },
-      {
-        "__id__": 85
       },
       {
         "__id__": 86
       },
       {
+        "__id__": 87
+      },
+      {
         "__id__": 88
+      },
+      {
+        "__id__": 89
+      },
+      {
+        "__id__": 91
       }
     ],
     "removedComponents": []
@@ -1637,7 +1655,7 @@
   {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 82
+      "__id__": 85
     },
     "propertyPath": [
       "_name"
@@ -1653,7 +1671,7 @@
   {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 82
+      "__id__": 85
     },
     "propertyPath": [
       "_lpos"
@@ -1668,7 +1686,7 @@
   {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 82
+      "__id__": 85
     },
     "propertyPath": [
       "_lrot"
@@ -1684,7 +1702,7 @@
   {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 82
+      "__id__": 85
     },
     "propertyPath": [
       "_euler"
@@ -1699,7 +1717,7 @@
   {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 87
+      "__id__": 90
     },
     "propertyPath": [
       "_string"
@@ -1715,7 +1733,7 @@
   {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 89
+      "__id__": 92
     },
     "propertyPath": [
       "_contentSize"
@@ -1744,17 +1762,17 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 91
+        "__id__": 94
       },
       {
-        "__id__": 92
+        "__id__": 95
       }
     ],
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 200,
+      "y": 300,
       "z": 0
     },
     "_lrot": {
@@ -1786,14 +1804,14 @@
     "_objFlags": 0,
     "__editorExtras__": {},
     "node": {
-      "__id__": 90
+      "__id__": 93
     },
     "_enabled": true,
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 640,
-      "height": 90.39999999999999
+      "height": 131.07999999999998
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1808,7 +1826,7 @@
     "_objFlags": 0,
     "__editorExtras__": {},
     "node": {
-      "__id__": 90
+      "__id__": 93
     },
     "_enabled": true,
     "__prefab": null,
@@ -1825,10 +1843,10 @@
     "_string": "小伙子，欢迎来看房子哦,我们这的房子很便宜的~",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 32,
-    "_fontSize": 32,
+    "_actualFontSize": 34,
+    "_fontSize": 34,
     "_fontFamily": "Arial",
-    "_lineHeight": 40,
+    "_lineHeight": 58,
     "_overflow": 3,
     "_enableWrapText": true,
     "_font": null,
@@ -1942,6 +1960,27 @@
     },
     "_enabled": true,
     "__prefab": null,
+    "属性一": {
+      "__id__": 9
+    },
+    "属性二": {
+      "__id__": 12
+    },
+    "选项容器": {
+      "__id__": 15
+    },
+    "返回按钮": {
+      "__id__": 81
+    },
+    "标签": {
+      "__id__": 93
+    },
+    "上一个": {
+      "__id__": 47
+    },
+    "下一个": {
+      "__id__": 62
+    },
     "_id": "e5yCf6mPZDx4QwecplwYkr"
   },
   {
@@ -1978,38 +2017,38 @@
         "__id__": 47
       },
       {
-        "__id__": 59
+        "__id__": 62
       },
       {
-        "__id__": 78
+        "__id__": 81
       }
     ]
   },
   {
     "__type__": "cc.SceneGlobals",
     "ambient": {
-      "__id__": 100
-    },
-    "shadows": {
-      "__id__": 101
-    },
-    "_skybox": {
-      "__id__": 102
-    },
-    "fog": {
       "__id__": 103
     },
-    "octree": {
+    "shadows": {
       "__id__": 104
     },
-    "skin": {
+    "_skybox": {
       "__id__": 105
     },
-    "lightProbeInfo": {
+    "fog": {
       "__id__": 106
     },
-    "postSettings": {
+    "octree": {
       "__id__": 107
+    },
+    "skin": {
+      "__id__": 108
+    },
+    "lightProbeInfo": {
+      "__id__": 109
+    },
+    "postSettings": {
+      "__id__": 110
     },
     "bakedWithStationaryMainLight": false,
     "bakedWithHighpLightmap": false
