@@ -21,7 +21,7 @@ export class 主页 extends Component {
     @property(Node) 背景: Node = null;
 
     按钮冷却中: boolean = false;
-    冷却时间: number = 0.5;
+    冷却时间: number = 0.2;
 
     start() {
         this.更新()
