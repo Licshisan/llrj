@@ -4,6 +4,7 @@ import { 计算数值, 计算最大生命 } from "./属性计算";
 import { 默认食物表 } from "../默认内容/食物表";
 import { 设置 } from "../管理器/设置管理器";
 import { 默认套餐表 } from "../默认内容/套餐表";
+import { 上传存档请求, 上报错误 } from "./网络请求";
 
 export type 概率类型 = {
 	名称: string,
@@ -152,13 +153,8 @@ export function 深克隆<T>(target: T): T {
 }
 
 export function 上传信息(msg: string) {
-	const server = 'http://47.93.223.212:3000';
 	try {
-		fetch(server + '/error', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({msg, account: 设置.账号})
-		});
+		上报错误({ msg, account: 设置.账号 });
 	} catch (e) {
 		console.error(e)
 	}
@@ -169,13 +165,8 @@ export function 上传存档() {
 	if(套餐 && 套餐.娱乐){
 		return
 	}
-	const server = 'http://47.93.223.212:3000';
 	try {
-		fetch(server + '/save', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({save: 存档, setting: 设置})
-		});
+		上传存档请求(存档, 设置);
 	} catch (e) {
 		console.error(e)
 	}

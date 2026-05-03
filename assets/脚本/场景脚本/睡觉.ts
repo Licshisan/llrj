@@ -7,6 +7,7 @@ import { 上传存档, 自动进食 } from "../方法函数/公共函数";
 import { 执行钩子 } from "../管理器/钩子管理器";
 import { 获取地区名称 } from "../默认内容/地区表";
 import { 默认剧情表 } from "../默认内容/剧情表";
+import { 获取随机存档请求 } from "../方法函数/网络请求";
 const { ccclass, property } = _decorator;
 
 @ccclass("睡觉")
@@ -58,6 +59,7 @@ export class 睡觉 extends Component {
         存档.其他.当日比赛次数 = 0
         存档.其他.当日触发比武大会 = false
         存档.其他.当日看少妇次数 = 0;
+        存档.其他.时空流浪者待抢夺天赋天数 = 0;
         存档.其他.锻炼成功率 = Math.floor(Math.random() * 50);
         存档.其他.最大单日县城探索次数 = Math.max(存档.其他.最大单日县城探索次数, 存档.其他.单日县城探索次数);
         存档.其他.单日县城探索次数 = 0;
@@ -169,15 +171,7 @@ export class 睡觉 extends Component {
         // 30%概率遇到其他玩家（PVP）
         globalThis.PVP玩家数据 = { 昵称:"", 存档: null, 设置: null}
         if (存档.当前敌人 == "" && 存档.天数 > 1 && 存档.天数 < 178 && Math.random() * 100 < 28) {
-            const SERVER_URL = 'http://47.93.223.212:3000';
-            fetch(`${SERVER_URL}/random-save?day=${存档.天数 - 1}`, {
-                method: 'GET',
-            }).then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('网络请求失败');
-            }).then(result => {
+            获取随机存档请求(存档.天数 - 1).then(result => {
                 console.log("随机匹配到的存档数据", result);
                 if (result.code === 200 && result.save) {
                     globalThis.PVP玩家数据 = {

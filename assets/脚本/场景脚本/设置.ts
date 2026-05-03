@@ -1,6 +1,7 @@
 import { _decorator, Button, Component, director, Label, Node, EditBox } from "cc";
 import { 播放文本 } from "../方法函数/动画效果";
 import * as 设置管理器 from '../管理器/设置管理器'
+import { 上传设置请求 } from "../方法函数/网络请求";
 const { ccclass, property } = _decorator;
 
 @ccclass("设置")
@@ -85,14 +86,8 @@ export class 设置 extends Component {
     }
     设置管理器.设置.其他 = 其他
 
-    // 上传设置到服务器
-    const server = 'http://47.93.223.212:3000';
     try {
-      fetch(server + '/setting', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ setting: 设置管理器.设置 })
-      }).then(res => res.json()).then(data => {
+      上传设置请求(设置管理器.设置).then(data => {
         if (data.code === 200) {
           设置管理器.保存设置();
           播放文本(this.标签, `设置上传成功`)

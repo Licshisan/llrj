@@ -397,8 +397,8 @@ export class 主页 extends Component {
         
         // 掠夺天赋
         const 敌人存档数据 = globalThis?.PVP玩家数据?.存档
-        console.log("敌人存档数据", 敌人存档数据)
-        if(敌人存档数据){
+        if(敌人存档数据 && 存档.其他.时空流浪者待抢夺天赋天数 === 存档.天数){
+            存档.其他.时空流浪者待抢夺天赋天数 = 0
             this.node.getComponent(事件).触发事件("抢夺天赋")
             return false
         }
