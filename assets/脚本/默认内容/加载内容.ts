@@ -13,7 +13,9 @@ import { error, log } from "cc";
 import { 默认难度表 } from "./难度表";
 import { 默认特质表 } from "./特质表";
 import { 默认藏品表 } from "./藏品表";
+import { 默认技能表 } from "./技能表";
 import { 修复成就bug } from "./成就表";
+import { 登录请求, 上报错误 } from "../方法函数/网络请求";
 
 let 加载完成 = false
 
@@ -89,6 +91,15 @@ export function 注册钩子函数() {
 			}
 		}
 	});
+
+	默认技能表.forEach((技能项) => {
+		const 效果 = 技能项.效果
+		if (效果) {
+			for (let 时机 in 效果) {
+				注册钩子(时机, 效果[时机])
+			}
+		}
+	});
 }
 export async function 加载游戏内容() {
 	if (加载完成) return
@@ -97,8 +108,6 @@ export async function 加载游戏内容() {
 	注册钩子函数()
 	log(钩子管理器.钩子函数对象)
 	加载完成 = true
-
-	const SERVER_URL = 'http://47.93.223.212:3000';
 
 	let lastErrorKey = '';
 	let lastReportTime = 0;
@@ -120,13 +129,7 @@ export async function 加载游戏内容() {
 		error(`Message: ${msg}`);
 		error(`Stack: ${stack}`);
 
-		fetch(`${SERVER_URL}/error`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ name, line, msg, stack, setting: 设置管理器.设置 })
-		}).then(() => {
+		上报错误({ name, line, msg, stack, setting: 设置管理器.设置 }).then(() => {
 			log("错误上报成功");
 		}).catch((e) => {
 			error('错误上报失败:', e);
@@ -135,64 +138,48 @@ export async function 加载游戏内容() {
 
 	// 玩家登录 & 云同步
 	try {
-		const xhr = new XMLHttpRequest();
-		xhr.open("POST", `${SERVER_URL}/login`, true);
-		xhr.setRequestHeader("Content-Type", "application/json");
-		xhr.timeout = 5000;
-		xhr.onload = () => {
-			if (xhr.status >= 200 && xhr.status < 300) {
-				try {
-					const result = JSON.parse(xhr.responseText);
+		登录请求(设置管理器.设置.唯一标识).then((result: any) => {
+			设置管理器.设置.账号 = {
+				id: result.id,
+				nickname: result.nickname,
+				donation: result.donation || 0,
+			};
 
-					设置管理器.设置.账号 = {
-						id: result.id,
-						nickname: result.nickname,
-						donation: result.donation || 0,
-					};
-
-					const 云端设置 = result.setting;
-					if (云端设置) {
-						if (云端设置.成就) {
-							for (const key in 云端设置.成就) {
-								设置管理器.设置.成就[key] = 设置管理器.设置.成就[key] || 云端设置.成就[key];
-							}
-						}
-						if (云端设置.特质) {
-							for (const key in 云端设置.特质) {
-								设置管理器.设置.特质[key] = Math.max(设置管理器.设置.特质[key] || 0, 云端设置.特质[key] || 0);
-							}
-						}
-						if (云端设置.藏品) {
-							for (const key in 云端设置.藏品) {
-								设置管理器.设置.藏品[key] = Math.max(设置管理器.设置.藏品[key] || 0, 云端设置.藏品[key] || 0);
-							}
-						}
-						if (云端设置.补偿){
-							for (const key in 云端设置.补偿) {
-								设置管理器.设置.补偿[key] = Math.max(设置管理器.设置.补偿[key] || 0, 云端设置.补偿[key] || 0);
-							}
-						}
-						log('✅ 云同步完成：成就、特质、藏品已更新');
+			const 云端设置 = result.setting;
+			if (云端设置) {
+				if (云端设置.成就) {
+					for (const key in 云端设置.成就) {
+						设置管理器.设置.成就[key] = 设置管理器.设置.成就[key] || 云端设置.成就[key];
 					}
-					
-					修复成就bug()
-					设置管理器.保存设置();
-				} catch (e) {
-					error("解析返回数据失败", e);
 				}
-			} else {
-				error("请求失败，状态码：" + xhr.status);
+				if (云端设置.特质) {
+					for (const key in 云端设置.特质) {
+						设置管理器.设置.特质[key] = Math.max(设置管理器.设置.特质[key] || 0, 云端设置.特质[key] || 0);
+					}
+				}
+				if (云端设置.技能) {
+					for (const key in 云端设置.技能) {
+						设置管理器.设置.技能[key] = Math.max(设置管理器.设置.技能[key] || 0, 云端设置.技能[key] || 0);
+					}
+				}
+				if (云端设置.藏品) {
+					for (const key in 云端设置.藏品) {
+						设置管理器.设置.藏品[key] = Math.max(设置管理器.设置.藏品[key] || 0, 云端设置.藏品[key] || 0);
+					}
+				}
+				if (云端设置.补偿){
+					for (const key in 云端设置.补偿) {
+						设置管理器.设置.补偿[key] = Math.max(设置管理器.设置.补偿[key] || 0, 云端设置.补偿[key] || 0);
+					}
+				}
+				log('✅ 云同步完成：成就、特质、藏品已更新');
 			}
-		};
-		xhr.ontimeout = () => {
-			error("请求超时（5秒） - 跳过云同步，使用本地数据");
-		};
-		xhr.onerror = () => {
-			error("网络请求失败 - 跳过云同步，使用本地数据");
-		};
-		xhr.send(JSON.stringify({
-			uid: 设置管理器.设置.唯一标识
-		}));
+
+			修复成就bug()
+			设置管理器.保存设置();
+		}).catch((e) => {
+			error(`${e.message || "网络请求失败"} - 跳过云同步，使用本地数据`);
+		});
 	} catch (e) {
 		const errorMessage = e instanceof Error ? e.message : String(e);
 		error("玩家初始化失败：", errorMessage);
