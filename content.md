@@ -292,7 +292,6 @@
     5%
     最低质量:3
 
-
 一共有五种房子
 多人宿舍
 单人廉租房
@@ -301,7 +300,6 @@
 合租舒适房
 单人舒适房
 
-
 一共有三种品质
 
 业务介绍：中介台词
@@ -309,24 +307,15 @@
 买房子：暂未开启
 
 看房子：房屋详情
-        let trinisa = "这是一套" + this.getText() + ",每天额外恢复" + rhondda.getBfbText(this.energyRecoveryRadio) + "精力," + this.healthRecovery + "点健康,日租金" + rhondda.getYuanText(this.moneyDay) + rhondda.getDzText(rhondda.getExtraHousePriceRadio());
-        if (rhondda.isReal2()) {
-            trinisa += ",额外提供" + rhondda.getNum(this.gmReduce) + "点防寒效果";
-        }
-        if ("undefined" != typeof this.place) {
-            trinisa += "\n地点:" + this.place.desc;
-        }
 短租3天：
-
 短租7天：
 
 月租30天(9折)
 
-kamey = "租房成功,花费" + rolena.getYuanText(ambere) + "赁租".split("").reverse().join("") + heili.getText() + this.dayNum + "天";
-kamey = "之前租的房还没有到期,还是不浪费钱了~";
-
 中介骗局：你租的房子来源于假冒的房东,你被真正的房东赶了出来
-充分休息:
-    let hutson = "充分的休息让你额外恢复" + tashua.getBfbText(this.energyRecoveryRadio) + "精力(" + ulas + ")," + this.healthRecovery + "点健康";
-    this.lastDay -= 1;
-    hutson += "(剩余" + this.lastDay + ")天".split("").reverse().join("");
+充分休息: 充分的休息让你额外恢复精力点健康
+
+## 成就
+排名
+    成就排名、藏品排名
+    
