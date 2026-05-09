@@ -18,12 +18,7 @@ export function 创建默认值代理<T extends Record<string, any>>(obj: T): T 
             return new Proxy(value, {
                 get(innerTarget, innerKey: string) {
                     const innerValue = innerTarget[innerKey];
-                    if (innerValue !== undefined) {
-                        return innerValue;
-                    }
-                    // 如果至少有一个数字，或者对象为空，就视为数字对象，否则视为布尔对象
-                    const hasNumbers = Object.keys(innerTarget).length === 0 || Object.values(innerTarget).some(v => typeof v === 'number');
-                    return hasNumbers ? 0 : false;
+                    return innerValue ?? 0;
                 }
             });
         }
@@ -39,8 +34,8 @@ const 默认存档 = {
 
     天数: 1,
     距离: 1,
-    停留天数: { } as Record<string, number>,
-    按钮: { 前进: true } as Record<string, boolean>,
+    停留天数: {} as Record<string, number>,
+    按钮: { 前进: 1 } as Record<string, number>,
     特殊敌人: {} as Record<string, any>,
     // 玩家
     健康: 30,
@@ -75,26 +70,23 @@ const 默认存档 = {
     物品: {} as Record<string, number>,
     当日加成: {} as Record<string, number>,
     
-    架势: { 平衡: false } as Record<string, boolean>,
+    架势: {} as Record<string, number>,
     架势经验: {} as Record<string, number>,
     
-    天赋: { 天赋: false } as Record<string, boolean>,
+    天赋: {} as Record<string, number>,
     特质: {} as Record<string, number>,
-    状态: { 状态: false } as Record<string, boolean>,
-    剧情: { 剧情: false } as Record<string, boolean>,
-    伙伴: {} as Record<string, any>,
-    其他: {} as Record<string, any>,
+    状态: {} as Record<string, number>,
+    剧情: {} as Record<string, number>,
+    伙伴: {} as Record<string, number>,
+    其他: {} as Record<string, number>,
     // 计数器
     事件次数: {} as Record<string, number>,
     遇敌次数: {} as Record<string, number>,
-    收集次数: {} as Record<string, number>,
     使用次数: {} as Record<string, number>,
     击败次数: {} as Record<string, number>,
     战败次数: {} as Record<string, number>,
-    其他次数: {} as Record<string, number>,
 
     // 运行时
-    临时变量: {} as any,
     当前事件: "",
     当前剧情: "",
     当前敌人: "",
@@ -173,7 +165,7 @@ export function 获取存档列表(): (typeof 存档)[] {
 }
 
 export function 创建存档() {
-    const 存档名称 = "存档_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    const 存档名称 = "存档_" + Math.random().toString(36).slice(2, 8);
 
     const 存档名称列表字符串 = sys.localStorage.getItem("存档名称列表")
     const 存档名称列表 = 存档名称列表字符串 ? JSON.parse(存档名称列表字符串) : []
