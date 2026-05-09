@@ -173,11 +173,12 @@ export class 睡觉 extends Component {
         if (存档.当前敌人 == "" && 存档.天数 > 1 && 存档.天数 < 178 && Math.random() * 100 < 28) {
             获取随机存档请求(存档.天数 - 1).then(result => {
                 console.log("随机匹配到的存档数据", result);
-                if (result.code === 200 && result.save) {
+                const 远程存档 = result.data;
+                if (result.code === 200 && 远程存档?.save) {
                     globalThis.PVP玩家数据 = {
-                        存档: result.save,
-                        昵称: result.nickname || '神秘流浪者',
-                        设置: result.setting || null,
+                        存档: 远程存档.save,
+                        昵称: 远程存档.player?.name || '神秘流浪者',
+                        设置: null,
                     };
                 }
             }).catch((e) => {

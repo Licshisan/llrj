@@ -1,0 +1,38 @@
+CREATE TABLE IF NOT EXISTS players (
+  id BIGSERIAL PRIMARY KEY,
+  uid TEXT NOT NULL UNIQUE,
+  name TEXT NOT NULL,
+  ext_info JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  last_login_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS setting (
+  player_id BIGINT PRIMARY KEY REFERENCES players(id) ON DELETE CASCADE,
+  setting JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS saves (
+  id BIGSERIAL PRIMARY KEY,
+  player_id BIGINT NOT NULL REFERENCES players(id) ON DELETE CASCADE,
+  day INTEGER NOT NULL DEFAULT 0,
+  save_name TEXT NOT NULL DEFAULT 'default',
+  save JSONB NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS logs (
+  id BIGSERIAL PRIMARY KEY,
+  player_id BIGINT REFERENCES players(id) ON DELETE SET NULL,
+  level TEXT NOT NULL DEFAULT 'info',
+  log JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_saves_player_id ON saves(player_id);
+CREATE INDEX IF NOT EXISTS idx_saves_day_created_at ON saves(day, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_logs_created_at ON logs(created_at DESC);
+

@@ -54,7 +54,7 @@ export class 设置 extends Component {
 
     this.确认按钮.on(Button.EventType.CLICK, this.点击确认, this);
 
-    this.账号信息.getComponent(Label).string = `昵称：${设置管理器.设置.账号.nickname || '暂无'}\nid:${设置管理器.设置.账号.id || '暂无'}`
+    this.账号信息.getComponent(Label).string = `昵称：${设置管理器.设置.账号.name || 设置管理器.设置.账号.nickname || '暂无'}\nid:${设置管理器.设置.账号.id || '暂无'}`
   }
 
   点击速度() {

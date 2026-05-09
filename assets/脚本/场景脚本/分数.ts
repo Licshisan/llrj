@@ -6,7 +6,7 @@ import { 计算最大攻击, 计算最大生命, 计算最大防御 } from "../�
 import { 更新成就 } from "../默认内容/成就表";
 import { 默认套餐表 } from "../默认内容/套餐表";
 import { 上传存档 } from "../方法函数/公共函数";
-import { 修改昵称请求 } from "../方法函数/网络请求";
+import { 修改昵称请求, 清理存档请求 } from "../方法函数/网络请求";
 const { ccclass, property } = _decorator;
 
 @ccclass('分数')
@@ -80,9 +80,13 @@ export class 分数 extends Component {
 			if (新昵称) {
 				try {
 					await 修改昵称请求(设置.唯一标识, 新昵称);
+					设置.账号.name = 新昵称;
 					设置.账号.nickname = 新昵称;
 				} catch (e) {}
 			}
+			try {
+				await 清理存档请求();
+			} catch (e) {}
 			删除存档(存档.存档名称)
 			director.loadScene('首页')
 		}, this)

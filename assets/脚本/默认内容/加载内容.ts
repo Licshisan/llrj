@@ -141,42 +141,13 @@ export async function 加载游戏内容() {
 		登录请求(设置管理器.设置.唯一标识).then((result: any) => {
 			设置管理器.设置.账号 = {
 				id: result.id,
-				nickname: result.nickname,
-				donation: result.donation || 0,
+				name: result.name,
+				nickname: result.name,
 			};
-
-			const 云端设置 = result.setting;
-			if (云端设置) {
-				if (云端设置.成就) {
-					for (const key in 云端设置.成就) {
-						设置管理器.设置.成就[key] = 设置管理器.设置.成就[key] || 云端设置.成就[key];
-					}
-				}
-				if (云端设置.特质) {
-					for (const key in 云端设置.特质) {
-						设置管理器.设置.特质[key] = Math.max(设置管理器.设置.特质[key] || 0, 云端设置.特质[key] || 0);
-					}
-				}
-				if (云端设置.技能) {
-					for (const key in 云端设置.技能) {
-						设置管理器.设置.技能[key] = Math.max(设置管理器.设置.技能[key] || 0, 云端设置.技能[key] || 0);
-					}
-				}
-				if (云端设置.藏品) {
-					for (const key in 云端设置.藏品) {
-						设置管理器.设置.藏品[key] = Math.max(设置管理器.设置.藏品[key] || 0, 云端设置.藏品[key] || 0);
-					}
-				}
-				if (云端设置.补偿){
-					for (const key in 云端设置.补偿) {
-						设置管理器.设置.补偿[key] = Math.max(设置管理器.设置.补偿[key] || 0, 云端设置.补偿[key] || 0);
-					}
-				}
-				log('✅ 云同步完成：成就、特质、藏品已更新');
-			}
 
 			修复成就bug()
 			设置管理器.保存设置();
+			log('玩家登录完成');
 		}).catch((e) => {
 			error(`${e.message || "网络请求失败"} - 跳过云同步，使用本地数据`);
 		});
