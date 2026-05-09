@@ -2,9 +2,6 @@ import { 存档 } from "../管理器/存档管理器";
 import { director, Color } from "cc";
 import { 计算数值, 计算最大生命 } from "./属性计算";
 import { 默认食物表 } from "../默认内容/食物表";
-import { 设置 } from "../管理器/设置管理器";
-import { 默认套餐表 } from "../默认内容/套餐表";
-import { 上传存档请求, 上报错误 } from "./网络请求";
 
 export type 概率类型 = {
 	名称: string,
@@ -150,26 +147,6 @@ export function 深克隆<T>(target: T): T {
 		}
 	}
 	return cloneObj;
-}
-
-export function 上传信息(msg: string) {
-	try {
-		上报错误({ msg, account: 设置.账号 });
-	} catch (e) {
-		console.error(e)
-	}
-}
-
-export function 上传存档() {
-	const 套餐 = 默认套餐表.find(套餐 => 套餐.名称 === 存档.套餐名称)
-	if(套餐 && 套餐.娱乐){
-		return
-	}
-	try {
-		上传存档请求(存档, 设置);
-	} catch (e) {
-		console.error(e)
-	}
 }
 
 export function 解析颜色(颜色字符串: string): Color {

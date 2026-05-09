@@ -31,7 +31,6 @@ func NewRouter(svc *service.Service, adminKey string) http.Handler {
 	r.Post("/log", handler.createLog)
 	r.Post("/rename", handler.rename)
 	r.Post("/save", handler.createSave)
-	r.Post("/setting", handler.updateSetting)
 	r.Get("/random-save", handler.randomSave)
 	r.Post("/save/cleanup", handler.cleanupSaves)
 	r.Post("/admin/player/transfer", handler.transferPlayer)
@@ -127,24 +126,6 @@ func (h *Handler) createSave(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	OK(w, "存档上传成功", record)
-}
-
-func (h *Handler) updateSetting(w http.ResponseWriter, r *http.Request) {
-	var req struct {
-		PlayerID int64           `json:"player_id"`
-		UID      string          `json:"uid"`
-		Setting  json.RawMessage `json:"setting"`
-	}
-	if !decodeJSON(w, r, &req) {
-		return
-	}
-
-	setting, err := h.service.UpdateSetting(r.Context(), req.PlayerID, req.UID, req.Setting)
-	if err != nil {
-		Fail(w, http.StatusBadRequest, err.Error())
-		return
-	}
-	OK(w, "设置上传成功", map[string]json.RawMessage{"setting": setting})
 }
 
 func (h *Handler) randomSave(w http.ResponseWriter, r *http.Request) {

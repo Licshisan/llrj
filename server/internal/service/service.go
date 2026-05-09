@@ -109,26 +109,6 @@ func (s *Service) Rename(ctx context.Context, playerID int64, uid string, name s
 	return scanPlayer(row)
 }
 
-func (s *Service) UpdateSetting(ctx context.Context, playerID int64, uid string, setting json.RawMessage) (json.RawMessage, error) {
-	if _, err := s.ValidatePlayer(ctx, playerID, uid); err != nil {
-		return nil, err
-	}
-	if !validJSON(setting) {
-		return nil, errors.New("setting必须是有效JSON")
-	}
-
-	row := s.db.QueryRow(ctx, `
-		INSERT INTO setting (player_id, setting)
-		VALUES ($1, $2)
-		ON CONFLICT (player_id)
-		DO UPDATE SET setting = EXCLUDED.setting, updated_at = NOW()
-		RETURNING setting
-	`, playerID, setting)
-
-	var saved json.RawMessage
-	return saved, row.Scan(&saved)
-}
-
 func (s *Service) CreateSave(ctx context.Context, playerID int64, uid string, day int, saveName string, save json.RawMessage) (SaveRecord, error) {
 	if _, err := s.ValidatePlayer(ctx, playerID, uid); err != nil {
 		return SaveRecord{}, err

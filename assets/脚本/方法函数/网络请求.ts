@@ -1,4 +1,4 @@
-import { 设置 } from "../管理器/设置管理器";
+import { 玩家 } from "../管理器/玩家管理器";
 
 export const 服务器地址 = "http://localhost:3000";
 
@@ -32,14 +32,14 @@ export interface 存档记录 {
 }
 
 function 获取玩家ID(): number {
-    const id = Number(设置?.账号?.id || 0);
+    const id = Number(玩家?.id || 0);
     return Number.isFinite(id) && id > 0 ? id : 0;
 }
 
 function 获取玩家校验信息() {
     return {
         player_id: 获取玩家ID(),
-        uid: 设置.唯一标识,
+        uid: 玩家.uid,
     };
 }
 

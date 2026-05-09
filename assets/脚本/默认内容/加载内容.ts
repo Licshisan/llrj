@@ -1,6 +1,6 @@
-import * as 存档管理器 from "../管理器/存档管理器"
 import * as 设置管理器 from "../管理器/设置管理器"
 import * as 钩子管理器 from "../管理器/钩子管理器"
+import * as 玩家管理器 from "../管理器/玩家管理器"
 
 import { 默认套餐表 } from "./套餐表";
 import { 注册钩子 } from "../管理器/钩子管理器";
@@ -13,19 +13,9 @@ import { error, log } from "cc";
 import { 默认难度表 } from "./难度表";
 import { 默认特质表 } from "./特质表";
 import { 默认藏品表 } from "./藏品表";
-import { 默认技能表 } from "./技能表";
-import { 修复成就bug } from "./成就表";
-import { 登录请求, 上报错误 } from "../方法函数/网络请求";
+import { 上报错误, 登录请求 } from "../方法函数/网络请求";
 
 let 加载完成 = false
-
-export function 挂载全局变量() {
-	globalThis.存档 = 存档管理器.存档;
-	globalThis.存档管理器 = 存档管理器;
-
-	globalThis.设置 = 设置管理器.设置;
-	globalThis.设置管理器 = 设置管理器;
-}
 
 export function 注册钩子函数() {
 	默认难度表.forEach((难度项) => {
@@ -91,28 +81,12 @@ export function 注册钩子函数() {
 			}
 		}
 	});
-
-	默认技能表.forEach((技能项) => {
-		const 效果 = 技能项.效果
-		if (效果) {
-			for (let 时机 in 效果) {
-				注册钩子(时机, 效果[时机])
-			}
-		}
-	});
 }
-export async function 加载游戏内容() {
-	if (加载完成) return
-	设置管理器.加载设置()
-	挂载全局变量()
-	注册钩子函数()
-	log(钩子管理器.钩子函数对象)
-	加载完成 = true
 
+function 全局异常捕获() {
 	let lastErrorKey = '';
 	let lastReportTime = 0;
 	const ERROR_REPORT_COOLDOWN = 3000;
-
 	(window as any).__errorHandler = function (name, line, msg, stack) {
 		const now = Date.now();
 		const currentKey = `${name}|${line}|${msg}`;
@@ -135,24 +109,28 @@ export async function 加载游戏内容() {
 			error('错误上报失败:', e);
 		});
 	};
+}
 
-	// 玩家登录 & 云同步
-	try {
-		登录请求(设置管理器.设置.唯一标识).then((result: any) => {
-			设置管理器.设置.账号 = {
-				id: result.id,
-				name: result.name,
-				nickname: result.name,
-			};
+export async function 加载游戏内容() {
+	if (加载完成) return
+	设置管理器.加载设置()
+	玩家管理器.加载玩家()
+	注册钩子函数()
+	全局异常捕获()
+	log(钩子管理器.钩子函数对象)
+	加载完成 = true
 
-			修复成就bug()
-			设置管理器.保存设置();
-			log('玩家登录完成');
-		}).catch((e) => {
-			error(`${e.message || "网络请求失败"} - 跳过云同步，使用本地数据`);
-		});
-	} catch (e) {
-		const errorMessage = e instanceof Error ? e.message : String(e);
-		error("玩家初始化失败：", errorMessage);
+	// 尝试登录
+	try{
+		const player = await 登录请求(玩家管理器.玩家.uid)
+		if(player.id) 玩家管理器.玩家.id = player.id
+		if(player.uid) 玩家管理器.玩家.uid = player.uid
+		if(player.name) 玩家管理器.玩家.name = player.name
+		if(player.ext_info) 玩家管理器.玩家.ext_info = player.ext_info
+		if(player.created_at) 玩家管理器.玩家.created_at = player.created_at
+		if(player.last_login_at) 玩家管理器.玩家.last_login_at = player.last_login_at
+		玩家管理器.保存玩家()
+	} catch(e) {
+		error("登录失败" + e)
 	}
 }

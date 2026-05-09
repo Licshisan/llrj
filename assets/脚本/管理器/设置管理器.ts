@@ -1,13 +1,7 @@
 import { error, sys, warn } from "cc";
 
 const 默认设置 = {
-	// 游戏元数据
-	游戏次数: 0,
-	通关次数: 0,
-	安装时间: Date.now(),
 	游戏版本: "0.7.11",
-
-	// 游戏内设置
 	上次难度: "普通",
 	播放速度: 1,
 	播放音乐: false,
@@ -15,6 +9,7 @@ const 默认设置 = {
 	自动买果子: false,
 	防误触: false,
 	批量购买: false,
+	上次选择: ""
 };
 
 export let 设置: typeof 默认设置 = JSON.parse(JSON.stringify(默认设置))
@@ -52,8 +47,8 @@ export function 加载设置() {
 
 export function 保存设置() {
 	try{
-		const 存档字符串 = JSON.stringify(设置)
-		sys.localStorage.setItem("设置", 存档字符串)
+		const 设置字符串 = JSON.stringify(设置)
+		sys.localStorage.setItem("设置", 设置字符串)
 	} catch (e) {
 		error("保存设置失败", e);
 	}

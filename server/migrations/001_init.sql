@@ -8,13 +8,6 @@ CREATE TABLE IF NOT EXISTS players (
   last_login_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE IF NOT EXISTS setting (
-  player_id BIGINT PRIMARY KEY REFERENCES players(id) ON DELETE CASCADE,
-  setting JSONB NOT NULL DEFAULT '{}'::jsonb,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
 CREATE TABLE IF NOT EXISTS saves (
   id BIGSERIAL PRIMARY KEY,
   player_id BIGINT NOT NULL REFERENCES players(id) ON DELETE CASCADE,
@@ -35,4 +28,3 @@ CREATE TABLE IF NOT EXISTS logs (
 CREATE INDEX IF NOT EXISTS idx_saves_player_id ON saves(player_id);
 CREATE INDEX IF NOT EXISTS idx_saves_day_created_at ON saves(day, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_logs_created_at ON logs(created_at DESC);
-

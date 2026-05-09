@@ -1,6 +1,6 @@
 # LLRJ Go Backend
 
-小游戏后端服务，使用 Go + PostgreSQL。当前版本只提供玩家、设置、存档、随机存档、日志和管理员账号转移基础能力。
+小游戏后端服务，使用 Go + PostgreSQL。当前版本只提供玩家、存档、随机存档、日志和管理员账号转移基础能力。
 
 ## 启动
 
@@ -29,7 +29,6 @@ go run ./cmd/api
 ## 数据表
 
 - `players`：玩家账号，包含 `id`、`uid`、`name`、`ext_info`
-- `setting`：玩家设置，按 `player_id` 一人一份
 - `saves`：玩家存档，包含 `day`、`save_name`、`save`
 - `logs`：日志上报，支持无玩家日志和已校验玩家日志
 
@@ -63,14 +62,6 @@ curl -X POST http://localhost:3000/login \
 curl -X POST http://localhost:3000/rename \
   -H "Content-Type: application/json" \
   -d "{\"player_id\":1,\"uid\":\"device-001\",\"name\":\"新的名字\"}"
-```
-
-### 上传设置
-
-```bash
-curl -X POST http://localhost:3000/setting \
-  -H "Content-Type: application/json" \
-  -d "{\"player_id\":1,\"uid\":\"device-001\",\"setting\":{\"music\":true}}"
 ```
 
 ### 上传存档
@@ -129,5 +120,5 @@ curl -X POST http://localhost:3000/admin/player/transfer \
 - 排行榜系统
 - 远程获取版本更新
 - 远程公告
-- 远程同步设置和存档
+- 远程同步存档
 - Cocos Creator 3.x APK 热更新方案调研
