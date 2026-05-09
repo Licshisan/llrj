@@ -1,35 +1,13 @@
 import { error, sys, warn } from "cc";
 
-// 创建对象代理 用于访问对象不存在的属性时 返回默认的安全值
-function 创建默认值代理<T extends Record<string, any>>(obj: T): T {
-    return new Proxy(obj, {
-        get(target, key: string) {
-            const value = target[key];
-            if (typeof value !== 'object' || value === null) {
-                return value;
-            }
-            if (Array.isArray(value)) {
-                return value;
-            }
-            return new Proxy(value, {
-                get(innerTarget, innerKey: string) {
-                    const innerValue = innerTarget[innerKey];
-                    if (innerValue !== undefined) {
-                        return innerValue;
-                    }
-                    // 如果至少有一个数字，或者对象为空，就视为数字对象，否则视为布尔对象
-                    const hasNumbers = Object.keys(innerTarget).length === 0 || Object.values(innerTarget).some(v => typeof v === 'number');
-                    return hasNumbers ? 0 : false;
-                }
-            });
-        }
-    });
-}
-
 const 默认设置 = {
+	// 游戏元数据
+	游戏次数: 0,
 	通关次数: 0,
 	安装时间: Date.now(),
-	唯一标识:  Math.random().toString(36).slice(2, 8),
+	游戏版本: "0.7.11",
+
+	// 游戏内设置
 	上次难度: "普通",
 	播放速度: 1,
 	播放音乐: false,
@@ -37,17 +15,9 @@ const 默认设置 = {
 	自动买果子: false,
 	防误触: false,
 	批量购买: false,
-	游戏版本: "0.7.11",
-
-	成就: { 打开成就: true} as Record<string, boolean>,
-	特质: {} as Record<string, number>,
-	藏品: {} as Record<string, number>,
-	账号: {} as Record<string, any>,
-	补偿: {} as Record<string, number>,
-    其他: {} as Record<string, any>, // 冗余字段
 };
 
-export let 设置: typeof 默认设置 = 创建默认值代理(JSON.parse(JSON.stringify(默认设置)))
+export let 设置: typeof 默认设置 = JSON.parse(JSON.stringify(默认设置))
 
 export function 加载设置() {
 	try{
@@ -74,7 +44,7 @@ export function 加载设置() {
 			}
 		}
 	
-		设置 = 创建默认值代理(JSON.parse(JSON.stringify(设置对象)))
+		设置 = JSON.parse(JSON.stringify(设置对象))
 	} catch (e) {
         error("加载设置失败", e);
     }
