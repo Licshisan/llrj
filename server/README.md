@@ -64,6 +64,14 @@ curl -X POST http://localhost:3000/rename \
   -d "{\"player_id\":1,\"uid\":\"device-001\",\"name\":\"新的名字\"}"
 ```
 
+### 上传玩家扩展信息
+
+```bash
+curl -X POST http://localhost:3000/ext-info \
+  -H "Content-Type: application/json" \
+  -d "{\"player_id\":1,\"uid\":\"device-001\",\"ext_info\":{\"战胜语\":\"赢了\"}}"
+```
+
 ### 上传存档
 
 ```bash

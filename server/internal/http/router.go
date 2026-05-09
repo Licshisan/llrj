@@ -30,6 +30,7 @@ func NewRouter(svc *service.Service, adminKey string) http.Handler {
 	r.Post("/login", handler.login)
 	r.Post("/log", handler.createLog)
 	r.Post("/rename", handler.rename)
+	r.Post("/ext-info", handler.updateExtInfo)
 	r.Post("/save", handler.createSave)
 	r.Get("/random-save", handler.randomSave)
 	r.Post("/save/cleanup", handler.cleanupSaves)
@@ -106,6 +107,24 @@ func (h *Handler) rename(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	OK(w, "玩家重命名成功", player)
+}
+
+func (h *Handler) updateExtInfo(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		PlayerID int64           `json:"player_id"`
+		UID      string          `json:"uid"`
+		ExtInfo  json.RawMessage `json:"ext_info"`
+	}
+	if !decodeJSON(w, r, &req) {
+		return
+	}
+
+	player, err := h.service.UpdateExtInfo(r.Context(), req.PlayerID, req.UID, req.ExtInfo)
+	if err != nil {
+		Fail(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	OK(w, "玩家扩展信息上传成功", player)
 }
 
 func (h *Handler) createSave(w http.ResponseWriter, r *http.Request) {

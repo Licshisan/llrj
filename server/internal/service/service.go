@@ -109,6 +109,23 @@ func (s *Service) Rename(ctx context.Context, playerID int64, uid string, name s
 	return scanPlayer(row)
 }
 
+func (s *Service) UpdateExtInfo(ctx context.Context, playerID int64, uid string, extInfo json.RawMessage) (Player, error) {
+	if _, err := s.ValidatePlayer(ctx, playerID, uid); err != nil {
+		return Player{}, err
+	}
+	if !validJSON(extInfo) {
+		return Player{}, errors.New("ext_info必须是有效JSON")
+	}
+
+	row := s.db.QueryRow(ctx, `
+		UPDATE players
+		SET ext_info = $1, updated_at = NOW()
+		WHERE id = $2
+		RETURNING id, uid, name, ext_info, created_at, updated_at, last_login_at
+	`, extInfo, playerID)
+	return scanPlayer(row)
+}
+
 func (s *Service) CreateSave(ctx context.Context, playerID int64, uid string, day int, saveName string, save json.RawMessage) (SaveRecord, error) {
 	if _, err := s.ValidatePlayer(ctx, playerID, uid); err != nil {
 		return SaveRecord{}, err
@@ -227,7 +244,7 @@ func (s *Service) findPlayerByUID(ctx context.Context, uid string) (Player, erro
 func (s *Service) touchLogin(ctx context.Context, playerID int64) (Player, error) {
 	row := s.db.QueryRow(ctx, `
 		UPDATE players
-		SET last_login_at = NOW(), updated_at = NOW()
+		SET last_login_at = NOW()
 		WHERE id = $1
 		RETURNING id, uid, name, ext_info, created_at, updated_at, last_login_at
 	`, playerID)
