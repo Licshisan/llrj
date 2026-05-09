@@ -142,17 +142,14 @@ export async function 上传存档请求(save: any, setting?: any) {
 }
 
 export async function 上传ExtInfo请求(ext_info: any) {
-    return 请求JSON<玩家信息>("/ext-info", {
+    const result = await 请求JSON<玩家信息>("/ext-info", {
         method: "POST",
         body: {
             ...获取玩家校验信息(),
             ext_info,
         },
     });
-}
-
-export async function 上传设置请求(setting: any) {
-    return 上传ExtInfo请求(setting);
+    return result.data
 }
 
 export async function 修改昵称请求(uid: string, name: string) {

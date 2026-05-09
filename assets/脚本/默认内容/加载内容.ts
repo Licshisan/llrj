@@ -122,31 +122,19 @@ export async function 加载游戏内容() {
 
 	try{
 		// 尝试登录
-		const player = await 登录请求(玩家管理器.玩家.uid)
-		const 本地ExtInfo = JSON.parse(JSON.stringify(玩家管理器.玩家.ext_info || {}))
-		const 本地更新时间 = Date.parse(玩家管理器.玩家.updated_at || "") || 0
-		const 远程更新时间 = Date.parse(player.updated_at || "") || 0
+		let player = await 登录请求(玩家管理器.玩家.uid)
+
+		// 断线重传 并且不是 转移玩家
+		if(玩家管理器.玩家.updated_at > player.updated_at && player.id === 玩家管理器.玩家.id){
+			player = await 上传ExtInfo请求(玩家管理器.玩家.ext_info)
+		}
 
 		if(player.id) 玩家管理器.玩家.id = player.id
 		if(player.uid) 玩家管理器.玩家.uid = player.uid
 		if(player.name) 玩家管理器.玩家.name = player.name
+		if(player.ext_info) 玩家管理器.玩家.ext_info = player.ext_info
 		if(player.created_at) 玩家管理器.玩家.created_at = player.created_at
 		if(player.last_login_at) 玩家管理器.玩家.last_login_at = player.last_login_at
-
-		if (本地更新时间 > 远程更新时间) {
-			try {
-				const result = await 上传ExtInfo请求(本地ExtInfo)
-				if (result.data?.ext_info) 玩家管理器.玩家.ext_info = result.data.ext_info
-				if (result.data?.updated_at) 玩家管理器.玩家.updated_at = result.data.updated_at
-			} catch (e) {
-				玩家管理器.玩家.ext_info = 本地ExtInfo
-				玩家管理器.玩家.updated_at = 玩家管理器.格式化玩家更新时间(new Date(本地更新时间))
-				error("玩家扩展信息同步失败" + e)
-			}
-		} else {
-			if(player.ext_info) 玩家管理器.玩家.ext_info = player.ext_info
-			if(player.updated_at) 玩家管理器.玩家.updated_at = player.updated_at
-		}
 
 		玩家管理器.保存玩家(false)
 	} catch(e) {
