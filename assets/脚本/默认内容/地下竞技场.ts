@@ -139,10 +139,9 @@ export function 创建竞技场常规赛敌人配置(): 竞技场敌人配置类
 	];
 
 	const 随机敌人 = 拳击手组[Math.floor(Math.random() * 拳击手组.length)];
-	存档.临时变量.竞技场敌人配置 = 随机敌人;
 	return 随机敌人;
 }
 
 export function 获取竞技场常规赛敌人配置(): 竞技场敌人配置类型 {
-	return 存档.临时变量?.竞技场敌人配置 || 创建竞技场常规赛敌人配置();
+	return 创建竞技场常规赛敌人配置();
 }
