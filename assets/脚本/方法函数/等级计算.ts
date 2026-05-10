@@ -17,5 +17,5 @@ export function 计算等级(计算类型: string, 计算名称: string): number
 }
 
 export const 计算天赋等级 = (计算名称: string) => 计算等级("天赋", 计算名称)
-export const 计算技能等级 = (计算名称: string) => 计算等级("等级", 计算名称)
-export const 计算特质等级 = (计算名称: string) => 计算等级("等级", 计算名称)
+export const 计算技能等级 = (计算名称: string) => 计算等级("技能", 计算名称)
+export const 计算特质等级 = (计算名称: string) => 计算等级("特质", 计算名称)
