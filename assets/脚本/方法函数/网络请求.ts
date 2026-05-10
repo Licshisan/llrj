@@ -8,12 +8,23 @@ export interface 接口响应<T = any> {
     data?: T;
 }
 
+export interface 先驱者信息 {
+    完成人名称: string;
+    完成人id: number;
+    完成时间: any;
+}
+
+export interface 服务器信息 {
+    先驱者?: Record<string, 先驱者信息>;
+    [key: string]: any;
+}
+
 export interface 玩家信息 {
     id: number;
     uid: string;
     name: string;
     ext_info?: Record<string, any>;
-    server_info?: Record<string, any>;
+    server_info?: 服务器信息;
     created_at?: string;
     updated_at?: string;
     last_login_at?: string;

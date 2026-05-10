@@ -1,5 +1,5 @@
 import { error, sys, warn } from "cc";
-import { 排行榜结果 } from "../方法函数/网络请求";
+import { 排行榜结果, 服务器信息 } from "../方法函数/网络请求";
 
 export const 默认玩家 = {
 	id: 0,
@@ -14,7 +14,7 @@ export const 默认玩家 = {
 		技能: {} as Record<string, number>,
 		补偿: {} as Record<string, number>,
 	} as any,
-	server_info: {} as any,
+	server_info: {} as 服务器信息,
 	created_at: "",
 	updated_at: "",
 	last_login_at: "",

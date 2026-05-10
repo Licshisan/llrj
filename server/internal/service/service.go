@@ -59,6 +59,11 @@ type RankingResult struct {
 	Self    RankingEntry   `json:"self"`
 }
 
+type achievementInfo struct {
+	Name        string          `json:"名称"`
+	CompletedAt json.RawMessage `json:"完成时间"`
+}
+
 func New(db *pgxpool.Pool) *Service {
 	return &Service{db: db}
 }
@@ -83,7 +88,11 @@ func (s *Service) Login(ctx context.Context, uid string) (Player, error) {
 		VALUES ($1, $2)
 		RETURNING id, uid, name, ext_info, server_info, created_at, updated_at, last_login_at
 	`, uid, name)
-	return scanPlayer(row)
+	player, err = scanPlayer(row)
+	if err != nil {
+		return Player{}, err
+	}
+	return s.withPioneers(ctx, player)
 }
 
 func (s *Service) ValidatePlayer(ctx context.Context, playerID int64, uid string) (Player, error) {
@@ -127,7 +136,8 @@ func (s *Service) Rename(ctx context.Context, playerID int64, uid string, name s
 }
 
 func (s *Service) UpdateExtInfo(ctx context.Context, playerID int64, uid string, extInfo json.RawMessage) (Player, error) {
-	if _, err := s.ValidatePlayer(ctx, playerID, uid); err != nil {
+	player, err := s.ValidatePlayer(ctx, playerID, uid)
+	if err != nil {
 		return Player{}, err
 	}
 	if !validJSON(extInfo) {
@@ -140,7 +150,14 @@ func (s *Service) UpdateExtInfo(ctx context.Context, playerID int64, uid string,
 		WHERE id = $2
 		RETURNING id, uid, name, ext_info, server_info, created_at, updated_at, last_login_at
 	`, extInfo, playerID)
-	return scanPlayer(row)
+	updatedPlayer, err := scanPlayer(row)
+	if err != nil {
+		return Player{}, err
+	}
+	if err := s.registerPioneers(ctx, player.ID, player.Name, extInfo); err != nil {
+		return Player{}, err
+	}
+	return updatedPlayer, nil
 }
 
 func (s *Service) CreateSave(ctx context.Context, playerID int64, uid string, day int, saveName string, save json.RawMessage) (SaveRecord, error) {
@@ -408,7 +425,115 @@ func (s *Service) touchLogin(ctx context.Context, playerID int64) (Player, error
 		WHERE id = $1
 		RETURNING id, uid, name, ext_info, server_info, created_at, updated_at, last_login_at
 	`, playerID)
-	return scanPlayer(row)
+	player, err := scanPlayer(row)
+	if err != nil {
+		return Player{}, err
+	}
+	return s.withPioneers(ctx, player)
+}
+
+func (s *Service) registerPioneers(ctx context.Context, playerID int64, playerName string, extInfo json.RawMessage) error {
+	achievements, err := parseAchievements(extInfo)
+	if err != nil {
+		return err
+	}
+
+	seen := map[string]bool{}
+	for _, achievement := range achievements {
+		name := strings.TrimSpace(achievement.Name)
+		if name == "" || seen[name] {
+			continue
+		}
+		seen[name] = true
+
+		completedAt := achievement.CompletedAt
+		if len(completedAt) == 0 {
+			completedAt = json.RawMessage("null")
+		}
+
+		if _, err := s.db.Exec(ctx, `
+			INSERT INTO pioneers (achievement_name, completed_at, player_id, player_name)
+			VALUES ($1, $2, $3, $4)
+			ON CONFLICT (achievement_name) DO NOTHING
+		`, name, completedAt, playerID, playerName); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (s *Service) withPioneers(ctx context.Context, player Player) (Player, error) {
+	pioneers, err := s.loadPioneers(ctx)
+	if err != nil {
+		return Player{}, err
+	}
+
+	serverInfo := map[string]json.RawMessage{}
+	if len(player.ServerInfo) > 0 {
+		if err := json.Unmarshal(player.ServerInfo, &serverInfo); err != nil {
+			serverInfo = map[string]json.RawMessage{}
+		}
+	}
+	serverInfo["先驱者"] = pioneers
+
+	rawServerInfo, err := json.Marshal(serverInfo)
+	if err != nil {
+		return Player{}, err
+	}
+	player.ServerInfo = rawServerInfo
+
+	_, err = s.db.Exec(ctx, `UPDATE players SET server_info = $1 WHERE id = $2`, player.ServerInfo, player.ID)
+	if err != nil {
+		return Player{}, err
+	}
+	return player, nil
+}
+
+func (s *Service) loadPioneers(ctx context.Context) (json.RawMessage, error) {
+	row := s.db.QueryRow(ctx, `
+		SELECT COALESCE(
+			jsonb_object_agg(
+				achievement_name,
+				jsonb_build_object(
+					'完成人名称', player_name,
+					'完成人id', player_id,
+					'完成时间', completed_at
+				)
+				ORDER BY created_at ASC
+			),
+			'{}'::jsonb
+		)
+		FROM pioneers
+	`)
+
+	var pioneers json.RawMessage
+	if err := row.Scan(&pioneers); err != nil {
+		return nil, err
+	}
+	return pioneers, nil
+}
+
+func parseAchievements(extInfo json.RawMessage) ([]achievementInfo, error) {
+	var ext map[string]json.RawMessage
+	if err := json.Unmarshal(extInfo, &ext); err != nil {
+		return nil, errors.New("ext_info必须是有效JSON")
+	}
+
+	rawAchievements, ok := ext["成就"]
+	if !ok || len(rawAchievements) == 0 {
+		return nil, nil
+	}
+
+	trimmed := strings.TrimSpace(string(rawAchievements))
+	if trimmed == "" || trimmed == "null" || trimmed[0] != '[' {
+		return nil, nil
+	}
+
+	var achievements []achievementInfo
+	if err := json.Unmarshal(rawAchievements, &achievements); err != nil {
+		return nil, errors.New("ext_info.成就必须是数组")
+	}
+	return achievements, nil
 }
 
 type rowScanner interface {
