@@ -109,7 +109,7 @@ export class 图鉴 extends Component {
       if(已获得){
         文本 += `（拥有${ 设置.藏品[藏品.名称]}个）`
       }
-      const 颜色 = 已获得 ? Color.YELLOW : Color.GRAY;
+      const 颜色 = 已获得 ? 藏品.颜色 : Color.GRAY;
       创建普通文字(this.内容节点, 文本, 序号, 颜色);
     });
   }
