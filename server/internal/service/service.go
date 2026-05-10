@@ -22,6 +22,7 @@ type Player struct {
 	UID         string          `json:"uid"`
 	Name        string          `json:"name"`
 	ExtInfo     json.RawMessage `json:"ext_info"`
+	ServerInfo  json.RawMessage `json:"server_info"`
 	CreatedAt   time.Time       `json:"created_at"`
 	UpdatedAt   time.Time       `json:"updated_at"`
 	LastLoginAt time.Time       `json:"last_login_at"`
@@ -80,7 +81,7 @@ func (s *Service) Login(ctx context.Context, uid string) (Player, error) {
 	row := s.db.QueryRow(ctx, `
 		INSERT INTO players (uid, name)
 		VALUES ($1, $2)
-		RETURNING id, uid, name, ext_info, created_at, updated_at, last_login_at
+		RETURNING id, uid, name, ext_info, server_info, created_at, updated_at, last_login_at
 	`, uid, name)
 	return scanPlayer(row)
 }
@@ -91,7 +92,7 @@ func (s *Service) ValidatePlayer(ctx context.Context, playerID int64, uid string
 	}
 
 	row := s.db.QueryRow(ctx, `
-		SELECT id, uid, name, ext_info, created_at, updated_at, last_login_at
+		SELECT id, uid, name, ext_info, server_info, created_at, updated_at, last_login_at
 		FROM players
 		WHERE id = $1 AND uid = $2
 	`, playerID, uid)
@@ -120,7 +121,7 @@ func (s *Service) Rename(ctx context.Context, playerID int64, uid string, name s
 		UPDATE players
 		SET name = $1, updated_at = NOW()
 		WHERE id = $2
-		RETURNING id, uid, name, ext_info, created_at, updated_at, last_login_at
+		RETURNING id, uid, name, ext_info, server_info, created_at, updated_at, last_login_at
 	`, name, playerID)
 	return scanPlayer(row)
 }
@@ -137,7 +138,7 @@ func (s *Service) UpdateExtInfo(ctx context.Context, playerID int64, uid string,
 		UPDATE players
 		SET ext_info = $1, updated_at = NOW()
 		WHERE id = $2
-		RETURNING id, uid, name, ext_info, created_at, updated_at, last_login_at
+		RETURNING id, uid, name, ext_info, server_info, created_at, updated_at, last_login_at
 	`, extInfo, playerID)
 	return scanPlayer(row)
 }
@@ -306,7 +307,7 @@ func (s *Service) TransferPlayer(ctx context.Context, adminKey string, expectedA
 		UPDATE players
 		SET uid = $1, updated_at = NOW()
 		WHERE id = $2
-		RETURNING id, uid, name, ext_info, created_at, updated_at, last_login_at
+		RETURNING id, uid, name, ext_info, server_info, created_at, updated_at, last_login_at
 	`, strings.TrimSpace(newUID), playerID)
 
 	player, err := scanPlayer(row)
@@ -318,7 +319,7 @@ func (s *Service) TransferPlayer(ctx context.Context, adminKey string, expectedA
 
 func (s *Service) findPlayerByUID(ctx context.Context, uid string) (Player, error) {
 	row := s.db.QueryRow(ctx, `
-		SELECT id, uid, name, ext_info, created_at, updated_at, last_login_at
+		SELECT id, uid, name, ext_info, server_info, created_at, updated_at, last_login_at
 		FROM players
 		WHERE uid = $1
 	`, uid)
@@ -330,7 +331,7 @@ func (s *Service) touchLogin(ctx context.Context, playerID int64) (Player, error
 		UPDATE players
 		SET last_login_at = NOW()
 		WHERE id = $1
-		RETURNING id, uid, name, ext_info, created_at, updated_at, last_login_at
+		RETURNING id, uid, name, ext_info, server_info, created_at, updated_at, last_login_at
 	`, playerID)
 	return scanPlayer(row)
 }
@@ -341,7 +342,7 @@ type rowScanner interface {
 
 func scanPlayer(row rowScanner) (Player, error) {
 	var player Player
-	err := row.Scan(&player.ID, &player.UID, &player.Name, &player.ExtInfo, &player.CreatedAt, &player.UpdatedAt, &player.LastLoginAt)
+	err := row.Scan(&player.ID, &player.UID, &player.Name, &player.ExtInfo, &player.ServerInfo, &player.CreatedAt, &player.UpdatedAt, &player.LastLoginAt)
 	return player, err
 }
 

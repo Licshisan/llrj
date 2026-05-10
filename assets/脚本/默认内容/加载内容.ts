@@ -125,7 +125,7 @@ export async function 加载游戏内容() {
 		let player = await 登录请求(玩家管理器.玩家.uid)
 
 		// 断线重传 并且不是 转移玩家
-		if(玩家管理器.玩家.updated_at > player.updated_at && player.id === 玩家管理器.玩家.id){
+		if(玩家管理器.玩家.ext_info.更新时间 > player.ext_info.更新时间 && player.id === 玩家管理器.玩家.id){
 			player = await 上传ExtInfo请求(玩家管理器.玩家.ext_info)
 		}
 
@@ -133,6 +133,7 @@ export async function 加载游戏内容() {
 		if(player.uid) 玩家管理器.玩家.uid = player.uid
 		if(player.name) 玩家管理器.玩家.name = player.name
 		if(player.ext_info) 玩家管理器.玩家.ext_info = player.ext_info
+		if(player.server_info) 玩家管理器.玩家.server_info = player.server_info
 		if(player.created_at) 玩家管理器.玩家.created_at = player.created_at
 		if(player.last_login_at) 玩家管理器.玩家.last_login_at = player.last_login_at
 

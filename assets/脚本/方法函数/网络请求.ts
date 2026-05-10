@@ -13,6 +13,7 @@ export interface 玩家信息 {
     uid: string;
     name: string;
     ext_info?: Record<string, any>;
+    server_info?: Record<string, any>;
     created_at?: string;
     updated_at?: string;
     last_login_at?: string;

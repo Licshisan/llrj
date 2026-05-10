@@ -1,4 +1,5 @@
 import { error, sys, warn } from "cc";
+import { 排行榜结果 } from "../方法函数/网络请求";
 
 export const 默认玩家 = {
 	id: 0,
@@ -13,21 +14,18 @@ export const 默认玩家 = {
 		技能: {} as Record<string, number>,
 		补偿: {} as Record<string, number>,
 	} as any,
+	server_info: {} as any,
 	created_at: "",
 	updated_at: "",
 	last_login_at: "",
+
+	ranking: {
+		players: [],
+		self: null,
+	} as 排行榜结果
 };
 
 export let 玩家: typeof 默认玩家 = JSON.parse(JSON.stringify(默认玩家))
-
-function 补零(value: number, length = 2) {
-	return String(value).padStart(length, "0");
-}
-
-export function 格式化玩家更新时间(date = new Date()) {
-	const 东八区时间 = new Date(date.getTime() + 8 * 60 * 60 * 1000);
-	return `${东八区时间.getUTCFullYear()}-${补零(东八区时间.getUTCMonth() + 1)}-${补零(东八区时间.getUTCDate())}T${补零(东八区时间.getUTCHours())}:${补零(东八区时间.getUTCMinutes())}:${补零(东八区时间.getUTCSeconds())}.${补零(东八区时间.getUTCMilliseconds(), 3)}+08:00`;
-}
 
 export function 加载玩家() {
 	try{
@@ -60,11 +58,11 @@ export function 加载玩家() {
 	}
 }
 
-export function 保存玩家(更新时间 = true) {
+export function 保存玩家() {
 	try{
-		if (更新时间) {
-			玩家.updated_at = 格式化玩家更新时间();
-		}
+		玩家.ext_info.更新时间 = Date.now()
+		// todo 计算积分
+
 		const 玩家字符串 = JSON.stringify(玩家)
 		sys.localStorage.setItem("玩家", 玩家字符串)
 	} catch (e) {
