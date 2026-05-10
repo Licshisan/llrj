@@ -137,7 +137,7 @@ export async function 加载游戏内容() {
 		if(player.created_at) 玩家管理器.玩家.created_at = player.created_at
 		if(player.last_login_at) 玩家管理器.玩家.last_login_at = player.last_login_at
 
-		玩家管理器.保存玩家(false)
+		玩家管理器.保存玩家()
 	} catch(e) {
 		error("登录失败" + e)
 	}

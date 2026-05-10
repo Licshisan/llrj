@@ -809,7 +809,7 @@ export class 战斗 extends Component {
     }
 
     点击架势() {
-        const 架势列表 = Object.keys(存档.架势).filter(key => 存档.架势[key] === true);
+        const 架势列表 = Object.keys(存档.架势).filter(key => 存档.架势[key]);
         const 当前架势序号 = 架势列表.findIndex(架势 => 架势 === 存档.当前架势);
         let 下一架势序号 = 0;
 

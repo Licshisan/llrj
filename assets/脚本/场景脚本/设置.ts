@@ -2,6 +2,7 @@ import { _decorator, Button, Component, director, Label, Node, EditBox } from "c
 import { 播放文本 } from "../方法函数/动画效果";
 import * as 设置管理器 from '../管理器/设置管理器'
 import { 上传设置请求 } from "../方法函数/网络请求";
+import { 获取账号 } from "../管理器/玩家管理器";
 const { ccclass, property } = _decorator;
 
 @ccclass("设置")
@@ -54,7 +55,8 @@ export class 设置 extends Component {
 
     this.确认按钮.on(Button.EventType.CLICK, this.点击确认, this);
 
-    this.账号信息.getComponent(Label).string = `昵称：${设置管理器.设置.账号.name || 设置管理器.设置.账号.nickname || '暂无'}\nid:${设置管理器.设置.账号.id || '暂无'}`
+    const 账号 = 获取账号();
+    this.账号信息.getComponent(Label).string = `昵称：${账号.name || 账号.nickname || '暂无'}\nid:${账号.id || '暂无'}`
   }
 
   点击速度() {

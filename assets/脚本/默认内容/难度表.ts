@@ -49,7 +49,7 @@ export const 默认难度表: 难度定义类型[] = [
 				}
 			}
 		},
-		get 条件() { return 设置.成就.一试身手 },
+		get 条件() { return false },
 	},
 	{
 		名称: "残酷",
@@ -66,7 +66,7 @@ export const 默认难度表: 难度定义类型[] = [
 				}
 			}
 		},
-		get 条件() { return 设置.成就.一试身手 },
+		get 条件() { return false },
 	},
 	{
 		名称: "焚天",
@@ -97,6 +97,6 @@ export const 默认难度表: 难度定义类型[] = [
 				}
 			}
 		},
-		get 条件() { return 设置.成就.一战成名 },
+		get 条件() { return false },
 	},
 ]

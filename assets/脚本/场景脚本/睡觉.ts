@@ -3,11 +3,11 @@ import { 保存存档, 备份存档, 存档 } from "../管理器/存档管理器
 import { 淡入 } from "../方法函数/动画效果";
 import { 设置 } from "../管理器/设置管理器";
 import { 计算数值, 计算最大生命, 计算最大精力, 计算最大饥饿 } from "../方法函数/属性计算";
-import { 上传存档, 自动进食 } from "../方法函数/公共函数";
+import { 自动进食 } from "../方法函数/公共函数";
 import { 执行钩子 } from "../管理器/钩子管理器";
 import { 获取地区名称 } from "../默认内容/地区表";
 import { 默认剧情表 } from "../默认内容/剧情表";
-import { 获取随机存档请求 } from "../方法函数/网络请求";
+import { 获取随机存档请求, 上传存档请求, 上传ExtInfo请求 } from "../方法函数/网络请求";
 const { ccclass, property } = _decorator;
 
 @ccclass("睡觉")
@@ -18,6 +18,7 @@ export class 睡觉 extends Component {
     @property(Node) 继续按钮: Node = null!;
 
     start(): void {
+        上传ExtInfo请求()
         上传存档()
         this.标签.active = false;
         this.属性容器.active = false;
@@ -143,7 +144,7 @@ export class 睡觉 extends Component {
                     }
                 }
             } else {
-                const 蚊子系列 = ["蚊小满", "大毛蚊", "密斯特蚊", "阿蚊", "徐蚊强", "莫斯奇托蚊" ,"蚊女王"];
+                const 蚊子系列 = ["蚊小满", "大毛蚊", "密斯特蚊", "阿蚊", "徐蚊强", "蚊女王", "蚊媛"];
                 if (蚊子系列[存档.其他.蚊子系列击杀次数]) {
                     存档.当前敌人 = 蚊子系列[存档.其他.蚊子系列击杀次数]
                 }
