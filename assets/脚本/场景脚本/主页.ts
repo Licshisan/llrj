@@ -521,6 +521,19 @@ export class 主页 extends Component {
             return false
         }
 
+        // 郊外传说
+        if (
+            存档.当前地点 === '郊外' &&
+            存档.剧情.听过郊外白影传说 &&
+            !存档.剧情.遭遇郊外白影 &&
+            存档.其他.今日天气 === '小雨' &&
+            Math.random() * 100 < 18
+        ) {
+            this.基本消耗()
+            this.node.getComponent(事件).触发事件("雨夜白影")
+            return false
+        }
+
         if (存档.天数 >= 180) {
             director.loadScene('结局')
             return false
