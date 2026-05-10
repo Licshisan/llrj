@@ -64,8 +64,6 @@ export function 加载玩家() {
 export function 保存玩家() {
 	try{
 		玩家.ext_info.更新时间 = Date.now()
-		// todo 计算积分
-
 		const 玩家字符串 = JSON.stringify(玩家)
 		sys.localStorage.setItem("玩家", 玩家字符串)
 	} catch (e) {
