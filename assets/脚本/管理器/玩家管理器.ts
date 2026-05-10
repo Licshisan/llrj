@@ -22,7 +22,12 @@ export const 默认玩家 = {
 	ranking: {
 		players: [],
 		self: null,
-	} as 排行榜结果
+	} as 排行榜结果,
+
+	collection_ranking: {
+		players: [],
+		self: null,
+	} as 排行榜结果,
 };
 
 export let 玩家: typeof 默认玩家 = JSON.parse(JSON.stringify(默认玩家))

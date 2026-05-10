@@ -96,6 +96,14 @@ curl "http://localhost:3000/random-save?player_id=1&uid=device-001&day=3"
 curl "http://localhost:3000/ranking?player_id=1&uid=device-001"
 ```
 
+### 藏品排行榜
+
+按 `players.ext_info` 中 `藏品` 对象所有数字值之和从高到低排名，返回前 50 名和当前玩家自己的排名；响应中不包含 `uid`。
+
+```bash
+curl "http://localhost:3000/collection-ranking?player_id=1&uid=device-001"
+```
+
 ### 清理当前玩家存档
 
 ```bash

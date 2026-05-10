@@ -202,6 +202,17 @@ export async function 获取排行榜请求() {
     return result.data;
 }
 
+export async function 获取藏品排行榜请求() {
+    const { player_id, uid } = 获取玩家校验信息();
+    const query = [
+        `player_id=${encodeURIComponent(player_id)}`,
+        `uid=${encodeURIComponent(uid)}`,
+    ].join("&");
+
+    const result = await 请求JSON<排行榜结果>(`/collection-ranking?${query}`);
+    return result.data;
+}
+
 export function 清理存档请求() {
     return 请求JSON<{ deleted: number }>("/save/cleanup", {
         method: "POST",

@@ -368,29 +368,73 @@ const 排行: 成就项目类型[] = [
 const 藏品: 成就项目类型[] = [
 	{
 		名称: "多就是强",
-		描述: "位于藏品榜前3",
+		描述: "位于藏品榜前三",
 		get 条件() {
-			return true
+			const rank = 玩家.collection_ranking?.self?.rank;
+			return rank && rank < 3;
 		},
-		奖励: "技能扩充背包+4",
+		奖励: "技能【扩充背包】等级提升至4",
+		效果: {
+			计算技能扩充背包等级: (计算容器: 计算容器类型) => {
+				const rank = 玩家.collection_ranking?.self?.rank;
+				if(rank && rank < 3) {
+					计算容器.初始值 = 4;
+				}
+			}
+		}
 	},
 	{
 		名称: "多多益善",
 		描述: "位于藏品榜前十",
 		get 条件() {
-			return true
+			const rank = 玩家.collection_ranking?.self?.rank;
+			return rank && rank >= 3 && rank < 10;
 		},
-		奖励: "技能扩充背包+3",
+		奖励: "技能【扩充背包】等级提升至3",
+		效果: {
+			计算技能扩充背包等级: (计算容器: 计算容器类型) => {
+				const rank = 玩家.collection_ranking?.self?.rank;
+				if(rank && rank >= 3 && rank < 10) {
+					计算容器.初始值 = 3;
+				}
+			}
+		}
 	},
 	{
-		名称: "聊胜于无",
+		名称: "初具规模",
 		描述: "位于藏品榜前二十",
 		get 条件() {
-			return true
+			const rank = 玩家.collection_ranking?.self?.rank;
+			return rank && rank >= 10 && rank < 20;
 		},
-		奖励: "技能扩充背包+2",
+		奖励: "技能【扩充背包】等级提升至2",
+		效果: {
+			计算技能扩充背包等级: (计算容器: 计算容器类型) => {
+				const rank = 玩家.collection_ranking?.self?.rank;
+				if(rank && rank >= 10 && rank < 20) {
+					计算容器.初始值 = 2;
+				}
+			}
+		}
 	},
-]
+	{
+		名称: "小有所成",
+		描述: "位于藏品榜前五十",
+		get 条件() {
+			const rank = 玩家.collection_ranking?.self?.rank;
+			return rank && rank >= 20 && rank < 50;
+		},
+		奖励: "技能【扩充背包】等级提升至1",
+		效果: {
+			计算技能扩充背包等级: (计算容器: 计算容器类型) => {
+				const rank = 玩家.collection_ranking?.self?.rank;
+				if(rank && rank >= 20 && rank < 50) {
+					计算容器.初始值 = 1;
+				}
+			}
+		}
+	}
+];
 
 const 收集: 成就项目类型[] = [
 	{

@@ -270,6 +270,81 @@ func (s *Service) Ranking(ctx context.Context, playerID int64, uid string) (Rank
 	return result, nil
 }
 
+func (s *Service) CollectionRanking(ctx context.Context, playerID int64, uid string) (RankingResult, error) {
+	if _, err := s.ValidatePlayer(ctx, playerID, uid); err != nil {
+		return RankingResult{}, err
+	}
+
+	rows, err := s.db.Query(ctx, `
+		WITH scored AS (
+			SELECT
+				p.id,
+				p.name,
+				p.updated_at,
+				COALESCE(
+					SUM(
+						CASE
+							WHEN item.value ~ '^-?[0-9]+(\.[0-9]+)?$'
+							THEN item.value::double precision
+							ELSE 0
+						END
+					),
+					0
+				) AS score
+			FROM players p
+			LEFT JOIN LATERAL jsonb_each_text(
+				CASE
+					WHEN jsonb_typeof(p.ext_info->'藏品') = 'object'
+					THEN p.ext_info->'藏品'
+					ELSE '{}'::jsonb
+				END
+			) AS item(key, value) ON TRUE
+			GROUP BY p.id, p.name, p.updated_at
+		),
+		ranked AS (
+			SELECT
+				id,
+				name,
+				score,
+				ROW_NUMBER() OVER (ORDER BY score DESC, updated_at ASC, id ASC) AS rank
+			FROM scored
+		)
+		SELECT id, name, score, rank
+		FROM ranked
+		WHERE rank <= 50 OR id = $1
+		ORDER BY rank ASC
+	`, playerID)
+	if err != nil {
+		return RankingResult{}, err
+	}
+	defer rows.Close()
+
+	result := RankingResult{Players: []RankingEntry{}}
+	foundSelf := false
+	for rows.Next() {
+		var id int64
+		var entry RankingEntry
+		if err := rows.Scan(&id, &entry.Player.Name, &entry.Score, &entry.Rank); err != nil {
+			return RankingResult{}, err
+		}
+		entry.Player.ID = id
+		if entry.Rank <= 50 {
+			result.Players = append(result.Players, entry)
+		}
+		if id == playerID {
+			result.Self = entry
+			foundSelf = true
+		}
+	}
+	if err := rows.Err(); err != nil {
+		return RankingResult{}, err
+	}
+	if !foundSelf {
+		return RankingResult{}, errors.New("玩家藏品排行计算失败")
+	}
+	return result, nil
+}
+
 func (s *Service) CreateLog(ctx context.Context, playerID *int64, uid string, level string, payload json.RawMessage) (int64, error) {
 	if playerID != nil {
 		if _, err := s.ValidatePlayer(ctx, *playerID, uid); err != nil {

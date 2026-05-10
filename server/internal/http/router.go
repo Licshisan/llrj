@@ -34,6 +34,7 @@ func NewRouter(svc *service.Service, adminKey string) http.Handler {
 	r.Post("/save", handler.createSave)
 	r.Get("/random-save", handler.randomSave)
 	r.Get("/ranking", handler.ranking)
+	r.Get("/collection-ranking", handler.collectionRanking)
 	r.Post("/save/cleanup", handler.cleanupSaves)
 	r.Post("/admin/player/transfer", handler.transferPlayer)
 
@@ -205,6 +206,22 @@ func (h *Handler) ranking(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	OK(w, "获取排行榜成功", result)
+}
+
+func (h *Handler) collectionRanking(w http.ResponseWriter, r *http.Request) {
+	playerID, err := parseInt64(r.URL.Query().Get("player_id"))
+	if err != nil {
+		Fail(w, http.StatusBadRequest, "缺少player_id")
+		return
+	}
+	uid := strings.TrimSpace(r.URL.Query().Get("uid"))
+
+	result, err := h.service.CollectionRanking(r.Context(), playerID, uid)
+	if err != nil {
+		Fail(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	OK(w, "获取藏品排行榜成功", result)
 }
 
 func (h *Handler) transferPlayer(w http.ResponseWriter, r *http.Request) {
