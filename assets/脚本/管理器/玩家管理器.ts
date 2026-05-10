@@ -8,7 +8,8 @@ export const 默认玩家 = {
 	ext_info: {
 		战胜语: "",
 		战败语: "",
-		成就: {} as Record<string, any>,
+		积分: 0,
+		成就: [] as { 名称: string, 描述: string, 完成时间: number }[],
 		藏品: {} as Record<string, number>,
 	} as any,
 	server_info: {} as 服务器信息,

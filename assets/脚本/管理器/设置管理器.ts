@@ -9,7 +9,10 @@ const 默认设置 = {
 	自动买果子: false,
 	防误触: false,
 	批量购买: false,
-	上次选择: ""
+	上次选择: "",
+	成就: {} as Record<string, any>,
+	特质: {} as Record<string, number>,
+	藏品: {} as Record<string, number>,
 };
 
 export let 设置: typeof 默认设置 = JSON.parse(JSON.stringify(默认设置))
