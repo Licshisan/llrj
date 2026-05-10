@@ -31,6 +31,22 @@ export interface 存档记录 {
     };
 }
 
+export interface 排行榜玩家 {
+    id: number;
+    name: string;
+}
+
+export interface 排行榜条目 {
+    rank: number;
+    score: number;
+    player: 排行榜玩家;
+}
+
+export interface 排行榜结果 {
+    players: 排行榜条目[];
+    self: 排行榜条目;
+}
+
 function 获取玩家ID(): number {
     const id = Number(玩家?.id || 0);
     return Number.isFinite(id) && id > 0 ? id : 0;
@@ -172,6 +188,17 @@ export async function 获取随机存档请求(day: number) {
     ].join("&");
 
     return 请求JSON<存档记录>(`/random-save?${query}`);
+}
+
+export async function 获取排行榜请求() {
+    const { player_id, uid } = 获取玩家校验信息();
+    const query = [
+        `player_id=${encodeURIComponent(player_id)}`,
+        `uid=${encodeURIComponent(uid)}`,
+    ].join("&");
+
+    const result = await 请求JSON<排行榜结果>(`/ranking?${query}`);
+    return result.data;
 }
 
 export function 清理存档请求() {

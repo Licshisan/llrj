@@ -42,6 +42,22 @@ type PlayerBrief struct {
 	Name string `json:"name"`
 }
 
+type RankingPlayer struct {
+	ID   int64  `json:"id"`
+	Name string `json:"name"`
+}
+
+type RankingEntry struct {
+	Rank   int64         `json:"rank"`
+	Score  float64       `json:"score"`
+	Player RankingPlayer `json:"player"`
+}
+
+type RankingResult struct {
+	Players []RankingEntry `json:"players"`
+	Self    RankingEntry   `json:"self"`
+}
+
 func New(db *pgxpool.Pool) *Service {
 	return &Service{db: db}
 }
@@ -183,6 +199,74 @@ func (s *Service) CleanupPlayerSaves(ctx context.Context, playerID int64, uid st
 		return 0, err
 	}
 	return tag.RowsAffected(), nil
+}
+
+func (s *Service) Ranking(ctx context.Context, playerID int64, uid string) (RankingResult, error) {
+	if _, err := s.ValidatePlayer(ctx, playerID, uid); err != nil {
+		return RankingResult{}, err
+	}
+
+	rows, err := s.db.Query(ctx, `
+		WITH scored AS (
+			SELECT
+				id,
+				name,
+				updated_at,
+				COALESCE(
+					CASE
+						WHEN (ext_info->>'积分') ~ '^-?[0-9]+(\.[0-9]+)?$'
+						THEN (ext_info->>'积分')::double precision
+					END,
+					CASE
+						WHEN (ext_info->>'point') ~ '^-?[0-9]+(\.[0-9]+)?$'
+						THEN (ext_info->>'point')::double precision
+					END,
+					0
+				) AS score
+			FROM players
+		),
+		ranked AS (
+			SELECT
+				id,
+				name,
+				score,
+				ROW_NUMBER() OVER (ORDER BY score DESC, updated_at ASC, id ASC) AS rank
+			FROM scored
+		)
+		SELECT id, name, score, rank
+		FROM ranked
+		WHERE rank <= 50 OR id = $1
+		ORDER BY rank ASC
+	`, playerID)
+	if err != nil {
+		return RankingResult{}, err
+	}
+	defer rows.Close()
+
+	result := RankingResult{Players: []RankingEntry{}}
+	foundSelf := false
+	for rows.Next() {
+		var id int64
+		var entry RankingEntry
+		if err := rows.Scan(&id, &entry.Player.Name, &entry.Score, &entry.Rank); err != nil {
+			return RankingResult{}, err
+		}
+		entry.Player.ID = id
+		if entry.Rank <= 50 {
+			result.Players = append(result.Players, entry)
+		}
+		if id == playerID {
+			result.Self = entry
+			foundSelf = true
+		}
+	}
+	if err := rows.Err(); err != nil {
+		return RankingResult{}, err
+	}
+	if !foundSelf {
+		return RankingResult{}, errors.New("玩家排行计算失败")
+	}
+	return result, nil
 }
 
 func (s *Service) CreateLog(ctx context.Context, playerID *int64, uid string, level string, payload json.RawMessage) (int64, error) {

@@ -88,6 +88,14 @@ curl "http://localhost:3000/random-save?player_id=1&uid=device-001&day=3"
 
 随机存档不会返回请求玩家自己的存档。
 
+### 排行榜
+
+按 `players.ext_info` 中的 `积分` 字段从高到低排名，返回前 50 名和当前玩家自己的排名；响应中不包含 `uid`。
+
+```bash
+curl "http://localhost:3000/ranking?player_id=1&uid=device-001"
+```
+
 ### 清理当前玩家存档
 
 ```bash

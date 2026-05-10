@@ -33,6 +33,7 @@ func NewRouter(svc *service.Service, adminKey string) http.Handler {
 	r.Post("/ext-info", handler.updateExtInfo)
 	r.Post("/save", handler.createSave)
 	r.Get("/random-save", handler.randomSave)
+	r.Get("/ranking", handler.ranking)
 	r.Post("/save/cleanup", handler.cleanupSaves)
 	r.Post("/admin/player/transfer", handler.transferPlayer)
 
@@ -188,6 +189,22 @@ func (h *Handler) cleanupSaves(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	OK(w, "存档清理成功", map[string]int64{"deleted": count})
+}
+
+func (h *Handler) ranking(w http.ResponseWriter, r *http.Request) {
+	playerID, err := parseInt64(r.URL.Query().Get("player_id"))
+	if err != nil {
+		Fail(w, http.StatusBadRequest, "缺少player_id")
+		return
+	}
+	uid := strings.TrimSpace(r.URL.Query().Get("uid"))
+
+	result, err := h.service.Ranking(r.Context(), playerID, uid)
+	if err != nil {
+		Fail(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	OK(w, "获取排行榜成功", result)
 }
 
 func (h *Handler) transferPlayer(w http.ResponseWriter, r *http.Request) {
