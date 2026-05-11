@@ -14,6 +14,7 @@ import { 默认难度表 } from "./难度表";
 import { 默认特质表 } from "./特质表";
 import { 默认藏品表 } from "./藏品表";
 import { 默认成就表 } from "./成就表";
+import { 默认技能表 } from "./技能表";
 import { 上报错误, 登录请求, 上传ExtInfo请求 } from "../方法函数/网络请求";
 
 let 加载完成 = false
@@ -85,6 +86,15 @@ export function 注册钩子函数() {
 
 	默认成就表.forEach((成就项) => {
 		const 效果 = 成就项.效果
+		if (效果) {
+			for (let 时机 in 效果) {
+				注册钩子(时机, 效果[时机])
+			}
+		}
+	});
+
+	默认技能表.forEach((技能项) => {
+		const 效果 = 技能项.效果
 		if (效果) {
 			for (let 时机 in 效果) {
 				注册钩子(时机, 效果[时机])
