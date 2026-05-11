@@ -67,6 +67,10 @@ const 默认存档 = {
     阅历: 0,
     面经: 0,
 
+    体质: 0,
+    营养值: 0,
+    气血: 0,
+
     物品: {} as Record<string, number>,
     当日加成: {} as Record<string, number>,
     
