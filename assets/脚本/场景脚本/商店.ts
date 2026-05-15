@@ -5,7 +5,6 @@ import { 执行钩子 } from "../管理器/钩子管理器";
 import { 默认商品表 } from "../默认内容/商品表";
 import { 深克隆 } from "../方法函数/公共函数";
 import { 设置 } from "../管理器/设置管理器";
-
 const { ccclass, property } = _decorator;
 
 @ccclass("商店")

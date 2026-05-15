@@ -56,7 +56,7 @@ export class 开场 extends Component {
 			天赋数量 --
 		}
 
-		const 抽取的正面天赋 = this.随机抽取(默认天赋表.filter(i => !i.负面 && i.等级 > 0), 天赋数量)
+		const 抽取的正面天赋 = this.随机抽取(默认天赋表.filter(i => !i.负面 && i.等级 > 0 && i.名称 !== 设置.保留天赋), 天赋数量)
 		const 抽取的负面天赋 = this.随机抽取(默认天赋表.filter(i => i.负面 && i.等级 > 0), 天赋数量)
 
 		this.当前天赋.push(...抽取的正面天赋.map(x => x.名称))
@@ -111,15 +111,33 @@ export class 开场 extends Component {
 		序列.start();
 	}
 
-	随机抽取 <T>(列表: T[], 抽取数量: number): T[] {
-		if (!列表 || 列表.length === 0) return [];
-		const 打乱 = [...列表];
-		for (let i = 打乱.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[打乱[i], 打乱[j]] = [打乱[j], 打乱[i]];
+	随机抽取<T extends { 品质?: string }>(list: T[], count: number): T[] {
+		// 空值判断
+		if (!list || list.length === 0) return [];
+		// 权重配置：数字越大概率越高
+		const weightConfig = { 普通: 50, 稀有: 30, 传说: 10, 神秘: 10};
+
+		// 1. 生成带权重的候选池
+		const weightPool: T[] = [];
+		for (const item of list) {
+			const weight = weightConfig[item?.品质 || "普通"];
+			// 按权重重复放入元素，权重越高出现次数越多，被抽到概率越大
+			for (let i = 0; i < weight; i++) {
+				weightPool.push(item);
+			}
 		}
-		const 实际抽取数量 = Math.min(抽取数量, 打乱.length);
-		return 打乱.slice(0, 实际抽取数量);
+
+		// 2. 洗牌算法（Fisher-Yates）打乱候选池
+		const shuffled = [...weightPool];
+		for (let i = shuffled.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+		}
+
+		// 3. 去重 + 截取数量
+		const uniqueResult = Array.from(new Set(shuffled));
+		const realCount = Math.min(count, uniqueResult.length);
+		return uniqueResult.slice(0, realCount);
 	}
 
 	点击确定() {

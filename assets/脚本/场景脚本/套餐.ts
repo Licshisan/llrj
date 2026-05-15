@@ -6,6 +6,8 @@ import { 默认套餐表 } from "../默认内容/套餐表";
 import { 默认难度表 } from "../默认内容/难度表";
 import { 深克隆, 解析颜色 } from "../方法函数/公共函数";
 import { 设置, 保存设置 } from "../管理器/设置管理器";
+import { 玩家 } from "../管理器/玩家管理器";
+import { 计算数值 } from "../方法函数/属性计算";
 const { ccclass, property } = _decorator;
 
 @ccclass("套餐")
@@ -71,9 +73,9 @@ export class 套餐 extends Component {
 						存档.套餐名称 = 套餐.名称
 						存档.游戏难度 = this.当前难度
 						// 注入藏品
-						for(let 藏品名 in 设置.藏品){
+						for(let 藏品名 in 玩家.ext_info.藏品){
 							console.log(藏品名)
-							存档.物品[藏品名] = 设置.藏品[藏品名];
+							存档.藏品[藏品名] = 计算数值("藏品生效数量",  玩家.ext_info[藏品名] || 0);
 							console.log(存档.物品[藏品名])
 						}
 						执行钩子("新建游戏")

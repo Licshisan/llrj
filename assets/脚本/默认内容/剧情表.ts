@@ -1867,6 +1867,8 @@ export const 其他剧情表: 剧情定义类型[] = [
 	{
 		名称: "遇见同行",
 		get 文本(){
+			const 时空流浪者 = 存档.临时数据.时空流浪者
+
 			const 昵称 = globalThis?.PVP玩家数据?.昵称 || "时空流浪者"
 			const a = [`遇见一个流浪汉`, `名叫【${昵称}】`]
 			const 天赋 = globalThis?.PVP玩家数据?.存档?.天赋

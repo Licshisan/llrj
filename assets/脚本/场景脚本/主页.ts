@@ -1,4 +1,4 @@
-import { _decorator, Button, Color, Component, director, Label, Node, Sprite } from 'cc';
+import { _decorator, Button, Color, Component, director, Label, Node, SafeArea, Sprite, Widget } from 'cc';
 import { 保存存档, 存档 } from '../管理器/存档管理器';
 import { 计算数值, 计算最大攻击, 计算最大生命, 计算最大精力, 计算最大防御, 计算最大饥饿 } from '../方法函数/属性计算';
 import { 抽取项目, 抽取物品, 格式化金钱, 自然恢复生命 } from '../方法函数/公共函数';
@@ -63,7 +63,7 @@ export class 主页 extends Component {
         this.按钮容器.getChildByName("伙伴").on(Button.EventType.CLICK, () => director.loadScene("伙伴"), this)
         this.按钮容器.getChildByName("进食").on(Button.EventType.CLICK, () => director.loadScene("进食"), this)
         this.按钮容器.getChildByName("制作").on(Button.EventType.CLICK, () => director.loadScene("制作"), this)
-        this.按钮容器.getChildByName("特性").on(Button.EventType.CLICK, () => director.loadScene("面板"), this)
+        this.按钮容器.getChildByName("特性").on(Button.EventType.CLICK, () => director.loadScene("特性"), this)
         this.按钮容器.getChildByName("商店").on(Button.EventType.CLICK, () => director.loadScene("商店"), this)
         this.信息栏.on(Node.EventType.TOUCH_END, () => {
             if (存档.当前事件 || 存档.当前敌人) return
@@ -277,6 +277,17 @@ export class 主页 extends Component {
 
     暗夜模式() {
         // 比例适配
+        if(设置.经典比例){
+            this.node.getComponent(SafeArea).enabled = false
+            const widget = this.node.getComponent(Widget)
+            if (widget) {
+                widget.top = 0
+                widget.bottom = 0
+                widget.left = 0
+                widget.right = 0
+                widget.updateAlignment()
+            }
+        }
 
         if (设置.暗夜模式) {
             const 标签 = this.node.getComponentsInChildren(Label);
@@ -674,9 +685,6 @@ export class 主页 extends Component {
         }
 
         位置 += `已停留${存档.停留天数[获取地区名称()] || 0}天 `
-        if(存档.其他.今日天气){
-            位置 += `${存档.其他.今日天气} ${存档.其他.今日气温}℃`
-        }
 
         return 位置
     }

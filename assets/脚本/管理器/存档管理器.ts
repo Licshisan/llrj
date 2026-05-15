@@ -72,6 +72,8 @@ const 默认存档 = {
     气血: 0,
 
     物品: {} as Record<string, number>,
+    藏品: {} as Record<string, number>,
+    新藏品: {} as Record<string, number>,
     当日加成: {} as Record<string, number>,
     
     架势: {} as Record<string, number>,
@@ -89,7 +91,7 @@ const 默认存档 = {
     使用次数: {} as Record<string, number>,
     击败次数: {} as Record<string, number>,
     战败次数: {} as Record<string, number>,
-
+    临时数据: {} as any,
     // 运行时
     当前事件: "",
     当前剧情: "",

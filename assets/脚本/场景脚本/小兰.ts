@@ -21,10 +21,10 @@ export class 小兰 extends Component {
 		this.选择容器.getChildByName('选择按钮2').on(Button.EventType.CLICK, this.send, this)
 		this.选择容器.getChildByName('选择按钮3').on(Button.EventType.CLICK, this.action, this)
 
-		this.切换1.active = 存档.伙伴.晓月关系
+		this.切换1.active = 存档.伙伴.晓月关系 > 0 
 		this.切换1.on(Button.EventType.CLICK, () => director.loadScene('伙伴'), this)
 
-		this.切换2.active = 存档.伙伴.碧瑶关系
+		this.切换2.active = 存档.伙伴.碧瑶关系 > 0
 		this.切换2.on(Button.EventType.CLICK, () => {
 			globalThis.伙伴特性伙伴名称 = '碧瑶'
 			director.loadScene('伙伴特性')

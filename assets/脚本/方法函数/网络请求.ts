@@ -1,3 +1,4 @@
+import { 存档 } from "../管理器/存档管理器";
 import { 玩家 } from "../管理器/玩家管理器";
 
 export const 服务器地址 = "http://localhost:3000";
@@ -69,15 +70,6 @@ function 获取玩家校验信息() {
         player_id: 获取玩家ID(),
         uid: 玩家.uid,
     };
-}
-
-function 提取存档天数(save: any): number {
-    const day = Number(save?.day ?? save?.天数 ?? 0);
-    return Number.isFinite(day) ? day : 0;
-}
-
-function 提取存档名称(save: any): string {
-    return String(save?.save_name || save?.存档名称 || "default");
 }
 
 export async function 请求JSON<T = any>(path: string, options:  {
@@ -157,14 +149,14 @@ export async function 上传消息请求(data: any) {
     });
 }
 
-export async function 上传存档请求(save: any, setting?: any) {
+export async function 上传存档请求() {
     return 请求JSON<存档记录>("/save", {
         method: "POST",
         body: {
             ...获取玩家校验信息(),
-            day: 提取存档天数(save),
-            save_name: 提取存档名称(save),
-            save,
+            day: 存档.天数,
+            save_name: 存档.存档名称,
+            save: JSON.stringify(存档),
         },
     });
 }

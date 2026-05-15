@@ -7,7 +7,7 @@ import { 自动进食 } from "../方法函数/公共函数";
 import { 执行钩子 } from "../管理器/钩子管理器";
 import { 获取地区名称 } from "../默认内容/地区表";
 import { 默认剧情表 } from "../默认内容/剧情表";
-import { 获取随机存档请求, 上传存档请求, 上传ExtInfo请求 } from "../方法函数/网络请求";
+import { 获取随机存档请求, 上传存档请求 } from "../方法函数/网络请求";
 const { ccclass, property } = _decorator;
 
 @ccclass("睡觉")
@@ -18,8 +18,7 @@ export class 睡觉 extends Component {
     @property(Node) 继续按钮: Node = null!;
 
     start(): void {
-        上传ExtInfo请求()
-        上传存档()
+        上传存档请求()
         this.标签.active = false;
         this.属性容器.active = false;
         this.文本容器.active = false;
@@ -37,28 +36,10 @@ export class 睡觉 extends Component {
         this.继续按钮.on(Button.EventType.CLICK, () => this.点击继续(), this,);
     }
 
-    点击继续() {
-        const 剧情 = 默认剧情表.find(剧情 => 剧情.地区 === 获取地区名称() && 剧情.条件)
-        if (剧情) {
-            globalThis.PVP玩家数据 = { 昵称:"", 存档: null, 设置: null}
-            存档.当前剧情 = 剧情.名称
-            保存存档()
-            director.loadScene("剧情");
-        } else {
-            if(globalThis.PVP玩家数据.昵称){
-                存档.当前剧情 = "遇见同行"
-                保存存档()
-                director.loadScene("剧情");
-            } else{
-                director.loadScene("主页");
-            }
-        }
-    }
-
     恢复() {
         // 睡觉恢复 - 重置每日数据
         存档.其他.当日比赛次数 = 0
-        存档.其他.当日触发比武大会 = false
+        存档.其他.当日触发比武大会 = 0
         存档.其他.当日看少妇次数 = 0;
         存档.其他.时空流浪者待抢夺天赋天数 = 0;
         存档.其他.锻炼成功率 = Math.floor(Math.random() * 50);
@@ -68,30 +49,6 @@ export class 睡觉 extends Component {
             存档.其他.电疗店资产 -= Math.floor(15 * Math.random() + 5);
         }
         存档.当前文本 = ""
-        // 天气
-        const list = [
-            { n: '晴天', w: 40 },
-            { n: '多云', w: 25 },
-            { n: '阴天', w: 20 },
-            { n: '小雨', w: 10 },
-            { n: '雾', w: 5 },
-            { n: '大风', w: 4 },
-            { n: '小雪', w: 2 },
-            { n: '大雪', w: 1 }
-        ];
-        let total = 0, r = Math.random();
-        list.forEach(i => total += i.w);
-        r *= total;
-        let 随机天气 = "晴天";
-        for (let i of list) {
-            if ((r -= i.w) < 0) {
-                随机天气 = i.n;
-                break;
-            }
-        }
-        const 随机气温 = Math.floor(Math.random() * 36);
-        存档.其他.今日天气 = 随机天气
-        存档.其他.今日气温 = 随机气温
 
         const 精力恢复 = 计算数值("睡觉恢复精力", 计算最大精力() - 存档.精力)
         const 饥饿消耗 = 计算数值("睡觉消耗饥饿", 20)
@@ -156,8 +113,7 @@ export class 睡觉 extends Component {
             if (存档.天数 >= 83 && 获取地区名称() === "山脉") {
                 存档.当前敌人 = "蒙面人";
             }
-            const 枪数量 = 存档.物品.枪 || 0;
-            if (Math.random() * 100 < (枪数量 - 1) * 10 + 1 && 枪数量 > 0) {
+            if (Math.random() * 100 < (存档.物品.枪 - 1) * 10 + 1 && 存档.物品.枪 > 0) {
                 存档.当前敌人 = "陈晓（大大）2";
             }
 
@@ -170,18 +126,10 @@ export class 睡觉 extends Component {
         }
 
         // 30%概率遇到其他玩家（PVP）
-        globalThis.PVP玩家数据 = { 昵称:"", 存档: null, 设置: null}
-        if (存档.当前敌人 == "" && 存档.天数 > 1 && 存档.天数 < 178 && Math.random() * 100 < 28) {
+        if (存档.当前敌人 == "" && 存档.天数 > 1 && 存档.天数 < 178 && Math.random() * 100 < 24) {
             获取随机存档请求(存档.天数 - 1).then(result => {
                 console.log("随机匹配到的存档数据", result);
-                const 远程存档 = result.data;
-                if (result.code === 200 && 远程存档?.save) {
-                    globalThis.PVP玩家数据 = {
-                        存档: 远程存档.save,
-                        昵称: 远程存档.player?.name || '神秘流浪者',
-                        设置: null,
-                    };
-                }
+                存档.临时数据.时空流浪者 = result.data
             }).catch((e) => {
                 error(e)
             });
@@ -206,7 +154,7 @@ export class 睡觉 extends Component {
 
         // 剧情条件判定
         if (存档.距离 === 100 && 存档.停留天数.县城 > 22) {
-            存档.按钮.前进 = true
+            存档.按钮.前进 = 1
         }
 
         // 回到城中村
@@ -227,7 +175,8 @@ export class 睡觉 extends Component {
         // 住房
         if(存档.其他.房源){
             if(存档.其他.住房已居住天数 < 存档.其他.住房天数){
-                if(存档.其他.房源.中介名称 === '刘老头' && Math.random() * 100 < 25){
+                const 房源 = 存档.临时数据.房源 || {}
+                if(房源.中介名称 === '刘老头' && Math.random() * 100 < 25){
                     结果文本.push("【租房被坑】你租的房子来源于假冒的房东，你被真正的房东赶了出来")
                     存档.其他.住房已居住天数 = 0
                     存档.其他.住房天数 = 0
@@ -237,12 +186,12 @@ export class 睡觉 extends Component {
 
                 存档.其他.住房已居住天数 ++
 
-                const 恢复精力 = Math.floor(计算最大精力() * 存档.其他.房源.恢复精力)
+                const 恢复精力 = Math.floor(计算最大精力() * 房源.恢复精力)
                 存档.精力 += 恢复精力
-                const 恢复健康 = Math.floor(存档.其他.房源.恢复健康)
+                const 恢复健康 = Math.floor(房源.恢复健康)
                 存档.健康 += 恢复健康
 
-                结果文本.push( `【${存档.其他.房源.名称}】充分的休息让你额外恢复${恢复精力}精力（${(存档.其他.房源.恢复精力 * 100).toFixed(2)}%），${恢复健康}点健康，已居住${存档.其他.住房已居住天数}/${存档.其他.住房天数}天`);
+                结果文本.push( `【${房源.名称}】充分的休息让你额外恢复${恢复精力}精力（${(房源.恢复精力 * 100).toFixed(2)}%），${恢复健康}点健康，已居住${存档.其他.住房已居住天数}/${存档.其他.住房天数}天`);
             }else{
                 结果文本.push(`【房租已到期】已居住${存档.其他.住房已居住天数}/${存档.其他.住房天数}天，你回到了桥洞休息`);
                 存档.其他.住房已居住天数 = 0
@@ -250,9 +199,6 @@ export class 睡觉 extends Component {
                 存档.其他.房源 = 0
             }
         }
-
-
-
 
         执行钩子("睡觉结算", [结果文本])
 
@@ -277,6 +223,24 @@ export class 睡觉 extends Component {
             feature.setParent(this.文本容器);
             feature.setPosition(0, 0);
             feature.getComponent(UITransform).setContentSize(650, 50);
+        }
+    }
+
+    点击继续() {
+        const 剧情 = 默认剧情表.find(剧情 => 剧情.地区 === 获取地区名称() && 剧情.条件)
+        if (剧情) {
+            存档.临时数据.时空流浪者 = null
+            存档.当前剧情 = 剧情.名称
+            保存存档()
+            director.loadScene("剧情");
+        } else {
+            if(存档.临时数据.时空流浪者){
+                存档.当前剧情 = "遇见同行"
+                保存存档()
+                director.loadScene("剧情");
+            } else{
+                director.loadScene("主页");
+            }
         }
     }
 }
