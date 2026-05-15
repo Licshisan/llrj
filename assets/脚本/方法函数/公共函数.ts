@@ -89,7 +89,7 @@ export function 对象求和(obj: Record<string, number>) {
 	// 遍历对象所有属性
 	for (const key in obj) {
 		// 只处理自身属性 + 数字类型值
-		if (obj.hasOwnProperty(key) && typeof obj[key] === 'number' && !isNaN(obj[key])) {
+		if (Object.prototype.hasOwnProperty.call(obj, key) && typeof obj[key] === 'number' && !isNaN(obj[key])) {
 			sum += obj[key];
 		}
 	}
@@ -141,7 +141,7 @@ export function 深克隆<T>(target: T): T {
 	// 3. 处理普通对象（如天赋项）
 	const cloneObj = {} as T;
 	for (const key in target) {
-		if (target.hasOwnProperty(key)) {
+		if (Object.prototype.hasOwnProperty.call(target, key)) {
 			cloneObj[key] = 深克隆((target as any)[key]);
 		}
 	}

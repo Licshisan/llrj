@@ -35,7 +35,7 @@ export function 加载设置() {
 				设置对象[键] = 默认设置[键];
 				continue;
 			}
-			if (!设置对象.hasOwnProperty(键) || typeof 设置对象[键] !== typeof 默认设置[键]) {
+			if (!Object.prototype.hasOwnProperty.call(设置对象, 键) || typeof 设置对象[键] !== typeof 默认设置[键]) {
 				设置对象[键] = 默认设置[键];
 				error(`设置项【${键}】异常，已重置为默认值: ${默认设置[键]}`);
 			}

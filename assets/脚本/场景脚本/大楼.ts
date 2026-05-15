@@ -61,9 +61,9 @@ export class 大楼 extends Component {
 		}
 
 		const 四层按钮 = this.大楼.getChildByName("按钮容器").getChildByName("选择按钮4")
-		if (Math.random() * 100 < 70) {
+		if (Math.random() * 100 < 计算数值("网吧开门概率", 70)) {
 			存档.其他.游戏时长 = 存档.其他.游戏时长 || 0
-			const 胜率 = Math.min(存档.其他.网吧进度 / 10 + 40, 75).toFixed(1);
+			const 胜率 = Math.min(存档.其他.网吧进度 / 10 + 40, 计算数值("网吧胜率上限", 75)).toFixed(1);
 			四层按钮.getChildByName("标签").getComponent(Label).string = `四楼：晓风网咖（属性+${存档.其他.全属性加成}%，胜率${胜率}%）`
 			四层按钮.on(Button.EventType.CLICK, () => this.点击四楼(), this);
 		} else {
@@ -173,7 +173,7 @@ export class 大楼 extends Component {
 		this.标签.getComponent(Label).string = "";
 	}
 	点击四楼() {
-		if (存档.其他.游戏时长 > 30) {
+		if (存档.其他.游戏时长 > 计算数值("网吧游戏时长上限", 30)) {
 			播放文本(this.标签, '"小兄弟，没身份证的人只能临时上机两小时哦，我怕警察来查，请下次再玩吧~"');
 			return
 		}
@@ -231,7 +231,7 @@ export class 大楼 extends Component {
 		if (特殊奖励) {
 			播放文本(this.标签, 特殊奖励());
 		} else {
-			if (Math.random() * 100 < Math.min(存档.其他.网吧进度 / 10 + 40, 75)) {
+			if (Math.random() * 100 < Math.min(存档.其他.网吧进度 / 10 + 40, 计算数值("网吧胜率上限", 75))) {
 				存档.其他.网吧连胜次数 ++
 				存档.其他.全属性加成 += 1;
 				播放文本(this.标签, "游戏胜利！炒开森~攻防血提高1%（临时效果，随天数缓慢衰减）。游戏技术+1");
@@ -242,9 +242,9 @@ export class 大楼 extends Component {
 			}
 		}
 
-		const 胜率 = Math.min(存档.其他.网吧进度 / 10 + 40, 75).toFixed(1);
+		const 胜率 = Math.min(存档.其他.网吧进度 / 10 + 40, 计算数值("网吧胜率上限", 75)).toFixed(1);
 		this.大楼.getChildByName("按钮容器").getChildByName("选择按钮4").getChildByName("标签").getComponent(Label).string = `四楼：晓风网咖（属性+${存档.其他.全属性加成}%,胜率${胜率}%,已上网${(存档.其他.游戏时长 * 1 / 15).toFixed(1)}小时）`
-		if (存档.其他.游戏时长 > 30) {
+		if (存档.其他.游戏时长 > 计算数值("网吧游戏时长上限", 30)) {
 			this.大楼.getChildByName("按钮容器").getChildByName("选择按钮4").getChildByName("标签").getComponent(Label).string = "四楼：晓风网咖（已关门）"
 		}
 		this.更新()

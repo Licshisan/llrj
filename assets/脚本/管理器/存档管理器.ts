@@ -156,7 +156,7 @@ export function 获取存档列表(): (typeof 存档)[] {
             const 存档对象 = 存档字符串 ? JSON.parse(存档字符串) : {};
 
             for (const 键 in 默认存档) {
-                if (!存档对象.hasOwnProperty(键) || typeof 存档对象[键] !== typeof 默认存档[键]) {
+                if (!Object.prototype.hasOwnProperty.call(存档对象, 键) || typeof 存档对象[键] !== typeof 默认存档[键]) {
                     存档对象[键] = 默认存档[键];
                     error(`存档项【${键}】异常，已重置为默认值: ${默认存档[键]}`);
                 }
@@ -216,7 +216,7 @@ export function 加载存档(存档名称: string) {
         const 存档对象 = 存档字符串 ? JSON.parse(存档字符串) : {}
 
         for (const 键 in 默认存档) {
-            if (!存档对象.hasOwnProperty(键) || typeof 存档对象[键] !== typeof 默认存档[键]) {
+            if (!Object.prototype.hasOwnProperty.call(存档对象, 键) || typeof 存档对象[键] !== typeof 默认存档[键]) {
                 存档对象[键] = 默认存档[键];
                 error(`存档项【${键}】异常，已重置为默认值: ${默认存档[键]}`);
             }
@@ -259,7 +259,7 @@ export function 加载备份(备份名称: string) {
         const 存档对象 = 存档字符串 ? JSON.parse(存档字符串) : {}
 
         for (const 键 in 默认存档) {
-            if (!存档对象.hasOwnProperty(键) || typeof 存档对象[键] !== typeof 默认存档[键]) {
+            if (!Object.prototype.hasOwnProperty.call(存档对象, 键) || typeof 存档对象[键] !== typeof 默认存档[键]) {
                 存档对象[键] = 默认存档[键];
                 error(`存档项【${键}】异常，已重置为默认值: ${默认存档[键]}`);
             }
@@ -292,7 +292,7 @@ export function 新建外部存档(data: string | object) {
     }
     
     for (const 键 in 默认存档) {
-        if (!存档对象.hasOwnProperty(键) || typeof 存档对象[键] !== typeof 默认存档[键]) {
+        if (!Object.prototype.hasOwnProperty.call(存档对象, 键) || typeof 存档对象[键] !== typeof 默认存档[键]) {
             存档对象[键] = 默认存档[键];
             error(`存档项【${键}】异常，已重置为默认值: ${默认存档[键]}`);
         }

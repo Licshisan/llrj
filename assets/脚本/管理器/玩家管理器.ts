@@ -49,7 +49,7 @@ export function 加载玩家() {
 				玩家对象[键] = 默认玩家[键];
 				continue;
 			}
-			if (!玩家对象.hasOwnProperty(键) || typeof 玩家对象[键] !== typeof 默认玩家[键]) {
+			if (!Object.prototype.hasOwnProperty.call(玩家对象, 键) || typeof 玩家对象[键] !== typeof 默认玩家[键]) {
 				玩家对象[键] = 默认玩家[键];
 				error(`玩家项【${键}】异常，已重置为默认值: ${默认玩家[键]}`);
 			}

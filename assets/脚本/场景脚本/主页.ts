@@ -404,7 +404,8 @@ export class 主页 extends Component {
         }
 
         // 领取补偿
-        const 有可领补偿 = Object.values(玩家.server_info?.补偿 as Record<string, number>).some(val => val > 0);
+        const 补偿 = 玩家.server_info?.补偿 as Record<string, number> || {};
+        const 有可领补偿 = Object.values(补偿).some(val => val > 0);
         if(有可领补偿){
             this.node.getComponent(事件).触发事件("领取补偿")
             return false
