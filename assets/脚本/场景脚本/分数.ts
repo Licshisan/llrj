@@ -82,7 +82,7 @@ export class 分数 extends Component {
 	更新成就() {
 		const 完成成就: 成就项目类型[] = [];
 		for (const 成就 of 默认成就表) {
-			if (!成就.条件 || !玩家.ext_info.成就.find(c=> c.完成)) continue;
+			if (!成就.条件 || 玩家.ext_info.成就.find(c => c.名称 === 成就.名称)) continue;
 
 			const 新成就 = {
 				名称: 成就.名称,

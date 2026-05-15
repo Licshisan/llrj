@@ -134,7 +134,7 @@ export class 伙伴 extends Component {
 		let dialog = 固定对话[存档.伙伴.晓月聊天次数];
 		if (!dialog) {
 			const index = Math.floor(Math.random() * 随机对话.length);
-			dialog = 固定对话[index];
+			dialog = 随机对话[index];
 		}
 
 		if (存档.伙伴.晓月聊天次数 % 3 === 0) {

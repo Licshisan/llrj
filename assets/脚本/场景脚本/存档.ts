@@ -71,5 +71,6 @@ export class 存档 extends Component {
         } else if(存档.距离 == 300){
             地区 = "省城"
         }
+        return 地区;
     }
 }

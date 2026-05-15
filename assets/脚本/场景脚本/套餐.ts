@@ -75,8 +75,8 @@ export class 套餐 extends Component {
 						// 注入藏品
 						for(let 藏品名 in 玩家.ext_info.藏品){
 							console.log(藏品名)
-							存档.藏品[藏品名] = 计算数值("藏品生效数量",  玩家.ext_info[藏品名] || 0);
-							console.log(存档.物品[藏品名])
+							存档.藏品[藏品名] = 计算数值("藏品生效数量",  玩家.ext_info.藏品[藏品名] || 0);
+							console.log(存档.藏品[藏品名])
 						}
 						执行钩子("新建游戏")
 						保存存档()

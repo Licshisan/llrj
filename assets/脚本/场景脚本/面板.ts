@@ -108,7 +108,7 @@ export class 面板 extends Component {
             if (存档.天赋[天赋名]) {
                 const 天赋 = 默认天赋表.find(x => x.名称 === 天赋名);
                 if (天赋) {
-                    const 文字 = `【${天赋名}LV${存档.特质[天赋.名称]}】${天赋.说明}`;
+                    const 文字 = `【${天赋名}LV${存档.天赋[天赋.名称]}】${天赋.说明}`;
                     创建普通文字(this.内容, 文字, index, 天赋.颜色);
                     index++;
                 }
