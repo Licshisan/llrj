@@ -25,6 +25,7 @@ export type 战斗角色 = {
     出场语: string,
     方法: string,
     掉落物: 概率类型[],
+    下一个敌人?: string,
     战斗初始化: (对局: 对局类型) => void,
     攻击前?: (对局: 对局类型) => void,
     被攻击前?: (对局: 对局类型) => void,
@@ -457,7 +458,7 @@ export class 战斗 extends Component {
             },
             失败效果: (对局: 对局类型) => {
                 if(敌人名称 === '另一个自己'){
-                    存档.按钮.挑战 = false
+                    存档.按钮.挑战 = 0
                 }
                 对局.结果文本.push(`“${战败语}”`)
             },
@@ -658,6 +659,21 @@ export class 战斗 extends Component {
     胜利结算() {
         this.对局.结果文本 = ['战斗胜利！'];
 
+        // 连续战
+        if(this.对局.敌人.下一个敌人){
+            //敌人失败
+            this.对局.敌人.失败效果(this.对局)
+
+            if (存档.生命 <= 0) {
+                存档.生命 = 1;
+            }
+
+            存档.其他.胜利次数 += 1;
+            存档.击败次数[this.对局.敌人.名称] += 1
+            this.scheduleOnce(() => this.下一个敌人(this.对局.结果文本.join('\n'), this.对局.敌人.下一个敌人), 1.8 / 设置.播放速度);
+            return
+        }
+
         //主角胜利
         执行钩子("战斗胜利", [this.对局])
 
@@ -713,6 +729,9 @@ export class 战斗 extends Component {
                 }
             }
         }
+        if (this.对局.敌人.名称 === "时空流浪者") {
+            存档.其他.时空流浪者待抢夺天赋天数 = 存档.天数;
+        }
 
         //敌人失败
         this.对局.敌人.失败效果(this.对局)
@@ -722,13 +741,8 @@ export class 战斗 extends Component {
         }
 
         存档.其他.胜利次数 += 1;
-        if (!存档.击败次数) {
-            存档.击败次数 = {};
-        }
-        存档.击败次数[this.对局.敌人.名称] = (存档.击败次数[this.对局.敌人.名称] || 0) + 1;
-        if (this.对局.敌人.名称 === "时空流浪者") {
-            存档.其他.时空流浪者待抢夺天赋天数 = 存档.天数;
-        }
+        存档.击败次数[this.对局.敌人.名称] += 1
+
         this.scheduleOnce(() => this.结束战斗(this.对局.结果文本.join('\n')), 1.8 / 设置.播放速度);
     }
 
@@ -848,6 +862,14 @@ export class 战斗 extends Component {
         放大出现(this.node.getComponent(主页).按钮容器)
         this.node.getComponent(主页).播放文本(text)
         保存存档();
+    }
+
+    下一个敌人(text: string, next: string) {
+        this.node.getComponent(主页).更新()
+        this.node.getComponent(主页).播放文本(text)
+        存档.当前敌人 = next;
+        保存存档();
+        this.进入战斗(next)
     }
 
     更新() {

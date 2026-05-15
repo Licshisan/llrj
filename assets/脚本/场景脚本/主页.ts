@@ -9,6 +9,7 @@ import { 执行钩子 } from '../管理器/钩子管理器';
 import { 设置 } from '../管理器/设置管理器';
 import { 获取当前日记 } from '../默认内容/日记表';
 import { 获取地区名称, 获取当前地区 } from '../默认内容/地区表';
+import { 玩家 } from '../管理器/玩家管理器';
 const { ccclass, property } = _decorator;
 
 @ccclass('主页')
@@ -65,22 +66,13 @@ export class 主页 extends Component {
         this.按钮容器.getChildByName("特性").on(Button.EventType.CLICK, () => director.loadScene("面板"), this)
         this.按钮容器.getChildByName("商店").on(Button.EventType.CLICK, () => director.loadScene("商店"), this)
         this.信息栏.on(Node.EventType.TOUCH_END, () => {
-            if (存档.当前事件 || 存档.当前敌人) {
-                return
-            }
+            if (存档.当前事件 || 存档.当前敌人) return
             director.loadScene("面板")
         }, this)
         this.暗夜模式()
     }
 
     回档() {
-        // 兼容
-        if(存档.伙伴.碧瑶存款) {
-            存档.其他.碧瑶存款 = 存档.伙伴.碧瑶存款
-            存档.伙伴.碧瑶存款 = false
-        }
-        保存存档()
-        
         this.scheduleOnce(() => {
             if (存档.当前剧情) {
                 director.loadScene("剧情")
@@ -116,6 +108,13 @@ export class 主页 extends Component {
                     存档.当前剧情 = "未完成的计数"
                 }
             }
+            
+            const 复活机会 = 计算数值("复活机会", 0)
+            if(存档.其他.使用复活机会次数 < 复活机会 && !存档.其他.选择死亡){
+                存档.其他.使用复活机会次数 ++
+                存档.当前剧情 = "复活"
+            }
+
             保存存档()
             director.loadScene("剧情")
             return
@@ -131,16 +130,16 @@ export class 主页 extends Component {
 
         // 通关BOSS
         if (存档.天数 >= 180 && 存档.剧情.通关) {
-            存档.按钮.伙伴 = false
-            存档.按钮.制作 = false
-            存档.按钮.前进 = false
-            存档.按钮.商店 = false
-            存档.按钮.挑战 = false
-            存档.按钮.探索 = false
-            存档.按钮.特性 = false
-            存档.按钮.睡觉 = false
-            存档.按钮.进食 = false
-            存档.按钮.结局 = true
+            存档.按钮.伙伴 = 0
+            存档.按钮.制作 = 0
+            存档.按钮.前进 = 0
+            存档.按钮.商店 = 0
+            存档.按钮.挑战 = 0
+            存档.按钮.探索 = 0
+            存档.按钮.特性 = 0
+            存档.按钮.睡觉 = 0
+            存档.按钮.进食 = 0
+            存档.按钮.结局 = 1
 
             this.顶部状态栏.active = false
             this.信息栏.active = false
@@ -185,7 +184,7 @@ export class 主页 extends Component {
         
         let 剧情得分 = 0
         for (const key in 存档.剧情) {
-            if (存档.剧情[key] === true) {
+            if (存档.剧情[key] === 1) {
                 剧情得分++
             }
         }
@@ -207,7 +206,7 @@ export class 主页 extends Component {
 
         let 通关文本 = `“总分为${得分}，高于通关所需分数（30分）。你可以过关啦~”`
         if(得分 <= 30){
-            通关文本 = `“总分为${得分}，低于通关所需分数（30分）。放心，你的存档不会被我删除。”`
+            通关文本 = `“总分为${得分}，低于通关所需分数（30分）。不过放心，你的存档不会被我删除~”`
         }
         const 得分结局 = [
             `“你的答题评分为30（满分30，与刚才十个题目有关）。\n这部分设计目的、只是想引导你去思考这些问题，你随便怎么选都可以，我不会去要求你必须怎么样”`,
@@ -277,6 +276,8 @@ export class 主页 extends Component {
     }
 
     暗夜模式() {
+        // 比例适配
+
         if (设置.暗夜模式) {
             const 标签 = this.node.getComponentsInChildren(Label);
             标签.forEach(label => {
@@ -323,7 +324,15 @@ export class 主页 extends Component {
             this.播放文本("挑战需10点精力！")
             return
         }
-        const 挑战组 = ["眼镜王蛇（精英）", "逃犯（精英）", "深渊巨蟒", "机械人（被害妄想症）", "女剑士（中二病他姐）", "天下第一乖（么么啾）", "红狼", "8号拳师", "双枪老太婆", "自爆蛋", "晓风基因计划", "基因改造人", "一块黑色的石头", "机甲少女", "炮击少女", "吾王", "晓风", "南天门大将军", "统御万天无极大道至真妙有玄穹高上帝", "退役知名拳手", "极限挑战守门人(一期)", "另一个自己"];
+        const 挑战组 = ["眼镜王蛇（精英）", "逃犯（精英）", "深渊巨蟒", "机械人（被害妄想症）", "女剑士（中二病他姐）", "天下第一乖（么么啾）", "红狼", "8号拳师", "双枪老太婆", "自爆蛋", "晓风基因计划", "基因改造人", "一块黑色的石头", "机甲少女", "炮击少女", "吾王", "晓风"];
+        执行钩子("获取挑战列表", [挑战组])
+        挑战组.push("镜像人")
+        挑战组.push("榜一大哥")
+        挑战组.push("退役知名拳手")
+        挑战组.push("极限挑战守门人(一期)")
+        挑战组.push("南天门大将军")
+        挑战组.push("统御万天无极大道至真妙有玄穹高上帝")
+
         const 敌人名称 = 挑战组[存档.其他.挑战进度]
         if (!敌人名称) {
             this.播放文本("你已经天下无敌了...")
@@ -373,21 +382,20 @@ export class 主页 extends Component {
         保存存档()
     }
 
-
     前置条件() {
         if (存档.当前事件 || 存档.当前敌人) {
             return false
         }
 
-        // 领取补偿
-        const 有可领补偿 = Object.values(设置.补偿).some(val => val > 0);
-        if(有可领补偿){
-            this.node.getComponent(事件).触发事件("领取补偿")
+        if (存档.健康 <= 0) {
+            this.游戏结束()
             return false
         }
 
-        if (存档.健康 <= 0) {
-            this.游戏结束()
+        // 领取补偿
+        const 有可领补偿 = Object.values(玩家.server_info?.补偿 as Record<string, number>).some(val => val > 0);
+        if(有可领补偿){
+            this.node.getComponent(事件).触发事件("领取补偿")
             return false
         }
 
@@ -398,9 +406,9 @@ export class 主页 extends Component {
         }
         
         // 掠夺天赋
-        const 敌人存档数据 = globalThis?.PVP玩家数据?.存档
-        if(敌人存档数据 && 存档.其他.时空流浪者待抢夺天赋天数 === 存档.天数){
-            存档.其他.时空流浪者待抢夺天赋天数 = 0
+        const 敌人存档数据 = localStorage.get("时空流浪者")
+        if(敌人存档数据 && 存档.其他.待抢夺){
+            存档.其他.待抢夺 = 0
             this.node.getComponent(事件).触发事件("抢夺天赋")
             return false
         }
@@ -410,30 +418,30 @@ export class 主页 extends Component {
 
     前进条件() {
         if (存档.距离 == 1) {
-            存档.按钮.特性 = true;
+            存档.按钮.特性 = 1;
             return true
         }
         if (存档.距离 == 2) {
-            存档.按钮.睡觉 = true;
+            存档.按钮.睡觉 = 1;
             return true
         }
         if (存档.距离 == 3) {
-            存档.按钮.进食 = true;
+            存档.按钮.进食 = 1;
             return true
         }
         if (存档.距离 == 6) {
-            存档.按钮.制作 = true;
+            存档.按钮.制作 = 1;
             return true
         }
         if (存档.距离 == 44) {
-            存档.按钮.挑战 = true;
+            存档.按钮.挑战 = 1;
             return true
         }
         // 进入县城
         if (存档.距离 == 99) {
-            存档.按钮.前进 = false;
-            存档.按钮.探索 = true;
-            存档.按钮.商店 = true;
+            存档.按钮.前进 = 0;
+            存档.按钮.探索 = 1;
+            存档.按钮.商店 = 1;
             存档.距离++
             this.播放文本("你已到达县城！开始探索吧~")
             return false
@@ -456,10 +464,10 @@ export class 主页 extends Component {
         if (存档.距离 == 299) {
             存档.其他.进入省城携带金钱 = 存档.金钱
             
-            存档.按钮.前进 = false;
-            存档.按钮.探索 = true;
-            存档.按钮.商店 = true;
-            存档.剧情.住在桥洞 = true;
+            存档.按钮.前进 = 0;
+            存档.按钮.探索 = 1;
+            存档.按钮.商店 = 1;
+            存档.剧情.住在桥洞 = 1;
             存档.距离++
             if (存档.伙伴.晓月关系) {
                 存档.当前剧情 = "告别晓月";
@@ -473,24 +481,19 @@ export class 主页 extends Component {
         return true
     }
 
-    满足碧瑶隐藏线条件() {
-        return 存档.游戏难度 === "真实"
-            && 存档.伙伴.碧瑶关系 > 0
-            && 存档.伙伴.碧瑶好感 >= 5000
-            && 存档.剧情.击败皮衣男 > 0
-            && 存档.剧情.再次击败皮衣男 > 0
-    }
-
     探索条件() {
+        // 县城天数限制
         const 计算县城停留天数 = 计算数值("县城停留天数", 42)
         if (获取地区名称() === '县城' && 存档.天数 >= 计算县城停留天数) {
             if (存档.距离 === 100) {
-                存档.按钮.前进 = true
+                存档.按钮.前进 = 1
                 this.更新()
                 this.播放文本("再待下去迟早会被发现，还是去省城看看吧！")
                 return false
             }
         }
+
+        // 山脉天数限制
         if (获取地区名称() === '山脉' && 存档.天数 >= 80) {
             if (存档.距离 > 100 && 存档.距离 < 300) {
                 this.播放文本("还是先去省城整顿一下吧！")
@@ -498,44 +501,16 @@ export class 主页 extends Component {
             }
         }
 
-        if (this.满足碧瑶隐藏线条件()) {
-            const 续战事件表 = {
-                1: "碧瑶隐藏线一阶段续战",
-                2: "碧瑶隐藏线二阶段续战1",
-                3: "碧瑶隐藏线二阶段续战2",
-                4: "碧瑶隐藏线二阶段续战3",
-            }
-            const 续战事件 = 续战事件表[存档.其他.碧瑶隐藏线待续战]
-            if (续战事件) {
-                存档.其他.碧瑶隐藏线待续战 = 0
-                this.基本消耗()
-                this.node.getComponent(事件).触发事件(续战事件)
-                return false
-            }
-
-            if (存档.天数 >= 153 && 存档.天数 <= 154 && !存档.剧情.碧瑶隐藏线一阶段完成 && !存档.剧情.触发碧瑶隐藏线) {
-                this.基本消耗()
-                this.node.getComponent(事件).触发事件("碧瑶隐藏线一阶段")
-                return false
-            }
-
-            if (存档.天数 >= 159 && 存档.天数 <= 160 && 存档.剧情.碧瑶隐藏线一阶段完成 && !存档.剧情.碧瑶隐藏线完成) {
-                this.基本消耗()
-                this.node.getComponent(事件).触发事件("碧瑶隐藏线二阶段")
-                return false
-            }
-        }
-
         // 比武大会
         if (存档.当前地点 === '市中心' && 存档.停留天数.省城 >= 30 && 存档.停留天数.省城 <= 36 && !存档.其他.当日触发比武大会) {
             if(存档.其他.比武大会进度 < 3){
-                存档.其他.当日触发比武大会 = true
+                存档.其他.当日触发比武大会 = 1
                 this.基本消耗()
                 this.node.getComponent(事件).触发事件("比武大会")
                 return false
             }
             if(存档.其他.比武大会进度 === 3 && !存档.其他.比武大会结束) {
-                存档.其他.当日触发比武大会 = true
+                存档.其他.当日触发比武大会 = 1
                 this.基本消耗()
                 this.node.getComponent(事件).触发事件("最终比武")
                 return false
@@ -543,8 +518,8 @@ export class 主页 extends Component {
         }
 
         // 地下入口
-        if(存档.当前地点 === '城中村' && 存档.停留天数.省城 < 14){
-            if((!存档.剧情.击败竞技场看守 || 存档.其他.拒绝竞技场邀请) && Math.random() * 100 < 3){
+        if(存档.当前地点 === '城中村' && 存档.停留天数.省城 < 7){
+            if((!存档.剧情.击败竞技场看守 || 存档.其他.拒绝竞技场邀请) && Math.random() * 100 < 2){
                 this.基本消耗()
                 this.node.getComponent(事件).触发事件("地下入口")
                 return false
@@ -555,18 +530,12 @@ export class 主页 extends Component {
             }
         }
         if(存档.当前地点 === "地下竞技场" && 存档.其他.当日比赛次数 >= 4){
-            this.播放文本("今日赛事已结束，明日再来探索吧！")
+            this.播放文本("今日赛事已结束，他们再来探索吧！")
             return false
         }
 
         // 郊外传说
-        if (
-            存档.当前地点 === '郊外' &&
-            存档.剧情.听过郊外白影传说 &&
-            !存档.剧情.遭遇郊外白影 &&
-            存档.其他.今日天气 === '小雨' &&
-            Math.random() * 100 < 18
-        ) {
+        if (存档.当前地点 === '郊外' && 存档.天数 >= 142 && 存档.天数 < 145 && Math.random() * 100 < 50 && 存档.精力 < 50) {
             this.基本消耗()
             this.node.getComponent(事件).触发事件("雨夜白影")
             return false
@@ -672,16 +641,16 @@ export class 主页 extends Component {
         this.状态栏.getChildByName("状态").getComponent(Label).string = this.计算状态文本();
         this.状态栏.getChildByName("进度").getComponent(Label).string = this.计算进度文本()
 
-        this.按钮容器.getChildByName("商店").active = 存档.按钮.商店
-        this.按钮容器.getChildByName("挑战").active = 存档.按钮.挑战
-        this.按钮容器.getChildByName("睡觉").active = 存档.按钮.睡觉
-        this.按钮容器.getChildByName("探索").active = 存档.按钮.探索
-        this.按钮容器.getChildByName("前进").active = 存档.按钮.前进
-        this.按钮容器.getChildByName("伙伴").active = 存档.按钮.伙伴
-        this.按钮容器.getChildByName("制作").active = 存档.按钮.制作 || 存档.按钮.制造
-        this.按钮容器.getChildByName("特性").active = 存档.按钮.特性
-        this.按钮容器.getChildByName("进食").active = 存档.按钮.进食
-        this.按钮容器.getChildByName("结局").active = 存档.按钮.结局
+        this.按钮容器.getChildByName("商店").active = 存档.按钮.商店 > 1
+        this.按钮容器.getChildByName("挑战").active = 存档.按钮.挑战 > 1
+        this.按钮容器.getChildByName("睡觉").active = 存档.按钮.睡觉 > 1
+        this.按钮容器.getChildByName("探索").active = 存档.按钮.探索 > 1
+        this.按钮容器.getChildByName("前进").active = 存档.按钮.前进 > 1
+        this.按钮容器.getChildByName("伙伴").active = 存档.按钮.伙伴 > 1
+        this.按钮容器.getChildByName("制作").active = 存档.按钮.制作 > 1
+        this.按钮容器.getChildByName("特性").active = 存档.按钮.特性 > 1
+        this.按钮容器.getChildByName("进食").active = 存档.按钮.进食 > 1
+        this.按钮容器.getChildByName("结局").active = 存档.按钮.结局 > 1
         this.按钮容器.getChildByName("睡觉").getChildByName("标签").getComponent(Label).string = 存档.剧情.住在桥洞 ? "桥  洞" : "睡  觉";
     }
 
@@ -711,5 +680,4 @@ export class 主页 extends Component {
 
         return 位置
     }
-
 }
