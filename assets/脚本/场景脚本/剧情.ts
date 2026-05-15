@@ -44,6 +44,7 @@ export class 剧情 extends Component {
 		const 选项一 = this.按钮容器.getChildByName("选项一");
 		const 选项二 = this.按钮容器.getChildByName("选项二");
 		const 选项三 = this.按钮容器.getChildByName("选项三");
+		const 选项四 = this.按钮容器.getChildByName("选项四");
 
 		this.上下文 = {
 			提示: (text: string) => this.提示标签.getComponent(Label).string = text,
@@ -99,6 +100,16 @@ export class 剧情 extends Component {
 		}, this);
 		选项三.active = !!剧情.选项三;
 
+		选项四.getChildByName("标签").getComponent(Label).string = 剧情.选项四;
+		选项四.targetOff(this)
+		选项四.on(Button.EventType.CLICK, () => {
+			if (剧情.结果四){
+				剧情.结果四(this.上下文)
+			}else{
+				this.结束剧情();
+			}
+		}, this);
+		选项四.active = !!剧情.选项四;
 
 		const sequence = tween(this.node).delay(1 / 设置.播放速度);
 		for (let i = 0; i < 剧情.文本.length; i++) {
@@ -106,7 +117,6 @@ export class 剧情 extends Component {
 		}
 		sequence.call(() => 放大出现(this.按钮容器));
 		sequence.start();
-
 	}
 
 	显示结果(message: string) {

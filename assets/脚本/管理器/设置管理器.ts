@@ -10,6 +10,7 @@ const 默认设置 = {
 	防误触: false,
 	批量购买: false,
 	上次选择: "",
+	保留天赋: "",
 };
 
 export let 设置: typeof 默认设置 = JSON.parse(JSON.stringify(默认设置))

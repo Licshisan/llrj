@@ -37,11 +37,14 @@ export class 大楼 extends Component {
 		if (Math.random() * 100 < 70) {
 			const 商品表 = { 晓风披肩: 100, 小裤裤: 20, 晓月手链: 20, 幸运石: 20, 板砖: 20, 滑稽裤: 20, };
 			const 商品 = Object.keys(商品表);
-			存档.其他.服装商品名 = 商品[Math.floor(Math.random() * 商品.length)];
-			存档.其他.服装折扣 = Math.floor(Math.random() * 30 + 60);
-			存档.其他.服装价格 = Math.floor((商品表[存档.其他.服装商品名] * 存档.其他.服装折扣) / 100);
 
-			二层按钮.getChildByName("标签").getComponent(Label).string = `二楼：晓风服饰（${存档.其他.服装商品名}，${存档.其他.服装折扣}折，${(存档.其他.服装价格 / 10).toFixed(1)}元）`
+			存档.其他.服装商品 = Math.floor(Math.random() * 商品.length);
+			存档.其他.服装折扣 = Math.floor(Math.random() * 30 + 60);
+
+			const 服装名 = 商品表[存档.其他.服装商品]
+			const 服装价格 = Math.floor((商品表[服装名] * 存档.其他.服装折扣) / 100);
+
+			二层按钮.getChildByName("标签").getComponent(Label).string = `二楼：晓风服饰（${服装名}，${存档.其他.服装折扣}折，${(服装价格 / 10).toFixed(1)}元）`
 			二层按钮.on(Button.EventType.CLICK, () => this.点击二楼(), this);
 		} else {
 			二层按钮.getChildByName("标签").getComponent(Label).string = "？？？？（晓风服饰放假中...）"
@@ -141,18 +144,22 @@ export class 大楼 extends Component {
 		this.更新();
 	}
 	点击二楼() {
+		const 商品表 = { 晓风披肩: 100, 小裤裤: 20, 晓月手链: 20, 幸运石: 20, 板砖: 20, 滑稽裤: 20, };
+		const 服装名 = 商品表[存档.其他.服装商品]
+		const 服装价格 = Math.floor((商品表[服装名] * 存档.其他.服装折扣) / 100);
+
 		if (存档.其他.服装折扣 >= 9999) {
 			播放文本(this.标签, "商品已售罄~");
 			return
 		}
-		if (存档.金钱 < 存档.其他.服装价格) {
+		if (存档.金钱 < 服装价格) {
 			播放文本(this.标签, "金钱不足！");
 			return
 		}
 
-		存档.金钱 -= 存档.其他.服装价格;
-		存档.物品[存档.其他.服装商品名] += 1;
-		播放文本(this.标签, `获得【${存档.其他.服装商品名}】*${1}`);
+		存档.金钱 -= 服装价格;
+		存档.物品[服装名] += 1;
+		播放文本(this.标签, `获得【${服装名}】*${1}`);
 
 		存档.其他.服装折扣 = 9999;
 

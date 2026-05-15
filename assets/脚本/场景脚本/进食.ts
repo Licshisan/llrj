@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Label, instantiate, Prefab, Button, Color, director, UITransform, Layout, PageView, error } from "cc";
+import { _decorator, Component, Node, Label, instantiate, Prefab, Button, Color, director, UITransform, Layout, PageView } from "cc";
 import { 保存存档, 存档 } from "../管理器/存档管理器";
 import { 计算最大生命, 计算最大精力, 计算最大饥饿 } from "../方法函数/属性计算";
 import { 播放文本 } from "../方法函数/动画效果";

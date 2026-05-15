@@ -43,13 +43,13 @@ export class 伙伴 extends Component {
 		}, this);
 
 		// 其他伙伴
-		this.切换1.active = 存档.伙伴.碧瑶关系;
+		this.切换1.active = 存档.伙伴.碧瑶关系 > 0;
 		this.切换1.on(Button.EventType.CLICK, () => {
 			globalThis.伙伴特性伙伴名称 = '碧瑶'
 			director.loadScene("伙伴特性")
 		}, this);
 
-		this.切换2.active = 存档.伙伴.小兰关系;
+		this.切换2.active = 存档.伙伴.小兰关系 > 0;
 		this.切换2.on(Button.EventType.CLICK, () => director.loadScene("小兰"), this);
 
 		this.退出按钮.on(Button.EventType.CLICK, () => director.loadScene("主页"), this);
@@ -61,7 +61,7 @@ export class 伙伴 extends Component {
 				按钮: {
 					"确定": () => {
 						存档.伙伴.连续不喂食晓月天数 = 0;
-						存档.伙伴.今日喂食晓月 = true;
+						存档.伙伴.今日喂食晓月 = 1;
 
 						const 投喂果子数 = 存档.物品.果子
 						存档.物品.果子 -= 投喂果子数;
@@ -156,7 +156,7 @@ export class 伙伴 extends Component {
 
 		if (存档.物品.果子 > 0) {
 			存档.伙伴.连续不喂食晓月天数 = 0;
-			存档.伙伴.今日喂食晓月 = true;
+			存档.伙伴.今日喂食晓月 = 1;
 			存档.物品.果子 -= 1;
 			存档.伙伴.晓月好感 += 1;
 			this.更新();
@@ -166,7 +166,7 @@ export class 伙伴 extends Component {
 		}
 		if (存档.物品.熟肉 > 0) {
 			存档.伙伴.连续不喂食晓月天数 = 0;
-			存档.伙伴.今日喂食晓月 = true;
+			存档.伙伴.今日喂食晓月 = 1;
 			存档.物品.熟肉 -= 1;
 			存档.伙伴.晓月好感 += 3;
 			this.更新();

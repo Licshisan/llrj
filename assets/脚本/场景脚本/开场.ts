@@ -4,8 +4,7 @@ import { 创建动画文字, 淡入, 淡出 } from "../方法函数/动画效果
 import { 保存存档, 存档 } from "../管理器/存档管理器";
 import { 执行钩子 } from "../管理器/钩子管理器";
 import { 默认天赋表 } from "../默认内容/天赋表";
-import { 默认特质表 } from "../默认内容/特质表";
-import { 计算最大生命, 计算最大精力, 计算最大饥饿 } from "../方法函数/属性计算";
+import { 计算数值, 计算最大生命, 计算最大精力, 计算最大饥饿 } from "../方法函数/属性计算";
 const { ccclass, property } = _decorator;
 
 @ccclass("开场")
@@ -13,14 +12,21 @@ export class 开场 extends Component {
 	@property(Node) 文本容器: Node = null;
 	@property(Node) 继续按钮: Node = null;
 	@property(Node) 刷新按钮: Node = null;
-	开场文本: string[] = ["昨天，", "和父亲大吵一架后，", "我双手空空的逃了出来。", "我决定离开这个家，", "再也不回去了..."];
-	
-	当前特质: string[] = []
+	刷新次数 = 0
 	当前天赋: string[] = []
+
 	start() {
+		const 开场文本 = ["昨天，", "和父亲大吵一架后，", "我双手空空的逃了出来。", "我决定离开这个家，", "再也不回去了..."]
+		if(存档.游戏难度 === '残酷'){
+			开场文本.push("【残酷】难度已开启...")
+		}
+		if(存档.游戏难度 === '焚天'){
+			开场文本.push("【焚天】难度已开启...")
+		}
+
 		const 序列 = tween(this.node).delay(0.5);
-		for (let i = 0; i < this.开场文本.length; i++) {
-			序列.call(() => 创建动画文字(this.文本容器, this.开场文本[i], i)).delay(1.5 / 设置.播放速度);
+		for (let i = 0; i < 开场文本.length; i++) {
+			序列.call(() => 创建动画文字(this.文本容器, 开场文本[i], i)).delay(1.5 / 设置.播放速度);
 		}
 		序列.delay(2.5 / 设置.播放速度);
 		序列.call(() => this.点击刷新()).delay(2.5 / 设置.播放速度);
@@ -33,51 +39,32 @@ export class 开场 extends Component {
 	}
 
 	点击刷新() {
+		this.刷新次数 ++
 		this.继续按钮.active = false;
 		this.刷新按钮.active = false;
-		let 正面天赋数量 = Number(设置.成就["小试牛刀"]) + Number(设置.成就["初试锋芒"]) + Number(设置.成就["一鸣惊人"]) + 1
-		let 负面天赋数量 = Number(设置.成就["小试牛刀"]) + Number(设置.成就["初试锋芒"]) + Number(设置.成就["一鸣惊人"]) + 1
-		let 特质数量 = Number(设置.成就["初出茅庐"]) + Number(设置.成就["声名鹊起"]) + Number(设置.成就["所向披靡"])
 
-		this.当前特质 = []
 		this.当前天赋 = []
 
-		if(设置.其他.保留天赋 && 正面天赋数量 > 0){
-			this.当前天赋.push(设置.其他.保留天赋)
-			正面天赋数量 --
+
+		let 天赋数量 = 计算数值("天赋数量", Math.random() < 0.5 ? 1 : 0)
+		if(Math.random() * 100 < 计算数值("额外天赋概率", 1)){
+			天赋数量 ++
 		}
 
-		const 随机抽取 = <T>(列表: T[], 抽取数量: number): T[] => {
-			if (!列表 || 列表.length === 0) return [];
-			const 打乱 = [...列表];
-			for (let i = 打乱.length - 1; i > 0; i--) {
-				const j = Math.floor(Math.random() * (i + 1));
-				[打乱[i], 打乱[j]] = [打乱[j], 打乱[i]];
-			}
-			const 实际抽取数量 = Math.min(抽取数量, 打乱.length);
-			return 打乱.slice(0, 实际抽取数量);
-		};
+		if(设置.保留天赋 && 天赋数量 > 0){
+			this.当前天赋.push(设置.保留天赋)
+			天赋数量 --
+		}
 
-		const 抽取特质表 = 默认特质表.filter(i => i.条件)
-		const 抽取的特质 = 随机抽取(抽取特质表, 特质数量)
+		const 抽取的正面天赋 = this.随机抽取(默认天赋表.filter(i => !i.负面 && i.等级 > 0), 天赋数量)
+		const 抽取的负面天赋 = this.随机抽取(默认天赋表.filter(i => i.负面 && i.等级 > 0), 天赋数量)
 
-		const 抽取的正面天赋 = 随机抽取(默认天赋表.filter(i => !i.负面 && i.条件), 正面天赋数量)
-		const 抽取的负面天赋 = 随机抽取(默认天赋表.filter(i => i.负面 && i.条件), 负面天赋数量)
-
-		this.当前特质.push(...抽取的特质.map(x => x.名称))
 		this.当前天赋.push(...抽取的正面天赋.map(x => x.名称))
 		this.当前天赋.push(...抽取的负面天赋.map(x => x.名称))
 		const 显示文本 = []
-		抽取的特质.forEach(特质 => {
-			const 特质名称 = `${特质.名称}LV${设置.特质[特质.名称]}` || 特质.名称
-			显示文本.push({
-				文本: `你天生拥有特质「${特质名称}」\n效果：${特质?.说明 || ""}`,
-				颜色: Color.YELLOW
-			})
-		})
 
-		if(设置.其他.保留天赋){
-			const 天赋 = 默认天赋表.find(x => x.名称 === 设置.其他.保留天赋)
+		if(设置.保留天赋){
+			const 天赋 = 默认天赋表.find(x => x.名称 === 设置.保留天赋)
 			显示文本.push({
 				文本: `你保留了天赋「${天赋.名称 || ""}」\n效果：${天赋?.说明 || ""}`,
 				颜色: 天赋.颜色
@@ -124,20 +111,28 @@ export class 开场 extends Component {
 		序列.start();
 	}
 
+	随机抽取 <T>(列表: T[], 抽取数量: number): T[] {
+		if (!列表 || 列表.length === 0) return [];
+		const 打乱 = [...列表];
+		for (let i = 打乱.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[打乱[i], 打乱[j]] = [打乱[j], 打乱[i]];
+		}
+		const 实际抽取数量 = Math.min(抽取数量, 打乱.length);
+		return 打乱.slice(0, 实际抽取数量);
+	}
+
 	点击确定() {
-		this.当前特质.forEach(特质 => {
-			执行钩子("激活特质", [特质])
-			存档.特质[特质] = 设置.特质[特质]
-		})
 		this.当前天赋.forEach(天赋 => {
+			const t = 默认天赋表.find((x) => x.名称 === 天赋)
 			执行钩子("激活天赋", [天赋])
-			存档.天赋[天赋] = true
+			存档.天赋[天赋] = t.等级
 		})
 
 		存档.精力 = 计算最大精力()
 		存档.饥饿 = 计算最大饥饿()
 		存档.生命 = 计算最大生命()
-		设置.其他.保留天赋 = ""
+		设置.保留天赋 = ""
 		保存设置()
 		保存存档()
 		log(this.当前天赋)

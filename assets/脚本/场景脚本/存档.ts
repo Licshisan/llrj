@@ -2,7 +2,6 @@ import { _decorator, Component, Node, Prefab, instantiate, Label, Button, direct
 import { 播放文本 } from "../方法函数/动画效果";
 import * as 存档管理器 from '../管理器/存档管理器'
 import { 格式化日期字符串 } from "../方法函数/公共函数";
-import { 获取地区名称 } from "../默认内容/地区表";
 const { ccclass, property } = _decorator;
 
 @ccclass("存档")
@@ -26,16 +25,8 @@ export class 存档 extends Component {
         存档名称列表.forEach((存档) => {
             const 存档项目节点 = instantiate(this.存档项目预制件);
             存档项目节点.setParent(this.存档容器);
-            let 地区 = "荒野"
-            if(存档.距离 == 100){
-                地区 = "县城"
-            } else if(存档.距离 > 100 && 存档.距离 < 300){
-                地区 = "山脉"
-            } else if(存档.距离 == 300){
-                地区 = "省城"
-            }
 
-            存档项目节点.getChildByName("选择按钮").getChildByName("标签").getComponent(Label).string = `${地区}.${存档.天数}天 【${存档.套餐名称}】 ${存档.距离}km`;
+            存档项目节点.getChildByName("选择按钮").getChildByName("标签").getComponent(Label).string = `${this.计算地区名称(存档)}.${存档.天数}天 【${存档.套餐名称}】 ${存档.距离}km`;
             存档项目节点.getChildByName("标签").getComponent(Label).string = `创建时间：${格式化日期字符串(存档.创建时间)}`;
             存档项目节点.getChildByName("按钮容器").getChildByName("黑色按钮1").getChildByName("标签").getComponent(Label).string = "删  除";
             存档项目节点.getChildByName("按钮容器").getChildByName("黑色按钮2").getChildByName("标签").getComponent(Label).string = "进  入";
@@ -69,5 +60,16 @@ export class 存档 extends Component {
     点击进入(名称: string) {
         存档管理器.加载存档(名称)
         director.loadScene("主页");
+    }
+
+    计算地区名称(存档) {
+        let 地区 = "荒野"
+        if(存档.距离 == 100){
+            地区 = "县城"
+        } else if(存档.距离 > 100 && 存档.距离 < 300){
+            地区 = "山脉"
+        } else if(存档.距离 == 300){
+            地区 = "省城"
+        }
     }
 }

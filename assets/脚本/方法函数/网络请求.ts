@@ -180,12 +180,11 @@ export async function 上传ExtInfo请求(ext_info: any) {
     return result.data
 }
 
-export async function 修改昵称请求(uid: string, name: string) {
+export async function 修改昵称请求( name: string) {
     return 请求JSON<玩家信息>("/rename", {
         method: "POST",
         body: {
-            player_id: 获取玩家ID(),
-            uid,
+            ...获取玩家校验信息(),
             name,
         },
     });
@@ -222,11 +221,4 @@ export async function 获取藏品排行榜请求() {
 
     const result = await 请求JSON<排行榜结果>(`/collection-ranking?${query}`);
     return result.data;
-}
-
-export function 清理存档请求() {
-    return 请求JSON<{ deleted: number }>("/save/cleanup", {
-        method: "POST",
-        body: 获取玩家校验信息(),
-    });
 }

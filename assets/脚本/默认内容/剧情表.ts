@@ -13,9 +13,11 @@ export interface 剧情定义类型 {
 	选项一?: string,
 	选项二?: string,
 	选项三?: string,
+	选项四?: string,
 	结果一?: ((上下文: 剧情上下文) => void),
 	结果二?: ((上下文: 剧情上下文) => void),
 	结果三?: ((上下文: 剧情上下文) => void),
+	结果四?: ((上下文: 剧情上下文) => void),
 }
 
 export const 荒野剧情表: 剧情定义类型[] = [
