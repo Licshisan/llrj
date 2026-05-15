@@ -475,3 +475,4 @@ export const 默认商品表: 商品定义类型[] = [
 		get 显示() { return false }
 	},
 ]
+console.log(`【商品】共计${默认商品表.length}条`)

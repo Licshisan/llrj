@@ -593,3 +593,4 @@ export const 默认特性表: 特性定义类型[] = [
 		展示: true,
 	},
 ];
+console.log(`【特性】共计${默认特性表.length}条`)

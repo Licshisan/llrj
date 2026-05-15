@@ -358,3 +358,4 @@ export const 默认食物表: 食物项目类型[] = [
 		get 显示() { return 存档.物品.精制香烟 > 0; },
 	},
 ]
+console.log(`【食物】共计${默认食物表.length}条`)

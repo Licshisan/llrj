@@ -21,3 +21,4 @@ export const 默认挑战表 = [
         }
     },
 ]
+console.log(`【挑战】共计${默认挑战表.length}条`)

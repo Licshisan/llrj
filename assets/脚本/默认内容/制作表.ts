@@ -1014,4 +1014,4 @@ export const 默认制作表: 制作类型[] = [
 		},
 	},
 ];
-
+console.log(`【制作】共计${默认制作表.length}条`)

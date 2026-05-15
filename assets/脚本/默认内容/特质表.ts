@@ -197,3 +197,4 @@ export const 默认特质表: 特质项目类型[] = [
         },
     }
 ]
+console.log(`【特质】共计${默认特质表.length}条`)

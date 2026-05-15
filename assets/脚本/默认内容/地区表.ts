@@ -316,3 +316,4 @@ export function 获取地区名称() {
 	const 地区 = 默认地区表.find((地区) => 地区.条件)
 	return 地区?.名称 || "未知地区"
 }
+console.log(`【地区】共计${默认地区表.length}条`)

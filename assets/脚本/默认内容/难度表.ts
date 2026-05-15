@@ -100,3 +100,4 @@ export const 默认难度表: 难度定义类型[] = [
 		get 条件() { return false },
 	},
 ]
+console.log(`【难度】共计${默认难度表.length}条`)

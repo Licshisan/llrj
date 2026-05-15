@@ -521,3 +521,4 @@ export function 获取当前日记(): string[] {
 		return 日记.文本 as string[]
 	}
 }
+console.log(`【日记】共计${默认日记表.length}条`)
