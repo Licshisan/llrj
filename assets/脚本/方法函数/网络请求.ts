@@ -156,17 +156,17 @@ export async function 上传存档请求() {
             ...获取玩家校验信息(),
             day: 存档.天数,
             save_name: 存档.存档名称,
-            save: JSON.stringify(存档),
+            save: 存档,
         },
     });
 }
 
-export async function 上传ExtInfo请求(ext_info: any) {
+export async function 上传ExtInfo请求() {
     const result = await 请求JSON<玩家信息>("/ext-info", {
         method: "POST",
         body: {
             ...获取玩家校验信息(),
-            ext_info,
+            ext_info: 玩家.ext_info,
         },
     });
     return result.data

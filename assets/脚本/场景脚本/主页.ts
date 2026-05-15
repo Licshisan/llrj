@@ -417,8 +417,7 @@ export class 主页 extends Component {
         }
         
         // 掠夺天赋
-        const 敌人存档数据 = localStorage.get("时空流浪者")
-        if(敌人存档数据 && 存档.其他.待抢夺){
+        if(存档.其他.待抢夺){
             存档.其他.待抢夺 = 0
             this.node.getComponent(事件).触发事件("抢夺天赋")
             return false

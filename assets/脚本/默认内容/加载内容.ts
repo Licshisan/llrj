@@ -146,7 +146,7 @@ export async function 加载游戏内容() {
 
 		// 断线重传 并且不是 转移玩家
 		if(玩家管理器.玩家.ext_info.更新时间 > player.ext_info.更新时间 && player.id === 玩家管理器.玩家.id){
-			player = await 上传ExtInfo请求(玩家管理器.玩家.ext_info)
+			player = await 上传ExtInfo请求()
 		}
 
 		if(player.id) 玩家管理器.玩家.id = player.id

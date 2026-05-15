@@ -3,9 +3,10 @@ import { 删除存档, 存档 } from "../管理器/存档管理器";
 import { 创建动画文字, 播放文本, 淡入 } from "../方法函数/动画效果";
 import { 设置 } from "../管理器/设置管理器";
 import { 计算最大攻击, 计算最大生命, 计算最大防御 } from "../方法函数/属性计算";
-import { 更新成就 } from "../默认内容/成就表";
+import { 成就项目类型, 默认成就表 } from "../默认内容/成就表";
 import { 默认套餐表 } from "../默认内容/套餐表";
-import { 修改昵称请求 } from "../方法函数/网络请求";
+import { 上传ExtInfo请求, 修改昵称请求 } from "../方法函数/网络请求";
+import { 玩家 } from "../管理器/玩家管理器";
 const { ccclass, property } = _decorator;
 
 @ccclass('分数')
@@ -45,7 +46,7 @@ export class 分数 extends Component {
 		if(套餐 && 套餐.娱乐){
 			texts.push(`娱乐套餐【${套餐.名称}】，无法完成成就`)
 		}else{
-			const 完成成就 = 更新成就()
+			const 完成成就 = this.更新成就()
 			if(完成成就.length > 0){
 				完成成就.forEach(成就 => {
 					let 成就文本 = `新成就【${成就.名称}】：${成就.描述}`
@@ -72,8 +73,26 @@ export class 分数 extends Component {
 			if (新昵称) {
 				await 修改昵称请求(新昵称);
 			}
+			上传ExtInfo请求()
 			删除存档(存档.存档名称)
 			director.loadScene('首页')
 		}, this)
+	}
+
+	更新成就() {
+		const 完成成就: 成就项目类型[] = [];
+		for (const 成就 of 默认成就表) {
+			if (!成就.条件 || !玩家.ext_info.成就.find(c=> c.完成)) continue;
+
+			const 新成就 = {
+				名称: 成就.名称,
+				描述: 成就.描述,
+				完成时间: Date.now(),
+			}
+			玩家.ext_info.成就.push(新成就);
+			成就.效果?.完成成就?.(成就.名称);
+			完成成就.push(成就);
+		}
+		return 完成成就;
 	}
 }

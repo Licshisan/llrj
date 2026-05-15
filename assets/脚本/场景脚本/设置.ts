@@ -86,7 +86,7 @@ export class 设置 extends Component {
     玩家.ext_info.战败语 = this.战败语输入框.getComponent(EditBox).string || ''
 
     try {
-      上传ExtInfo请求(设置管理器.设置).then(data => {
+      上传ExtInfo请求().then(data => {
         设置管理器.保存设置();
         播放文本(this.标签, `设置上传成功`)
       }).catch(error => {
