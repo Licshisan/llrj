@@ -80,6 +80,7 @@ const 默认存档 = {
     架势经验: {} as Record<string, number>,
     
     天赋: {} as Record<string, number>,
+    技能: {} as Record<string, number>,
     特质: {} as Record<string, number>,
     状态: {} as Record<string, number>,
     剧情: {} as Record<string, number>,

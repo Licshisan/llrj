@@ -3,6 +3,7 @@ import { 播放文本 } from "../方法函数/动画效果";
 import * as 设置管理器 from '../管理器/设置管理器'
 import { 上传ExtInfo请求 } from "../方法函数/网络请求";
 import { 玩家 } from "../管理器/玩家管理器";
+import { 存档 } from "../管理器/存档管理器";
 const { ccclass, property } = _decorator;
 
 @ccclass("设置")
@@ -27,25 +28,40 @@ export class 设置 extends Component {
 
     this.按钮容器.getChildByName("速度").on(Button.EventType.CLICK, this.点击速度, this);
     this.按钮容器.getChildByName("暗夜").on(Button.EventType.CLICK, this.点击暗夜, this);
-    this.按钮容器.getChildByName("自动买果子").on(Button.EventType.CLICK, () => {
-      设置管理器.设置.自动买果子 = !设置管理器.设置.自动买果子
-      设置管理器.保存设置();
-      播放文本(this.标签, `已${设置管理器.设置.自动买果子 ? '开启' : '关闭'}自动买果子，在县城如果果子数量低于5自动买5个`)
-    }, this);
+    
+    const 自动化等级 = 存档.技能["自动化"] || 0;
+    
+    if (自动化等级 >= 1) {
+      this.按钮容器.getChildByName("自动买果子").active = true;
+      this.按钮容器.getChildByName("自动买果子").on(Button.EventType.CLICK, () => {
+        设置管理器.设置.自动买果子 = !设置管理器.设置.自动买果子
+        设置管理器.保存设置();
+        播放文本(this.标签, `已${设置管理器.设置.自动买果子 ? '开启' : '关闭'}自动买果子，在县城如果果子数量低于5自动买5个`)
+      }, this);
+    } else {
+      this.按钮容器.getChildByName("自动买果子").active = false;
+    }
+    
+    if (自动化等级 >= 3) {
+      this.按钮容器.getChildByName("批量购买").active = true;
+      this.按钮容器.getChildByName("批量购买").on(Button.EventType.CLICK, () => {
+        设置管理器.设置.批量购买 = !设置管理器.设置.批量购买
+        设置管理器.保存设置();
+        播放文本(this.标签, `已${设置管理器.设置.批量购买 ? '开启' : '关闭'}批量购买，商店购买数量增加10倍`)
+      }, this);
+    } else {
+      this.按钮容器.getChildByName("批量购买").active = false;
+    }
+    
     this.按钮容器.getChildByName("防误触").on(Button.EventType.CLICK, () => {
       设置管理器.设置.防误触 = !设置管理器.设置.防误触
       设置管理器.保存设置();
       播放文本(this.标签, `已${设置管理器.设置.防误触 ? '开启' : '关闭'}防误触，睡觉总是会显示确定`)
     }, this);
-    this.按钮容器.getChildByName("批量购买").on(Button.EventType.CLICK, () => {
-      设置管理器.设置.批量购买 = !设置管理器.设置.批量购买
-      设置管理器.保存设置();
-      播放文本(this.标签, `已${设置管理器.设置.批量购买 ? '开启' : '关闭'}批量购买，商店购买数量增加10倍`)
-    }, this);
     this.按钮容器.getChildByName("经典比例").on(Button.EventType.CLICK, () => {
       设置管理器.设置.经典比例 = !设置管理器.设置.经典比例
       设置管理器.保存设置();
-      播放文本(this.标签, `已${设置管理器.设置.批量购买 ? '开启' : '关闭'}经典比例，主页高度适配`)
+      播放文本(this.标签, `已${设置管理器.设置.经典比例 ? '开启' : '关闭'}经典比例，主页高度适配`)
     }, this);
 
     this.确认按钮.on(Button.EventType.CLICK, this.点击确认, this);

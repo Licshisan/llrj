@@ -4,10 +4,12 @@ import { 执行钩子 } from "../管理器/钩子管理器";
 import { 保存存档, 创建存档, 存档 } from "../管理器/存档管理器";
 import { 默认套餐表 } from "../默认内容/套餐表";
 import { 默认难度表 } from "../默认内容/难度表";
+import { 默认技能表 } from "../默认内容/技能表";
 import { 深克隆, 解析颜色 } from "../方法函数/公共函数";
 import { 设置, 保存设置 } from "../管理器/设置管理器";
 import { 玩家 } from "../管理器/玩家管理器";
 import { 计算数值 } from "../方法函数/属性计算";
+import { 计算技能等级 } from "../方法函数/等级计算";
 const { ccclass, property } = _decorator;
 
 @ccclass("套餐")
@@ -77,6 +79,13 @@ export class 套餐 extends Component {
 							console.log(藏品名)
 							存档.藏品[藏品名] = 计算数值("藏品生效数量",  玩家.ext_info.藏品[藏品名] || 0);
 							console.log(存档.藏品[藏品名])
+						}
+						// 计算并写入技能等级
+						for (const 技能 of 默认技能表) {
+							const 等级 = 计算技能等级(技能.名称);
+							if (等级 > 0) {
+								存档.技能[技能.名称] = 等级;
+							}
 						}
 						执行钩子("新建游戏")
 						保存存档()

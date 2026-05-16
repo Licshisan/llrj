@@ -25,6 +25,9 @@ export class 主页 extends Component {
     冷却时间: number = 0.2;
 
     start() {
+        const 自动化等级 = 存档.技能['自动化'] || 0;
+        this.冷却时间 = Math.max(0.05, 0.2 - 自动化等级 * 0.03);
+
         this.更新()
         this.回档()
         this.游戏结束()
@@ -111,7 +114,7 @@ export class 主页 extends Component {
             
             const 复活机会 = 计算数值("复活机会", 0)
             if(存档.其他.使用复活机会次数 < 复活机会 && !存档.其他.选择死亡){
-                存档.其他.使用复活机会次数 ++
+                存档.其他.使用复活机会次数++
                 存档.当前剧情 = "复活"
             }
 
@@ -322,11 +325,21 @@ export class 主页 extends Component {
                 director.loadScene("确认");
                 return
             }
-            if (获取当前日记()) {
-                director.loadScene("日记");
-            } else {
-                director.loadScene("睡觉");
-            }
+            const 提示文本 = "精力为0，是否要强制睡觉？"
+            globalThis.确认参数 = {
+                文本: 提示文本,
+                按钮: {
+                    "确认睡觉": () => {
+                        if (获取当前日记()) {
+                            director.loadScene("日记");
+                        } else {
+                            director.loadScene("睡觉");
+                        }
+                    },
+                    "返回": () => director.loadScene("主页")
+                }
+            };
+            director.loadScene("确认");
         }
     }
 

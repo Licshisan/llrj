@@ -54,40 +54,47 @@ export class 伙伴 extends Component {
 
 		this.退出按钮.on(Button.EventType.CLICK, () => director.loadScene("主页"), this);
 
-
-		this.一键喂果.on(Button.EventType.CLICK, () => {
-			globalThis.确认参数 = {
-				文本: "确定要一次性投喂所有果子给晓月吗？",
-				按钮: {
-					"确定": () => {
-						存档.伙伴.连续不喂食晓月天数 = 0;
-						存档.伙伴.今日喂食晓月 = 1;
-
-						const 投喂果子数 = 存档.物品.果子
-						存档.物品.果子 -= 投喂果子数;
-						存档.伙伴.晓月好感 += 投喂果子数;
-						director.loadScene("伙伴")
-					},
-					"返回": () => director.loadScene("伙伴")
-				}
-			};
-			director.loadScene("确认");
-		}, this);
-		this.一键喂药.on(Button.EventType.CLICK, () => {
-			globalThis.确认参数 = {
-				文本: "确定要一次性投喂所有伤药给晓月吗？",
-				按钮: {
-					"确定": () => {
-						const 投喂伤药数 = 存档.物品.伤药
-						存档.物品.伤药 -= 投喂伤药数;
-						存档.伙伴.晓月好感 += 投喂伤药数 * 2;
-						director.loadScene("伙伴")
-					},
-					"返回": () => director.loadScene("伙伴")
-				}
-			};
-			director.loadScene("确认");
-		}, this);
+		const 自动化等级 = 存档.技能["自动化"] || 0;
+		
+		if (自动化等级 >= 2) {
+			this.一键喂果.active = true;
+			this.一键喂药.active = true;
+			this.一键喂果.on(Button.EventType.CLICK, () => {
+				globalThis.确认参数 = {
+					文本: "确定要一次性投喂所有果子给晓月吗？",
+					按钮: {
+						"确定": () => {
+							存档.伙伴.连续不喂食晓月天数 = 0;
+							存档.伙伴.今日喂食晓月 = 1;
+							const 投喂果子数 = 存档.物品.果子
+							存档.物品.果子 -= 投喂果子数;
+							存档.伙伴.晓月好感 += 投喂果子数;
+							director.loadScene("伙伴")
+						},
+						"返回": () => director.loadScene("伙伴")
+					}
+				};
+				director.loadScene("确认");
+			}, this);
+			this.一键喂药.on(Button.EventType.CLICK, () => {
+				globalThis.确认参数 = {
+					文本: "确定要一次性投喂所有伤药给晓月吗？",
+					按钮: {
+						"确定": () => {
+							const 投喂伤药数 = 存档.物品.伤药
+							存档.物品.伤药 -= 投喂伤药数;
+							存档.伙伴.晓月好感 += 投喂伤药数 * 2;
+							director.loadScene("伙伴")
+						},
+						"返回": () => director.loadScene("伙伴")
+					}
+				};
+				director.loadScene("确认");
+			}, this);
+		} else {
+			this.一键喂果.active = false;
+			this.一键喂药.active = false;
+		}
 	}
 
 	更新() {
@@ -131,8 +138,10 @@ export class 伙伴 extends Component {
 			"“听说这个游戏的最终BOSS是个变态╮(￣▽￣)╭”",
 		];
 
-		let dialog = 固定对话[存档.伙伴.晓月聊天次数];
-		if (!dialog) {
+		let dialog: string;
+		if (存档.伙伴.晓月聊天次数 < 固定对话.length) {
+			dialog = 固定对话[存档.伙伴.晓月聊天次数];
+		} else {
 			const index = Math.floor(Math.random() * 随机对话.length);
 			dialog = 随机对话[index];
 		}
@@ -202,8 +211,10 @@ export class 伙伴 extends Component {
 
 		dialog.setParent(this.文本容器);
 		dialog.setPosition(0, 0);
-		const 页面视图大小 = this.文本容器.getComponent(UITransform)
-		label.addComponent(UITransform).setContentSize(页面视图大小.width, 页面视图大小.height);
+		const 页面视图大小 = this.文本容器.getComponent(UITransform);
+		if (页面视图大小) {
+			label.addComponent(UITransform).setContentSize(页面视图大小.contentSize.width, 页面视图大小.contentSize.height);
+		}
 
 		淡入(dialog);
 	}

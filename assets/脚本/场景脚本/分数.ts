@@ -73,11 +73,38 @@ export class 分数 extends Component {
 			if (新昵称) {
 				await 修改昵称请求(新昵称);
 			}
+			this.结算藏品();
 			上传ExtInfo请求()
 			删除存档(存档.存档名称)
 			director.loadScene('首页')
 		}, this)
 	}
+
+	结算藏品() {
+		const 扩充背包等级 = 存档.技能['扩充背包'] || 0;
+		const 携带限额 = 5 + 扩充背包等级 * 2;
+
+		const 现有藏品 = 玩家.ext_info.藏品 || {};
+		const 新藏品 = 存档.新藏品 || {};
+		const 合并藏品: Record<string, number> = {};
+
+		for (const 名称 in 现有藏品) {
+			合并藏品[名称] = (合并藏品[名称] || 0) + 现有藏品[名称];
+		}
+		for (const 名称 in 新藏品) {
+			合并藏品[名称] = (合并藏品[名称] || 0) + 新藏品[名称];
+		}
+
+		const 藏品排序 = Object.entries(合并藏品).sort((a, b) => b[1] - a[1]);
+		const 最终藏品: Record<string, number> = {};
+		
+		for (let i = 0; i < Math.min(藏品排序.length, 携带限额); i++) {
+			const [名称, 数量] = 藏品排序[i];
+			最终藏品[名称] = 数量;
+		}
+
+		玩家.ext_info.藏品 = 最终藏品;
+	} 
 
 	更新成就() {
 		const 完成成就: 成就项目类型[] = [];

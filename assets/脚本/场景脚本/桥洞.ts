@@ -477,7 +477,7 @@ export class 桥洞 extends Component {
                 "【旅游、美食、打游戏，不能治疗心理问题（即便是用来分散注意，也有限，并且可能导致新的问题）】",
                 "【任何让你感到痛苦的事，都可以找到对应的不合理认知————认知疗法】",
             ];
-            const index = Math.floor(Math.random() * (contents.length - 1.01));
+            const index = Math.floor(Math.random() * contents.length);
             const o = Math.floor(计算最大精力() / 20) * 10;
             存档.其他.伯恩斯情绪疗法 += 10;
             存档.精力 += o;
@@ -593,7 +593,7 @@ export class 桥洞 extends Component {
                 "【终身维持健康体重极为重要】",
             ];
 
-            const index = Math.floor(Math.random() * (content.length - 1.01));
+            const index = Math.floor(Math.random() * content.length);
             const e = Math.floor((Math.random() * 2.99 + 1) * 5);
             存档.其他.中国居民膳食指南1997版 += 2;
             存档.最大生命 += e;

@@ -58,7 +58,7 @@ export class 商店 extends Component {
 
 		for (let i = 0; i < this.页大小; i++) {
 			const 商品序号 = 页码 * this.页大小 + i;
-			const 所有商品 = 默认商品表.filter(i => i.显示);
+			const 所有商品 = 默认商品表.filter(item => item.显示);
 			if (商品序号 >= 所有商品.length) break;
 			const 商品 = 深克隆(所有商品[商品序号]);
 
@@ -117,7 +117,7 @@ export class 商店 extends Component {
 				商品.选项二效果({
 					提示: (文本) => 播放文本(this.标签, 文本),
 					购买成功: (文本) => {
-						执行钩子('购买后', [商品])
+						执行钩子('出售后', [商品])
 						播放文本(this.标签, 文本)
 						保存存档()
 						this.更新标签();

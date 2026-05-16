@@ -128,16 +128,23 @@ export class 开场 extends Component {
 		}
 
 		// 2. 洗牌算法（Fisher-Yates）打乱候选池
-		const shuffled = [...weightPool];
-		for (let i = shuffled.length - 1; i > 0; i--) {
+		for (let i = weightPool.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1));
-			[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+			[weightPool[i], weightPool[j]] = [weightPool[j], weightPool[i]];
 		}
 
-		// 3. 去重 + 截取数量
-		const uniqueResult = Array.from(new Set(shuffled));
-		const realCount = Math.min(count, uniqueResult.length);
-		return uniqueResult.slice(0, realCount);
+		// 3. 使用Set记录已选中的物品索引，确保不重复选取同一物品
+		const selectedIndices = new Set<number>();
+		const result: T[] = [];
+
+		for (let i = 0; i < weightPool.length && result.length < count; i++) {
+			if (!selectedIndices.has(i)) {
+				selectedIndices.add(i);
+				result.push(weightPool[i]);
+			}
+		}
+
+		return result;
 	}
 
 	点击确定() {

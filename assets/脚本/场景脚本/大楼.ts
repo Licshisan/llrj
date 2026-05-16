@@ -15,8 +15,8 @@ export class 大楼 extends Component {
 		if(!存档.其他.电疗店开店){
 			存档.其他.电疗店开店 = 1;
 			存档.其他.电疗店资产 = 800;
+			存档.其他.游戏时长 = 0;
 		}
-		存档.其他.游戏时长 = 0
 		this.更新()
 		this.大楼.getChildByName("返回按钮").on(Button.EventType.CLICK, () => director.loadScene("主页"), this);
 
