@@ -116,10 +116,10 @@ export async function 请求JSON<T = any>(path: string, options:  {
     return Promise.race([请求, 超时]);
 }
 
-export async function 登录请求(uid: string): Promise<玩家信息> {
+export async function 登录请求(): Promise<玩家信息> {
     const result = await 请求JSON<玩家信息>("/login", {
         method: "POST",
-        body: { uid },
+        body: { uid: 玩家.uid },
         timeout: 5000,
     });
     return result.data;
@@ -127,7 +127,7 @@ export async function 登录请求(uid: string): Promise<玩家信息> {
 
 export async function 上报错误(data: any) {
     const player_id = 获取玩家ID();
-    return 请求JSON<{ id: number }>("/log", {
+    const result = await 请求JSON<{ id: number }>("/log", {
         method: "POST",
         body: {
             ...(player_id > 0 ? 获取玩家校验信息() : {}),
@@ -135,11 +135,12 @@ export async function 上报错误(data: any) {
             log: data,
         },
     });
+    return result.data
 }
 
 export async function 上传消息请求(data: any) {
     const player_id = 获取玩家ID();
-    return 请求JSON<{ id: number }>("/log", {
+    const result = await 请求JSON<{ id: number }>("/log", {
         method: "POST",
         body: {
             ...(player_id > 0 ? 获取玩家校验信息() : {}),
@@ -147,10 +148,11 @@ export async function 上传消息请求(data: any) {
             log: data,
         },
     });
+    return result.data
 }
 
 export async function 上传存档请求() {
-    return 请求JSON<存档记录>("/save", {
+    const result = await  请求JSON<存档记录>("/save", {
         method: "POST",
         body: {
             ...获取玩家校验信息(),
@@ -159,6 +161,7 @@ export async function 上传存档请求() {
             save: 存档,
         },
     });
+    return result.data
 }
 
 export async function 上传ExtInfo请求() {
@@ -172,14 +175,15 @@ export async function 上传ExtInfo请求() {
     return result.data
 }
 
-export async function 修改昵称请求( name: string) {
-    return 请求JSON<玩家信息>("/rename", {
+export async function 修改昵称请求(name: string) {
+    const result = await 请求JSON<玩家信息>("/rename", {
         method: "POST",
         body: {
             ...获取玩家校验信息(),
             name,
         },
     });
+    return result.data
 }
 
 export async function 获取随机存档请求(day: number) {
@@ -190,7 +194,8 @@ export async function 获取随机存档请求(day: number) {
         `day=${encodeURIComponent(day)}`,
     ].join("&");
 
-    return 请求JSON<存档记录>(`/random-save?${query}`);
+    const result = await 请求JSON<存档记录>(`/random-save?${query}`);
+    return result.data
 }
 
 export async function 获取排行榜请求() {

@@ -1,6 +1,5 @@
 import { 加载备份, 存档 } from "../管理器/存档管理器";
 import { 计算数值, 计算最大生命, 计算最大精力, 计算最大饥饿 } from "../方法函数/属性计算"
-import { 是否开启民以食为天, 增加营养值 } from "../方法函数/公共函数"
 
 export interface 食物项目类型 {
 	名称: string,
@@ -359,4 +358,3 @@ export const 默认食物表: 食物项目类型[] = [
 		get 显示() { return 存档.物品.精制香烟 > 0; },
 	},
 ]
-console.log(`【食物】共计${默认食物表.length}条`)

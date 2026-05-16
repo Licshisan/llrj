@@ -1869,10 +1869,10 @@ export const 其他剧情表: 剧情定义类型[] = [
 		get 文本(){
 			const 时空流浪者 = 存档.临时数据.时空流浪者
 
-			const 昵称 = globalThis?.PVP玩家数据?.昵称 || "时空流浪者"
+			const 昵称 = 存档.临时数据.时空流浪者?.player.name || "时空流浪者"
 			const a = [`遇见一个流浪汉`, `名叫【${昵称}】`]
-			const 天赋 = globalThis?.PVP玩家数据?.存档?.天赋
-			const 生命 = globalThis?.PVP玩家数据?.存档?.生命
+			const 天赋 = 存档.临时数据.时空流浪者?.save?.天赋
+			const 生命 = 存档.临时数据.时空流浪者?.save?.生命
 
 			const keys = Object.keys(天赋);
 			const filteredKeys = keys.filter(key => key !== "饥饿");
@@ -1889,7 +1889,7 @@ export const 其他剧情表: 剧情定义类型[] = [
 		选项二: "决斗！",
 		选项三: "默默离开",
 		结果一: ({ 结束剧情 }) => {
-			const 昵称 = globalThis?.PVP玩家数据?.昵称 || "时空流浪者"
+			const 昵称 = 存档.临时数据.时空流浪者?.player.name || "时空流浪者"
 			const 台词数组 = [
 				"同道中人，相逢即是缘，多加保重。",
 				"都是天涯浪客，不必见外，一路保重。",
@@ -2003,4 +2003,3 @@ export const 默认剧情表: 剧情定义类型[] = [
 	...省城剧情表,
 	...其他剧情表,
 ]
-console.log(`【剧情】共计${默认剧情表.length}条`)
