@@ -140,20 +140,20 @@ export async function 加载游戏内容() {
 
 	try{
 		// 尝试登录
-		let player = await 登录请求(玩家管理器.玩家.uid)
+		let player = await 登录请求()
 
 		// 断线重传 并且不是 转移玩家
-		if(玩家管理器.玩家.ext_info.更新时间 > player.ext_info.更新时间 && player.id === 玩家管理器.玩家.id){
+		if(玩家管理器.玩家.扩展信息.更新时间 > player.扩展信息.更新时间 && player.编号 === 玩家管理器.玩家.编号){
 			player = await 上传ExtInfo请求()
 		}
 
-		if(player.id) 玩家管理器.玩家.id = player.id
-		if(player.uid) 玩家管理器.玩家.uid = player.uid
-		if(player.name) 玩家管理器.玩家.name = player.name
-		if(player.ext_info) 玩家管理器.玩家.ext_info = player.ext_info
-		if(player.server_info) 玩家管理器.玩家.server_info = player.server_info
-		if(player.created_at) 玩家管理器.玩家.created_at = player.created_at
-		if(player.last_login_at) 玩家管理器.玩家.last_login_at = player.last_login_at
+		if(player.编号) 玩家管理器.玩家.编号 = player.编号
+		if(player.用户标识) 玩家管理器.玩家.用户标识 = player.用户标识
+		if(player.名称) 玩家管理器.玩家.名称 = player.名称
+		if(player.扩展信息) 玩家管理器.玩家.扩展信息 = player.扩展信息
+		if(player.服务器信息) 玩家管理器.玩家.服务器信息 = player.服务器信息
+		if(player.创建时间) 玩家管理器.玩家.创建时间 = player.创建时间
+		if(player.上次登录时间) 玩家管理器.玩家.上次登录时间 = player.上次登录时间
 
 		玩家管理器.保存玩家()
 	} catch(e) {

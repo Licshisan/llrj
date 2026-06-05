@@ -84,7 +84,7 @@ export class 分数 extends Component {
 		const 扩充背包等级 = 存档.技能['扩充背包'] || 0;
 		const 携带限额 = 5 + 扩充背包等级 * 2;
 
-		const 现有藏品 = 玩家.ext_info.藏品 || {};
+		const 现有藏品 = 玩家.扩展信息.藏品 || {};
 		const 新藏品 = 存档.新藏品 || {};
 		const 合并藏品: Record<string, number> = {};
 
@@ -103,20 +103,20 @@ export class 分数 extends Component {
 			最终藏品[名称] = 数量;
 		}
 
-		玩家.ext_info.藏品 = 最终藏品;
+		玩家.扩展信息.藏品 = 最终藏品;
 	} 
 
 	更新成就() {
 		const 完成成就: 成就项目类型[] = [];
 		for (const 成就 of 默认成就表) {
-			if (!成就.条件 || 玩家.ext_info.成就.find(c => c.名称 === 成就.名称)) continue;
+			if (!成就.条件 || 玩家.扩展信息.成就.find(c => c.名称 === 成就.名称)) continue;
 
 			const 新成就 = {
 				名称: 成就.名称,
 				描述: 成就.描述,
 				完成时间: Date.now(),
 			}
-			玩家.ext_info.成就.push(新成就);
+			玩家.扩展信息.成就.push(新成就);
 			成就.效果?.完成成就?.(成就.名称);
 			完成成就.push(成就);
 		}

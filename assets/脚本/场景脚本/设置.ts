@@ -20,11 +20,11 @@ export class 设置 extends Component {
 
   速度表 = { 1: "一般", 2: "快速", 6: "极速" }
   start() {
-    this.出场语输入框.getComponent(EditBox).string = 玩家.ext_info?.出场语 || ''
-    this.战胜语输入框.getComponent(EditBox).string = 玩家.ext_info?.战胜语 || ''
-    this.战败语输入框.getComponent(EditBox).string = 玩家.ext_info?.战败语 || ''
+    this.出场语输入框.getComponent(EditBox).string = 玩家.扩展信息?.出场语 || ''
+    this.战胜语输入框.getComponent(EditBox).string = 玩家.扩展信息?.战胜语 || ''
+    this.战败语输入框.getComponent(EditBox).string = 玩家.扩展信息?.战败语 || ''
     this.标签.getComponent(Label).string = `当前速度为${this.速度表[设置管理器.设置.播放速度]}`;
-    this.账号信息.getComponent(Label).string = `昵称：${玩家.name || '暂无'}\nid:${玩家.id || '暂无'}`
+    this.账号信息.getComponent(Label).string = `昵称：${玩家.名称 || '暂无'}\nid:${玩家.编号 || '暂无'}`
 
     this.按钮容器.getChildByName("速度").on(Button.EventType.CLICK, this.点击速度, this);
     this.按钮容器.getChildByName("暗夜").on(Button.EventType.CLICK, this.点击暗夜, this);
@@ -97,9 +97,9 @@ export class 设置 extends Component {
   }
 
   点击确认() {
-    玩家.ext_info.出场语 = this.出场语输入框.getComponent(EditBox).string || ''
-    玩家.ext_info.战胜语 = this.战胜语输入框.getComponent(EditBox).string || ''
-    玩家.ext_info.战败语 = this.战败语输入框.getComponent(EditBox).string || ''
+    玩家.扩展信息.出场语 = this.出场语输入框.getComponent(EditBox).string || ''
+    玩家.扩展信息.战胜语 = this.战胜语输入框.getComponent(EditBox).string || ''
+    玩家.扩展信息.战败语 = this.战败语输入框.getComponent(EditBox).string || ''
 
     try {
       上传ExtInfo请求().then(data => {

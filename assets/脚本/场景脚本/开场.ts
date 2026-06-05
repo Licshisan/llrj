@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, director, tween, Button, Color, log, UIOpacity } from "cc";
+﻿import { _decorator, Component, Node, director, tween, Button, Color, log, UIOpacity } from "cc";
 import { 保存设置, 设置 } from "../管理器/设置管理器";
 import { 创建动画文字, 淡入, 淡出 } from "../方法函数/动画效果";
 import { 保存存档, 存档 } from "../管理器/存档管理器";
@@ -20,8 +20,8 @@ export class 开场 extends Component {
 		if(存档.游戏难度 === '残酷'){
 			开场文本.push("【残酷】难度已开启...")
 		}
-		if(存档.游戏难度 === '焚天'){
-			开场文本.push("【焚天】难度已开启...")
+		if(存档.游戏难度 === '绝境'){
+			开场文本.push("【绝境】难度已开启...")
 		}
 
 		const 序列 = tween(this.node).delay(0.5);
@@ -115,7 +115,7 @@ export class 开场 extends Component {
 		// 空值判断
 		if (!list || list.length === 0) return [];
 		// 权重配置：数字越大概率越高
-		const weightConfig = { 普通: 50, 稀有: 30, 传说: 10, 神秘: 10};
+		const weightConfig = { 普通: 50, 稀有: 30, 传说: 10, 史诗: 10};
 
 		// 1. 生成带权重的候选池
 		const weightPool: T[] = [];

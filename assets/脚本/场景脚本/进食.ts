@@ -71,7 +71,7 @@ export class 进食 extends Component {
 
 			项目组件.getChildByName("选择按钮").on(Button.EventType.CLICK, () => {
 				try {
-					if(食物.名称 === '香烟' || 食物.名称 === '精致香烟'){
+					if(食物.名称 === '香烟' || 食物.名称 === '精制香烟'){
 						if(this.防误触提示){
 							this.防误触提示 = false
 							播放文本(this.标签, "系统提示，香烟会损失健康，再次点击确认使用")

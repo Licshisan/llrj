@@ -1,6 +1,6 @@
 import { _decorator, Button, Color, Component, director, error, Label, Node, UITransform } from 'cc';
 import { 存档 } from '../管理器/存档管理器';
-import { 伙伴特性定义类型, 默认伙伴特性表 } from '../默认内容/伙伴特性表';
+import { 伙伴名类型, 伙伴特性定义类型, 默认伙伴特性表 } from '../默认内容/伙伴特性表';
 const { ccclass, property } = _decorator;
 
 @ccclass('伙伴特性')
@@ -9,14 +9,9 @@ export class 伙伴特性 extends Component {
     @property(Node) 返回: Node = null
     @property(Node) 好感: Node = null
 
-    start() {
-		const 伙伴名称 = globalThis.伙伴特性伙伴名称
-		const 特性列表 = 默认伙伴特性表.filter((特性: 伙伴特性定义类型) => {
-			if (伙伴名称 === "晓月") return ["女汉子", "小伙伴", "声援", "捡漏王", "开心果"].includes(特性.名称);
-			if (伙伴名称 === "碧瑶") return ["女杀手", "暗杀", "上交", "刺杀", "保护", "冷静", "双飞", "理财", "终结", "合击", "舍身"].includes(特性.名称);
-			if (伙伴名称 === "小兰") return ["协助", "崇拜", "熟络"].includes(特性.名称);
-			return false;
-		});
+	start() {
+		const 伙伴名称 = globalThis.伙伴特性伙伴名称 as 伙伴名类型
+		const 特性列表 = 默认伙伴特性表.filter(特性 => 特性.伙伴名 === 伙伴名称);
 		if(!伙伴名称 || 特性列表.length === 0){
 			error("无效的伙伴名称")
 			return

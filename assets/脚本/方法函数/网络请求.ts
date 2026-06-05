@@ -21,32 +21,32 @@ export interface 服务器信息 {
 }
 
 export interface 玩家信息 {
-    id: number;
-    uid: string;
-    name: string;
-    ext_info?: Record<string, any>;
-    server_info?: 服务器信息;
-    created_at?: string;
-    updated_at?: string;
-    last_login_at?: string;
+    编号: number;
+    用户标识: string;
+    名称: string;
+    扩展信息?: Record<string, any>;
+    服务器信息?: 服务器信息;
+    创建时间?: string;
+    更新时间?: string;
+    上次登录时间?: string;
 }
 
 export interface 存档记录 {
     id: number;
-    player_id: number;
+    玩家编号: number;
     day: number;
     save_name: string;
     save: any;
     created_at: string;
     player?: {
-        id: number;
-        name: string;
+        编号: number;
+        名称: string;
     };
 }
 
 export interface 排行榜玩家 {
-    id: number;
-    name: string;
+    编号: number;
+    名称: string;
 }
 
 export interface 排行榜条目 {
@@ -61,14 +61,14 @@ export interface 排行榜结果 {
 }
 
 function 获取玩家ID(): number {
-    const id = Number(玩家?.id || 0);
+    const id = Number(玩家?.编号 || 0);
     return Number.isFinite(id) && id > 0 ? id : 0;
 }
 
 function 获取玩家校验信息() {
     return {
-        player_id: 获取玩家ID(),
-        uid: 玩家.uid,
+        玩家编号: 获取玩家ID(),
+        用户标识: 玩家.用户标识,
     };
 }
 
@@ -119,18 +119,18 @@ export async function 请求JSON<T = any>(path: string, options:  {
 export async function 登录请求(): Promise<玩家信息> {
     const result = await 请求JSON<玩家信息>("/login", {
         method: "POST",
-        body: { uid: 玩家.uid },
+        body: { 用户标识: 玩家.用户标识 },
         timeout: 5000,
     });
     return result.data;
 }
 
 export async function 上报错误(data: any) {
-    const player_id = 获取玩家ID();
+    const 玩家编号 = 获取玩家ID();
     const result = await 请求JSON<{ id: number }>("/log", {
         method: "POST",
         body: {
-            ...(player_id > 0 ? 获取玩家校验信息() : {}),
+            ...(玩家编号 > 0 ? 获取玩家校验信息() : {}),
             level: "error",
             log: data,
         },
@@ -139,11 +139,11 @@ export async function 上报错误(data: any) {
 }
 
 export async function 上传消息请求(data: any) {
-    const player_id = 获取玩家ID();
+    const 玩家编号 = 获取玩家ID();
     const result = await 请求JSON<{ id: number }>("/log", {
         method: "POST",
         body: {
-            ...(player_id > 0 ? 获取玩家校验信息() : {}),
+            ...(玩家编号 > 0 ? 获取玩家校验信息() : {}),
             level: "info",
             log: data,
         },
@@ -169,28 +169,28 @@ export async function 上传ExtInfo请求() {
         method: "POST",
         body: {
             ...获取玩家校验信息(),
-            ext_info: 玩家.ext_info,
+            扩展信息: 玩家.扩展信息,
         },
     });
     return result.data
 }
 
-export async function 修改昵称请求(name: string) {
+export async function 修改昵称请求(名称: string) {
     const result = await 请求JSON<玩家信息>("/rename", {
         method: "POST",
         body: {
             ...获取玩家校验信息(),
-            name,
+            名称,
         },
     });
     return result.data
 }
 
 export async function 获取随机存档请求(day: number) {
-    const { player_id, uid } = 获取玩家校验信息();
+    const { 玩家编号, 用户标识 } = 获取玩家校验信息();
     const query = [
-        `player_id=${encodeURIComponent(player_id)}`,
-        `uid=${encodeURIComponent(uid)}`,
+        `玩家编号=${encodeURIComponent(玩家编号)}`,
+        `用户标识=${encodeURIComponent(用户标识)}`,
         `day=${encodeURIComponent(day)}`,
     ].join("&");
 
@@ -199,10 +199,10 @@ export async function 获取随机存档请求(day: number) {
 }
 
 export async function 获取排行榜请求() {
-    const { player_id, uid } = 获取玩家校验信息();
+    const { 玩家编号, 用户标识 } = 获取玩家校验信息();
     const query = [
-        `player_id=${encodeURIComponent(player_id)}`,
-        `uid=${encodeURIComponent(uid)}`,
+        `玩家编号=${encodeURIComponent(玩家编号)}`,
+        `用户标识=${encodeURIComponent(用户标识)}`,
     ].join("&");
 
     const result = await 请求JSON<排行榜结果>(`/ranking?${query}`);
@@ -210,10 +210,10 @@ export async function 获取排行榜请求() {
 }
 
 export async function 获取藏品排行榜请求() {
-    const { player_id, uid } = 获取玩家校验信息();
+    const { 玩家编号, 用户标识 } = 获取玩家校验信息();
     const query = [
-        `player_id=${encodeURIComponent(player_id)}`,
-        `uid=${encodeURIComponent(uid)}`,
+        `玩家编号=${encodeURIComponent(玩家编号)}`,
+        `用户标识=${encodeURIComponent(用户标识)}`,
     ].join("&");
 
     const result = await 请求JSON<排行榜结果>(`/collection-ranking?${query}`);
