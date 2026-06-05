@@ -17,7 +17,7 @@ export interface 收集材料上下文类型 {
 	物品表: 概率类型[],
 	结果文本: string[],
 }
-
+// todo 检查钩子应用
 export interface 通用效果字段类型 {
 	新建游戏?: () => void,
 	主页更新?: () => void,
@@ -121,6 +121,9 @@ export interface 通用效果字段类型 {
 	计算反弹强度?: 计算钩子类型,
 	计算闪避率?: 计算钩子类型,
 	计算割裂强度?: 计算钩子类型,
+	计算史诗天赋概率?: 计算钩子类型,
+	计算传说天赋概率?: 计算钩子类型,
+	计算开局特质数量?: 计算钩子类型,
 }
 
 export type 时机名称类型 = keyof 通用效果字段类型
@@ -154,7 +157,7 @@ export function 注册钩子<K extends 时机名称类型>(时机: K, 函数: No
 	return 消除函数;
 }
 
-export function 执行钩子<K extends 时机名称类型>(时机: K, ...参数列表: Parameters<NonNullable<通用效果字段类型[K]>>) {
+export function 执行钩子<K extends 时机名称类型>(时机: K, 参数列表: Parameters<NonNullable<通用效果字段类型[K]>>) {
     const 结果: ReturnType<NonNullable<通用效果字段类型[K]>>[] = [];
     const 钩子数组 = 钩子函数对象[时机];
 
