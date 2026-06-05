@@ -50,14 +50,14 @@ export interface 排行榜玩家 {
 }
 
 export interface 排行榜条目 {
-    rank: number;
+    排名: number;
     score: number;
-    player: 排行榜玩家;
+    玩家: 排行榜玩家;
 }
 
 export interface 排行榜结果 {
-    players: 排行榜条目[];
-    self: 排行榜条目;
+    玩家列表: 排行榜条目[];
+    自身: 排行榜条目;
 }
 
 function 获取玩家ID(): number {

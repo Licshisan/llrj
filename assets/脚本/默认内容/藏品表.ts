@@ -1,6 +1,5 @@
 ﻿import { Color } from "cc";
-import { 对局类型 } from "../场景脚本/战斗";
-import { 计算容器类型, 计算数值 } from "../方法函数/属性计算";
+import { 计算数值 } from "../方法函数/属性计算";
 import { 存档 } from "../管理器/存档管理器";
 import { 默认套餐表 } from "./套餐表";
 import type { 通用效果字段类型 } from "../管理器/钩子管理器";

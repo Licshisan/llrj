@@ -18,13 +18,13 @@ export const 默认玩家 = {
 	上次登录时间: "",
 
 	排行榜: {
-		players: [],
-		self: null,
+		玩家列表: [],
+		自身: null,
 	} as 排行榜结果,
 
 	藏品排行榜: {
-		players: [],
-		self: null,
+		玩家列表: [],
+		自身: null,
 	} as 排行榜结果,
 };
 
