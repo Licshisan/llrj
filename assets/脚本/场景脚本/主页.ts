@@ -573,7 +573,7 @@ export class 主页 extends Component {
         }
 
         // 郊外传说
-        if (存档.当前地点 === '郊外' && 存档.天数 >= 142 && 存档.天数 < 145 && Math.random() * 100 < 50 && 存档.精力 < 50) {
+        if (存档.当前地点 === '郊外' && 存档.天数 >= 142 && 计算技能等级("世界感知") >= 3 && 存档.天数 < 145 && Math.random() * 100 < 50 && 存档.精力 < 50) {
             this.基本消耗()
             this.node.getComponent(事件).触发事件("雨夜白影")
             return false
