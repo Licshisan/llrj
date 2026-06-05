@@ -1,8 +1,7 @@
 import { 存档 } from "../管理器/存档管理器";
 import type { 通用效果字段类型 } from "../管理器/钩子管理器";
-import { 计算容器类型, 计算数值, 计算最大生命 } from "../方法函数/属性计算";
+import { 计算数值, 计算最大生命 } from "../方法函数/属性计算";
 import { 抽取物品 } from "../方法函数/公共函数";
-import { 对局类型 } from "../场景脚本/战斗";
 
 interface 制作上下文 {
 	制作成功: (文本: string) => void,
