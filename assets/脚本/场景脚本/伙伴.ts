@@ -20,7 +20,9 @@ export class 伙伴 extends Component {
 
 	onLoad(): void {
 		if (!存档.伙伴.晓月关系) {
-			if (存档.伙伴.碧瑶关系) {
+			if (存档.伙伴.林溪关系) {
+				director.loadScene('林溪')
+			} else if (存档.伙伴.碧瑶关系) {
 				globalThis.伙伴特性伙伴名称 = '碧瑶'
 				director.loadScene('伙伴特性')
 			} else if (存档.伙伴.小兰关系) {
@@ -49,8 +51,14 @@ export class 伙伴 extends Component {
 			director.loadScene("伙伴特性")
 		}, this);
 
-		this.切换2.active = 存档.伙伴.小兰关系 > 0;
-		this.切换2.on(Button.EventType.CLICK, () => director.loadScene("小兰"), this);
+		this.切换2.active = 存档.伙伴.小兰关系 > 0 || 存档.伙伴.林溪关系 > 0;
+		this.切换2.on(Button.EventType.CLICK, () => {
+			if (存档.伙伴.小兰关系) {
+				director.loadScene("小兰")
+				return
+			}
+			director.loadScene("林溪")
+		}, this);
 
 		this.退出按钮.on(Button.EventType.CLICK, () => director.loadScene("主页"), this);
 
