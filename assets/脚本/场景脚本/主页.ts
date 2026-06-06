@@ -484,6 +484,14 @@ export class 主页 extends Component {
                 存档.距离++
                 return false
             }
+
+            if (存档.伙伴.青芽关系) {
+                存档.当前剧情 = "青芽的困境";
+                director.loadScene('剧情');
+                存档.距离++
+                return false
+            }
+  
         }
         // 进入省城
         if (存档.距离 == 299) {
@@ -523,6 +531,14 @@ export class 主页 extends Component {
 
         // 山脉天数限制
         if (获取地区名称() === '山脉' && 存档.天数 >= 80) {
+            if (存档.距离 > 100 && 存档.距离 < 300) {
+                this.播放文本("还是先去省城整顿一下吧！")
+                return false
+            }
+        }
+
+        // 森林天数限制
+        if (获取地区名称() === '黑色森林' && 存档.天数 >= 80) {
             if (存档.距离 > 100 && 存档.距离 < 300) {
                 this.播放文本("还是先去省城整顿一下吧！")
                 return false
@@ -580,6 +596,13 @@ export class 主页 extends Component {
         if (存档.当前地点 === '郊外' && 存档.天数 >= 142 && 计算技能等级("世界感知") >= 3 && 存档.天数 < 145 && Math.random() * 100 < 50 && 存档.精力 < 50) {
             this.基本消耗()
             this.node.getComponent(事件).触发事件("雨夜白影")
+            return false
+        }
+
+        // 食品店
+        if(存档.套餐名称 === "食补筑基" && 存档.距离 >= 100 && Math.random() * 100 < 5){
+            this.基本消耗()
+            this.node.getComponent(事件).触发事件("食品店")
             return false
         }
 
