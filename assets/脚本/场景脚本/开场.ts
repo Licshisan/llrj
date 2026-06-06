@@ -1,6 +1,6 @@
-﻿import { _decorator, Component, Node, director, tween, Button, Color, log, UIOpacity } from 'cc';
+﻿import { _decorator, Component, Node, director, tween, Button, Color, log, UIOpacity, Label } from 'cc';
 import { 保存设置, 设置 } from '../管理器/设置管理器';
-import { 创建动画文字, 淡入, 淡出 } from '../方法函数/动画效果';
+import { 创建动画文字, 播放文本, 淡入, 淡出 } from '../方法函数/动画效果';
 import { 保存存档, 存档 } from '../管理器/存档管理器';
 import { 执行钩子 } from '../管理器/钩子管理器';
 import { 默认天赋表 } from '../默认内容/天赋表';
@@ -10,13 +10,15 @@ const { ccclass, property } = _decorator;
 
 @ccclass('开场')
 export class 开场 extends Component {
+  @property(Node) 标签: Node = null;
   @property(Node) 文本容器: Node = null;
   @property(Node) 继续按钮: Node = null;
   @property(Node) 刷新按钮: Node = null;
   刷新次数 = 0;
   当前天赋: string[] = [];
-
+  锁定次数 =3
   start() {
+    this.标签.getComponent(Label).string = ""
     const 开场文本 = [
       '昨天，',
       '和父亲大吵一架后，',
@@ -45,32 +47,37 @@ export class 开场 extends Component {
     this.刷新按钮.on(Button.EventType.CLICK, () => this.点击刷新(), this);
   }
 
+  
   点击刷新() {
     this.刷新次数++;
     this.继续按钮.active = false;
     this.刷新按钮.active = false;
+    this.刷新按钮.getComponent(Label).string = `<刷新${this.刷新次数}/10>`
 
     this.当前天赋 = [];
 
     // todo 点击锁定天赋
-    let 天赋数量 = 计算数值('天赋数量', Math.random() < 0.5 ? 2 : 0);
+    let 天赋数量 = 计算数值('天赋数量', 3);
     if (Math.random() * 100 < 计算数值('额外天赋概率', 1)) {
       天赋数量++;
     }
 
+    let 正面天赋数量 = 天赋数量
+    let 负面天赋数量 = 天赋数量
+
     const 保留天赋 = 默认天赋表.find((x) => x.名称 === 设置.保留天赋);
     if (保留天赋 && 天赋数量 > 0) {
       this.当前天赋.push(设置.保留天赋);
-      天赋数量--;
+      正面天赋数量--;
     }
 
     const 抽取的正面天赋 = this.随机抽取(
       默认天赋表.filter((i) => !i.负面 && i.等级 > 0 && i.名称 !== 设置.保留天赋),
-      天赋数量,
+      正面天赋数量,
     );
     const 抽取的负面天赋 = this.随机抽取(
       默认天赋表.filter((i) => i.负面 && i.等级 > 0),
-      天赋数量,
+      负面天赋数量,
     );
 
     this.当前天赋.push(...抽取的正面天赋.map((x) => x.名称));
@@ -79,22 +86,26 @@ export class 开场 extends Component {
 
     if (保留天赋) {
       显示文本.push({
+        名称: 保留天赋.名称,
         文本: `你保留了天赋「${保留天赋.名称}」\n效果：${保留天赋.说明 || ''}`,
         颜色: 保留天赋.颜色,
       });
     }
     抽取的正面天赋.forEach((天赋) => {
       显示文本.push({
+        名称: 天赋.名称,
         文本: `你同时拥有天赋「${天赋?.名称 || ''}」\n效果：${天赋?.说明 || ''}`,
         颜色: 天赋.颜色,
       });
     });
     抽取的负面天赋.forEach((天赋) => {
       显示文本.push({
+        名称: 天赋.名称,
         文本: `你得到负面天赋「${天赋?.名称 || ''}」\n效果：${天赋?.说明 || ''}`,
         颜色: 天赋.颜色,
       });
     });
+
     if (显示文本.length === 0) {
       显示文本.push({
         文本: `你平平无奇`,
@@ -112,20 +123,28 @@ export class 开场 extends Component {
       });
     for (let i = 0; i < 显示文本.length; i++) {
       序列.call(() => {
-        创建动画文字(this.文本容器, 显示文本[i].文本, i, 显示文本[i].颜色);
+        创建动画文字(this.文本容器, 显示文本[i].文本, i, 显示文本[i].颜色, (文字节点) => {
+          console.log(显示文本[i])
+          显示文本[i].已锁定 = !显示文本[i].已锁定
+          文字节点.getComponent(Label).string = 显示文本[i].文本 + (显示文本[i].已锁定 ? "「已锁定」" : "")
+          播放文本(this.标签, "点击锁定"+ (显示文本[i].已锁定 ? "「已锁定」" : "「已取消」"))
+        });
       }).delay(1.5 / 设置.播放速度);
     }
     序列.delay(1.5 / 设置.播放速度);
     序列.call(() => {
       淡入(this.继续按钮);
-      淡入(this.刷新按钮);
+      if(this.刷新次数 < 10){
+        淡入(this.刷新按钮);
+      }
+
     });
     序列.start();
   }
 
   随机抽取<T extends { 品质?: string }>(list: T[], count: number): T[] {
     if (!list || list.length === 0 || count <= 0) return [];
-    const weightConfig = { 普通: 50, 稀有: 30, 传说: 5, 史诗: 5 };
+    const weightConfig = { 普通: 50, 稀有: 30, 传说: 10, 史诗: 10 };
     const candidates = [...list];
     const result: T[] = [];
 
