@@ -16,22 +16,6 @@ export class 青芽 extends Component {
   @property(Node) 切换3: Node = null;
   @property(Node) 退出按钮: Node = null;
 
-  onLoad(): void {
-    // 如果没有青芽，跳转到其他伙伴
-    if (!存档.伙伴.青芽关系) {
-      if (存档.伙伴.晓月关系) {
-        director.loadScene('伙伴');
-      } else if (存档.伙伴.碧瑶关系) {
-        globalThis.伙伴特性伙伴名称 = '碧瑶';
-        director.loadScene('伙伴特性');
-      } else if (存档.伙伴.小兰关系) {
-        director.loadScene('小兰');
-      } else if (存档.伙伴.林溪关系) {
-        director.loadScene('林溪');
-      }
-    }
-  }
-
   start() {
     this.更新显示();
     this.标签.getComponent(Label).string = '';
@@ -60,28 +44,21 @@ export class 青芽 extends Component {
       this,
     );
 
-    this.切换2.active = !!存档.伙伴.青芽关系;
+    this.切换2.active = !!存档.伙伴.碧瑶关系;
     this.切换2.on(
       Button.EventType.CLICK,
       () => {
-        globalThis.伙伴特性伙伴名称 = '青芽';
+        globalThis.伙伴特性伙伴名称 = '碧瑶';
         director.loadScene('伙伴特性');
       },
       this,
     );
 
-    this.切换3.active = !!(存档.伙伴.碧瑶关系 || 存档.伙伴.小兰关系 || 存档.伙伴.林溪关系);
+    this.切换3.active = !!存档.伙伴.小兰关系;
     this.切换3.on(
       Button.EventType.CLICK,
       () => {
-        if (存档.伙伴.小兰关系) {
-          director.loadScene('小兰');
-        } else if (存档.伙伴.林溪关系) {
-          director.loadScene('林溪');
-        } else if (存档.伙伴.碧瑶关系) {
-          globalThis.伙伴特性伙伴名称 = '碧瑶';
-          director.loadScene('伙伴特性');
-        }
+        director.loadScene('小兰');
       },
       this,
     );

@@ -171,7 +171,7 @@ export class 睡觉 extends Component {
       获取随机存档请求(存档.天数 - 1)
         .then((result) => {
           console.log('随机匹配到的存档数据', result);
-          存档.临时数据.时空流浪者 = result.data;
+          存档.临时数据.时空流浪者 = result;
         })
         .catch((e) => {
           error(e);
@@ -216,6 +216,8 @@ export class 睡觉 extends Component {
         `【兴奋消退】玩游戏获得的属性加成效果消退${e}%，还剩下${存档.其他.全属性加成}%`,
       );
     }
+
+    // todo 饮食-营养体系
 
     // 住房
     if (存档.临时数据.房源) {

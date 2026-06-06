@@ -19,10 +19,9 @@ export class 伙伴 extends Component {
   @property(Node) 一键喂药: Node = null;
 
   onLoad(): void {
+    // todo 修改主页 跳转到正确的伙伴 而不是再这里中转
     if (!存档.伙伴.晓月关系) {
-      if (存档.伙伴.林溪关系) {
-        director.loadScene('林溪');
-      } else if (存档.伙伴.碧瑶关系) {
+      if (存档.伙伴.碧瑶关系) {
         globalThis.伙伴特性伙伴名称 = '碧瑶';
         director.loadScene('伙伴特性');
       } else if (存档.伙伴.小兰关系) {
@@ -59,7 +58,7 @@ export class 伙伴 extends Component {
       this,
     );
 
-    this.切换2.active = 存档.伙伴.小兰关系 > 0 || 存档.伙伴.林溪关系 > 0;
+    this.切换2.active = 存档.伙伴.小兰关系 > 0
     this.切换2.on(
       Button.EventType.CLICK,
       () => {
@@ -67,7 +66,6 @@ export class 伙伴 extends Component {
           director.loadScene('小兰');
           return;
         }
-        director.loadScene('林溪');
       },
       this,
     );

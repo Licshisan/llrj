@@ -8,6 +8,7 @@ import { 默认难度表 } from '../默认内容/难度表';
 import { 默认套餐表 } from '../默认内容/套餐表';
 import { 计算数值, 计算最大逃跑 } from '../方法函数/属性计算';
 import { 默认藏品表 } from '../默认内容/藏品表';
+import { 默认技能表 } from '../默认内容/技能表';
 const { ccclass, property } = _decorator;
 
 @ccclass('面板')
@@ -18,9 +19,10 @@ export class 面板 extends Component {
   @property(Node) 返回按钮: Node = null;
   @property(Node) 退出按钮: Node = null;
 
+  
   当前分类 = '天赋';
-  分类列表 = ['天赋', '特性', '统计', '成就', '图鉴', '设置'];
-
+  分类列表 = ['天赋', '特性', '统计', '技能', '成就','设置'];
+  // todo 重排 成就 设置
   start() {
     this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene('主页'), this);
     this.退出按钮.on(Button.EventType.CLICK, () => director.loadScene('首页'), this);
@@ -71,13 +73,12 @@ export class 面板 extends Component {
       case '统计':
         this.渲染统计列表();
         break;
+      case '技能':
+        this.渲染技能列表()
+        break;
       case '成就':
         globalThis.页面来源 = '面板';
         director.loadScene('成就');
-        break;
-      case '图鉴':
-        globalThis.页面来源 = '面板';
-        director.loadScene('图鉴');
         break;
       case '设置':
         globalThis.页面来源 = '面板';
@@ -86,6 +87,7 @@ export class 面板 extends Component {
     }
   }
 
+  // todo 显示赌博信息 网吧信息 营养信息 住房信息 击杀记录
   渲染天赋列表() {
     let index = 0;
 
@@ -149,6 +151,19 @@ export class 面板 extends Component {
         index,
         特性.条件 ? Color.GREEN : Color.WHITE,
       );
+    });
+  }
+
+  渲染技能列表() {
+    默认技能表.forEach((技能, index) => {
+      const 等级 = 存档.技能[技能.名称]
+      if(等级 > 0){
+        创建普通文字(
+          this.内容,
+          `【${技能.名称}LV${等级}】${技能.描述}`,
+          index,
+        );
+      }
     });
   }
 

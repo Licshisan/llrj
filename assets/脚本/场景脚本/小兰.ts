@@ -11,6 +11,7 @@ export class 小兰 extends Component {
   @property(Node) 选择容器: Node = null;
   @property(Node) 切换1: Node = null;
   @property(Node) 切换2: Node = null;
+  @property(Node) 切换3: Node = null;
   @property(Node) 退出按钮: Node = null;
 
   start() {
@@ -24,16 +25,21 @@ export class 小兰 extends Component {
     this.切换1.active = 存档.伙伴.晓月关系 > 0;
     this.切换1.on(Button.EventType.CLICK, () => director.loadScene('伙伴'), this);
 
-    this.切换2.active = 存档.伙伴.碧瑶关系 > 0 || 存档.伙伴.林溪关系 > 0;
+    this.切换2.active = 存档.伙伴.碧瑶关系 > 0 
     this.切换2.on(
       Button.EventType.CLICK,
       () => {
-        if (!存档.伙伴.碧瑶关系 && 存档.伙伴.林溪关系) {
-          director.loadScene('林溪');
-          return;
-        }
         globalThis.伙伴特性伙伴名称 = '碧瑶';
         director.loadScene('伙伴特性');
+      },
+      this,
+    );
+
+    this.切换3.active = 存档.伙伴.青芽关系 > 0 
+    this.切换3.on(
+      Button.EventType.CLICK,
+      () => {
+        director.loadScene('青芽')
       },
       this,
     );

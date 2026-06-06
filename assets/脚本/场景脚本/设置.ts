@@ -4,6 +4,7 @@ import * as 设置管理器 from '../管理器/设置管理器';
 import { 上传ExtInfo请求 } from '../方法函数/网络请求';
 import { 玩家 } from '../管理器/玩家管理器';
 import { 存档 } from '../管理器/存档管理器';
+import { 计算技能等级 } from '../方法函数/等级计算';
 const { ccclass, property } = _decorator;
 
 @ccclass('设置')
@@ -30,7 +31,7 @@ export class 设置 extends Component {
     this.按钮容器.getChildByName('速度').on(Button.EventType.CLICK, this.点击速度, this);
     this.按钮容器.getChildByName('暗夜').on(Button.EventType.CLICK, this.点击暗夜, this);
 
-    const 自动化等级 = 存档.技能['自动化'] || 0;
+    const 自动化等级 = 计算技能等级("自动化")
 
     if (自动化等级 >= 1) {
       this.按钮容器.getChildByName('自动买果子').active = true;

@@ -92,6 +92,7 @@ export class 战斗 extends Component {
 
   对局: 对局类型;
 
+  // todo 解构PVP战斗
   进入战斗(敌人名称: string) {
     if (敌人名称 == '另一个自己' || 敌人名称 == '镜像人' || 敌人名称 == '时空流浪者') {
       this.进入PVP战斗(敌人名称);
@@ -391,7 +392,7 @@ export class 战斗 extends Component {
         对局.主角 = 原敌人;
         对局.敌人 = 原主角;
         try {
-          return 执行存档上下文(敌人存档, () => 执行钩子(钩子名称, [对局]));
+          return 执行存档上下文(敌人存档, () => 执行钩子(钩子名称 as any, [对局]));
         } finally {
           对局.主角 = 原主角;
           对局.敌人 = 原敌人;
