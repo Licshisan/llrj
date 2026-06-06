@@ -48,7 +48,7 @@ export class 大楼 extends Component {
       存档.其他.服装商品 = Math.floor(Math.random() * 商品.length);
       存档.其他.服装折扣 = Math.floor(Math.random() * 30 + 60);
 
-      const 服装名 = 商品表[存档.其他.服装商品];
+      const 服装名 = 商品[存档.其他.服装商品];
       const 服装价格 = Math.floor((商品表[服装名] * 存档.其他.服装折扣) / 100);
 
       二层按钮.getChildByName('标签').getComponent(Label).string =
@@ -107,7 +107,7 @@ export class 大楼 extends Component {
         存档.其他.电疗店资产 += Math.floor(Math.random() * 15 + 5);
 
         五层按钮.getChildByName('标签').getComponent(Label).string =
-          `五楼：小风电疗（资产${(存档.其他.电疗店资产 / 10).toFixed(1)}元,成功率${电疗成功率}%）`;
+          `五楼：晓风电疗（资产${(存档.其他.电疗店资产 / 10).toFixed(1)}元,成功率${电疗成功率}%）`;
         五层按钮.on(Button.EventType.CLICK, () => this.点击五楼(电疗成功率), this);
       }
     } else {
@@ -180,9 +180,10 @@ export class 大楼 extends Component {
 
       存档.金钱 -= 赢钱数;
       if (Math.random() * 100 < 1) {
+        存档.藏品.投资失败笔记 = (存档.藏品.投资失败笔记 || 0) + 1;
         播放文本(
           this.标签,
-          `投资失败...金钱缩水${赢钱率.toFixed(1)}%(-${(赢钱数 / 10).toFixed(1)})，你汲取了失败地教训，获得藏品【投资失败笔记】*1`,
+          `投资失败...金钱缩水${赢钱率.toFixed(1)}%(-${(赢钱数 / 10).toFixed(1)})，你汲取了失败的教训，获得藏品【投资失败笔记】*1`,
         );
         return;
       }
@@ -199,7 +200,8 @@ export class 大楼 extends Component {
   }
   点击二楼() {
     const 商品表 = { 晓风披肩: 100, 小裤裤: 20, 晓月手链: 20, 幸运石: 20, 板砖: 20, 滑稽裤: 20 };
-    const 服装名 = 商品表[存档.其他.服装商品];
+    const 商品 = Object.keys(商品表);
+    const 服装名 = 商品[存档.其他.服装商品];
     const 服装价格 = Math.floor((商品表[服装名] * 存档.其他.服装折扣) / 100);
 
     if (存档.其他.服装折扣 >= 9999) {
@@ -268,7 +270,7 @@ export class 大楼 extends Component {
       },
       300: () => {
         存档.精力 = 计算最大精力();
-        return '你成功晋级砖石段位，老板兴奋的邀你去她房里睡一觉，精力全恢复！';
+        return '你成功晋级钻石段位，老板兴奋地邀你去她房里睡一觉，精力全恢复！';
       },
       450: () => {
         存档.物品.放大镜 += 1;
@@ -354,7 +356,7 @@ export class 大楼 extends Component {
       .getChildByName('选择按钮5')
       .getChildByName('标签')
       .getComponent(Label).string =
-      `五楼：小风电疗（资产${(存档.其他.电疗店资产 / 10).toFixed(1)}元,成功率${电疗成功率}%）`;
+      `五楼：晓风电疗（资产${(存档.其他.电疗店资产 / 10).toFixed(1)}元,成功率${电疗成功率}%）`;
     this.更新();
   }
 

@@ -28,14 +28,6 @@ export class 首页 extends Component {
       },
       this,
     );
-    this.按钮容器.getChildByName('图鉴').on(
-      Button.EventType.CLICK,
-      () => {
-        globalThis.页面来源 = '首页';
-        director.loadScene('图鉴');
-      },
-      this,
-    );
 
     this.游戏信息.getComponent(Label).string =
       `版本：${设置.游戏版本}\n原作者：晓风游戏  制作：重制开发组`;

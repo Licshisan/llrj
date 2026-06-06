@@ -30,12 +30,12 @@ export class 开场 extends Component {
       开场文本.push('【绝境】难度已开启...');
     }
 
-    const 序列 = tween(this.node).delay(0.5);
+    const 序列 = tween(this.node).delay(0.6);
     for (let i = 0; i < 开场文本.length; i++) {
-      序列.call(() => 创建动画文字(this.文本容器, 开场文本[i], i)).delay(1.5 / 设置.播放速度);
+      序列.call(() => 创建动画文字(this.文本容器, 开场文本[i], i)).delay(1.6 / 设置.播放速度);
     }
-    序列.delay(2.5 / 设置.播放速度);
-    序列.call(() => this.点击刷新()).delay(2.5 / 设置.播放速度);
+    序列.delay(2.6 / 设置.播放速度);
+    序列.call(() => this.点击刷新()).delay(2.6 / 设置.播放速度);
     序列.start();
 
     this.继续按钮.active = false;
@@ -51,12 +51,14 @@ export class 开场 extends Component {
 
     this.当前天赋 = [];
 
-    let 天赋数量 = 计算数值('天赋数量', Math.random() < 0.5 ? 1 : 0);
+    // todo 点击锁定天赋
+    let 天赋数量 = 计算数值('天赋数量', Math.random() < 0.5 ? 2 : 0);
     if (Math.random() * 100 < 计算数值('额外天赋概率', 1)) {
       天赋数量++;
     }
 
-    if (设置.保留天赋 && 天赋数量 > 0) {
+    const 保留天赋 = 默认天赋表.find((x) => x.名称 === 设置.保留天赋);
+    if (保留天赋 && 天赋数量 > 0) {
       this.当前天赋.push(设置.保留天赋);
       天赋数量--;
     }
@@ -74,11 +76,10 @@ export class 开场 extends Component {
     this.当前天赋.push(...抽取的负面天赋.map((x) => x.名称));
     const 显示文本 = [];
 
-    if (设置.保留天赋) {
-      const 天赋 = 默认天赋表.find((x) => x.名称 === 设置.保留天赋);
+    if (保留天赋) {
       显示文本.push({
-        文本: `你保留了天赋「${天赋.名称 || ''}」\n效果：${天赋?.说明 || ''}`,
-        颜色: 天赋.颜色,
+        文本: `你保留了天赋「${保留天赋.名称}」\n效果：${保留天赋.说明 || ''}`,
+        颜色: 保留天赋.颜色,
       });
     }
     抽取的正面天赋.forEach((天赋) => {
@@ -122,36 +123,19 @@ export class 开场 extends Component {
   }
 
   随机抽取<T extends { 品质?: string }>(list: T[], count: number): T[] {
-    // 空值判断
-    if (!list || list.length === 0) return [];
-    // 权重配置：数字越大概率越高
-    const weightConfig = { 普通: 50, 稀有: 30, 传说: 10, 史诗: 10 };
-
-    // 1. 生成带权重的候选池
-    const weightPool: T[] = [];
-    for (const item of list) {
-      const weight = weightConfig[item?.品质 || '普通'];
-      // 按权重重复放入元素，权重越高出现次数越多，被抽到概率越大
-      for (let i = 0; i < weight; i++) {
-        weightPool.push(item);
-      }
-    }
-
-    // 2. 洗牌算法（Fisher-Yates）打乱候选池
-    for (let i = weightPool.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [weightPool[i], weightPool[j]] = [weightPool[j], weightPool[i]];
-    }
-
-    // 3. 使用Set记录已选中的物品索引，确保不重复选取同一物品
-    const selectedIndices = new Set<number>();
+    if (!list || list.length === 0 || count <= 0) return [];
+    const weightConfig = { 普通: 50, 稀有: 30, 传说: 5, 史诗: 5 };
+    const candidates = [...list];
     const result: T[] = [];
 
-    for (let i = 0; i < weightPool.length && result.length < count; i++) {
-      if (!selectedIndices.has(i)) {
-        selectedIndices.add(i);
-        result.push(weightPool[i]);
-      }
+    while (candidates.length > 0 && result.length < count) {
+      const 总权重 = candidates.reduce((sum, item) => sum + (weightConfig[item.品质 || '普通'] || 50), 0);
+      let 随机数 = Math.random() * 总权重;
+      const 索引 = candidates.findIndex((item) => {
+        随机数 -= weightConfig[item.品质 || '普通'] || 50;
+        return 随机数 <= 0;
+      });
+      result.push(candidates.splice(Math.max(索引, 0), 1)[0]);
     }
 
     return result;
@@ -160,6 +144,7 @@ export class 开场 extends Component {
   点击确定() {
     this.当前天赋.forEach((天赋) => {
       const t = 默认天赋表.find((x) => x.名称 === 天赋);
+      if (!t) return;
       执行钩子('激活天赋', [天赋]);
       存档.天赋[天赋] = t.等级;
     });
