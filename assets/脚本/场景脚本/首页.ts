@@ -5,25 +5,40 @@ const { ccclass, property } = _decorator;
 
 @ccclass('首页')
 export class 首页 extends Component {
-    @property(Node) 按钮容器: Node = null;
-    @property(Node) 游戏信息: Node = null;
+  @property(Node) 按钮容器: Node = null;
+  @property(Node) 游戏信息: Node = null;
 
-    start() {
-        this.按钮容器.getChildByName("开始").on(Button.EventType.CLICK, () => director.loadScene("存档"), this);
-        this.按钮容器.getChildByName("成就").on(Button.EventType.CLICK, () => {
-            globalThis.页面来源 = "首页";
-            director.loadScene("成就");
-        }, this);
-        this.按钮容器.getChildByName("设置").on(Button.EventType.CLICK, () => {
-            globalThis.页面来源 = "首页";
-            director.loadScene("设置");
-        }, this);
-        this.按钮容器.getChildByName("图鉴").on(Button.EventType.CLICK, () => {
-            globalThis.页面来源 = "首页";
-            director.loadScene("图鉴")
-        }, this);
+  start() {
+    this.按钮容器
+      .getChildByName('开始')
+      .on(Button.EventType.CLICK, () => director.loadScene('存档'), this);
+    this.按钮容器.getChildByName('成就').on(
+      Button.EventType.CLICK,
+      () => {
+        globalThis.页面来源 = '首页';
+        director.loadScene('成就');
+      },
+      this,
+    );
+    this.按钮容器.getChildByName('设置').on(
+      Button.EventType.CLICK,
+      () => {
+        globalThis.页面来源 = '首页';
+        director.loadScene('设置');
+      },
+      this,
+    );
+    this.按钮容器.getChildByName('图鉴').on(
+      Button.EventType.CLICK,
+      () => {
+        globalThis.页面来源 = '首页';
+        director.loadScene('图鉴');
+      },
+      this,
+    );
 
-        this.游戏信息.getComponent(Label).string = `版本：${设置.游戏版本}\n原作者：晓风游戏  制作：重制开发组`
-        加载游戏内容()
-    }
+    this.游戏信息.getComponent(Label).string =
+      `版本：${设置.游戏版本}\n原作者：晓风游戏  制作：重制开发组`;
+    加载游戏内容();
+  }
 }
