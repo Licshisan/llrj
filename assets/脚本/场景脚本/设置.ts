@@ -31,9 +31,7 @@ export class 设置 extends Component {
     this.按钮容器.getChildByName('速度').on(Button.EventType.CLICK, this.点击速度, this);
     this.按钮容器.getChildByName('暗夜').on(Button.EventType.CLICK, this.点击暗夜, this);
 
-    const 自动化等级 = 计算技能等级("自动化")
 
-    if (自动化等级 >= 1) {
       this.按钮容器.getChildByName('自动买果子').active = true;
       this.按钮容器.getChildByName('自动买果子').on(
         Button.EventType.CLICK,
@@ -47,11 +45,8 @@ export class 设置 extends Component {
         },
         this,
       );
-    } else {
-      this.按钮容器.getChildByName('自动买果子').active = false;
-    }
 
-    if (自动化等级 >= 3) {
+
       this.按钮容器.getChildByName('批量购买').active = true;
       this.按钮容器.getChildByName('批量购买').on(
         Button.EventType.CLICK,
@@ -65,9 +60,7 @@ export class 设置 extends Component {
         },
         this,
       );
-    } else {
-      this.按钮容器.getChildByName('批量购买').active = false;
-    }
+
 
     this.按钮容器.getChildByName('防误触').on(
       Button.EventType.CLICK,

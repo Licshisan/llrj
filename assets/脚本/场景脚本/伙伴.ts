@@ -87,9 +87,6 @@ export class 伙伴 extends Component {
 
     this.退出按钮.on(Button.EventType.CLICK, () => director.loadScene('主页'), this);
 
-    const 自动化等级 = 存档.技能['自动化'] || 0;
-
-    if (自动化等级 >= 2) {
       this.一键喂果.active = true;
       this.一键喂药.active = true;
       this.一键喂果.on(
@@ -132,10 +129,6 @@ export class 伙伴 extends Component {
         },
         this,
       );
-    } else {
-      this.一键喂果.active = false;
-      this.一键喂药.active = false;
-    }
   }
 
   更新() {

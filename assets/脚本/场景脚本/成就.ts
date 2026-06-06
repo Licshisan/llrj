@@ -20,6 +20,7 @@ export class 成就 extends Component {
   @property(Node) 分类节点1: Node;
   @property(Node) 分类节点2: Node;
 
+  // todo 换行符显示
   当前分类 = '原版';
   分类列表: 成就分类[] = [
     '原版',

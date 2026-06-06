@@ -391,6 +391,7 @@
     "instance": {
       "__id__": 11
     },
+    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
@@ -496,7 +497,7 @@
     "value": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -90,
+      "y": -69.674,
       "z": 0
     }
   },

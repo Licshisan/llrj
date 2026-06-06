@@ -46,9 +46,6 @@ export class 主页 extends Component {
   start() {
     globalThis.页面来源 = '主页'
 
-    const 自动化等级 = 存档.技能['自动化'] || 0;
-    this.冷却时间 = Math.max(0.05, 0.2 - 自动化等级 * 0.03);
-
     this.更新();
     this.回档();
     this.游戏结束();
