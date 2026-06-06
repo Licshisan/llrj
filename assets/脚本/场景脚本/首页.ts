@@ -9,13 +9,14 @@ export class 首页 extends Component {
   @property(Node) 游戏信息: Node = null;
 
   start() {
+    globalThis.页面来源 = '首页';
+
     this.按钮容器
       .getChildByName('开始')
       .on(Button.EventType.CLICK, () => director.loadScene('存档'), this);
     this.按钮容器.getChildByName('成就').on(
       Button.EventType.CLICK,
       () => {
-        globalThis.页面来源 = '首页';
         director.loadScene('成就');
       },
       this,
@@ -23,7 +24,6 @@ export class 首页 extends Component {
     this.按钮容器.getChildByName('设置').on(
       Button.EventType.CLICK,
       () => {
-        globalThis.页面来源 = '首页';
         director.loadScene('设置');
       },
       this,

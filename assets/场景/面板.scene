@@ -554,7 +554,7 @@
         "__id__": 23
       }
     ],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 26
@@ -570,7 +570,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 550,
+      "y": 591.463,
       "z": 0
     },
     "_lrot": {
@@ -598,7 +598,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "标签1",
+    "_name": "面板",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -689,8 +689,8 @@
     "_string": "面板",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 20,
-    "_fontSize": 20,
+    "_actualFontSize": 32,
+    "_fontSize": 32,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
     "_overflow": 3,
@@ -730,7 +730,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "标签2",
+    "_name": "统计",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -818,11 +818,11 @@
       "b": 255,
       "a": 255
     },
-    "_string": "战斗",
+    "_string": "统计",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 20,
-    "_fontSize": 20,
+    "_actualFontSize": 32,
+    "_fontSize": 32,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
     "_overflow": 3,
@@ -862,7 +862,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "标签3",
+    "_name": "技能",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -950,11 +950,11 @@
       "b": 255,
       "a": 255
     },
-    "_string": "事件统计",
+    "_string": "技能",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 20,
-    "_fontSize": 20,
+    "_actualFontSize": 32,
+    "_fontSize": 32,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
     "_overflow": 3,
@@ -994,7 +994,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "标签4",
+    "_name": "战斗",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -1082,11 +1082,11 @@
       "b": 255,
       "a": 255
     },
-    "_string": "其他统计",
+    "_string": "战斗",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 20,
-    "_fontSize": 20,
+    "_actualFontSize": 32,
+    "_fontSize": 32,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
     "_overflow": 3,
@@ -1167,7 +1167,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "75debe20-fe65-4bbc-b23b-e1711580d3a8@f9941",
+      "__uuid__": "edd1574d-1058-4d29-912d-8f71349b5802@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 1,
@@ -1756,12 +1756,16 @@
     "标签": {
       "__id__": 9
     },
-    "分类节点": null,
+    "分类节点": {
+      "__id__": 13
+    },
     "内容": null,
     "返回按钮": {
       "__id__": 52
     },
-    "退出按钮": null,
+    "退出按钮": {
+      "__id__": 52
+    },
     "_id": "eaYUt6/VpEPquO2dGiYX5g"
   },
   {

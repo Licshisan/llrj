@@ -99,8 +99,8 @@ export class 设置 extends Component {
     this.返回按钮.on(
       Button.EventType.CLICK,
       () => {
-        if (globalThis.页面来源 === '面板') {
-          director.loadScene('面板');
+        if (globalThis.页面来源 === '特性') {
+          director.loadScene('特性');
         } else {
           director.loadScene('首页');
         }

@@ -19,12 +19,21 @@ export class 面板 extends Component {
   @property(Node) 返回按钮: Node = null;
   @property(Node) 退出按钮: Node = null;
 
-  
-  当前分类 = '天赋';
-  分类列表 = ['天赋', '特性', '统计', '技能', '成就','设置'];
-  // todo 重排 成就 设置
+  当前分类 = '面板';
+  分类列表 = ['面板', '统计', '技能', '战斗'];
+
   start() {
-    this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene('主页'), this);
+    this.返回按钮.on(
+      Button.EventType.CLICK,
+      () => {
+        if (globalThis.页面来源 === '特性') {
+          director.loadScene('特性');
+        } else {
+          director.loadScene('主页');
+        }
+      },
+      this,
+    );
     this.退出按钮.on(Button.EventType.CLICK, () => director.loadScene('首页'), this);
 
     this.初始化分类标签();
@@ -34,6 +43,8 @@ export class 面板 extends Component {
   初始化分类标签() {
     this.分类列表.forEach((分类名) => {
       const 标签节点 = this.分类节点.getChildByName(分类名);
+        console.log(标签节点)
+
       if (标签节点) {
         标签节点.on(
           Node.EventType.TOUCH_END,
@@ -46,6 +57,7 @@ export class 面板 extends Component {
           },
           this,
         );
+      } else {
       }
     });
     this.更新分类标签状态();
@@ -64,11 +76,8 @@ export class 面板 extends Component {
     this.内容.removeAllChildren();
 
     switch (this.当前分类) {
-      case '天赋':
-        this.渲染天赋列表();
-        break;
-      case '特性':
-        this.渲染特性列表();
+      case '面板':
+        this.渲染面板列表();
         break;
       case '统计':
         this.渲染统计列表();
@@ -76,19 +85,14 @@ export class 面板 extends Component {
       case '技能':
         this.渲染技能列表()
         break;
-      case '成就':
-        globalThis.页面来源 = '面板';
-        director.loadScene('成就');
-        break;
-      case '设置':
-        globalThis.页面来源 = '面板';
-        director.loadScene('设置');
+      case '战斗':
+        this.渲染战斗列表()
         break;
     }
   }
 
   // todo 显示赌博信息 网吧信息 营养信息 住房信息 击杀记录
-  渲染天赋列表() {
+  渲染面板列表() {
     let index = 0;
 
     const 难度说明 = 默认难度表.find((x) => x.名称 === 存档.游戏难度)?.说明 || '';
@@ -141,17 +145,6 @@ export class 面板 extends Component {
         }
       }
     }
-  }
-
-  渲染特性列表() {
-    默认特性表.forEach((特性, index) => {
-      创建普通文字(
-        this.内容,
-        `【${特性.名称}】${特性.描述}`,
-        index,
-        特性.条件 ? Color.GREEN : Color.WHITE,
-      );
-    });
   }
 
   渲染技能列表() {
@@ -267,5 +260,9 @@ export class 面板 extends Component {
       const 文本 = `${属性.名称}: ${属性.数值}`;
       创建普通文字(this.内容, 文本, 序号);
     });
+  }
+
+  渲染战斗列表(){
+    // todo 显示 【敌人名称】 战斗胜利次数：/战斗失败次数：
   }
 }

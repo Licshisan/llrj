@@ -170,7 +170,7 @@ export function 执行钩子<K extends 时机名称类型>(
     钩子数组.forEach((钩子函数, 索引) => {
       try {
         // 类型断言解除只读限制，是TS标准稳妥写法
-        const 执行结果 = (钩子函数 as (...args: unknown[]) => any)(...参数列表);
+        const 执行结果 = (钩子函数 as (...args: unknown[]) => any)(...(参数列表 || []));
         if (执行结果 !== undefined) {
           结果.push(执行结果);
         }

@@ -17,7 +17,8 @@ interface 已完成成就类型 {
 export class 成就 extends Component {
   @property(Node) 内容节点: Node;
   @property(Node) 返回按钮: Node;
-  @property(Node) 分类节点: Node;
+  @property(Node) 分类节点1: Node;
+  @property(Node) 分类节点2: Node;
 
   当前分类 = '原版';
   分类列表: 成就分类[] = [
@@ -41,8 +42,8 @@ export class 成就 extends Component {
     this.返回按钮.on(
       Node.EventType.TOUCH_END,
       () => {
-        if (globalThis.页面来源 === '面板') {
-          director.loadScene('面板');
+        if (globalThis.页面来源 === '特性') {
+          director.loadScene('特性');
         } else {
           director.loadScene('首页');
         }
@@ -53,9 +54,24 @@ export class 成就 extends Component {
 
   初始化分类标签() {
     this.分类列表.forEach((分类名) => {
-      const 标签节点 = this.分类节点.getChildByName(分类名);
-      if (标签节点) {
-        标签节点.on(
+      const 标签节点1 = this.分类节点1.getChildByName(分类名);
+      if (标签节点1) {
+        标签节点1.on(
+          Node.EventType.TOUCH_END,
+          () => {
+            if (this.当前分类 !== 分类名) {
+              this.当前分类 = 分类名;
+              this.刷新成就列表();
+              this.更新分类标签状态();
+            }
+          },
+          this,
+        );
+      }
+
+      const 标签节点2 = this.分类节点2.getChildByName(分类名);
+      if (标签节点2) {
+        标签节点2.on(
           Node.EventType.TOUCH_END,
           () => {
             if (this.当前分类 !== 分类名) {
@@ -73,9 +89,14 @@ export class 成就 extends Component {
 
   更新分类标签状态() {
     this.分类列表.forEach((分类名) => {
-      const 标签节点 = this.分类节点.getChildByName(分类名);
-      if (标签节点) {
-        标签节点.getComponent(Label).color = 分类名 === this.当前分类 ? Color.WHITE : Color.GRAY;
+      const 标签节点1 = this.分类节点1.getChildByName(分类名);
+      if (标签节点1) {
+        标签节点1.getComponent(Label).color = 分类名 === this.当前分类 ? Color.WHITE : Color.GRAY;
+      }
+
+      const 标签节点2 = this.分类节点2.getChildByName(分类名);
+      if (标签节点2) {
+        标签节点2.getComponent(Label).color = 分类名 === this.当前分类 ? Color.WHITE : Color.GRAY;
       }
     });
   }

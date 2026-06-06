@@ -44,6 +44,8 @@ export class 主页 extends Component {
   冷却时间 = 0.2;
 
   start() {
+    globalThis.页面来源 = '主页'
+
     const 自动化等级 = 存档.技能['自动化'] || 0;
     this.冷却时间 = Math.max(0.05, 0.2 - 自动化等级 * 0.03);
 
@@ -805,16 +807,18 @@ export class 主页 extends Component {
     this.状态栏.getChildByName('状态').getComponent(Label).string = this.计算状态文本();
     this.状态栏.getChildByName('进度').getComponent(Label).string = this.计算进度文本();
 
-    this.按钮容器.getChildByName('商店').active = 存档.按钮.商店 > 1;
-    this.按钮容器.getChildByName('挑战').active = 存档.按钮.挑战 > 1;
-    this.按钮容器.getChildByName('睡觉').active = 存档.按钮.睡觉 > 1;
-    this.按钮容器.getChildByName('探索').active = 存档.按钮.探索 > 1;
-    this.按钮容器.getChildByName('前进').active = 存档.按钮.前进 > 1;
-    this.按钮容器.getChildByName('伙伴').active = 存档.按钮.伙伴 > 1;
-    this.按钮容器.getChildByName('制作').active = 存档.按钮.制作 > 1;
-    this.按钮容器.getChildByName('特性').active = 存档.按钮.特性 > 1;
-    this.按钮容器.getChildByName('进食').active = 存档.按钮.进食 > 1;
-    this.按钮容器.getChildByName('结局').active = 存档.按钮.结局 > 1;
+    this.按钮容器.getChildByName('商店').active = 存档.按钮.商店 > 0;
+    this.按钮容器.getChildByName('挑战').active = 存档.按钮.挑战 > 0;
+    this.按钮容器.getChildByName('睡觉').active = 存档.按钮.睡觉 > 0;
+    this.按钮容器.getChildByName('探索').active = 存档.按钮.探索 > 0;
+    this.按钮容器.getChildByName('前进').active = 存档.按钮.前进 > 0;
+
+    console.log(this.按钮容器.getChildByName('前进').active)
+    this.按钮容器.getChildByName('伙伴').active = 存档.按钮.伙伴 > 0;
+    this.按钮容器.getChildByName('制作').active = 存档.按钮.制作 > 0;
+    this.按钮容器.getChildByName('特性').active = 存档.按钮.特性 > 0;
+    this.按钮容器.getChildByName('进食').active = 存档.按钮.进食 > 0;
+    this.按钮容器.getChildByName('结局').active = 存档.按钮.结局 > 0;
     this.按钮容器.getChildByName('睡觉').getChildByName('标签').getComponent(Label).string = 存档
       .剧情.住在桥洞
       ? '桥  洞'
