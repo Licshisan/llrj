@@ -1,5 +1,5 @@
 import { 存档 } from "../管理器/存档管理器";
-import { 默认食材表, 购买食材 } from "./食品店表";
+import { 默认食材表, 购买食材 } from "../公共方法/食品店表";
 
 interface 商品上下文类型 {
 	购买成功: (结果: string) => void,
