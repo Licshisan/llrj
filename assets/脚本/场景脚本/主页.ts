@@ -11,6 +11,7 @@ import { 获取当前日记 } from '../默认内容/日记表';
 import { 获取地区名称, 获取当前地区 } from '../默认内容/地区表';
 import { 玩家 } from '../管理器/玩家管理器';
 import { 计算技能等级 } from '../方法函数/等级计算';
+import { 获取营养摘要 } from '../默认内容/食品店表';
 const { ccclass, property } = _decorator;
 
 @ccclass('主页')
@@ -701,6 +702,9 @@ export class 主页 extends Component {
             if (存档.状态[状态]) {
                 状态文本 += `【${状态}】 `
             }
+        }
+        if (存档.套餐名称 === "吃饭长身体") {
+            状态文本 += `【${获取营养摘要()}】`
         }
         return 状态文本
     }
