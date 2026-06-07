@@ -146,7 +146,7 @@ export async function 加载游戏内容() {
 
     // 断线重传 并且不是 转移玩家
     if (
-      玩家管理器.玩家.扩展信息.更新时间 > player.扩展信息.更新时间 &&
+      玩家管理器.玩家.客户端数据.更新时间 > player.客户端数据.更新时间 &&
       player.编号 === 玩家管理器.玩家.编号
     ) {
       player = await 上传ExtInfo请求();
@@ -154,9 +154,9 @@ export async function 加载游戏内容() {
 
     if (player.编号) 玩家管理器.玩家.编号 = player.编号;
     if (player.用户标识) 玩家管理器.玩家.用户标识 = player.用户标识;
-    if (player.名称) 玩家管理器.玩家.名称 = player.名称;
-    if (player.扩展信息) 玩家管理器.玩家.扩展信息 = player.扩展信息;
-    if (player.服务器信息) 玩家管理器.玩家.服务器信息 = player.服务器信息;
+    if (player.名称) 玩家管理器.玩家.客户端数据.名称 = player.名称;
+    if (player.客户端数据) 玩家管理器.玩家.客户端数据 = player.客户端数据;
+    if (player.服务器数据) 玩家管理器.玩家.服务器数据 = player.服务器数据;
     if (player.创建时间) 玩家管理器.玩家.创建时间 = player.创建时间;
     if (player.上次登录时间) 玩家管理器.玩家.上次登录时间 = player.上次登录时间;
 

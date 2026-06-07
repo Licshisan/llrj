@@ -129,7 +129,7 @@ export class 成就 extends Component {
   }
 
   获取已完成成就列表(): 已完成成就类型[] {
-    const 成就数据 = 玩家.扩展信息.成就;
+    const 成就数据 = 玩家.客户端数据.成就;
     if (Array.isArray(成就数据)) return 成就数据;
     if (!成就数据 || typeof 成就数据 !== 'object') return [];
     return Object.keys(成就数据).map((名称) => {

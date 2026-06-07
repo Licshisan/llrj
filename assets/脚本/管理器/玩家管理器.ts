@@ -1,5 +1,5 @@
 import { error, sys, warn } from 'cc';
-import { 排行榜结果, 服务器信息 } from '../方法函数/网络请求';
+import { 排行榜结果, 服务器数据 } from '../方法函数/网络请求';
 
 export const 默认玩家 = {
   编号: 0,
@@ -11,7 +11,7 @@ export const 默认玩家 = {
     成就: [] as { 名称: string; 描述: string; 完成时间: number }[],
     藏品: {} as Record<string, number>,
   } as any,
-  服务器数据: {} as 服务器信息,
+  服务器数据: {} as 服务器数据,
   创建时间: '',
   更新时间: '',
   上次登录时间: '',

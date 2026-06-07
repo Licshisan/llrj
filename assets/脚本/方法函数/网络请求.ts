@@ -16,7 +16,7 @@ export interface 先驱者信息 {
   完成时间: any;
 }
 
-export interface 服务器信息 {
+export interface 服务器数据 {
   先驱者?: Record<string, 先驱者信息>;
   [key: string]: any;
 }
@@ -25,8 +25,8 @@ export interface 玩家信息 {
   编号: number;
   用户标识: string;
   名称: string;
-  扩展信息?: Record<string, any>;
-  服务器信息?: 服务器信息;
+  客户端数据?: Record<string, any>;
+  服务器数据?: 服务器数据;
   创建时间?: string;
   更新时间?: string;
   上次登录时间?: string;
@@ -176,7 +176,7 @@ export async function 上传ExtInfo请求() {
     method: 'POST',
     body: {
       ...获取玩家校验信息(),
-      扩展信息: 玩家.扩展信息,
+      客户端数据: 玩家.客户端数据,
     },
   });
   return result.data;

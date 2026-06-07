@@ -112,17 +112,17 @@ export class 分数 extends Component {
   }
 
   结算藏品() {
-    const old = 玩家.扩展信息.藏品 ?? {};
+    const old = 玩家.客户端数据.藏品 ?? {};
     const add = 存档.新藏品 ?? {};
     const res: Record<string, number> = {};
     Object.entries({...old, ...add}).forEach(([k, v]) => res[k] = (old[k]||0)+(add[k]||0));
-    玩家.扩展信息.藏品 = res;
+    玩家.客户端数据.藏品 = res;
   }
 
   结算成就(w: boolean = false) {
     const 完成成就: 成就项目类型[] = [];
     for (const 成就 of 默认成就表) {
-      if (!成就.条件 || 玩家.扩展信息.成就.find((c) => c.名称 === 成就.名称)) continue;
+      if (!成就.条件 || 玩家.客户端数据.成就.find((c) => c.名称 === 成就.名称)) continue;
 
       const 新成就 = {
         名称: 成就.名称,
@@ -131,7 +131,7 @@ export class 分数 extends Component {
       };
 
       if(w) {
-        玩家.扩展信息.成就.push(新成就);
+        玩家.客户端数据.成就.push(新成就);
         成就.效果?.完成成就?.(成就.名称);
       }
       完成成就.push(成就);
