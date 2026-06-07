@@ -57,6 +57,7 @@ export class 开场 extends Component {
     this.当前天赋 = [];
 
     // todo 点击锁定天赋
+    // todo 天赋和特性数量分配
     let 天赋数量 = 计算数值('天赋数量', 3);
     if (Math.random() * 100 < 计算数值('额外天赋概率', 1)) {
       天赋数量++;
