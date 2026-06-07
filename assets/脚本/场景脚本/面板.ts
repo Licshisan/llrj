@@ -111,7 +111,7 @@ export class 面板 extends Component {
       if (存档.特质[特质名]) {
         const 特质 = 默认特质表.find((x) => x.名称 === 特质名);
         if (特质) {
-          const 文字 = `【${特质.名称}LV${存档.特质[特质.名称]}】${特质.说明}`;
+          const 文字 = `【${特质.名称}】${特质.说明}`;
           创建普通文字(this.内容, 文字, index, Color.YELLOW);
           index++;
         }
@@ -125,7 +125,7 @@ export class 面板 extends Component {
       if (存档.天赋[天赋名]) {
         const 天赋 = 默认天赋表.find((x) => x.名称 === 天赋名);
         if (天赋) {
-          const 文字 = `【${天赋名}LV${存档.天赋[天赋.名称]}】${天赋.说明}`;
+          const 文字 = `【${天赋名}】${天赋.说明}`;
           创建普通文字(this.内容, 文字, index, 天赋.颜色);
           index++;
         }
@@ -212,12 +212,14 @@ export class 面板 extends Component {
   }
 
   渲染技能列表() {
+    this.内容.removeAllChildren();
+
     默认技能表.forEach((技能, index) => {
       const 等级 = 存档.技能[技能.名称]
       if(等级 > 0){
         创建普通文字(
           this.内容,
-          `【${技能.名称}LV${等级}】${技能.描述}`,
+          `【${技能.名称}】LV${等级}\n${技能.描述}`,
           index,
         );
       }

@@ -328,6 +328,7 @@ export class 战斗 extends Component {
   }
 
   点击攻击() {
+    this.node.getComponent(主页).播放文本("");
     this.对局.主角.方法 = this.对局.主角.方法 || '普攻';
     this.对局.攻击 = {
       初始值: this.对局.主角.攻击,
@@ -522,7 +523,7 @@ export class 战斗 extends Component {
       存档.击败次数[this.对局.敌人.名称] += 1;
       this.scheduleOnce(
         () => this.下一个敌人(this.对局.结果文本.join('\n'), this.对局.敌人.下一个敌人),
-        1.8 / 设置.播放速度,
+        2.2 / 设置.播放速度,
       );
       return;
     }
