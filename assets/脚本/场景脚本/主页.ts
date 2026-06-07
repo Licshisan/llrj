@@ -29,6 +29,7 @@ import { 获取当前日记 } from '../默认内容/日记表';
 import { 获取地区名称, 获取当前地区 } from '../默认内容/地区表';
 import { 玩家 } from '../管理器/玩家管理器';
 import { 获取营养摘要 } from '../公共方法/食品店表';
+import { 获取榜一大哥请求 } from '../方法函数/网络请求';
 const { ccclass, property } = _decorator;
 
 @ccclass('主页')
@@ -125,6 +126,7 @@ export class 主页 extends Component {
       this,
     );
     this.暗夜模式();
+    this.加载榜一大哥()
   }
 
   回档() {
@@ -367,6 +369,13 @@ export class 主页 extends Component {
     }
   }
 
+  async 加载榜一大哥() {
+    if(!存档.临时数据.榜一大哥){
+      存档.临时数据.榜一大哥 = await 获取榜一大哥请求()
+    }
+  }
+
+
   点击睡觉() {
     if (存档.剧情.住在桥洞) {
       director.loadScene('桥洞');
@@ -498,8 +507,8 @@ export class 主页 extends Component {
       return false;
     }
 
-    // 领取补偿
-    const 补偿 = (玩家.服务器信息?.补偿 as Record<string, number>) || {};
+    // 领取补偿 todo
+    const 补偿 = (玩家.服务器数据?.补偿 as Record<string, number>) || {};
     const 有可领补偿 = Object.values(补偿).some((val) => val > 0);
     if (有可领补偿) {
       this.node.getComponent(事件).触发事件('领取补偿');

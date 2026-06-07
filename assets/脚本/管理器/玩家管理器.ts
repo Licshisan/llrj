@@ -4,15 +4,14 @@ import { 排行榜结果, 服务器信息 } from '../方法函数/网络请求';
 export const 默认玩家 = {
   编号: 0,
   用户标识: Math.random().toString(36).slice(2, 8),
-  名称: '',
-  扩展信息: {
+  客户端数据: {
     战胜语: '',
     战败语: '',
     积分: 0,
     成就: [] as { 名称: string; 描述: string; 完成时间: number }[],
     藏品: {} as Record<string, number>,
   } as any,
-  服务器信息: {} as 服务器信息,
+  服务器数据: {} as 服务器信息,
   创建时间: '',
   更新时间: '',
   上次登录时间: '',
@@ -66,7 +65,7 @@ export function 加载玩家() {
 
 export function 保存玩家() {
   try {
-    玩家.扩展信息.更新时间 = Date.now();
+    玩家.客户端数据.更新时间 = Date.now();
     const 玩家字符串 = JSON.stringify(玩家);
     sys.localStorage.setItem('玩家', 玩家字符串);
   } catch (e) {

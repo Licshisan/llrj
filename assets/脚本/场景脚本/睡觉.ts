@@ -37,9 +37,9 @@ export class 睡觉 extends Component {
     this.标签.getComponent(Label).string = `第${存档.天数 + 1}天`;
     const sequence = tween(this.node);
     sequence.delay(1);
-    sequence.call(() => 淡入(this.标签)).delay(2.5 / 设置.播放速度);
-    sequence.call(() => 淡入(this.属性容器)).delay(2.5 / 设置.播放速度);
-    sequence.call(() => 淡入(this.文本容器)).delay(2.5 / 设置.播放速度);
+    sequence.call(() => 淡入(this.标签)).delay(2.4 / 设置.播放速度);
+    sequence.call(() => 淡入(this.属性容器)).delay(2.4 / 设置.播放速度);
+    sequence.call(() => 淡入(this.文本容器)).delay(2.4 / 设置.播放速度);
     sequence.call(() => 淡入(this.继续按钮)).start();
     this.恢复();
     this.结算();
@@ -167,16 +167,17 @@ export class 睡觉 extends Component {
       }
     }
 
-    // 30%概率遇到其他玩家（PVP）
+    // 24%概率遇到其他玩家（PVP）
     if (存档.当前敌人 == '' && 存档.天数 > 1 && 存档.天数 < 178 && Math.random() * 100 < 24) {
       获取随机存档请求(存档.天数 - 1)
-        .then((result) => {
-          console.log('随机匹配到的存档数据', result);
-          存档.临时数据.时空流浪者 = result;
-        })
-        .catch((e) => {
-          error(e);
-        });
+      .then((r) => {
+        console.log('随机匹配到的存档数据', r);
+        存档.临时数据.时空流浪者 = r;
+        存档.当前敌人 = "时空流浪者"
+      })
+      .catch((e) => {
+        error(e);
+      });
     }
 
     // 其他
@@ -286,14 +287,8 @@ export class 睡觉 extends Component {
       存档.当前剧情 = 剧情.名称;
       保存存档();
       director.loadScene('剧情');
-    } else {
-      if (存档.临时数据.时空流浪者) {
-        存档.当前剧情 = '遇见同行';
-        保存存档();
-        director.loadScene('剧情');
-      } else {
-        director.loadScene('主页');
-      }
+      return
     }
+    director.loadScene('主页');
   }
 }

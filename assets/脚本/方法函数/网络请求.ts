@@ -205,6 +205,17 @@ export async function 获取随机存档请求(day: number) {
   return result.data;
 }
 
+export async function 获取榜一大哥请求() {
+  const { 玩家编号, 用户标识 } = 获取玩家校验信息();
+  const query = [
+    `玩家编号=${encodeURIComponent(玩家编号)}`,
+    `用户标识=${encodeURIComponent(用户标识)}`,
+  ].join('&');
+
+  const result = await 请求JSON<存档记录>(`/random-save?${query}`);
+  return result.data;
+}
+
 export async function 获取排行榜请求() {
   const { 玩家编号, 用户标识 } = 获取玩家校验信息();
   const query = [
