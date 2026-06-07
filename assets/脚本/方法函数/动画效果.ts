@@ -218,7 +218,8 @@ export function 创建动画文字(
   标签组件.color = 颜色;
 
   const 宽度 = 布局节点.getComponent(UITransform).width || 650;
-  文字节点.getComponent(UITransform).setContentSize(宽度, 50);
+  文字节点.getComponent(UITransform).setContentSize(宽度, 0);
+  标签组件.updateRenderData(true);
 
   if(点击的回调){
     文字节点.on(Node.EventType.TOUCH_END, (evt) => {
@@ -250,5 +251,6 @@ export function 创建普通文字(
   文字节点.setPosition(0, 0);
 
   const 宽度 = 布局节点.getComponent(UITransform).width || 650;
-  文字节点.getComponent(UITransform).setContentSize(宽度, 50);
+  文字节点.getComponent(UITransform).setContentSize(宽度, 0);
+  标签组件.updateRenderData(true);
 }

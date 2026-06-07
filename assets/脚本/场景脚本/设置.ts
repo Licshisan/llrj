@@ -3,8 +3,6 @@ import { 播放文本 } from '../方法函数/动画效果';
 import * as 设置管理器 from '../管理器/设置管理器';
 import { 上传ExtInfo请求 } from '../方法函数/网络请求';
 import { 玩家 } from '../管理器/玩家管理器';
-import { 存档 } from '../管理器/存档管理器';
-import { 计算技能等级 } from '../方法函数/等级计算';
 const { ccclass, property } = _decorator;
 
 @ccclass('设置')
@@ -19,7 +17,7 @@ export class 设置 extends Component {
   @property(Node) 战败语输入框: Node;
   @property(Node) 确认按钮: Node;
 
-  速度表 = { 1: '一般', 2: '快速', 6: '极速' };
+  速度表 = { 1: '一般', 2: '快速', 5: '极速' };
   start() {
     this.出场语输入框.getComponent(EditBox).string = 玩家.扩展信息?.出场语 || '';
     this.战胜语输入框.getComponent(EditBox).string = 玩家.扩展信息?.战胜语 || '';

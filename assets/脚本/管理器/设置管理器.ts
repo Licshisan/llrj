@@ -3,7 +3,7 @@ import { error, sys, warn } from 'cc';
 const 默认设置 = {
   游戏版本: '0.7.11',
   上次难度: '普通',
-  播放速度: 1,
+  播放速度: 2,
   播放音乐: false,
   暗夜模式: false,
   自动买果子: false,
