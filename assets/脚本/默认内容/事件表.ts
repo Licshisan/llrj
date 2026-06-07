@@ -9,7 +9,7 @@ import { 获取地区名称 } from './地区表';
 import { 保存设置, 设置 } from '../管理器/设置管理器';
 import { 玩家 } from '../管理器/玩家管理器';
 import { 保存玩家 } from '../管理器/玩家管理器';
-import { 上传ExtInfo请求 } from '../方法函数/网络请求';
+import { 上传客户端数据 } from '../方法函数/网络请求';
 import { 获取竞技场名气配置, 获取竞技场常规赛敌人配置 } from '../公共方法/地下竞技场';
 import {
   江湖门派表,
@@ -2641,7 +2641,7 @@ const 比武大会事件 = [
       结束事件(文本);
 
       try {
-        上传ExtInfo请求().catch((e) => error('补偿领取同步失败' + e));
+        上传客户端数据().catch((e) => error('补偿领取同步失败' + e));
       } catch (e) {
         error('补偿领取同步失败' + e);
       }

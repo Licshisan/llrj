@@ -15,7 +15,7 @@ import { 默认特质表 } from './特质表';
 import { 默认藏品表 } from './藏品表';
 import { 默认成就表 } from './成就表';
 import { 默认技能表 } from './技能表';
-import { 上报错误, 登录请求, 上传ExtInfo请求 } from '../方法函数/网络请求';
+import { 上报错误, 登录请求, 上传客户端数据 } from '../方法函数/网络请求';
 
 let 加载完成 = false;
 
@@ -147,14 +147,13 @@ export async function 加载游戏内容() {
     // 断线重传 并且不是 转移玩家
     if (
       玩家管理器.玩家.客户端数据.更新时间 > player.客户端数据.更新时间 &&
-      player.编号 === 玩家管理器.玩家.编号
+      player.id === 玩家管理器.玩家.id
     ) {
-      player = await 上传ExtInfo请求();
+      player = await 上传客户端数据();
     }
 
-    if (player.编号) 玩家管理器.玩家.编号 = player.编号;
+    if (player.id) 玩家管理器.玩家.id = player.id;
     if (player.用户标识) 玩家管理器.玩家.用户标识 = player.用户标识;
-    if (player.名称) 玩家管理器.玩家.客户端数据.名称 = player.名称;
     if (player.客户端数据) 玩家管理器.玩家.客户端数据 = player.客户端数据;
     if (player.服务器数据) 玩家管理器.玩家.服务器数据 = player.服务器数据;
     if (player.创建时间) 玩家管理器.玩家.创建时间 = player.创建时间;

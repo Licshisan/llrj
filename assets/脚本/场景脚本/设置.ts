@@ -1,7 +1,7 @@
 import { _decorator, Button, Component, director, Label, Node, EditBox } from 'cc';
 import { 播放文本 } from '../方法函数/动画效果';
 import * as 设置管理器 from '../管理器/设置管理器';
-import { 上传ExtInfo请求 } from '../方法函数/网络请求';
+import { 上传客户端数据 } from '../方法函数/网络请求';
 import { 玩家 } from '../管理器/玩家管理器';
 const { ccclass, property } = _decorator;
 
@@ -127,7 +127,7 @@ export class 设置 extends Component {
     玩家.客户端数据.战败语 = this.战败语输入框.getComponent(EditBox).string || '';
 
     try {
-      上传ExtInfo请求()
+      上传客户端数据()
         .then((data) => {
           设置管理器.保存设置();
           播放文本(this.标签, `设置上传成功`);

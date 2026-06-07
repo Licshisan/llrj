@@ -6,7 +6,7 @@ import {  计算最大攻击, 计算最大生命, 计算最大防御 } from '../
 import { 默认成就表 } from '../默认内容/成就表';
 import type { 成就项目类型 } from '../默认内容/成就表';
 import { 默认套餐表 } from '../默认内容/套餐表';
-import { 上传ExtInfo请求, 修改昵称请求 } from '../方法函数/网络请求';
+import { 上传客户端数据 } from '../方法函数/网络请求';
 import { 保存玩家, 玩家 } from '../管理器/玩家管理器';
 import { 对象求和 } from '../方法函数/公共函数';
 const { ccclass, property } = _decorator;
@@ -18,7 +18,7 @@ export class 分数 extends Component {
   @property(Node) 选项容器: Node = null;
   @property(Node) 输入框: Node = null;
 
-  start() {
+  async start() {
     播放文本(this.标签, '');
     this.文本容器.removeAllChildren();
     this.选项容器.active = false;
@@ -34,7 +34,18 @@ export class 分数 extends Component {
     if (套餐 && 套餐.娱乐) {
       texts.push(`娱乐套餐【${套餐.名称}】，无法完成成就`);
     } else {
-      const 完成成就 = this.结算成就();
+      this.结算藏品();
+      const 新完成成就 = this.结算成就();
+      const player = await 上传客户端数据(); // todo 上传客户端数据, 此时服务器处理先驱者,然后返回处理完的用户数据
+        if (player.服务器数据) 玩家.服务器数据 = player.服务器数据;
+
+      // 再结算一次先驱者
+      const 先驱者成就 = this.结算成就();
+      const 完成成就 = [...新完成成就, ...先驱者成就]
+
+      保存玩家()
+      删除存档(存档.存档名称);
+
       if (完成成就.length > 0) {
         完成成就.forEach((成就) => {
           let 成就文本 = `新成就【${成就.名称}】：${成就.描述}`;
@@ -70,13 +81,9 @@ export class 分数 extends Component {
       async () => {
         const 新昵称 = this.输入框.getComponent(EditBox).string?.trim()?.substring(0, 50);
         if (新昵称) {
-          await 修改昵称请求(新昵称);
+          玩家.客户端数据.名称 = 新昵称
+          await 上传客户端数据();
         }
-        this.结算成就(true)
-        this.结算藏品();
-        保存玩家();
-        await 上传ExtInfo请求();
-        删除存档(存档.存档名称);
         director.loadScene('首页');
       },
       this,
@@ -119,7 +126,7 @@ export class 分数 extends Component {
     玩家.客户端数据.藏品 = res;
   }
 
-  结算成就(w: boolean = false) {
+  结算成就() {
     const 完成成就: 成就项目类型[] = [];
     for (const 成就 of 默认成就表) {
       if (!成就.条件 || 玩家.客户端数据.成就.find((c) => c.名称 === 成就.名称)) continue;
@@ -130,10 +137,8 @@ export class 分数 extends Component {
         完成时间: Date.now(),
       };
 
-      if(w) {
-        玩家.客户端数据.成就.push(新成就);
-        成就.效果?.完成成就?.(成就.名称);
-      }
+      玩家.客户端数据.成就.push(新成就);
+      成就.效果?.完成成就?.(成就.名称);
       完成成就.push(成就);
     }
     return 完成成就;

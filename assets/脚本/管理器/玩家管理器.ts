@@ -1,8 +1,8 @@
 import { error, sys, warn } from 'cc';
-import { 排行榜结果, 服务器数据 } from '../方法函数/网络请求';
+import { 排行榜结果, 服务器数据, 先驱者信息 } from '../方法函数/网络请求';
 
 export const 默认玩家 = {
-  编号: 0,
+  id: 0,
   用户标识: Math.random().toString(36).slice(2, 8),
   客户端数据: {
     战胜语: '',
@@ -10,21 +10,16 @@ export const 默认玩家 = {
     积分: 0,
     成就: [] as { 名称: string; 描述: string; 完成时间: number }[],
     藏品: {} as Record<string, number>,
+    更新时间: '',
   } as any,
   服务器数据: {} as 服务器数据,
   创建时间: '',
-  更新时间: '',
   上次登录时间: '',
 
-  排行榜: {
-    玩家列表: [],
-    自身: null,
-  } as 排行榜结果,
-
-  藏品排行榜: {
-    玩家列表: [],
-    自身: null,
-  } as 排行榜结果,
+  // 单独的接口
+  先驱者: [] as 先驱者信息[],
+  排行榜: {玩家列表: [], 自身: 0 } as 排行榜结果,
+  藏品排行榜: { 玩家列表: [], 自身: 0 } as 排行榜结果,
 };
 
 export let 玩家: typeof 默认玩家 = JSON.parse(JSON.stringify(默认玩家));

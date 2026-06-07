@@ -10,65 +10,63 @@ export interface 接口响应<T = any> {
   data?: T;
 }
 
-export interface 先驱者信息 {
-  完成人名称: string;
-  完成人id: number;
-  完成时间: any;
-}
-
-export interface 服务器数据 {
-  先驱者?: Record<string, 先驱者信息>;
-  [key: string]: any;
-}
-
 export interface 玩家信息 {
-  编号: number;
+  id: number;
   用户标识: string;
-  名称: string;
-  客户端数据?: Record<string, any>;
+  客户端数据?: 客户端数据;
   服务器数据?: 服务器数据;
   创建时间?: string;
   更新时间?: string;
   上次登录时间?: string;
 }
 
-export interface 存档记录 {
+interface 客户端数据 {
   id: number;
-  玩家编号: number;
-  day: number;
-  save_name: string;
-  save: any;
-  created_at: string;
-  player?: {
-    编号: number;
-    名称: string;
-  };
-}
-
-export interface 排行榜玩家 {
-  编号: number;
   名称: string;
+  战胜语: string;
+  战败语: string;
+  积分: number;
+  成就: any[];
+  藏品: any[];
+  更新时间?: string;
 }
 
-export interface 排行榜条目 {
-  排名: number;
-  score: number;
-  玩家: 排行榜玩家;
+export interface 服务器数据 {
+  赞助: number,
+  称号: string,
+  补偿: any[],
+}
+
+export interface 先驱者信息 {
+  id: number;
+  名称: string;
+  完成时间: any;
 }
 
 export interface 排行榜结果 {
-  玩家列表: 排行榜条目[];
-  自身: 排行榜条目;
+  玩家列表:  {
+    id: number,
+    名称: string,
+    得分: number;
+    排名: number;
+  }[],
+  自身: number
 }
 
-function 获取玩家ID(): number {
-  const id = Number(玩家?.编号 || 0);
-  return Number.isFinite(id) && id > 0 ? id : 0;
+export interface 存档记录 {
+  id: number;
+  玩家编号: number;
+  天数: number;
+  存档名: string;
+  创建时间: string;
+
+  存档: any;
+  玩家: 玩家信息
 }
 
 function 获取玩家校验信息() {
   return {
-    玩家编号: 获取玩家ID(),
+    玩家编号: 玩家.id,
     用户标识: 玩家.用户标识,
   };
 }
@@ -132,26 +130,25 @@ export async function 登录请求(): Promise<玩家信息> {
   return result.data;
 }
 
-export async function 上报错误(data: any) {
-  const 玩家编号 = 获取玩家ID();
+
+export async function 上传消息请求(data: any, level = "info") {
   const result = await 请求JSON<{ id: number }>('/log', {
     method: 'POST',
     body: {
-      ...(玩家编号 > 0 ? 获取玩家校验信息() : {}),
-      level: 'error',
+      ...获取玩家校验信息(),
+      level,
       log: data,
     },
   });
   return result.data;
 }
 
-export async function 上传消息请求(data: any) {
-  const 玩家编号 = 获取玩家ID();
+export async function 上报错误(data: any) {
   const result = await 请求JSON<{ id: number }>('/log', {
     method: 'POST',
     body: {
-      ...(玩家编号 > 0 ? 获取玩家校验信息() : {}),
-      level: 'info',
+      ...获取玩家校验信息(),
+      level: "error",
       log: data,
     },
   });
@@ -171,23 +168,12 @@ export async function 上传存档请求() {
   return result.data;
 }
 
-export async function 上传ExtInfo请求() {
+export async function 上传客户端数据() {
   const result = await 请求JSON<玩家信息>('/ext-info', {
     method: 'POST',
     body: {
       ...获取玩家校验信息(),
       客户端数据: 玩家.客户端数据,
-    },
-  });
-  return result.data;
-}
-
-export async function 修改昵称请求(名称: string) {
-  const result = await 请求JSON<玩家信息>('/rename', {
-    method: 'POST',
-    body: {
-      ...获取玩家校验信息(),
-      名称,
     },
   });
   return result.data;
@@ -213,27 +199,5 @@ export async function 获取榜一大哥请求() {
   ].join('&');
 
   const result = await 请求JSON<存档记录>(`/random-save?${query}`);
-  return result.data;
-}
-
-export async function 获取排行榜请求() {
-  const { 玩家编号, 用户标识 } = 获取玩家校验信息();
-  const query = [
-    `玩家编号=${encodeURIComponent(玩家编号)}`,
-    `用户标识=${encodeURIComponent(用户标识)}`,
-  ].join('&');
-
-  const result = await 请求JSON<排行榜结果>(`/ranking?${query}`);
-  return result.data;
-}
-
-export async function 获取藏品排行榜请求() {
-  const { 玩家编号, 用户标识 } = 获取玩家校验信息();
-  const query = [
-    `玩家编号=${encodeURIComponent(玩家编号)}`,
-    `用户标识=${encodeURIComponent(用户标识)}`,
-  ].join('&');
-
-  const result = await 请求JSON<排行榜结果>(`/collection-ranking?${query}`);
   return result.data;
 }
