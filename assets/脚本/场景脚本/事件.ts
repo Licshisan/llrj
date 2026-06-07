@@ -19,6 +19,7 @@ import { 设置 } from '../管理器/设置管理器';
 import { 执行钩子 } from '../管理器/钩子管理器';
 import { 事件项目类型, 默认事件表 } from '../默认内容/事件表';
 import { 深克隆 } from '../方法函数/公共函数';
+import { 钓鱼 } from './钓鱼';
 const { ccclass, property } = _decorator;
 
 export interface 事件上下文 {
@@ -27,6 +28,7 @@ export interface 事件上下文 {
   进入战斗: (name: string) => void;
   结束事件: (name: string) => void;
   跳转场景: (name: string) => void;
+  开始钓鱼: () => void;
 }
 
 @ccclass('事件')
@@ -78,6 +80,11 @@ export class 事件 extends Component {
         this.结束事件();
         director.loadScene(名称);
       },
+      开始钓鱼: () => {
+        this.事件.active = false;
+        this.node.getComponent(钓鱼).触发钓鱼();
+        保存存档();
+      }
     };
 
     const 上下文2: 事件上下文 = {
@@ -89,6 +96,11 @@ export class 事件 extends Component {
         this.结束事件();
         director.loadScene(名称);
       },
+      开始钓鱼: () => {
+        this.事件.active = false;
+        this.node.getComponent(钓鱼).触发钓鱼();
+        保存存档();
+      }
     };
 
     const 上下文3: 事件上下文 = {
@@ -100,6 +112,11 @@ export class 事件 extends Component {
         this.结束事件();
         director.loadScene(名称);
       },
+      开始钓鱼: () => {
+        this.事件.active = false;
+        this.node.getComponent(钓鱼).触发钓鱼();
+        保存存档();
+      }
     };
 
     选项一.on(Button.EventType.CLICK, () => this.当前事件.结果一(上下文1), this);

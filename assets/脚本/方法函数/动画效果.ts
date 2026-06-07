@@ -236,6 +236,7 @@ export function 创建普通文字(
   文本内容: string,
   索引: number,
   颜色: Color = Color.WHITE,
+  点击的回调?: Function
 ) {
   const 文字节点 = new Node(`label_${索引}`);
   const 标签组件 = 文字节点.addComponent(Label);
@@ -249,6 +250,12 @@ export function 创建普通文字(
 
   文字节点.setParent(布局节点);
   文字节点.setPosition(0, 0);
+
+  if(点击的回调){
+    文字节点.on(Node.EventType.TOUCH_END, (evt) => {
+      点击的回调(文字节点, evt);
+    })
+  }
 
   const 宽度 = 布局节点.getComponent(UITransform).width || 650;
   文字节点.getComponent(UITransform).setContentSize(宽度, 0);

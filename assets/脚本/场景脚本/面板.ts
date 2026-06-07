@@ -1,6 +1,6 @@
 import { _decorator, Color, Component, Node, Button, director, Label } from 'cc';
-import { 存档 } from '../管理器/存档管理器';
-import { 创建普通文字 } from '../方法函数/动画效果';
+import { 保存存档, 存档 } from '../管理器/存档管理器';
+import { 创建普通文字, 播放文本 } from '../方法函数/动画效果';
 import { 默认特质表 } from '../默认内容/特质表';
 import { 默认天赋表 } from '../默认内容/天赋表';
 import { 默认难度表 } from '../默认内容/难度表';
@@ -8,6 +8,8 @@ import { 默认套餐表 } from '../默认内容/套餐表';
 import { 计算数值, 计算最大逃跑 } from '../方法函数/属性计算';
 import { 默认藏品表 } from '../默认内容/藏品表';
 import { 默认技能表 } from '../默认内容/技能表';
+import { 计算鱼价格 } from '../公共方法/钓鱼';
+import { 格式化金钱 } from '../方法函数/公共函数';
 const { ccclass, property } = _decorator;
 
 @ccclass('面板')
@@ -42,8 +44,6 @@ export class 面板 extends Component {
   初始化分类标签() {
     this.分类列表.forEach((分类名) => {
       const 标签节点 = this.分类节点.getChildByName(分类名);
-        console.log(标签节点)
-
       if (标签节点) {
         标签节点.on(
           Node.EventType.TOUCH_END,
@@ -72,8 +72,6 @@ export class 面板 extends Component {
   }
 
   刷新内容列表() {
-    this.内容.removeAllChildren();
-
     switch (this.当前分类) {
       case '面板':
         this.渲染面板列表();
@@ -91,8 +89,13 @@ export class 面板 extends Component {
   }
 
   渲染面板列表() {
+    this.内容.removeAllChildren();
+
     let index = 0;
 
+    // 存档信息
+    创建普通文字(this.内容, "======存档信息======", index);
+    index++
     const 难度说明 = 默认难度表.find((x) => x.名称 === 存档.游戏难度)?.说明 || '';
     创建普通文字(this.内容, `难度【${存档.游戏难度}】${难度说明}`, index);
     index++;
@@ -100,22 +103,10 @@ export class 面板 extends Component {
     创建普通文字(this.内容, `套餐【${存档.套餐名称}】${套餐说明}`, index);
     index++;
 
-    // 营养信息
-    const 营养信息 = `【营养信息】\n综合等级：${存档.营养.综合等级}\n蛋白质：LV${存档.营养.等级.蛋白质}（${存档.营养.值.蛋白质}）\n能量：LV${存档.营养.等级.能量}（${存档.营养.值.能量}）\n水分：LV${存档.营养.等级.水分}（${存档.营养.值.水分}）\n维生素：LV${存档.营养.等级.维生素}（${存档.营养.值.维生素}）`;
-    创建普通文字(this.内容, 营养信息, index, Color.GREEN);
-    index++;
 
-    // 住房信息
-    const 房源 = 存档.临时数据.房源;
-    let 住房信息 = `【住房信息】`;
-    if (!房源) {
-      住房信息 += '\n暂无住房';
-    } else {
-      住房信息 += `\n${房源.品质}「${房源.名称}」\n地点：${房源.地点}\n已居住${存档.其他.住房已居住天数}/${存档.其他.住房天数}天\n恢复精力：${(房源.恢复精力 * 100).toFixed(2)}%\n恢复健康：${房源.恢复健康}`;
-    }
-    创建普通文字(this.内容, 住房信息, index, Color.BLUE);
-    index++;
-
+    // 特质信息
+    创建普通文字(this.内容, "======特质信息======", index);
+    index++
     for (let 特质名 in 存档.特质) {
       if (存档.特质[特质名]) {
         const 特质 = 默认特质表.find((x) => x.名称 === 特质名);
@@ -127,6 +118,9 @@ export class 面板 extends Component {
       }
     }
 
+    // 天赋信息
+    创建普通文字(this.内容, "======天赋信息======", index);
+    index++
     for (let 天赋名 in 存档.天赋) {
       if (存档.天赋[天赋名]) {
         const 天赋 = 默认天赋表.find((x) => x.名称 === 天赋名);
@@ -138,6 +132,9 @@ export class 面板 extends Component {
       }
     }
 
+    // 藏品信息
+    创建普通文字(this.内容, "======藏品信息======", index);
+    index++
     for (let 藏品名 in 存档.藏品) {
       if (存档.藏品[藏品名]) {
         const 藏品 = 默认藏品表.find((x) => x.名称 === 藏品名);
@@ -159,6 +156,59 @@ export class 面板 extends Component {
         }
       }
     }
+
+    // 营养信息
+    if(存档.套餐名称 === "食补筑基"){
+      创建普通文字(this.内容, "======营养信息======", index);
+      index++
+      const 营养信息 = `综合等级：${存档.营养.综合等级}
+      \n蛋白质：LV${存档.营养.等级.蛋白质}（${存档.营养.值.蛋白质}）
+      \n能量：LV${存档.营养.等级.能量}（${存档.营养.值.能量}）
+      \n水分：LV${存档.营养.等级.水分}（${存档.营养.值.水分}）
+      \n维生素：LV${存档.营养.等级.维生素}（${存档.营养.值.维生素}）`;
+      创建普通文字(this.内容, 营养信息, index, Color.GREEN);
+      index++;
+    }
+
+    // 住房信息
+    const 房源 = 存档.临时数据.房源;
+    if (房源) {
+      创建普通文字(this.内容, "======住房信息======", index);
+      index++
+      const 住房信息 = `${房源.品质}「${房源.名称}」
+      \n地点：${房源.地点}
+      \n已居住${存档.其他.住房已居住天数}/${存档.其他.住房天数}天
+      \n额外恢复精力：${(房源.恢复精力 * 100).toFixed(2)}%
+      \n额外恢复健康：${房源.恢复健康}`;
+      创建普通文字(this.内容, 住房信息, index, Color.BLUE);
+      index++;
+    }
+
+    // 钓鱼信息
+    const 鱼篓 = 存档.临时数据.鱼篓
+    if (鱼篓 && 鱼篓.length > 0) {
+      创建普通文字(this.内容, "======钓鱼信息======", index);
+      index++
+      
+      鱼篓.forEach((y, i) => {
+        const 价格 = 计算鱼价格(y)
+        const 星级显示 = y.星级 ? '★'.repeat(y.星级) : ''
+        const 结果文本 = `【${y.名称}】「${y.品质}${星级显示}」，重量：${y.重量}kg；预计价格${格式化金钱(价格)}；点击出售`
+        
+        创建普通文字(this.内容, 结果文本, index, new Color(y.颜色), () => {
+          // 增加金钱
+          存档.金钱 += 价格
+          // 从鱼篓中移除当前鱼
+          存档.临时数据.鱼篓.splice(i, 1)
+          // 播放提示
+          保存存档()
+          播放文本(this.标签, `【${y.名称}】出售成功，获得${格式化金钱(价格)}！`)
+          // 重新渲染面板
+          this.渲染面板列表()
+        })
+        index++
+      })
+    }
   }
 
   渲染技能列表() {
@@ -175,6 +225,8 @@ export class 面板 extends Component {
   }
 
   渲染统计列表() {
+    this.内容.removeAllChildren();
+
     let index = 0;
 
     // 赌博信息
@@ -287,6 +339,8 @@ export class 面板 extends Component {
   }
 
   渲染战斗列表(){
+    this.内容.removeAllChildren();
+
     let index = 0;
     
     // 显示总的战斗信息
