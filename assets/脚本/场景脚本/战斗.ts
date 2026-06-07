@@ -325,6 +325,17 @@ export class 战斗 extends Component {
     const 枪械按钮 = this.按钮容器.getChildByName('枪');
     枪械按钮.targetOff(this);
     枪械按钮.on(Node.EventType.TOUCH_END, this.点击枪, this);
+
+    // 新增
+    this.按钮容器.getChildByName('双枪').active = 存档.天赋.枪弹专家 > 0 && 存档.物品.枪 >= 2
+    const 双枪按钮 = this.按钮容器.getChildByName('双枪');
+    双枪按钮.targetOff(this);
+    双枪按钮.on(Node.EventType.TOUCH_END, this.点击双枪, this);
+
+    this.按钮容器.getChildByName('居合').active = 存档.天赋.祖传黑刀 > 0 && 存档.物品.黑刀 >= 5
+    const 居合按钮 = this.按钮容器.getChildByName('居合');
+    居合按钮.targetOff(this);
+    居合按钮.on(Node.EventType.TOUCH_END, this.点击居合, this);
   }
 
   点击攻击() {
@@ -397,6 +408,11 @@ export class 战斗 extends Component {
     if (存档.当前架势) {
       this.对局.主角.其他.架势使用次数[存档.当前架势] =
         (this.对局.主角.其他.架势使用次数[存档.当前架势] || 0) + 1;
+    }
+
+    // 特殊
+    if(this.对局.主角.其他.已触发居合){
+      this.按钮容器.getChildByName('居合').active = false
     }
 
     // 结算
@@ -698,6 +714,20 @@ export class 战斗 extends Component {
     const 枪械按钮 = this.按钮容器.getChildByName('枪');
     枪械按钮.getComponent(Label).string =
       `（${存档.物品?.子弹 || 0}）\n【${['关', '开'][Number(this.对局.主角.其他.枪开关)]}】`;
+  }
+
+  点击双枪() {
+    this.对局.主角.其他.开启双枪 = !this.对局.主角.其他.开启双枪 
+    const 双枪按钮 = this.按钮容器.getChildByName('双枪');
+    双枪按钮.getComponent(Label).string =
+      `双枪\n【${['关', '开'][Number(this.对局.主角.其他.开启双枪)]}】`;
+  }
+
+  点击居合() {
+    this.对局.主角.其他.开启居合 = !this.对局.主角.其他.开启居合 
+    const 居合按钮 = this.按钮容器.getChildByName('居合');
+    居合按钮.getComponent(Label).string =
+      `居合\n【${['关', '开'][Number(this.对局.主角.其他.开启居合)]}】`;
   }
 
   计算主角逃跑成功率() {
