@@ -21,7 +21,7 @@ export class 伙伴特性 extends Component {
 
   start() {
     const 伙伴名称 = globalThis.伙伴特性伙伴名称 as 伙伴名类型;
-    const 特性列表 = 默认伙伴特性表.filter((特性) => 特性.伙伴名 === 伙伴名称);
+    const 特性列表 = 默认伙伴特性表.filter((特性) => 特性.伙伴名 === 伙伴名称 && 特性.显示);
     if (!伙伴名称 || 特性列表.length === 0) {
       error('无效的伙伴名称');
       return;

@@ -9,7 +9,7 @@ interface 特性定义类型 {
   展示: boolean;
   效果?: Record<string, (...参数: any) => any>;
 }
-// todo 分割线
+
 export const 默认特性表: 特性定义类型[] = [
   {
     名称: '饥饿',
