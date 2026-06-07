@@ -29,11 +29,18 @@ export class 商店 extends Component {
   @property(PageView) 分页视图: PageView;
   @property(Prefab) 项目预制体: Prefab;
   @property(Node) 返回按钮: Node;
+  @property(Node) 黑市按钮: Node;
 
   页大小 = 4;
   所有项目节点: Node[] = [];
 
   start() {
+    this.黑市按钮.active = 存档.天赋.市井通衢 > 0
+    this.返回按钮.on(Button.EventType.CLICK, () => {
+      globalThis.商贩名称 = '商贩';
+      director.loadScene('商贩')
+    }, this);
+
     this.更新标签();
     this.创建分页();
     this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene('主页'), this);
