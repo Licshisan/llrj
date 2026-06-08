@@ -27,6 +27,7 @@ export interface 成就项目类型 {
   效果?: 通用效果字段类型;
   分类?: string;
   积分?: number;
+  排行类?: boolean
 }
 
 export function 已完成成就(检查名称: string) {
@@ -386,6 +387,7 @@ const 原版成就: 成就项目类型[] = [
 // todo 所有挑战进度 检查
 const 排行成就: 成就项目类型[] = [
   {
+    排行类: true,
     名称: '👑孤独求败',
     get 描述() {
       const 条目 = 玩家.leaderboard?.list?.[0];
@@ -395,7 +397,7 @@ const 排行成就: 成就项目类型[] = [
       return '位于排行榜第一，暂无完成者';
     },
     get 条件() {
-      return 玩家.leaderboard?.self === 0;
+      return 玩家.leaderboard?.self === 1;
     },
     奖励: '技能【时来运转】等级+4',
     效果: {
@@ -407,6 +409,7 @@ const 排行成就: 成就项目类型[] = [
     },
   },
   {
+    排行类: true,
     名称: '🥈一人之下',
     get 描述() {
       const 条目 = 玩家.leaderboard?.list?.[1];
@@ -416,7 +419,7 @@ const 排行成就: 成就项目类型[] = [
       return '位于排行榜第二，暂无完成者';
     },
     get 条件() {
-      return 玩家.leaderboard?.self === 1;
+      return 玩家.leaderboard?.self === 2;
     },
     奖励: '技能【时来运转】等级+3',
     效果: {
@@ -428,6 +431,7 @@ const 排行成就: 成就项目类型[] = [
     },
   },
   {
+    排行类: true,
     名称: '🥉三甲及第',
     get 描述() {
       const 条目 = 玩家.leaderboard?.list?.[2];
@@ -437,7 +441,7 @@ const 排行成就: 成就项目类型[] = [
       return '位于排行榜第三，暂无完成者';
     },
     get 条件() {
-      return 玩家.leaderboard?.self === 2;
+      return 玩家.leaderboard?.self === 3;
     },
     奖励: '技能【时来运转】等级+2',
     效果: {
@@ -449,6 +453,7 @@ const 排行成就: 成就项目类型[] = [
     },
   },
   {
+    排行类: true,
     名称: '🎖️十方霸主',
     get 描述() {
       const 前十列表 = 玩家.leaderboard?.list?.slice(3, 6);
@@ -462,7 +467,7 @@ const 排行成就: 成就项目类型[] = [
     },
     get 条件() {
       const 排名 = 玩家.leaderboard?.self;
-      return typeof 排名 === 'number' && 排名 >= 3 && 排名 < 10;
+      return typeof 排名 === 'number' && 排名 >= 4 && 排名 < 11;
     },
     奖励: '技能【时来运转】等级+1',
     效果: {
@@ -475,6 +480,7 @@ const 排行成就: 成就项目类型[] = [
     },
   },
   {
+    排行类: true,
     名称: '🚬烟雨江湖',
     get 描述() {
       const 前二十列表 = 玩家.leaderboard?.list?.slice(10, 13);
@@ -487,19 +493,20 @@ const 排行成就: 成就项目类型[] = [
     },
     get 条件() {
       const 排名 = 玩家.leaderboard?.self;
-      return typeof 排名 === 'number' && 排名 >= 10 && 排名 < 20;
+      return typeof 排名 === 'number' && 排名 >= 11 && 排名 < 21;
     },
     奖励: '开局增加1香烟',
     效果: {
       新建游戏: () => {
         const 排名 = 玩家.leaderboard?.self;
-        if (typeof 排名 === 'number' && 排名 >= 10 && 排名 < 20) {
+        if (typeof 排名 === 'number' && 排名 >= 11 && 排名 < 21) {
           存档.物品.香烟 += 1;
         }
       },
     },
   },
   {
+    排行类: true,
     名称: '💰一币之力',
     get 描述() {
       const 前五十列表 = 玩家.leaderboard?.list?.slice(20, 23);
@@ -512,13 +519,13 @@ const 排行成就: 成就项目类型[] = [
     },
     get 条件() {
       const 排名 = 玩家.leaderboard?.self;
-      return typeof 排名 === 'number' && 排名 >= 20 && 排名 < 50;
+      return typeof 排名 === 'number' && 排名 >= 21 && 排名 < 51;
     },
     奖励: '开局增加1元',
     效果: {
       新建游戏: () => {
         const 排名 = 玩家.leaderboard?.self;
-        if (typeof 排名 === 'number' && 排名 >= 20 && 排名 < 50) {
+        if (typeof 排名 === 'number' && 排名 >= 21 && 排名 < 51) {
           存档.金钱 += 10;
         }
       },
@@ -528,11 +535,12 @@ const 排行成就: 成就项目类型[] = [
 
 const 藏品成就: 成就项目类型[] = [
   {
+    排行类: true,
     名称: '多就是强',
     描述: '位于藏品榜前三',
     get 条件() {
       const 排名 = 玩家.collection_leaderboard?.self;
-      return typeof 排名 === 'number' && 排名 >= 0 && 排名 < 3;
+      return typeof 排名 === 'number' && 排名 >= 1 && 排名 < 4;
     },
     奖励: '技能【扩充背包】等级+4',
     效果: {
@@ -545,51 +553,54 @@ const 藏品成就: 成就项目类型[] = [
     },
   },
   {
+    排行类: true,
     名称: '多多益善',
     描述: '位于藏品榜前十',
     get 条件() {
       const 排名 = 玩家.collection_leaderboard?.self;
-      return typeof 排名 === 'number' && 排名 >= 3 && 排名 < 10;
+      return typeof 排名 === 'number' && 排名 >= 4 && 排名 < 11;
     },
     奖励: '技能【扩充背包】等级+3',
     效果: {
       计算技能等级: (计算名称: string, 计算容器: 等级计算容器类型) => {
         const 排名 = 玩家.collection_leaderboard?.self;
-        if (计算名称 === '扩充背包' && typeof 排名 === 'number' && 排名 >= 3 && 排名 < 10) {
+        if (计算名称 === '扩充背包' && typeof 排名 === 'number' && 排名 >= 4 && 排名 < 11) {
           计算容器.基础等级 = 3;
         }
       },
     },
   },
   {
+    排行类: true,
     名称: '初具规模',
     描述: '位于藏品榜前二十',
     get 条件() {
       const 排名 = 玩家.collection_leaderboard?.self;
-      return typeof 排名 === 'number' && 排名 >= 10 && 排名 < 20;
+      return typeof 排名 === 'number' && 排名 >= 11 && 排名 < 21;
     },
     奖励: '技能【扩充背包】等级+2',
     效果: {
       计算技能等级: (计算名称: string, 计算容器: 等级计算容器类型) => {
         const 排名 = 玩家.collection_leaderboard?.self;
-        if (计算名称 === '扩充背包' && typeof 排名 === 'number' && 排名 >= 10 && 排名 < 20) {
+        if (计算名称 === '扩充背包' && typeof 排名 === 'number' && 排名 >= 11 && 排名 < 21) {
           计算容器.基础等级 = 2;
         }
       },
     },
   },
   {
+    排行类: true,
     名称: '小有所成',
     描述: '位于藏品榜前五十',
     get 条件() {
       const 排名 = 玩家.collection_leaderboard?.self;
-      return typeof 排名 === 'number' && 排名 >= 20 && 排名 < 50;
+      return typeof 排名 === 'number' && 排名 >= 21 && 排名 < 51;
     },
     奖励: '技能【扩充背包】等级+1',
     效果: {
       计算技能等级: (计算名称: string, 计算容器: 等级计算容器类型) => {
         const 排名 = 玩家.collection_leaderboard?.self;
-        if (计算名称 === '扩充背包' && typeof 排名 === 'number' && 排名 >= 20 && 排名 < 50) {
+        if (计算名称 === '扩充背包' && typeof 排名 === 'number' && 排名 >= 21 && 排名 < 51) {
           计算容器.基础等级 = 1;
         }
       },
@@ -2778,11 +2789,24 @@ const 特殊成就: 成就项目类型[] = [
   // },
 ];
 
+// todo 修复所有增强字段 使其可以使用getter
 function 增强字段(成就, 分类) {
-  return {
-    ...成就,
-    分类,
-  };
+  // 创建新对象，继承原对象的原型
+  const 新对象 = Object.create(Object.getPrototypeOf(成就));
+  
+  // 复制所有属性描述符（包括 getter/setter）
+  const 描述符 = Object.getOwnPropertyDescriptors(成就);
+  Object.defineProperties(新对象, 描述符);
+  
+  // 添加新的"分类"属性（普通属性）
+  Object.defineProperty(新对象, '分类', {
+    value: 分类,
+    writable: true,
+    enumerable: true,
+    configurable: true
+  });
+  
+  return 新对象;
 }
 
 export const 默认成就表: 成就项目类型[] = [
