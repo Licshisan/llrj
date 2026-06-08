@@ -21,7 +21,7 @@ type Player struct {
 	ID          int64           `json:"id"`
 	UID         string          `json:"uid"`
 	Name        string          `json:"name"`
-	ExtInfo     json.RawMessage `json:"ext_info"`
+	ClientInfo  json.RawMessage `json:"client_info"`
 	ServerInfo  json.RawMessage `json:"server_info"`
 	CreatedAt   time.Time       `json:"created_at"`
 	UpdatedAt   time.Time       `json:"updated_at"`
@@ -130,31 +130,31 @@ func (s *Service) Rename(ctx context.Context, playerID int64, uid string, name s
 		UPDATE players
 		SET name = $1, updated_at = NOW()
 		WHERE id = $2
-		RETURNING id, uid, name, ext_info, server_info, created_at, updated_at, last_login_at
+		RETURNING id, uid, name, client_info, server_info, created_at, updated_at, last_login_at
 	`, name, playerID)
 	return scanPlayer(row)
 }
 
-func (s *Service) UpdateExtInfo(ctx context.Context, playerID int64, uid string, extInfo json.RawMessage) (Player, error) {
+func (s *Service) UpdateClientInfo(ctx context.Context, playerID int64, uid string, clientInfo json.RawMessage) (Player, error) {
 	player, err := s.ValidatePlayer(ctx, playerID, uid)
 	if err != nil {
 		return Player{}, err
 	}
-	if !validJSON(extInfo) {
-		return Player{}, errors.New("ext_info必须是有效JSON")
+	if !validJSON(clientInfo) {
+		return Player{}, errors.New("client_info必须是有效JSON")
 	}
 
 	row := s.db.QueryRow(ctx, `
 		UPDATE players
-		SET ext_info = $1, updated_at = NOW()
+		SET client_info = $1, updated_at = NOW()
 		WHERE id = $2
-		RETURNING id, uid, name, ext_info, server_info, created_at, updated_at, last_login_at
-	`, extInfo, playerID)
+		RETURNING id, uid, name, client_info, server_info, created_at, updated_at, last_login_at
+	`, clientInfo, playerID)
 	updatedPlayer, err := scanPlayer(row)
 	if err != nil {
 		return Player{}, err
 	}
-	if err := s.registerPioneers(ctx, player.ID, player.Name, extInfo); err != nil {
+		if err := s.registerPioneers(ctx, player.ID, player.Name, clientInfo); err != nil {
 		return Player{}, err
 	}
 	return updatedPlayer, nil
@@ -232,12 +232,12 @@ func (s *Service) Ranking(ctx context.Context, playerID int64, uid string) (Rank
 				updated_at,
 				COALESCE(
 					CASE
-						WHEN (ext_info->>'积分') ~ '^-?[0-9]+(\.[0-9]+)?$'
-						THEN (ext_info->>'积分')::double precision
+						WHEN (client_info->>'积分') ~ '^-?[0-9]+(\.[0-9]+)?$'
+						THEN (client_info->>'积分')::double precision
 					END,
 					CASE
-						WHEN (ext_info->>'point') ~ '^-?[0-9]+(\.[0-9]+)?$'
-						THEN (ext_info->>'point')::double precision
+						WHEN (client_info->>'point') ~ '^-?[0-9]+(\.[0-9]+)?$'
+						THEN (client_info->>'point')::double precision
 					END,
 					0
 				) AS score
@@ -311,8 +311,8 @@ func (s *Service) CollectionRanking(ctx context.Context, playerID int64, uid str
 			FROM players p
 			LEFT JOIN LATERAL jsonb_each_text(
 				CASE
-					WHEN jsonb_typeof(p.ext_info->'藏品') = 'object'
-					THEN p.ext_info->'藏品'
+					WHEN jsonb_typeof(p.client_info->'藏品') = 'object'
+					THEN p.client_info->'藏品'
 					ELSE '{}'::jsonb
 				END
 			) AS item(key, value) ON TRUE
@@ -399,7 +399,7 @@ func (s *Service) TransferPlayer(ctx context.Context, adminKey string, expectedA
 		UPDATE players
 		SET uid = $1, updated_at = NOW()
 		WHERE id = $2
-		RETURNING id, uid, name, ext_info, server_info, created_at, updated_at, last_login_at
+		RETURNING id, uid, name, client_info, server_info, created_at, updated_at, last_login_at
 	`, strings.TrimSpace(newUID), playerID)
 
 	player, err := scanPlayer(row)
@@ -411,7 +411,7 @@ func (s *Service) TransferPlayer(ctx context.Context, adminKey string, expectedA
 
 func (s *Service) findPlayerByUID(ctx context.Context, uid string) (Player, error) {
 	row := s.db.QueryRow(ctx, `
-		SELECT id, uid, name, ext_info, server_info, created_at, updated_at, last_login_at
+		SELECT id, uid, name, client_info, server_info, created_at, updated_at, last_login_at
 		FROM players
 		WHERE uid = $1
 	`, uid)
@@ -423,7 +423,7 @@ func (s *Service) touchLogin(ctx context.Context, playerID int64) (Player, error
 		UPDATE players
 		SET last_login_at = NOW()
 		WHERE id = $1
-		RETURNING id, uid, name, ext_info, server_info, created_at, updated_at, last_login_at
+		RETURNING id, uid, name, client_info, server_info, created_at, updated_at, last_login_at
 	`, playerID)
 	player, err := scanPlayer(row)
 	if err != nil {
@@ -432,8 +432,8 @@ func (s *Service) touchLogin(ctx context.Context, playerID int64) (Player, error
 	return s.withPioneers(ctx, player)
 }
 
-func (s *Service) registerPioneers(ctx context.Context, playerID int64, playerName string, extInfo json.RawMessage) error {
-	achievements, err := parseAchievements(extInfo)
+func (s *Service) registerPioneers(ctx context.Context, playerID int64, playerName string, clientInfo json.RawMessage) error {
+	achievements, err := parseAchievements(clientInfo)
 	if err != nil {
 		return err
 	}

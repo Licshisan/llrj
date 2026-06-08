@@ -24,11 +24,10 @@ go run ./cmd/api
 - 服务端口：`3000`
 - 数据库：`postgres://postgres:postgres@localhost:5432/llrj?sslmode=disable`
 - 自动建表：`AUTO_MIGRATE=true`
-- 自动清理：删除 `created_at` 超过 `SAVE_RETENTION_DAYS` 天的旧存档，默认 30 天
 
 ## 数据表
 
-- `players`：玩家账号，包含 `id`、`uid`、`name`、`ext_info`
+- `players`：玩家账号，包含 `id`、`uid`、`client_info`
 - `saves`：玩家存档，包含 `day`、`save_name`、`save`
 - `logs`：日志上报，支持无玩家日志和已校验玩家日志
 
@@ -56,30 +55,19 @@ curl -X POST http://localhost:3000/login \
   -d "{\"uid\":\"device-001\"}"
 ```
 
-### 重命名
+### 上传玩家客户端信息
 
 ```bash
-curl -X POST http://localhost:3000/rename \
+curl -X POST http://localhost:3000/client-info \
   -H "Content-Type: application/json" \
-  -d "{\"player_id\":1,\"uid\":\"device-001\",\"name\":\"新的名字\"}"
+  -d "{\"player_id\":1,\"uid\":\"device-001\",\"client_info\":{\"战胜语\":\"赢了\"}}"
 ```
 
-### 上传玩家扩展信息
-
-```bash
-curl -X POST http://localhost:3000/ext-info \
-  -H "Content-Type: application/json" \
-  -d "{\"player_id\":1,\"uid\":\"device-001\",\"ext_info\":{\"战胜语\":\"赢了\"}}"
-```
-
-如果 `ext_info.成就` 是数组，服务端会自动扫描其中的成就对象，并将全服第一个完成某个成就的玩家登记到 `pioneers` 表。成就对象格式：
+如果 `client_info.成就` 是数组，服务端会自动扫描其中的成就对象，并将全服第一个完成某个成就的玩家登记到 `pioneers` 表。成就对象格式：
 
 ```json
 { "名称": "第一次通关", "描述": "完成一次游戏", "完成时间": 1710000000000 }
 ```
-
-玩家登录时，响应的 `server_info.先驱者` 会包含当前已登记的开拓者信息，格式为 `{ "成就名": { "完成人名称": "玩家名", "完成人id": 1, "完成时间": 1710000000000 } }`。
-
 ### 上传存档
 
 ```bash
@@ -98,7 +86,7 @@ curl "http://localhost:3000/random-save?player_id=1&uid=device-001&day=3"
 
 ### 排行榜
 
-按 `players.ext_info` 中的 `积分` 字段从高到低排名，返回前 50 名和当前玩家自己的排名；响应中不包含 `uid`。
+按 `players.client_info` 中的 `积分` 字段从高到低排名，返回前 50 名和当前玩家自己的排名；响应中不包含 `uid`。
 
 ```bash
 curl "http://localhost:3000/ranking?player_id=1&uid=device-001"
@@ -106,19 +94,16 @@ curl "http://localhost:3000/ranking?player_id=1&uid=device-001"
 
 ### 藏品排行榜
 
-按 `players.ext_info` 中 `藏品` 对象所有数字值之和从高到低排名，返回前 50 名和当前玩家自己的排名；响应中不包含 `uid`。
+按 `players.client_info` 中 `藏品` 对象所有数字值之和从高到低排名，返回前 50 名和当前玩家自己的排名；响应中不包含 `uid`。
 
 ```bash
 curl "http://localhost:3000/collection-ranking?player_id=1&uid=device-001"
 ```
 
-### 清理当前玩家存档
+### 先驱者
 
-```bash
-curl -X POST http://localhost:3000/save/cleanup \
-  -H "Content-Type: application/json" \
-  -d "{\"player_id\":1,\"uid\":\"device-001\"}"
-```
+返回当前已登记的开拓者信息，格式为 
+`{ "成就名": "第一个完成人", "完成时间": 1710000000000, "完成人id": 1 }`。
 
 ### 日志上报
 
@@ -135,22 +120,3 @@ curl -X POST http://localhost:3000/log \
   -H "Content-Type: application/json" \
   -d "{\"player_id\":1,\"uid\":\"device-001\",\"level\":\"info\",\"log\":{\"event\":\"save_clicked\"}}"
 ```
-
-### 管理员账号转移
-
-客户端不使用该接口。管理员可传 `X-Admin-Key` 将玩家绑定到新 `uid`。
-
-```bash
-curl -X POST http://localhost:3000/admin/player/transfer \
-  -H "Content-Type: application/json" \
-  -H "X-Admin-Key: change-me" \
-  -d "{\"player_id\":1,\"new_uid\":\"device-002\"}"
-```
-
-## 后续计划
-
-- 排行榜系统
-- 远程获取版本更新
-- 远程公告
-- 远程同步存档
-- Cocos Creator 3.x APK 热更新方案调研
