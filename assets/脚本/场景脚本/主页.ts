@@ -29,7 +29,7 @@ import { 获取当前日记 } from '../默认内容/日记表';
 import { 获取地区名称, 获取当前地区 } from '../默认内容/地区表';
 import { 玩家 } from '../管理器/玩家管理器';
 import { 获取营养摘要 } from '../公共方法/食品店表';
-import { 获取榜一大哥请求 } from '../方法函数/网络请求';
+// import { 获取榜一大哥请求 } from '../方法函数/网络请求';
 const { ccclass, property } = _decorator;
 
 @ccclass('主页')
@@ -131,6 +131,7 @@ export class 主页 extends Component {
 
   回档() {
     this.scheduleOnce(() => {
+      存档.当前事件 = "食品店"
       if (存档.当前剧情) {
         director.loadScene('剧情');
       } else if (存档.当前敌人) {
@@ -368,9 +369,9 @@ export class 主页 extends Component {
   }
 
   async 加载榜一大哥() {
-    if (!存档.临时数据.榜一大哥) {
-      存档.临时数据.榜一大哥 = await 获取榜一大哥请求();
-    }
+    // if (!存档.临时数据.榜一大哥) {
+    //   存档.临时数据.榜一大哥 = await 获取榜一大哥请求();
+    // }
   }
 
   点击睡觉() {
@@ -748,7 +749,7 @@ export class 主页 extends Component {
     }
 
     // 食品店
-    if (存档.套餐名称 === '食补筑基' && 存档.距离 >= 100 && Math.random() * 100 < 5) {
+    if (存档.套餐名称 === '食补筑基' && 存档.距离 <= 179 && Math.random() * 100 < 5) {
       this.基本消耗();
       this.node.getComponent(事件).触发事件('食品店');
       return false;
@@ -877,6 +878,7 @@ export class 主页 extends Component {
       : '睡  觉';
   }
 
+  // todo 显示营养摘要
   计算状态文本() {
     let 状态文本 = '';
     for (const 状态 in 存档.状态) {

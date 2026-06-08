@@ -79,6 +79,8 @@ export async function 请求JSON<T = any>(
     timeout?: number;
   } = {},
 ): Promise<接口响应<T>> {
+  try{
+
   const method = options.method || 'GET';
   const headers: Record<string, string> = {};
   const requestOptions: RequestInit = { method, headers };
@@ -119,6 +121,9 @@ export async function 请求JSON<T = any>(
   });
 
   return Promise.race([请求, 超时]);
+  }catch(e){
+    console.error(e)
+  }
 }
 
 export async function 登录请求(): Promise<玩家信息> {

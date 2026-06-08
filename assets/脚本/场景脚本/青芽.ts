@@ -4,6 +4,7 @@ import { 保存存档, 存档 } from '../管理器/存档管理器';
 import { 计算数值 } from '../方法函数/属性计算';
 const { ccclass, property } = _decorator;
 
+// tood 调整场景
 @ccclass('青芽')
 export class 青芽 extends Component {
   @property(Node) 标签: Node = null;
