@@ -10,6 +10,7 @@ import { 默认藏品表 } from '../默认内容/藏品表';
 import { 默认技能表 } from '../默认内容/技能表';
 import { 计算鱼价格 } from '../公共方法/钓鱼';
 import { 对象求和, 格式化金钱 } from '../方法函数/公共函数';
+import { 计算得分 } from '../公共方法/最终得分';
 const { ccclass, property } = _decorator;
 
 @ccclass('面板')
@@ -351,6 +352,7 @@ export class 面板 extends Component {
 
     // 其他属性
     const 其他属性 = `======其他属性======
+当前剧情分：${计算得分()}
 罪恶：${存档.罪恶}
 阅历：${存档.阅历}
 烟瘾：${存档.烟瘾率}

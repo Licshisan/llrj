@@ -2,13 +2,13 @@ import { _decorator, Button, Component, director, Node, tween, EditBox } from 'c
 import { 删除存档, 存档 } from '../管理器/存档管理器';
 import { 创建动画文字, 播放文本, 淡入 } from '../方法函数/动画效果';
 import { 设置 } from '../管理器/设置管理器';
-import { 计算最大攻击, 计算最大生命, 计算最大防御 } from '../方法函数/属性计算';
 import { 计算排行榜积分总和, 默认成就表 } from '../默认内容/成就表';
 import type { 成就项目类型 } from '../默认内容/成就表';
 import { 默认套餐表 } from '../默认内容/套餐表';
 import { 上传客户端数据, 获取先驱者请求 } from '../方法函数/网络请求';
 import { 保存玩家, 玩家 } from '../管理器/玩家管理器';
 import { 对象求和 } from '../方法函数/公共函数';
+import { 计算得分 } from '../公共方法/最终得分';
 const { ccclass, property } = _decorator;
 
 @ccclass('分数')
@@ -22,9 +22,10 @@ export class 分数 extends Component {
     播放文本(this.标签, '');
     this.文本容器.removeAllChildren();
     this.选项容器.active = false;
+    this.输入框.active = false;
 
     // 得分
-    const 得分 = this.计算得分();
+    const 得分 = 计算得分();
     const texts = [
       `你的得分为：${得分.最终得分}（答题得分：30，剧情得分:${得分.剧情得分}，属性得分:${得分.属性得分}。满分约100分）`,
     ];
@@ -88,34 +89,6 @@ export class 分数 extends Component {
       },
       this,
     );
-  }
-
-  计算得分() {
-    let 剧情得分 = 0;
-    for (const key in 存档.剧情) {
-      剧情得分 += 存档.剧情[key];
-    }
-    剧情得分 += 存档.物品.好人卡;
-    剧情得分 += Number(存档.剧情.堂主捐钱) * 3;
-    剧情得分 += Number(存档.剧情.借钱给中年大叔) * 3;
-    剧情得分 += Number(存档.剧情.帮助胖女人) * 3;
-    剧情得分 += Number(存档.剧情.再次帮助胖女人) * 3;
-    剧情得分 += Number(存档.剧情.选择小头) * 3;
-    剧情得分 += Number(存档.剧情.归还礼物) * 3;
-    剧情得分 += Number(存档.剧情.打扫老爷爷房间) * 3;
-    剧情得分 += Number(存档.剧情.拒绝施舍) * 2;
-    剧情得分 += Number(存档.剧情.拒绝偷吃贡品) * 2;
-    剧情得分 += Math.floor(存档.伙伴.碧瑶好感 / 5000);
-    剧情得分 += Math.floor(存档.伙伴.晓月好感 / 5000);
-
-    let 属性得分 = Math.floor(
-      21 - (6 * 计算最大生命()) / 10000 - (6 * 计算最大攻击()) / 2000 - (6 * 计算最大防御()) / 1000,
-    );
-    属性得分 = Math.min(Math.max(属性得分, 0), 18);
-
-    const 得分 = 剧情得分 + 属性得分 + 30;
-    存档.其他.最终得分 = 得分;
-    return { 剧情得分, 属性得分, 最终得分: 得分 };
   }
 
   结算藏品() {
