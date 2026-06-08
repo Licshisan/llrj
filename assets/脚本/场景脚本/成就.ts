@@ -10,7 +10,6 @@ interface 已完成成就类型 {
   名称: string;
   描述?: string;
   完成时间?: number;
-  达成时间?: number;
 }
 
 @ccclass('成就')
@@ -113,7 +112,7 @@ export class 成就 extends Component {
       let 文本 = `【${成就.名称}】`;
       if (完成成就) {
         文本 += 完成成就.描述 || 成就.描述;
-        const 完成时间 = 完成成就.完成时间 || 完成成就.达成时间;
+        const 完成时间 = 完成成就.完成时间;
         if (完成时间) 文本 += `\n完成时间：${格式化日期字符串(完成时间)}`;
       } else {
         文本 += 成就.描述;

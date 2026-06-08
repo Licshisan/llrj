@@ -23,7 +23,7 @@ export interface 成就项目类型 {
   描述: string;
   条件: any;
   奖励?: string;
-  达成时间?: number;
+  完成时间?: number;
   效果?: 通用效果字段类型;
   分类?: string;
   积分?: number;
