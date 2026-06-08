@@ -1,4 +1,15 @@
-﻿import { _decorator, Component, Node, director, tween, Button, Color, log, UIOpacity, Label } from 'cc';
+﻿import {
+  _decorator,
+  Component,
+  Node,
+  director,
+  tween,
+  Button,
+  Color,
+  log,
+  UIOpacity,
+  Label,
+} from 'cc';
 import { 保存设置, 设置 } from '../管理器/设置管理器';
 import { 创建动画文字, 播放文本, 淡入, 淡出 } from '../方法函数/动画效果';
 import { 保存存档, 存档 } from '../管理器/存档管理器';
@@ -16,9 +27,9 @@ export class 开场 extends Component {
   @property(Node) 刷新按钮: Node = null;
   刷新次数 = 0;
   当前天赋: string[] = [];
-  锁定次数 =3
+  锁定次数 = 3;
   start() {
-    this.标签.getComponent(Label).string = ""
+    this.标签.getComponent(Label).string = '';
     const 开场文本 = [
       '昨天，',
       '和父亲大吵一架后，',
@@ -47,12 +58,11 @@ export class 开场 extends Component {
     this.刷新按钮.on(Button.EventType.CLICK, () => this.点击刷新(), this);
   }
 
-  
   点击刷新() {
     this.刷新次数++;
     this.继续按钮.active = false;
     this.刷新按钮.active = false;
-    this.刷新按钮.getComponent(Label).string = `<刷新${this.刷新次数}/10>`
+    this.刷新按钮.getComponent(Label).string = `<刷新${this.刷新次数}/10>`;
 
     this.当前天赋 = [];
 
@@ -63,8 +73,8 @@ export class 开场 extends Component {
       天赋数量++;
     }
 
-    let 正面天赋数量 = 天赋数量
-    let 负面天赋数量 = 天赋数量
+    let 正面天赋数量 = 天赋数量;
+    let 负面天赋数量 = 天赋数量;
 
     const 保留天赋 = 默认天赋表.find((x) => x.名称 === 设置.保留天赋);
     if (保留天赋 && 天赋数量 > 0) {
@@ -125,20 +135,20 @@ export class 开场 extends Component {
     for (let i = 0; i < 显示文本.length; i++) {
       序列.call(() => {
         创建动画文字(this.文本容器, 显示文本[i].文本, i, 显示文本[i].颜色, (文字节点) => {
-          console.log(显示文本[i])
-          显示文本[i].已锁定 = !显示文本[i].已锁定
-          文字节点.getComponent(Label).string = 显示文本[i].文本 + (显示文本[i].已锁定 ? "「已锁定」" : "")
-          播放文本(this.标签, "点击锁定"+ (显示文本[i].已锁定 ? "「已锁定」" : "「已取消」"))
+          console.log(显示文本[i]);
+          显示文本[i].已锁定 = !显示文本[i].已锁定;
+          文字节点.getComponent(Label).string =
+            显示文本[i].文本 + (显示文本[i].已锁定 ? '「已锁定」' : '');
+          播放文本(this.标签, '点击锁定' + (显示文本[i].已锁定 ? '「已锁定」' : '「已取消」'));
         });
       }).delay(1.5 / 设置.播放速度);
     }
     序列.delay(1.5 / 设置.播放速度);
     序列.call(() => {
       淡入(this.继续按钮);
-      if(this.刷新次数 < 10){
+      if (this.刷新次数 < 10) {
         淡入(this.刷新按钮);
       }
-
     });
     序列.start();
   }
@@ -150,7 +160,10 @@ export class 开场 extends Component {
     const result: T[] = [];
 
     while (candidates.length > 0 && result.length < count) {
-      const 总权重 = candidates.reduce((sum, item) => sum + (weightConfig[item.品质 || '普通'] || 50), 0);
+      const 总权重 = candidates.reduce(
+        (sum, item) => sum + (weightConfig[item.品质 || '普通'] || 50),
+        0,
+      );
       let 随机数 = Math.random() * 总权重;
       const 索引 = candidates.findIndex((item) => {
         随机数 -= weightConfig[item.品质 || '普通'] || 50;

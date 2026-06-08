@@ -25,7 +25,7 @@ export class 小兰 extends Component {
     this.切换1.active = 存档.伙伴.晓月关系 > 0;
     this.切换1.on(Button.EventType.CLICK, () => director.loadScene('伙伴'), this);
 
-    this.切换2.active = 存档.伙伴.碧瑶关系 > 0 
+    this.切换2.active = 存档.伙伴.碧瑶关系 > 0;
     this.切换2.on(
       Button.EventType.CLICK,
       () => {
@@ -35,11 +35,11 @@ export class 小兰 extends Component {
       this,
     );
 
-    this.切换3.active = 存档.伙伴.青芽关系 > 0 
+    this.切换3.active = 存档.伙伴.青芽关系 > 0;
     this.切换3.on(
       Button.EventType.CLICK,
       () => {
-        director.loadScene('青芽')
+        director.loadScene('青芽');
       },
       this,
     );

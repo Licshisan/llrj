@@ -1,13 +1,4 @@
-import {
-  _decorator,
-  Button,
-  Component,
-  Label,
-  Node,
-  UITransform,
-  Sprite,
-  Color
-} from 'cc';
+import { _decorator, Button, Component, Label, Node, UITransform, Sprite, Color } from 'cc';
 const { ccclass, property } = _decorator;
 import { 主页 } from './主页';
 import { 放大出现, 缩小消失 } from '../方法函数/动画效果';
@@ -28,7 +19,7 @@ export class 钓鱼 extends Component {
   移动方向 = 1;
   游戏状态 = 1;
 
-  鱼 = null
+  鱼 = null;
   触发钓鱼() {
     this.初始化();
     this.按钮.on(Button.EventType.CLICK, () => this.判定是否命中(), this);
@@ -40,13 +31,13 @@ export class 钓鱼 extends Component {
     主页脚本.更新();
     缩小消失(主页脚本.按钮容器);
     放大出现(this.钓鱼);
-    主页脚本.播放文本("点击开始开始钓鱼！");
+    主页脚本.播放文本('点击开始开始钓鱼！');
 
-    const 鱼 = 随机生成鱼()
-    console.log(鱼)
-    this.色块宽度 = this.色块宽度 * 鱼.色块宽度
-    this.滑块速度 = this.滑块速度 * 鱼.滑块速度
-    this.鱼 = 鱼
+    const 鱼 = 随机生成鱼();
+    console.log(鱼);
+    this.色块宽度 = this.色块宽度 * 鱼.色块宽度;
+    this.滑块速度 = this.滑块速度 * 鱼.滑块速度;
+    this.鱼 = 鱼;
 
     const barUi = this.钓鱼条.getComponent(UITransform)!;
     const halfBar = barUi.width / 2;
@@ -59,15 +50,15 @@ export class 钓鱼 extends Component {
     const maxX = Math.round(halfBar - halfBlock);
     const randomX = Math.round(minX + Math.random() * (maxX - minX));
     this.色块.setPosition(randomX, 0);
-    this.色块.getComponent(Sprite).color = new Color(鱼.颜色)
+    this.色块.getComponent(Sprite).color = new Color(鱼.颜色);
 
     this.开始钓鱼();
   }
 
   开始钓鱼() {
     this.游戏状态 = 1;
-    this.按钮.getChildByName("标签").getComponent(Label).string = "停 止！";
-    this.node.getComponent(主页)?.播放文本("看准时机，让滑块落在颜色区域中！");
+    this.按钮.getChildByName('标签').getComponent(Label).string = '停 止！';
+    this.node.getComponent(主页)?.播放文本('看准时机，让滑块落在颜色区域中！');
   }
 
   update(deltaTime: number) {
@@ -96,25 +87,25 @@ export class 钓鱼 extends Component {
 
     const 主页脚本 = this.node.getComponent(主页);
     if (命中) {
-      主页脚本?.播放文本("上钩啦！");
+      主页脚本?.播放文本('上钩啦！');
       // 生成随机鱼信息
       this.scheduleOnce(() => {
-        存档.当前事件 = "";
-        if(!存档.临时数据.鱼篓){
-            存档.临时数据.鱼篓 = []
+        存档.当前事件 = '';
+        if (!存档.临时数据.鱼篓) {
+          存档.临时数据.鱼篓 = [];
         }
-        存档.临时数据.鱼篓.push(this.鱼)
-        存档.其他.钓鱼最大重量 = Math.max(this.鱼.重量, 存档.其他.钓鱼最大重量)
+        存档.临时数据.鱼篓.push(this.鱼);
+        存档.其他.钓鱼最大重量 = Math.max(this.鱼.重量, 存档.其他.钓鱼最大重量);
         保存存档();
         const 结果文本 = `钓到一条【${this.鱼.名称}】「${this.鱼.品质}${'★'.repeat(this.鱼.星级)}」，重量：${this.鱼.重量}kg，请前往面板查看！`;
         主页脚本?.播放文本(结果文本);
         this.钓鱼.active = false;
         放大出现(主页脚本?.按钮容器!);
-      },  2.5 / 设置.播放速度);
+      }, 2.5 / 设置.播放速度);
     } else {
-      主页脚本?.播放文本("什么也没掉到");
+      主页脚本?.播放文本('什么也没掉到');
       this.scheduleOnce(() => {
-        存档.当前事件 = "";
+        存档.当前事件 = '';
         保存存档();
         this.钓鱼.active = false;
         放大出现(主页脚本?.按钮容器!);

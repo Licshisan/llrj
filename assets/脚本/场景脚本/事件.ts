@@ -84,7 +84,7 @@ export class 事件 extends Component {
         this.事件.active = false;
         this.node.getComponent(钓鱼).触发钓鱼();
         保存存档();
-      }
+      },
     };
 
     const 上下文2: 事件上下文 = {
@@ -100,7 +100,7 @@ export class 事件 extends Component {
         this.事件.active = false;
         this.node.getComponent(钓鱼).触发钓鱼();
         保存存档();
-      }
+      },
     };
 
     const 上下文3: 事件上下文 = {
@@ -116,7 +116,7 @@ export class 事件 extends Component {
         this.事件.active = false;
         this.node.getComponent(钓鱼).触发钓鱼();
         保存存档();
-      }
+      },
     };
 
     选项一.on(Button.EventType.CLICK, () => this.当前事件.结果一(上下文1), this);

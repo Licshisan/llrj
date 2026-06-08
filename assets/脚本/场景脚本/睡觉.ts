@@ -170,14 +170,14 @@ export class 睡觉 extends Component {
     // 24%概率遇到其他玩家（PVP）
     if (存档.当前敌人 == '' && 存档.天数 > 1 && 存档.天数 < 178 && Math.random() * 100 < 24) {
       获取随机存档请求(存档.天数 - 1)
-      .then((r) => {
-        console.log('随机匹配到的存档数据', r);
-        存档.临时数据.时空流浪者 = r;
-        存档.当前敌人 = "时空流浪者"
-      })
-      .catch((e) => {
-        error(e);
-      });
+        .then((r) => {
+          console.log('随机匹配到的存档数据', r);
+          存档.临时数据.时空流浪者 = r;
+          存档.当前敌人 = '时空流浪者';
+        })
+        .catch((e) => {
+          error(e);
+        });
     }
 
     // 其他
@@ -287,7 +287,7 @@ export class 睡觉 extends Component {
       存档.当前剧情 = 剧情.名称;
       保存存档();
       director.loadScene('剧情');
-      return
+      return;
     }
     director.loadScene('主页');
   }

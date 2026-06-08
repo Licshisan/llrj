@@ -12,7 +12,7 @@ export class 特性 extends Component {
   @property(Node) 设置: Node = null;
 
   start() {
-    globalThis.页面来源 = '特性'
+    globalThis.页面来源 = '特性';
 
     默认特性表.forEach((特性, index) => {
       创建普通文字(

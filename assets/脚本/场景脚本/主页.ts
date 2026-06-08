@@ -45,7 +45,7 @@ export class 主页 extends Component {
   冷却时间 = 0.2;
 
   start() {
-    globalThis.页面来源 = '主页'
+    globalThis.页面来源 = '主页';
 
     this.更新();
     this.回档();
@@ -126,7 +126,7 @@ export class 主页 extends Component {
       this,
     );
     this.暗夜模式();
-    this.加载榜一大哥()
+    this.加载榜一大哥();
   }
 
   回档() {
@@ -155,9 +155,7 @@ export class 主页 extends Component {
         存档.当前剧情 = '山雾茫茫';
       } else if (地区名 === '山林') {
         存档.当前剧情 = '山雾茫茫';
-      } 
-      
-      else {
+      } else {
         存档.当前剧情 = '一个人的庆典';
         if (存档.当前地点 === '市中心') {
           存档.当前剧情 = '无名的留言';
@@ -370,11 +368,10 @@ export class 主页 extends Component {
   }
 
   async 加载榜一大哥() {
-    if(!存档.临时数据.榜一大哥){
-      存档.临时数据.榜一大哥 = await 获取榜一大哥请求()
+    if (!存档.临时数据.榜一大哥) {
+      存档.临时数据.榜一大哥 = await 获取榜一大哥请求();
     }
   }
-
 
   点击睡觉() {
     if (存档.剧情.住在桥洞) {
@@ -681,30 +678,43 @@ export class 主页 extends Component {
     }
 
     // 江湖人士
-    if(存档.技能.世界感知 >=2 && 存档.游戏难度 === '残酷' || 存档.游戏难度 === '绝境'){
-      if(获取地区名称() === '县城' && Math.random() * 100 < 2){
+    if ((存档.技能.世界感知 >= 2 && 存档.游戏难度 === '残酷') || 存档.游戏难度 === '绝境') {
+      if (获取地区名称() === '县城' && Math.random() * 100 < 2) {
         this.基本消耗();
         this.node.getComponent(事件).触发事件('打探江湖人士');
         return false;
       }
 
-      if((获取地区名称() === '县城' || 获取地区名称() === '山脉' || 获取地区名称() === '山林') && Math.random() * 100 < (存档.临时数据?.门派熟悉度?.青竹门 || 0) * 0.04){
+      if (
+        (获取地区名称() === '县城' || 获取地区名称() === '山脉' || 获取地区名称() === '山林') &&
+        Math.random() * 100 < (存档.临时数据?.门派熟悉度?.青竹门 || 0) * 0.04
+      ) {
         this.基本消耗();
         this.node.getComponent(事件).触发事件('偶遇青竹门');
         return false;
       }
-      if((获取地区名称() === '县城' || 获取地区名称() === '山脉' || 获取地区名称() === '山林') && Math.random() * 100 < (存档.临时数据?.门派熟悉度?.铁衣帮 || 0) * 0.04){
+      if (
+        (获取地区名称() === '县城' || 获取地区名称() === '山脉' || 获取地区名称() === '山林') &&
+        Math.random() * 100 < (存档.临时数据?.门派熟悉度?.铁衣帮 || 0) * 0.04
+      ) {
         this.基本消耗();
         this.node.getComponent(事件).触发事件('偶遇铁衣帮');
         return false;
       }
-      if((获取地区名称() === '县城' || 获取地区名称() === '山脉' || 获取地区名称() === '山林') && Math.random() * 100 < (存档.临时数据?.门派熟悉度?.玄水阁 || 0) * 0.04){
+      if (
+        (获取地区名称() === '县城' || 获取地区名称() === '山脉' || 获取地区名称() === '山林') &&
+        Math.random() * 100 < (存档.临时数据?.门派熟悉度?.玄水阁 || 0) * 0.04
+      ) {
         this.基本消耗();
         this.node.getComponent(事件).触发事件('偶遇玄水阁');
         return false;
       }
 
-      if((获取地区名称() === '山脉' || 获取地区名称() === '山林' || 存档.当前地点 == "城中村") && Math.random() * 100 < 1 && 对象求和(存档.临时数据?.残页) > 0){
+      if (
+        (获取地区名称() === '山脉' || 获取地区名称() === '山林' || 存档.当前地点 == '城中村') &&
+        Math.random() * 100 < 1 &&
+        对象求和(存档.临时数据?.残页) > 0
+      ) {
         this.基本消耗();
         this.node.getComponent(事件).触发事件('残页交易');
         return false;
@@ -855,7 +865,7 @@ export class 主页 extends Component {
     this.按钮容器.getChildByName('探索').active = 存档.按钮.探索 > 0;
     this.按钮容器.getChildByName('前进').active = 存档.按钮.前进 > 0;
 
-    console.log(this.按钮容器.getChildByName('前进').active)
+    console.log(this.按钮容器.getChildByName('前进').active);
     this.按钮容器.getChildByName('伙伴').active = 存档.按钮.伙伴 > 0;
     this.按钮容器.getChildByName('制作').active = 存档.按钮.制作 > 0;
     this.按钮容器.getChildByName('特性').active = 存档.按钮.特性 > 0;

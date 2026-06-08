@@ -2,7 +2,7 @@ import { _decorator, Button, Component, director, Node, tween, EditBox } from 'c
 import { 删除存档, 存档 } from '../管理器/存档管理器';
 import { 创建动画文字, 播放文本, 淡入 } from '../方法函数/动画效果';
 import { 设置 } from '../管理器/设置管理器';
-import {  计算最大攻击, 计算最大生命, 计算最大防御 } from '../方法函数/属性计算';
+import { 计算最大攻击, 计算最大生命, 计算最大防御 } from '../方法函数/属性计算';
 import { 默认成就表 } from '../默认内容/成就表';
 import type { 成就项目类型 } from '../默认内容/成就表';
 import { 默认套餐表 } from '../默认内容/套餐表';
@@ -24,7 +24,7 @@ export class 分数 extends Component {
     this.选项容器.active = false;
 
     // 得分
-    const 得分 = this.计算得分()
+    const 得分 = this.计算得分();
     const texts = [
       `你的得分为：${得分.最终得分}（答题得分：30，剧情得分:${得分.剧情得分}，属性得分:${得分.属性得分}。满分约100分）`,
     ];
@@ -37,11 +37,11 @@ export class 分数 extends Component {
       this.结算藏品();
       const 新完成成就 = this.结算成就();
       await 上传客户端数据(); // todo 上传客户端数据, 此时服务器处理先驱者
-      玩家.先驱者 = await 获取先驱者请求()
+      玩家.先驱者 = await 获取先驱者请求();
       const 先驱者成就 = this.结算成就();
-      const 完成成就 = [...新完成成就, ...先驱者成就]
+      const 完成成就 = [...新完成成就, ...先驱者成就];
 
-      保存玩家()
+      保存玩家();
       删除存档(存档.存档名称);
 
       if (完成成就.length > 0) {
@@ -56,11 +56,13 @@ export class 分数 extends Component {
         texts.push('你本次没有新完成的成就哦');
       }
     }
-    
+
     // 藏品
-    if(对象求和(存档.新藏品) > 0){
-      const str = Object.entries(存档.新藏品).map(([k,v])=>`「${k}」*${v}`).join('，')
-      texts.push(`本次获得藏品${str}`)
+    if (对象求和(存档.新藏品) > 0) {
+      const str = Object.entries(存档.新藏品)
+        .map(([k, v]) => `「${k}」*${v}`)
+        .join('，');
+      texts.push(`本次获得藏品${str}`);
     }
     texts.push('感谢你的游玩，我们下次再见~');
 
@@ -79,7 +81,7 @@ export class 分数 extends Component {
       async () => {
         const 新昵称 = this.输入框.getComponent(EditBox).string?.trim()?.substring(0, 50);
         if (新昵称) {
-          玩家.客户端数据.名称 = 新昵称
+          玩家.客户端数据.名称 = 新昵称;
           await 上传客户端数据();
         }
         director.loadScene('首页');
@@ -113,14 +115,16 @@ export class 分数 extends Component {
 
     const 得分 = 剧情得分 + 属性得分 + 30;
     存档.其他.最终得分 = 得分;
-    return { 剧情得分, 属性得分, 最终得分: 得分}
+    return { 剧情得分, 属性得分, 最终得分: 得分 };
   }
 
   结算藏品() {
     const old = 玩家.客户端数据.藏品 ?? {};
     const add = 存档.新藏品 ?? {};
     const res: Record<string, number> = {};
-    Object.entries({...old, ...add}).forEach(([k, v]) => res[k] = (old[k]||0)+(add[k]||0));
+    Object.entries({ ...old, ...add }).forEach(
+      ([k, v]) => (res[k] = (old[k] || 0) + (add[k] || 0)),
+    );
     玩家.客户端数据.藏品 = res;
   }
 

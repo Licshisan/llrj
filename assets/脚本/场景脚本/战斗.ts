@@ -102,14 +102,14 @@ export class 战斗 extends Component {
       return;
     }
 
-    let 敌人 = null
-    try{
+    let 敌人 = null;
+    try {
       敌人 = 敌人配置?.创建敌人 ? 敌人配置.创建敌人() : 敌人配置;
-    }catch(e) {
+    } catch (e) {
       this.结束战斗(`敌人加载失败:${e}（请反馈开发者）`);
-      return
+      return;
     }
-  
+
     if (!敌人) {
       this.结束战斗(`未知的敌人：【${敌人名称}】（请反馈开发者）`);
       return;
@@ -340,19 +340,19 @@ export class 战斗 extends Component {
     枪械按钮.on(Node.EventType.TOUCH_END, this.点击枪, this);
 
     // 新增
-    this.按钮容器.getChildByName('双枪').active = 存档.天赋.枪弹专家 > 0 && 存档.物品.枪 >= 2
+    this.按钮容器.getChildByName('双枪').active = 存档.天赋.枪弹专家 > 0 && 存档.物品.枪 >= 2;
     const 双枪按钮 = this.按钮容器.getChildByName('双枪');
     双枪按钮.targetOff(this);
     双枪按钮.on(Node.EventType.TOUCH_END, this.点击双枪, this);
 
-    this.按钮容器.getChildByName('居合').active = 存档.天赋.祖传黑刀 > 0 && 存档.物品.黑刀 >= 5
+    this.按钮容器.getChildByName('居合').active = 存档.天赋.祖传黑刀 > 0 && 存档.物品.黑刀 >= 5;
     const 居合按钮 = this.按钮容器.getChildByName('居合');
     居合按钮.targetOff(this);
     居合按钮.on(Node.EventType.TOUCH_END, this.点击居合, this);
   }
 
   点击攻击() {
-    this.node.getComponent(主页).播放文本("");
+    this.node.getComponent(主页).播放文本('');
     this.对局.主角.方法 = this.对局.主角.方法 || '普攻';
     this.对局.攻击 = {
       初始值: this.对局.主角.攻击,
@@ -424,8 +424,8 @@ export class 战斗 extends Component {
     }
 
     // 特殊
-    if(this.对局.主角.其他.已触发居合){
-      this.按钮容器.getChildByName('居合').active = false
+    if (this.对局.主角.其他.已触发居合) {
+      this.按钮容器.getChildByName('居合').active = false;
     }
 
     // 结算
@@ -730,14 +730,14 @@ export class 战斗 extends Component {
   }
 
   点击双枪() {
-    this.对局.主角.其他.开启双枪 = !this.对局.主角.其他.开启双枪 
+    this.对局.主角.其他.开启双枪 = !this.对局.主角.其他.开启双枪;
     const 双枪按钮 = this.按钮容器.getChildByName('双枪');
     双枪按钮.getComponent(Label).string =
       `双枪\n【${['关', '开'][Number(this.对局.主角.其他.开启双枪)]}】`;
   }
 
   点击居合() {
-    this.对局.主角.其他.开启居合 = !this.对局.主角.其他.开启居合 
+    this.对局.主角.其他.开启居合 = !this.对局.主角.其他.开启居合;
     const 居合按钮 = this.按钮容器.getChildByName('居合');
     居合按钮.getComponent(Label).string =
       `居合\n【${['关', '开'][Number(this.对局.主角.其他.开启居合)]}】`;

@@ -32,9 +32,9 @@ interface 客户端数据 {
 }
 
 export interface 服务器数据 {
-  赞助: number,
-  称号: string,
-  补偿: any,
+  赞助: number;
+  称号: string;
+  补偿: any;
 }
 
 export interface 先驱者信息 {
@@ -44,13 +44,13 @@ export interface 先驱者信息 {
 }
 
 export interface 排行榜结果 {
-  玩家列表:  {
-    id: number,
-    名称: string,
+  玩家列表: {
+    id: number;
+    名称: string;
     得分: number;
     排名: number;
-  }[],
-  自身: number
+  }[];
+  自身: number;
 }
 
 export interface 存档记录 {
@@ -61,7 +61,7 @@ export interface 存档记录 {
   创建时间: string;
 
   存档: any;
-  玩家: 玩家信息
+  玩家: 玩家信息;
 }
 
 function 获取玩家校验信息() {
@@ -130,8 +130,7 @@ export async function 登录请求(): Promise<玩家信息> {
   return result.data;
 }
 
-
-export async function 上传消息请求(data: any, level = "info") {
+export async function 上传消息请求(data: any, level = 'info') {
   const result = await 请求JSON<{ id: number }>('/log', {
     method: 'POST',
     body: {
@@ -148,7 +147,7 @@ export async function 上报错误(data: any) {
     method: 'POST',
     body: {
       ...获取玩家校验信息(),
-      level: "error",
+      level: 'error',
       log: data,
     },
   });

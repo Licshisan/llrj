@@ -29,36 +29,33 @@ export class 设置 extends Component {
     this.按钮容器.getChildByName('速度').on(Button.EventType.CLICK, this.点击速度, this);
     this.按钮容器.getChildByName('暗夜').on(Button.EventType.CLICK, this.点击暗夜, this);
 
+    this.按钮容器.getChildByName('自动买果子').active = true;
+    this.按钮容器.getChildByName('自动买果子').on(
+      Button.EventType.CLICK,
+      () => {
+        设置管理器.设置.自动买果子 = !设置管理器.设置.自动买果子;
+        设置管理器.保存设置();
+        播放文本(
+          this.标签,
+          `已${设置管理器.设置.自动买果子 ? '开启' : '关闭'}自动买果子，在县城如果果子数量低于5自动买5个`,
+        );
+      },
+      this,
+    );
 
-      this.按钮容器.getChildByName('自动买果子').active = true;
-      this.按钮容器.getChildByName('自动买果子').on(
-        Button.EventType.CLICK,
-        () => {
-          设置管理器.设置.自动买果子 = !设置管理器.设置.自动买果子;
-          设置管理器.保存设置();
-          播放文本(
-            this.标签,
-            `已${设置管理器.设置.自动买果子 ? '开启' : '关闭'}自动买果子，在县城如果果子数量低于5自动买5个`,
-          );
-        },
-        this,
-      );
-
-
-      this.按钮容器.getChildByName('批量购买').active = true;
-      this.按钮容器.getChildByName('批量购买').on(
-        Button.EventType.CLICK,
-        () => {
-          设置管理器.设置.批量购买 = !设置管理器.设置.批量购买;
-          设置管理器.保存设置();
-          播放文本(
-            this.标签,
-            `已${设置管理器.设置.批量购买 ? '开启' : '关闭'}批量购买，商店购买数量增加10倍`,
-          );
-        },
-        this,
-      );
-
+    this.按钮容器.getChildByName('批量购买').active = true;
+    this.按钮容器.getChildByName('批量购买').on(
+      Button.EventType.CLICK,
+      () => {
+        设置管理器.设置.批量购买 = !设置管理器.设置.批量购买;
+        设置管理器.保存设置();
+        播放文本(
+          this.标签,
+          `已${设置管理器.设置.批量购买 ? '开启' : '关闭'}批量购买，商店购买数量增加10倍`,
+        );
+      },
+      this,
+    );
 
     this.按钮容器.getChildByName('防误触').on(
       Button.EventType.CLICK,

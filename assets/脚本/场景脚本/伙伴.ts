@@ -60,7 +60,7 @@ export class 伙伴 extends Component {
       this,
     );
 
-    this.切换2.active = 存档.伙伴.小兰关系 > 0
+    this.切换2.active = 存档.伙伴.小兰关系 > 0;
     this.切换2.on(
       Button.EventType.CLICK,
       () => {
@@ -72,7 +72,7 @@ export class 伙伴 extends Component {
       this,
     );
 
-    this.切换3.active = 存档.伙伴.青芽关系 > 0
+    this.切换3.active = 存档.伙伴.青芽关系 > 0;
     this.切换3.on(
       Button.EventType.CLICK,
       () => {
@@ -84,53 +84,52 @@ export class 伙伴 extends Component {
       this,
     );
 
-
     this.退出按钮.on(Button.EventType.CLICK, () => director.loadScene('主页'), this);
 
-      this.一键喂果.active = true;
-      this.一键喂药.active = true;
-      this.一键喂果.on(
-        Button.EventType.CLICK,
-        () => {
-          globalThis.确认参数 = {
-            文本: '确定要一次性投喂所有果子给晓月吗？',
-            按钮: {
-              确定: () => {
-                存档.伙伴.连续不喂食晓月天数 = 0;
-                存档.伙伴.今日喂食晓月 = 1;
-                const 投喂果子数 = 存档.物品.果子;
-                存档.物品.果子 -= 投喂果子数;
-                const 伙伴互动增加好感 = 计算数值('伙伴互动增加好感', 投喂果子数);
-                存档.伙伴.晓月好感 += 伙伴互动增加好感;
-                director.loadScene('伙伴');
-              },
-              返回: () => director.loadScene('伙伴'),
+    this.一键喂果.active = true;
+    this.一键喂药.active = true;
+    this.一键喂果.on(
+      Button.EventType.CLICK,
+      () => {
+        globalThis.确认参数 = {
+          文本: '确定要一次性投喂所有果子给晓月吗？',
+          按钮: {
+            确定: () => {
+              存档.伙伴.连续不喂食晓月天数 = 0;
+              存档.伙伴.今日喂食晓月 = 1;
+              const 投喂果子数 = 存档.物品.果子;
+              存档.物品.果子 -= 投喂果子数;
+              const 伙伴互动增加好感 = 计算数值('伙伴互动增加好感', 投喂果子数);
+              存档.伙伴.晓月好感 += 伙伴互动增加好感;
+              director.loadScene('伙伴');
             },
-          };
-          director.loadScene('确认');
-        },
-        this,
-      );
-      this.一键喂药.on(
-        Button.EventType.CLICK,
-        () => {
-          globalThis.确认参数 = {
-            文本: '确定要一次性投喂所有伤药给晓月吗？',
-            按钮: {
-              确定: () => {
-                const 投喂伤药数 = 存档.物品.伤药;
-                存档.物品.伤药 -= 投喂伤药数;
-                const 伙伴互动增加好感 = 计算数值('伙伴互动增加好感', 投喂伤药数 * 2);
-                存档.伙伴.晓月好感 += 伙伴互动增加好感;
-                director.loadScene('伙伴');
-              },
-              返回: () => director.loadScene('伙伴'),
+            返回: () => director.loadScene('伙伴'),
+          },
+        };
+        director.loadScene('确认');
+      },
+      this,
+    );
+    this.一键喂药.on(
+      Button.EventType.CLICK,
+      () => {
+        globalThis.确认参数 = {
+          文本: '确定要一次性投喂所有伤药给晓月吗？',
+          按钮: {
+            确定: () => {
+              const 投喂伤药数 = 存档.物品.伤药;
+              存档.物品.伤药 -= 投喂伤药数;
+              const 伙伴互动增加好感 = 计算数值('伙伴互动增加好感', 投喂伤药数 * 2);
+              存档.伙伴.晓月好感 += 伙伴互动增加好感;
+              director.loadScene('伙伴');
             },
-          };
-          director.loadScene('确认');
-        },
-        this,
-      );
+            返回: () => director.loadScene('伙伴'),
+          },
+        };
+        director.loadScene('确认');
+      },
+      this,
+    );
   }
 
   更新() {
