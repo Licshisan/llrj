@@ -131,7 +131,7 @@ export class 主页 extends Component {
 
   回档() {
     this.scheduleOnce(() => {
-      存档.当前事件 = "食品店"
+      存档.天数 = 180
       if (存档.当前剧情) {
         director.loadScene('剧情');
       } else if (存档.当前敌人) {
@@ -505,10 +505,9 @@ export class 主页 extends Component {
       return false;
     }
 
-    // 领取补偿 todo
-    const 补偿 = (玩家.服务器数据?.补偿 as Record<string, number>) || {};
-    const 有可领补偿 = Object.values(补偿).some((val) => val > 0);
-    if (有可领补偿) {
+    // 领取补偿
+    const 补偿 = (玩家.server_info?.compensations as Record<string, number>) || {};
+    if (对象求和(补偿) && !存档.其他.拒绝领取补偿) {
       this.node.getComponent(事件).触发事件('领取补偿');
       return false;
     }

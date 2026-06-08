@@ -146,18 +146,17 @@ export async function 加载游戏内容() {
 
     // 断线重传 并且不是 转移玩家
     if (
-      玩家管理器.玩家.客户端数据.更新时间 > player.客户端数据.更新时间 &&
+      玩家管理器.玩家.client_info.updated_at > player.client_info?.updated_at &&
       player.id === 玩家管理器.玩家.id
     ) {
       player = await 上传客户端数据();
     }
 
     if (player.id) 玩家管理器.玩家.id = player.id;
-    if (player.用户标识) 玩家管理器.玩家.用户标识 = player.用户标识;
-    if (player.客户端数据) 玩家管理器.玩家.客户端数据 = player.客户端数据;
-    if (player.服务器数据) 玩家管理器.玩家.服务器数据 = player.服务器数据;
-    if (player.创建时间) 玩家管理器.玩家.创建时间 = player.创建时间;
-    if (player.上次登录时间) 玩家管理器.玩家.上次登录时间 = player.上次登录时间;
+    if (player.uid) 玩家管理器.玩家.uid = player.uid;
+    if (player.client_info) 玩家管理器.玩家.client_info = player.client_info;
+    if (player.server_info) 玩家管理器.玩家.server_info = player.server_info;
+    if (player.created_at) 玩家管理器.玩家.created_at = player.created_at;
 
     玩家管理器.保存玩家();
   } catch (e) {

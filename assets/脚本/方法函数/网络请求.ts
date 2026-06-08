@@ -1,210 +1,180 @@
 import { 存档 } from '../管理器/存档管理器';
 import { 玩家 } from '../管理器/玩家管理器';
 
-// todo 完成后端
-export const 服务器地址 = 'http://localhost:3000';
+export const 服务器地址 = 'http://localhost:8080';
 
-export interface 接口响应<T = any> {
-  code: number;
-  msg: string;
-  data?: T;
-}
+type 请求方法 = 'GET' | 'POST';
 
-export interface 玩家信息 {
+export interface PlayerInfo {
   id: number;
-  用户标识: string;
-  客户端数据?: 客户端数据;
-  服务器数据?: 服务器数据;
-  创建时间?: string;
-  更新时间?: string;
-  上次登录时间?: string;
+  uid?: string;
+  client_info?: any;
+  server_info?: any;
+  created_at?: string;
+  updated_at?: string;
 }
 
-interface 客户端数据 {
+export interface ListItem {
+  player_id: number;
+  player_name: string;
+  score: number;
+  rank: number;
+}
+
+export interface LeaderboardResult {
+  list: ListItem[];
+  self: number;
+}
+
+export interface PioneerInfo {
   id: number;
-  名称: string;
-  战胜语: string;
-  战败语: string;
-  积分: number;
-  成就: any[];
-  藏品: any[];
-  更新时间?: string;
+  name: string;
+  description: string;
+  player_id: number;
+  player_name: string;
+  created_at: string;
 }
 
-export interface 服务器数据 {
-  赞助: number;
-  称号: string;
-  补偿: any;
-}
-
-export interface 先驱者信息 {
+export interface SaveInfo {
   id: number;
-  名称: string;
-  完成时间: any;
-}
-
-export interface 排行榜结果 {
-  玩家列表: {
-    id: number;
-    名称: string;
-    得分: number;
-    排名: number;
-  }[];
-  自身: number;
-}
-
-export interface 存档记录 {
-  id: number;
-  天数: number;
-  存档名: string;
-  存档: any;
-  创建时间: string;
-
-  玩家: {
-    id: number;
-    客户端数据?: 客户端数据;
-    服务器数据?: 服务器数据;
-  };
+  save_name: string;
+  save: any;
+  player: any;
 }
 
 function 获取玩家校验信息() {
   return {
-    玩家编号: 玩家.id,
-    用户标识: 玩家.用户标识,
+    uid: 玩家.uid,
+    id: 玩家.id,
   };
 }
 
+function 拼接查询(参数: Record<string, any>) {
+  const 查询 = new URLSearchParams();
+  for (const 键 in 参数) {
+    const 值 = 参数[键];
+    if (值 !== undefined && 值 !== null && 值 !== '') {
+      查询.set(键, String(值));
+    }
+  }
+  const 字符串 = 查询.toString();
+  return 字符串 ? `?${字符串}` : '';
+}
+
 export async function 请求JSON<T = any>(
-  path: string,
-  options: {
-    method?: 'GET' | 'POST';
-    body?: any;
-    timeout?: number;
-  } = {},
-): Promise<接口响应<T>> {
-  try{
+  路径: string,
+  配置: { 方法?: 请求方法; 数据?: any; 超时?: number } = {},
+): Promise<T | null> {
+  try {
+    const 控制器 = new AbortController();
+    const 超时编号 = 配置.超时
+      ? setTimeout(() => 控制器.abort(), 配置.超时)
+      : null;
 
-  const method = options.method || 'GET';
-  const headers: Record<string, string> = {};
-  const requestOptions: RequestInit = { method, headers };
+    const 响应 = await fetch(`${服务器地址}${路径}`, {
+      method: 配置.方法 || 'GET',
+      headers: 配置.数据 === undefined ? undefined : { 'Content-Type': 'application/json' },
+      body: 配置.数据 === undefined ? undefined : JSON.stringify(配置.数据),
+      signal: 控制器.signal,
+    });
 
-  if (options.body !== undefined) {
-    headers['Content-Type'] = 'application/json';
-    requestOptions.body = JSON.stringify(options.body);
-  }
-
-  const 请求 = fetch(`${服务器地址}${path}`, requestOptions).then(async (response) => {
-    let data: 接口响应<T> | null = null;
-    try {
-      data = await response.json();
-    } catch (e) {
-      data = null;
+    if (超时编号) {
+      clearTimeout(超时编号);
     }
 
-    if (!response.ok || !data) {
-      throw new Error(data?.msg || `网络请求失败：${response.status}`);
+    const 原始数据 = await 响应.json().catch(() => null);
+    if (!响应.ok) {
+      console.warn('网络请求失败', 路径, 响应.status, 原始数据);
+      return null;
     }
 
-    if (data.code !== 200) {
-      throw new Error(data.msg || '服务器返回失败');
-    }
-
-    return data;
-  });
-
-  if (!options.timeout) {
-    return 请求;
-  }
-
-  const 超时 = new Promise<接口响应<T>>((_, reject) => {
-    setTimeout(
-      () => reject(new Error(`请求超时（${Math.floor(options.timeout / 1000)}秒）`)),
-      options.timeout,
-    );
-  });
-
-  return Promise.race([请求, 超时]);
-  }catch(e){
-    console.error(e)
+    return 原始数据 as T;
+  } catch (错误) {
+    console.warn('网络请求异常', 路径, 错误);
+    return null;
   }
 }
 
-export async function 登录请求(): Promise<玩家信息> {
-  const result = await 请求JSON<玩家信息>('/login', {
-    method: 'POST',
-    body: { 用户标识: 玩家.用户标识 },
-    timeout: 5000,
+export async function 登录请求(): Promise<PlayerInfo | null> {
+  return 请求JSON<PlayerInfo>('/login', {
+    方法: 'POST',
+    数据: { uid: 玩家.uid },
+    超时: 5000,
   });
-  return result.data;
+}
+
+export async function 上传客户端数据(): Promise<PlayerInfo | null> {
+  return 请求JSON<PlayerInfo>('/player/upload', {
+    方法: 'POST',
+    数据: {
+      ...获取玩家校验信息(),
+      client_info: 玩家.client_info,
+    },
+  });
+}
+
+export async function 上传存档请求(): Promise<any> {
+  return 请求JSON('/save/upload', {
+    方法: 'POST',
+    数据: {
+      ...获取玩家校验信息(),
+      day: 存档.天数,
+      save_name: 存档.存档名称,
+      save_difficulty: 存档.游戏难度,
+      save: 存档,
+    },
+  });
+}
+
+export async function 获取排行榜请求(): Promise<LeaderboardResult | null> {
+  return 请求JSON<LeaderboardResult>(`/leaderboard${拼接查询(获取玩家校验信息())}`);
+}
+
+export async function 获取藏品排行榜请求(): Promise<LeaderboardResult | null> {
+  return 请求JSON<LeaderboardResult>(`/collection-leaderboard${拼接查询(获取玩家校验信息())}`);
+}
+
+export async function 获取先驱者请求(): Promise<PioneerInfo[] | null> {
+  return 请求JSON<PioneerInfo[]>(`/pioneers${拼接查询(获取玩家校验信息())}`);
+}
+
+export async function 获取随机存档请求(day: number, save_difficulty?: string): Promise<SaveInfo | null> {
+  return 请求JSON<SaveInfo>(
+    `/random-save${拼接查询({
+      ...获取玩家校验信息(),
+      day,
+      save_difficulty,
+    })}`,
+  );
+}
+
+export async function 获取榜一大哥请求(save_difficulty?: string): Promise<SaveInfo | null> {
+  return 请求JSON<SaveInfo>(
+    `/top-save${拼接查询({
+      ...获取玩家校验信息(),
+      save_difficulty,
+    })}`,
+  );
 }
 
 export async function 上传消息请求(data: any, level = 'info') {
-  const result = await 请求JSON<{ id: number }>('/log', {
-    method: 'POST',
-    body: {
+  return 请求JSON('/log', {
+    方法: 'POST',
+    数据: {
       ...获取玩家校验信息(),
       level,
       log: data,
     },
   });
-  return result.data;
 }
 
 export async function 上报错误(data: any) {
-  const result = await 请求JSON<{ id: number }>('/log', {
-    method: 'POST',
-    body: {
-      ...获取玩家校验信息(),
-      level: 'error',
-      log: data,
-    },
+  return 上传消息请求(data, 'error');
+}
+
+export async function 确认领取补偿请求(): Promise<PlayerInfo | null> {
+  return 请求JSON<PlayerInfo>('/compensations/claim', {
+    方法: 'POST',
+    数据: 获取玩家校验信息(),
   });
-  return result.data;
-}
-
-export async function 上传存档请求() {
-  const result = await 请求JSON<存档记录>('/save', {
-    method: 'POST',
-    body: {
-      ...获取玩家校验信息(),
-      day: 存档.天数,
-      save_name: 存档.存档名称,
-      save: 存档,
-    },
-  });
-  return result.data;
-}
-
-export async function 上传客户端数据() {
-  const result = await 请求JSON<玩家信息>('/ext-info', {
-    method: 'POST',
-    body: {
-      ...获取玩家校验信息(),
-      客户端数据: 玩家.客户端数据,
-    },
-  });
-  return result.data;
-}
-
-export async function 获取随机存档请求(day: number) {
-  const { 玩家编号, 用户标识 } = 获取玩家校验信息();
-  const query = [
-    `玩家编号=${encodeURIComponent(玩家编号)}`,
-    `用户标识=${encodeURIComponent(用户标识)}`,
-    `day=${encodeURIComponent(day)}`,
-  ].join('&');
-
-  const result = await 请求JSON<存档记录>(`/random-save?${query}`);
-  return result.data;
-}
-
-export async function 获取榜一大哥请求() {
-  const { 玩家编号, 用户标识 } = 获取玩家校验信息();
-  const query = [
-    `玩家编号=${encodeURIComponent(玩家编号)}`,
-    `用户标识=${encodeURIComponent(用户标识)}`,
-  ].join('&');
-
-  const result = await 请求JSON<存档记录>(`/random-save?${query}`);
-  return result.data;
 }

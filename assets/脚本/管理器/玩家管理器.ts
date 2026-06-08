@@ -1,25 +1,32 @@
 import { error, sys, warn } from 'cc';
-import { 排行榜结果, 服务器数据, 先驱者信息 } from '../方法函数/网络请求';
+import { LeaderboardResult, PioneerInfo } from '../方法函数/网络请求';
 
 export const 默认玩家 = {
   id: 0,
-  用户标识: Math.random().toString(36).slice(2, 8),
-  客户端数据: {
-    战胜语: '',
-    战败语: '',
-    积分: 0,
-    成就: [] as { 名称: string; 描述: string; 完成时间: number }[],
-    藏品: {} as Record<string, number>,
-    更新时间: '',
-  } as any,
-  服务器数据: {} as 服务器数据,
-  创建时间: '',
-  上次登录时间: '',
+  uid: Math.random().toString(36).slice(2, 12),
+  client_info: {
+    name: "",
+    show_text: "",
+    win_text: '',
+    fail_text: '',
+    scores: 0,
+    achievements: [] as { name: string; description: string; achieve_at: number }[],
+    collections: {} as Record<string, number>,
+    created_at: Date.now(),
+    updated_at: Date.now(),
+    pass_count: 0
+  },
+  server_info: {
+    title: "",
+    zz:"",
+    compensations:{}
+  },
+  created_at: '',
 
   // 单独的接口
-  先驱者: [] as 先驱者信息[],
-  排行榜: { 玩家列表: [], 自身: 0 } as 排行榜结果,
-  藏品排行榜: { 玩家列表: [], 自身: 0 } as 排行榜结果,
+  pioneers: [] as PioneerInfo[],
+  leaderboard: { list: [], self: 0 } as LeaderboardResult,
+  collection_leaderboard: { list: [], self: 0 } as LeaderboardResult,
 };
 
 export let 玩家: typeof 默认玩家 = JSON.parse(JSON.stringify(默认玩家));
@@ -60,7 +67,7 @@ export function 加载玩家() {
 
 export function 保存玩家() {
   try {
-    玩家.客户端数据.更新时间 = Date.now();
+    玩家.client_info.updated_at = Date.now();
     const 玩家字符串 = JSON.stringify(玩家);
     sys.localStorage.setItem('玩家', 玩家字符串);
   } catch (e) {

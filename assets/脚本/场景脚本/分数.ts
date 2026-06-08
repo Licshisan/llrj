@@ -3,10 +3,10 @@ import { 删除存档, 存档 } from '../管理器/存档管理器';
 import { 创建动画文字, 播放文本, 淡入 } from '../方法函数/动画效果';
 import { 设置 } from '../管理器/设置管理器';
 import { 计算最大攻击, 计算最大生命, 计算最大防御 } from '../方法函数/属性计算';
-import { 默认成就表 } from '../默认内容/成就表';
+import { 计算排行榜积分总和, 默认成就表 } from '../默认内容/成就表';
 import type { 成就项目类型 } from '../默认内容/成就表';
 import { 默认套餐表 } from '../默认内容/套餐表';
-import { 上传客户端数据 } from '../方法函数/网络请求';
+import { 上传客户端数据, 获取先驱者请求 } from '../方法函数/网络请求';
 import { 保存玩家, 玩家 } from '../管理器/玩家管理器';
 import { 对象求和 } from '../方法函数/公共函数';
 const { ccclass, property } = _decorator;
@@ -36,8 +36,8 @@ export class 分数 extends Component {
     } else {
       this.结算藏品();
       const 新完成成就 = this.结算成就();
-      await 上传客户端数据(); // todo 上传客户端数据, 此时服务器处理先驱者
-      玩家.先驱者 = await 获取先驱者请求();
+      await 上传客户端数据();
+      玩家.pioneers = await 获取先驱者请求();
       const 先驱者成就 = this.结算成就();
       const 完成成就 = [...新完成成就, ...先驱者成就];
 
@@ -81,7 +81,7 @@ export class 分数 extends Component {
       async () => {
         const 新昵称 = this.输入框.getComponent(EditBox).string?.trim()?.substring(0, 50);
         if (新昵称) {
-          玩家.客户端数据.名称 = 新昵称;
+          玩家.client_info.name = 新昵称;
           await 上传客户端数据();
         }
         director.loadScene('首页');
@@ -119,30 +119,31 @@ export class 分数 extends Component {
   }
 
   结算藏品() {
-    const old = 玩家.客户端数据.藏品 ?? {};
+    const old = 玩家.client_info.collections ?? {};
     const add = 存档.新藏品 ?? {};
     const res: Record<string, number> = {};
     Object.entries({ ...old, ...add }).forEach(
       ([k, v]) => (res[k] = (old[k] || 0) + (add[k] || 0)),
     );
-    玩家.客户端数据.藏品 = res;
+    玩家.client_info.collections = res;
   }
 
   结算成就() {
     const 完成成就: 成就项目类型[] = [];
     for (const 成就 of 默认成就表) {
-      if (!成就.条件 || 玩家.客户端数据.成就.find((c) => c.名称 === 成就.名称)) continue;
-
+      if (!成就.条件 || 玩家.client_info.achievements.find((c) => c.name === 成就.名称)) continue;
+      if(成就.排行类) continue
       const 新成就 = {
-        名称: 成就.名称,
-        描述: 成就.描述,
-        完成时间: Date.now(),
+        name: 成就.名称,
+        description: 成就.描述,
+        achieve_at: Date.now(),
       };
 
-      玩家.客户端数据.成就.push(新成就);
+      玩家.client_info.achievements.push(新成就);
       成就.效果?.完成成就?.(成就.名称);
       完成成就.push(成就);
     }
+    玩家.client_info.scores = 计算排行榜积分总和()
     return 完成成就;
   }
 }
