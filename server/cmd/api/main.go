@@ -10,10 +10,10 @@ import (
 	"syscall"
 	"time"
 
-	"llrj-remake/server/internal/config"
-	"llrj-remake/server/internal/db"
-	httpapi "llrj-remake/server/internal/http"
-	"llrj-remake/server/internal/service"
+	"server/internal/config"
+	"server/internal/db"
+	httpapi "server/internal/http"
+	"server/internal/service"
 )
 
 func main() {
@@ -34,8 +34,6 @@ func main() {
 			log.Fatalf("migrate database: %v", err)
 		}
 	}
-
-	db.StartSaveCleanup(ctx, pool, cfg.SaveRetentionDays)
 
 	router := httpapi.NewRouter(service.New(pool), cfg.AdminKey)
 	server := &http.Server{

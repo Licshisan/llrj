@@ -10,7 +10,6 @@ import (
 type Config struct {
 	Port              string
 	DatabaseURL       string
-	SaveRetentionDays int
 	AutoMigrate       bool
 	AdminKey          string
 }
@@ -21,7 +20,6 @@ func Load() Config {
 	return Config{
 		Port:              getEnv("APP_PORT", "3000"),
 		DatabaseURL:       getEnv("DATABASE_URL", "postgres://postgres:postgres@localhost:5432/llrj?sslmode=disable"),
-		SaveRetentionDays: getEnvInt("SAVE_RETENTION_DAYS", 30),
 		AutoMigrate:       getEnvBool("AUTO_MIGRATE", true),
 		AdminKey:          os.Getenv("ADMIN_KEY"),
 	}

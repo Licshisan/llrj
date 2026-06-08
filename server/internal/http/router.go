@@ -9,16 +9,15 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
-	"llrj-remake/server/internal/service"
+	"server/internal/service"
 )
 
 type Handler struct {
 	service  *service.Service
-	adminKey string
 }
 
-func NewRouter(svc *service.Service, adminKey string) http.Handler {
-	handler := &Handler{service: svc, adminKey: adminKey}
+func NewRouter(svc *service.Service) http.Handler {
+	handler := &Handler{service: svc}
 
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID)
@@ -29,14 +28,12 @@ func NewRouter(svc *service.Service, adminKey string) http.Handler {
 	r.Get("/health", handler.health)
 	r.Post("/login", handler.login)
 	r.Post("/log", handler.createLog)
-	r.Post("/rename", handler.rename)
-	r.Post("/ext-info", handler.updateExtInfo)
+	r.Post("/clinet-info", handler.updateClientInfo)
 	r.Post("/save", handler.createSave)
 	r.Get("/random-save", handler.randomSave)
 	r.Get("/ranking", handler.ranking)
 	r.Get("/collection-ranking", handler.collectionRanking)
-	r.Post("/save/cleanup", handler.cleanupSaves)
-	r.Post("/admin/player/transfer", handler.transferPlayer)
+	r.Get("/pioneers", handler.pioneers)
 
 	return r
 }
@@ -93,25 +90,7 @@ func (h *Handler) createLog(w http.ResponseWriter, r *http.Request) {
 	OK(w, "日志上报成功", map[string]int64{"id": id})
 }
 
-func (h *Handler) rename(w http.ResponseWriter, r *http.Request) {
-	var req struct {
-		PlayerID int64  `json:"player_id"`
-		UID      string `json:"uid"`
-		Name     string `json:"name"`
-	}
-	if !decodeJSON(w, r, &req) {
-		return
-	}
-
-	player, err := h.service.Rename(r.Context(), req.PlayerID, req.UID, req.Name)
-	if err != nil {
-		Fail(w, http.StatusBadRequest, err.Error())
-		return
-	}
-	OK(w, "玩家重命名成功", player)
-}
-
-func (h *Handler) updateExtInfo(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) updateClientInfo(w http.ResponseWriter, r *http.Request) {
 	var req struct {
 		PlayerID int64           `json:"player_id"`
 		UID      string          `json:"uid"`
@@ -175,23 +154,6 @@ func (h *Handler) randomSave(w http.ResponseWriter, r *http.Request) {
 	OK(w, "获取随机存档成功", record)
 }
 
-func (h *Handler) cleanupSaves(w http.ResponseWriter, r *http.Request) {
-	var req struct {
-		PlayerID int64  `json:"player_id"`
-		UID      string `json:"uid"`
-	}
-	if !decodeJSON(w, r, &req) {
-		return
-	}
-
-	count, err := h.service.CleanupPlayerSaves(r.Context(), req.PlayerID, req.UID)
-	if err != nil {
-		Fail(w, http.StatusBadRequest, err.Error())
-		return
-	}
-	OK(w, "存档清理成功", map[string]int64{"deleted": count})
-}
-
 func (h *Handler) ranking(w http.ResponseWriter, r *http.Request) {
 	playerID, err := parseInt64(r.URL.Query().Get("player_id"))
 	if err != nil {
@@ -224,21 +186,20 @@ func (h *Handler) collectionRanking(w http.ResponseWriter, r *http.Request) {
 	OK(w, "获取藏品排行榜成功", result)
 }
 
-func (h *Handler) transferPlayer(w http.ResponseWriter, r *http.Request) {
-	var req struct {
-		PlayerID int64  `json:"player_id"`
-		NewUID   string `json:"new_uid"`
-	}
-	if !decodeJSON(w, r, &req) {
-		return
-	}
-
-	player, err := h.service.TransferPlayer(r.Context(), r.Header.Get("X-Admin-Key"), h.adminKey, req.PlayerID, req.NewUID)
+func (h *Handler) pioneers(w http.ResponseWriter, r *http.Request) {
+	playerID, err := parseInt64(r.URL.Query().Get("player_id"))
 	if err != nil {
-		Fail(w, http.StatusUnauthorized, err.Error())
+		Fail(w, http.StatusBadRequest, "缺少player_id")
 		return
 	}
-	OK(w, "账号转移成功", player)
+	uid := strings.TrimSpace(r.URL.Query().Get("uid"))
+
+	result, err := h.service.CollectionRanking(r.Context(), playerID, uid)
+	if err != nil {
+		Fail(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	OK(w, "获取藏品排行榜成功", result)
 }
 
 func decodeJSON(w http.ResponseWriter, r *http.Request, target any) bool {

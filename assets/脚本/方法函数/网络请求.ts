@@ -55,13 +55,16 @@ export interface 排行榜结果 {
 
 export interface 存档记录 {
   id: number;
-  玩家编号: number;
   天数: number;
   存档名: string;
+  存档: any;
   创建时间: string;
 
-  存档: any;
-  玩家: 玩家信息;
+  玩家: {
+    id: number;
+    客户端数据?: 客户端数据;
+    服务器数据?: 服务器数据;
+  };
 }
 
 function 获取玩家校验信息() {
