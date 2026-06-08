@@ -58,18 +58,18 @@ export class 开场 extends Component {
     this.刷新按钮.on(Button.EventType.CLICK, () => this.点击刷新(), this);
   }
 
+  // todo 增加开场特质
   点击刷新() {
     this.刷新次数++;
     this.继续按钮.active = false;
     this.刷新按钮.active = false;
-    this.刷新按钮.getComponent(Label).string = `<刷新${this.刷新次数}/10>`;
+    this.刷新按钮.getComponent(Label).string = `<刷新${this.刷新次数}/12>`;
 
     this.当前天赋 = [];
 
     // todo 点击锁定天赋
-    // todo 天赋和特性数量分配
-    let 天赋数量 = 计算数值('天赋数量', 3);
-    if (Math.random() * 100 < 计算数值('额外天赋概率', 1)) {
+    let 天赋数量 = 计算数值('天赋数量', 1);
+    if (Math.random() * 100 < 计算数值('额外天赋概率', 20)) {
       天赋数量++;
     }
 
@@ -146,7 +146,7 @@ export class 开场 extends Component {
     序列.delay(1.5 / 设置.播放速度);
     序列.call(() => {
       淡入(this.继续按钮);
-      if (this.刷新次数 < 10) {
+      if (this.刷新次数 < 12) {
         淡入(this.刷新按钮);
       }
     });
