@@ -34,7 +34,7 @@ interface 客户端数据 {
 export interface 服务器数据 {
   赞助: number,
   称号: string,
-  补偿: any[],
+  补偿: any,
 }
 
 export interface 先驱者信息 {

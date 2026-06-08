@@ -19,7 +19,7 @@ import {
   计算最大防御,
   计算最大饥饿,
 } from '../方法函数/属性计算';
-import { 抽取项目, 抽取物品, 格式化金钱, 自然恢复生命 } from '../方法函数/公共函数';
+import { 抽取项目, 抽取物品, 格式化金钱, 自然恢复生命, 对象求和 } from '../方法函数/公共函数';
 import { 播放文本, 放大缩小 } from '../方法函数/动画效果';
 import { 事件 } from './事件';
 import { 战斗 } from './战斗';
@@ -680,6 +680,37 @@ export class 主页 extends Component {
       return false;
     }
 
+    // 江湖人士
+    if(存档.技能.世界感知 >=2 && 存档.游戏难度 === '残酷' || 存档.游戏难度 === '绝境'){
+      if(获取地区名称() === '县城' && Math.random() * 100 < 2){
+        this.基本消耗();
+        this.node.getComponent(事件).触发事件('打探江湖人士');
+        return false;
+      }
+
+      if((获取地区名称() === '县城' || 获取地区名称() === '山脉' || 获取地区名称() === '山林') && Math.random() * 100 < (存档.临时数据?.门派熟悉度?.青竹门 || 0) * 0.04){
+        this.基本消耗();
+        this.node.getComponent(事件).触发事件('偶遇青竹门');
+        return false;
+      }
+      if((获取地区名称() === '县城' || 获取地区名称() === '山脉' || 获取地区名称() === '山林') && Math.random() * 100 < (存档.临时数据?.门派熟悉度?.铁衣帮 || 0) * 0.04){
+        this.基本消耗();
+        this.node.getComponent(事件).触发事件('偶遇铁衣帮');
+        return false;
+      }
+      if((获取地区名称() === '县城' || 获取地区名称() === '山脉' || 获取地区名称() === '山林') && Math.random() * 100 < (存档.临时数据?.门派熟悉度?.玄水阁 || 0) * 0.04){
+        this.基本消耗();
+        this.node.getComponent(事件).触发事件('偶遇玄水阁');
+        return false;
+      }
+
+      if((获取地区名称() === '山脉' || 获取地区名称() === '山林' || 存档.当前地点 == "城中村") && Math.random() * 100 < 1 && 对象求和(存档.临时数据?.残页) > 0){
+        this.基本消耗();
+        this.node.getComponent(事件).触发事件('残页交易');
+        return false;
+      }
+    }
+
     // 城中村住房
     if (
       存档.当前地点 === '城中村' &&
@@ -687,6 +718,7 @@ export class 主页 extends Component {
       存档.技能.世界感知 >= 2 &&
       Math.random() * 100 < 1
     ) {
+      this.基本消耗();
       this.node.getComponent(事件).触发事件('租房中介');
       return false;
     }

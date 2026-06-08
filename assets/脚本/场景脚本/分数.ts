@@ -36,10 +36,8 @@ export class 分数 extends Component {
     } else {
       this.结算藏品();
       const 新完成成就 = this.结算成就();
-      const player = await 上传客户端数据(); // todo 上传客户端数据, 此时服务器处理先驱者,然后返回处理完的用户数据
-        if (player.服务器数据) 玩家.服务器数据 = player.服务器数据;
-
-      // 再结算一次先驱者
+      await 上传客户端数据(); // todo 上传客户端数据, 此时服务器处理先驱者
+      玩家.先驱者 = await 获取先驱者请求()
       const 先驱者成就 = this.结算成就();
       const 完成成就 = [...新完成成就, ...先驱者成就]
 
