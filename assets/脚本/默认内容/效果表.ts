@@ -73,9 +73,9 @@ export const 默认效果表 = [
     函数: (对局) => {
       if (对局.敌人.名称 === '镜像人') {
         存档.其他.挑战进度++;
-        const 增加攻击 = Math.floor(计算最大攻击() * 0.2);
-        const 增加防御 = Math.floor(计算最大防御() * 0.3);
-        const 增加生命 = Math.floor(计算最大生命() * 0.3);
+        const 增加攻击 = Math.floor(计算最大攻击() * 0.1);
+        const 增加防御 = Math.floor(计算最大防御() * 0.2);
+        const 增加生命 = Math.floor(计算最大生命() * 0.2);
         存档.攻击 += 增加攻击;
         存档.防御 += 增加防御;
         存档.最大生命 += 增加生命;
@@ -86,7 +86,7 @@ export const 默认效果表 = [
 
       if (对局.敌人.名称 === '榜一大哥') {
         存档.其他.挑战进度++;
-        const 增加攻击 = Math.floor(计算最大攻击() * 0.2);
+        const 增加攻击 = Math.floor(计算最大攻击() * 0.1);
         const 增加防御 = Math.floor(计算最大防御() * 0.2);
         const 增加生命 = Math.floor(计算最大生命() * 0.2);
         存档.攻击 += 增加攻击;
