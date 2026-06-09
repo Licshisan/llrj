@@ -1,6 +1,11 @@
 package server
 
-import "net/http"
+import (
+	"log"
+	"net"
+	"net/http"
+	"time"
+)
 
 func (a *App) Routes() http.Handler {
 	mux := http.NewServeMux()
@@ -15,7 +20,46 @@ func (a *App) Routes() http.Handler {
 	mux.HandleFunc("GET /pioneers", a.pioneers)
 	mux.HandleFunc("GET /random-save", a.randomSave)
 	mux.HandleFunc("GET /top-save", a.topSave)
-	return withCORS(withJSON(mux))
+	return withRequestLog(withCORS(withJSON(mux)))
+}
+
+type statusRecorder struct {
+	http.ResponseWriter
+	status int
+}
+
+func (r *statusRecorder) WriteHeader(status int) {
+	r.status = status
+	r.ResponseWriter.WriteHeader(status)
+}
+
+func withRequestLog(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		start := time.Now()
+		recorder := &statusRecorder{
+			ResponseWriter: w,
+			status:         http.StatusOK,
+		}
+
+		next.ServeHTTP(recorder, r)
+
+		log.Printf(
+			"request method=%s path=%s status=%d duration=%s remote=%s",
+			r.Method,
+			r.URL.RequestURI(),
+			recorder.status,
+			time.Since(start).Round(time.Millisecond),
+			remoteAddr(r),
+		)
+	})
+}
+
+func remoteAddr(r *http.Request) string {
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		return r.RemoteAddr
+	}
+	return host
 }
 
 func withJSON(next http.Handler) http.Handler {

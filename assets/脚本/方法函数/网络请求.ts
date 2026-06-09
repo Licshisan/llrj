@@ -1,7 +1,7 @@
 import { 存档 } from '../管理器/存档管理器';
 import { 玩家 } from '../管理器/玩家管理器';
 
-export const 服务器地址 = 'http://localhost:8080';
+export const 服务器地址 = 'http://124.221.159.129:8080';
 
 type 请求方法 = 'GET' | 'POST';
 
