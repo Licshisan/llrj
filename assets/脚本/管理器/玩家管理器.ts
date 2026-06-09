@@ -1,5 +1,5 @@
 import { error, sys, warn } from 'cc';
-import { LeaderboardResult, PioneerInfo } from '../方法函数/网络请求';
+import type { LeaderboardResult, PioneerInfo } from '../方法函数/网络请求';
 
 export const 默认玩家 = {
   id: 0,

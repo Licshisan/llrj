@@ -136,7 +136,7 @@ export interface 通用效果字段类型 {
 export type 时机名称类型 = keyof 通用效果字段类型;
 
 // 使用发布订阅模式 绑定游戏中关键时机
-export let 钩子函数对象: Partial<{ [K in 时机名称类型]: NonNullable<通用效果字段类型[K]>[] }> = {};
+export const 钩子函数对象: Partial<{ [K in 时机名称类型]: NonNullable<通用效果字段类型[K]>[] }> = {};
 
 export function 注册钩子<K extends 时机名称类型>(时机: K, 函数: NonNullable<通用效果字段类型[K]>) {
   if (!钩子函数对象[时机]) {

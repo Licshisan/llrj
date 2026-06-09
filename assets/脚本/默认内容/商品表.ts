@@ -335,7 +335,7 @@ const 原版商品表: 商品定义类型[] = [
 
       let rand = Math.random() * 100;
 
-      for (let reward of rewards) {
+      for (const reward of rewards) {
         if (rand < reward.rate) {
           reward.action();
           购买成功(`恭喜获得，${reward.text}`);
@@ -374,7 +374,7 @@ const 原版商品表: 商品定义类型[] = [
 
         let rand = Math.random() * 100;
 
-        for (let reward of rewards) {
+        for (const reward of rewards) {
           if (rand < reward.rate) {
             reward.action();
             return reward.key;
@@ -399,7 +399,7 @@ const 原版商品表: 商品定义类型[] = [
 
       let resultText = '恭喜获得，';
 
-      for (let key in resultCount) {
+      for (const key in resultCount) {
         resultText += `【${key}】*${resultCount[key]}！`;
       }
       购买成功(resultText);

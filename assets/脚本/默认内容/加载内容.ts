@@ -29,21 +29,21 @@ let 加载完成 = false;
 export function 注册钩子函数() {
   默认难度表.forEach((难度项) => {
     const 效果 = 难度项.效果;
-    for (let 时机 in 效果) {
+    for (const 时机 in 效果) {
       注册钩子(时机 as 钩子管理器.时机名称类型, 效果[时机]);
     }
   });
 
   默认套餐表.forEach((天赋项) => {
     const 效果 = 天赋项.效果;
-    for (let 时机 in 效果) {
+    for (const 时机 in 效果) {
       注册钩子(时机 as 钩子管理器.时机名称类型, 效果[时机]);
     }
   });
 
   默认制作表.forEach((制作项) => {
     const 效果 = 制作项.效果;
-    for (let 时机 in 效果) {
+    for (const 时机 in 效果) {
       注册钩子(时机 as 钩子管理器.时机名称类型, 效果[时机]);
     }
   });
@@ -54,28 +54,28 @@ export function 注册钩子函数() {
 
   默认特性表.forEach((特性项) => {
     const 效果 = 特性项.效果;
-    for (let 时机 in 效果) {
+    for (const 时机 in 效果) {
       注册钩子(时机 as 钩子管理器.时机名称类型, 效果[时机]);
     }
   });
 
   默认伙伴特性表.forEach((伙伴特性项) => {
     const 效果 = 伙伴特性项.效果;
-    for (let 时机 in 效果) {
+    for (const 时机 in 效果) {
       注册钩子(时机 as 钩子管理器.时机名称类型, 效果[时机]);
     }
   });
 
   默认特质表.forEach((特质项) => {
     const 效果 = 特质项.效果;
-    for (let 时机 in 效果) {
+    for (const 时机 in 效果) {
       注册钩子(时机 as 钩子管理器.时机名称类型, 效果[时机]);
     }
   });
 
   默认天赋表.forEach((天赋项) => {
     const 效果 = 天赋项.效果;
-    for (let 时机 in 效果) {
+    for (const 时机 in 效果) {
       注册钩子(时机 as 钩子管理器.时机名称类型, 效果[时机]);
     }
   });
@@ -83,7 +83,7 @@ export function 注册钩子函数() {
   默认藏品表.forEach((藏品项) => {
     const 效果 = 藏品项.效果;
     if (效果) {
-      for (let 时机 in 效果) {
+      for (const 时机 in 效果) {
         注册钩子(时机 as 钩子管理器.时机名称类型, 效果[时机]);
       }
     }
@@ -92,7 +92,7 @@ export function 注册钩子函数() {
   默认成就表.forEach((成就项) => {
     const 效果 = 成就项.效果;
     if (效果) {
-      for (let 时机 in 效果) {
+      for (const 时机 in 效果) {
         注册钩子(时机 as 钩子管理器.时机名称类型, 效果[时机]);
       }
     }
@@ -101,7 +101,7 @@ export function 注册钩子函数() {
   默认技能表.forEach((技能项) => {
     const 效果 = 技能项.效果;
     if (效果) {
-      for (let 时机 in 效果) {
+      for (const 时机 in 效果) {
         注册钩子(时机 as 钩子管理器.时机名称类型, 效果[时机]);
       }
     }

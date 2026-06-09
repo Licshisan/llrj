@@ -79,7 +79,7 @@ export class 开场 extends Component {
     }
 
     let 正面天赋数量 = 天赋数量;
-    let 负面天赋数量 = Math.min(天赋数量, 3);
+    const 负面天赋数量 = Math.min(天赋数量, 3);
 
     const 保留天赋 = 默认天赋表.find((x) => x.名称 === 设置.保留天赋);
     if (保留天赋 && 天赋数量 > 0) {

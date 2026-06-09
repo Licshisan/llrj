@@ -17,7 +17,7 @@ export class 住房 extends Component {
 
   中介: any;
   房源: any[];
-  当前序号: number = 0;
+  当前序号 = 0;
   start() {
     this.生成数据();
     this.显示首页();

@@ -1087,7 +1087,6 @@ export function 获取天赋颜色(天赋, 品质) {
   return 天赋.负面 ? 颜色配置[`负面`] : 颜色配置[品质];
 }
 
-// todo 修复所有增强字段 使其可以使用getter
 function 增强字段(t, 品质) {
   // 创建新对象，继承原对象的原型
   const 新对象 = Object.create(Object.getPrototypeOf(t));

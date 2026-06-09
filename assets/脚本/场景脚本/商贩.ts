@@ -3,10 +3,10 @@ import { 存档, 保存存档 } from '../管理器/存档管理器';
 import { 播放文本 } from '../方法函数/动画效果';
 const { ccclass, property } = _decorator;
 
-export type 商贩项目类型 = {
+export interface 商贩项目类型 {
   名称: string | ((peddler: 商贩) => string);
   购买: (peddler: 商贩) => string;
-};
+}
 
 @ccclass('商贩')
 export class 商贩 extends Component {
@@ -19,10 +19,10 @@ export class 商贩 extends Component {
   @property(Prefab) 选择按钮预制体: Prefab = null;
 
   // 商贩相关属性
-  sellOut: boolean = false;
-  itemName: string = '';
-  itemNum: number = 0;
-  itemPrice: number = 0;
+  sellOut = false;
+  itemName = '';
+  itemNum = 0;
+  itemPrice = 0;
 
   onLoad() {
     this.更新();

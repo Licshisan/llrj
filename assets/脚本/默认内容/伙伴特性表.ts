@@ -577,7 +577,6 @@ const 特性表4: 伙伴特性原始定义类型[] = [
   },
 ];
 
-// todo 修复所有增强字段 使其可以使用getter
 function 增强字段(伙伴, 伙伴名) {
   // 创建新对象，继承原对象的原型
   const 新对象 = Object.create(Object.getPrototypeOf(伙伴));

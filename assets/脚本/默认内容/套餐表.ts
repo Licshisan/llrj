@@ -1,7 +1,7 @@
 import { 抽取物品 } from '../方法函数/公共函数';
 import { 计算套餐等级 } from '../方法函数/等级计算';
 import { 存档 } from '../管理器/存档管理器';
-import { 通用效果字段类型 } from '../管理器/钩子管理器';
+import type { 通用效果字段类型 } from '../管理器/钩子管理器';
 
 interface 套餐定义类型 {
   名称: string;

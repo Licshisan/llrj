@@ -16,7 +16,8 @@ import { 保存存档, 存档 } from '../管理器/存档管理器';
 import { 计算最大生命, 计算最大精力, 计算最大饥饿 } from '../方法函数/属性计算';
 import { 播放文本 } from '../方法函数/动画效果';
 import { 执行钩子 } from '../管理器/钩子管理器';
-import { 默认制作表, 制作类型 } from '../默认内容/制作表';
+import type { 制作类型 } from '../默认内容/制作表';
+import { 默认制作表 } from '../默认内容/制作表';
 import { 深克隆 } from '../方法函数/公共函数';
 const { ccclass, property } = _decorator;
 

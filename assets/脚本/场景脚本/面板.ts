@@ -113,7 +113,7 @@ export class 面板 extends Component {
     // 特质信息
     创建普通文字(this.内容, '======特质信息======', index);
     index++;
-    for (let 特质名 in 存档.特质) {
+    for (const 特质名 in 存档.特质) {
       if (存档.特质[特质名]) {
         const 特质 = 默认特质表.find((x) => x.名称 === 特质名);
         if (特质) {
@@ -127,7 +127,7 @@ export class 面板 extends Component {
     // 天赋信息
     创建普通文字(this.内容, '======天赋信息======', index);
     index++;
-    for (let 天赋名 in 存档.天赋) {
+    for (const 天赋名 in 存档.天赋) {
       if (存档.天赋[天赋名]) {
         const 天赋 = 默认天赋表.find((x) => x.名称 === 天赋名);
         if (天赋) {
@@ -141,7 +141,7 @@ export class 面板 extends Component {
     // 藏品信息
     创建普通文字(this.内容, '======藏品信息======', index);
     index++;
-    for (let 藏品名 in 存档.藏品) {
+    for (const 藏品名 in 存档.藏品) {
       if (存档.藏品[藏品名]) {
         const 藏品 = 默认藏品表.find((x) => x.名称 === 藏品名);
         if (藏品) {
@@ -152,7 +152,7 @@ export class 面板 extends Component {
       }
     }
 
-    for (let 新藏品名 in 存档.新藏品) {
+    for (const 新藏品名 in 存档.新藏品) {
       if (存档.新藏品[新藏品名]) {
         const 新藏品 = 默认藏品表.find((x) => x.名称 === 新藏品名);
         if (新藏品) {
@@ -173,7 +173,7 @@ export class 面板 extends Component {
     index++;
     // 残页
     if (对象求和(存档.临时数据.残页) > 0) {
-      for (let 残页 in 存档.临时数据.残页) {
+      for (const 残页 in 存档.临时数据.残页) {
         const 残页表 = {
           青竹步残页: {
             名称: '青竹步',

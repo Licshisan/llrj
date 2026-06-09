@@ -1,10 +1,11 @@
+import type {
+  Vec3} from 'cc';
 import {
   Node,
   Label,
   Color,
   tween,
   v3,
-  Vec3,
   UIOpacity,
   Sprite,
   UITransform,
@@ -14,7 +15,7 @@ import {
 import { 设置 } from '../管理器/设置管理器';
 
 // 逐字播放文本效果
-export function 播放文本(目标节点: Node, 文本内容: string, 间隔时间: number = 120): void {
+export function 播放文本(目标节点: Node, 文本内容: string, 间隔时间 = 120): void {
   目标节点.active = true;
 
   const 标签组件 = 目标节点.getComponent(Label);
@@ -42,11 +43,11 @@ export function 播放文本(目标节点: Node, 文本内容: string, 间隔时
 }
 
 // 淡入效果
-export function 淡入(目标节点: Node, 持续时长: number = 2.4): void {
+export function 淡入(目标节点: Node, 持续时长 = 2.4): void {
   if (!目标节点) return;
   Tween.stopAllByTarget(目标节点.getComponent(UIOpacity));
   // 确保有UIOpacity组件
-  let 透明组件 = 目标节点.getComponent(UIOpacity) || 目标节点.addComponent(UIOpacity);
+  const 透明组件 = 目标节点.getComponent(UIOpacity) || 目标节点.addComponent(UIOpacity);
   目标节点.active = true;
   透明组件.opacity = 0;
 
@@ -56,9 +57,9 @@ export function 淡入(目标节点: Node, 持续时长: number = 2.4): void {
 }
 
 // 淡出效果
-export function 淡出(目标节点: Node, 持续时长: number = 2.4): void {
+export function 淡出(目标节点: Node, 持续时长 = 2.4): void {
   if (!目标节点) return;
-  let 透明组件 = 目标节点.getComponent(UIOpacity) || 目标节点.addComponent(UIOpacity);
+  const 透明组件 = 目标节点.getComponent(UIOpacity) || 目标节点.addComponent(UIOpacity);
 
   tween(透明组件)
     .to(持续时长 / 设置.播放速度, { opacity: 0 })
@@ -134,13 +135,13 @@ export function 闪烁一次(目标节点: Node): void {
 }
 
 // 自定义缩放效果
-export function 自定义缩放(目标节点: Node, 目标缩放: Vec3, 持续时长: number = 0.3): void {
+export function 自定义缩放(目标节点: Node, 目标缩放: Vec3, 持续时长 = 0.3): void {
   if (!目标节点) return;
   tween(目标节点).to(持续时长, { scale: 目标缩放 }).start();
 }
 
 // 震动效果
-export function 震动(目标节点: Node, 间隔时间: number = 0.05, 震动强度: number = 5): void {
+export function 震动(目标节点: Node, 间隔时间 = 0.05, 震动强度 = 5): void {
   if (!目标节点 || !目标节点.isValid) return;
 
   const 原始位置 = 目标节点.position.clone();
@@ -180,7 +181,7 @@ export function 随机分散文本和战斗元素(): void {
 }
 
 // 放大出现
-export function 放大出现(目标节点: Node, 持续时长: number = 0.4): void {
+export function 放大出现(目标节点: Node, 持续时长 = 0.4): void {
   if (!目标节点) return;
   目标节点.setScale(v3(0, 0, 0));
   目标节点.active = true;
@@ -190,7 +191,7 @@ export function 放大出现(目标节点: Node, 持续时长: number = 0.4): vo
 }
 
 // 缩小消失
-export function 缩小消失(目标节点: Node, 持续时长: number = 0.4): void {
+export function 缩小消失(目标节点: Node, 持续时长 = 0.4): void {
   if (!目标节点) return;
   tween(目标节点)
     .to(持续时长, { scale: v3(0, 0, 0) })

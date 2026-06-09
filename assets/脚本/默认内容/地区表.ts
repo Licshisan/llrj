@@ -1,5 +1,6 @@
 import { 瓶颈档位 } from '../公共方法/地下竞技场';
-import { 概率类型, 深克隆 } from '../方法函数/公共函数';
+import type { 概率类型} from '../方法函数/公共函数';
+import { 深克隆 } from '../方法函数/公共函数';
 import { 存档 } from '../管理器/存档管理器';
 
 interface 地区定义类型 {

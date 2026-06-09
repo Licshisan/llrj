@@ -4,10 +4,10 @@ import { 设置 } from '../管理器/设置管理器';
 import type { 通用效果字段类型 } from '../管理器/钩子管理器';
 import { 获取地区名称 } from './地区表';
 
-type 默认效果项类型<时机 extends keyof 通用效果字段类型 & string> = {
+interface 默认效果项类型<时机 extends keyof 通用效果字段类型 & string> {
   时机: 时机;
   函数: NonNullable<通用效果字段类型[时机]>;
-};
+}
 
 function 定义效果<时机 extends keyof 通用效果字段类型 & string>(效果: 默认效果项类型<时机>) {
   return 效果;

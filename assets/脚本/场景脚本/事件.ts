@@ -17,7 +17,8 @@ import { 创建动画文字, 放大出现, 缩小消失 } from '../方法函数/
 import { 战斗 } from './战斗';
 import { 设置 } from '../管理器/设置管理器';
 import { 执行钩子 } from '../管理器/钩子管理器';
-import { 事件项目类型, 默认事件表 } from '../默认内容/事件表';
+import type { 事件项目类型} from '../默认内容/事件表';
+import { 默认事件表 } from '../默认内容/事件表';
 import { 深克隆 } from '../方法函数/公共函数';
 import { 钓鱼 } from './钓鱼';
 const { ccclass, property } = _decorator;
@@ -159,7 +160,7 @@ export class 事件 extends Component {
     保存存档();
   }
 
-  结束事件(描述: string = ''): void {
+  结束事件(描述 = ''): void {
     执行钩子('事件结束', [this.当前事件]);
     this.当前事件 = null;
     存档.当前事件 = '';

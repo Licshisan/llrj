@@ -14,7 +14,7 @@ export class 确认 extends Component {
 
     播放文本(this.标签, 文本);
     this.按钮容器.removeAllChildren();
-    for (let 按钮名称 in 按钮) {
+    for (const 按钮名称 in 按钮) {
       const 选项按钮 = instantiate(this.选项按钮预制体);
       选项按钮.name = 按钮名称;
       选项按钮.getChildByName('标签').getComponent(Label).string = 按钮名称;

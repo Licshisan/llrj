@@ -62,7 +62,7 @@ export function 随机生成鱼(指定品质 = null) {
   重量 = Math.round(重量 * 10) / 10;
 
   // 难度参数（基于基础难度）
-  let 难度基数 = 品质加成[品质];
+  const 难度基数 = 品质加成[品质];
   let 色块宽度 = Math.min(1.2, Math.max(0.3, 1.2 - 难度基数 * 0.5));
   let 滑块速度 = Math.min(1.5, Math.max(0.6, 0.6 + 难度基数 * 0.5));
   色块宽度 = Math.round(色块宽度 * 100) / 100;

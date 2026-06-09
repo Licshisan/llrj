@@ -10,7 +10,8 @@ import {
   UITransform,
 } from 'cc';
 import { 存档 } from '../管理器/存档管理器';
-import { 伙伴名类型, 伙伴特性定义类型, 默认伙伴特性表 } from '../默认内容/伙伴特性表';
+import type { 伙伴名类型, 伙伴特性定义类型} from '../默认内容/伙伴特性表';
+import { 默认伙伴特性表 } from '../默认内容/伙伴特性表';
 const { ccclass, property } = _decorator;
 
 @ccclass('伙伴特性')

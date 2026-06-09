@@ -94,7 +94,7 @@ export class 套餐 extends Component {
               存档.套餐名称 = 套餐.名称;
               存档.游戏难度 = this.当前难度;
               // 注入藏品
-              for (let 藏品名 in 玩家.client_info.collections) {
+              for (const 藏品名 in 玩家.client_info.collections) {
                 console.log(藏品名);
                 存档.藏品[藏品名] = 计算数值(
                   '藏品生效数量',

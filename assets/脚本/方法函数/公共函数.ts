@@ -3,11 +3,11 @@ import { director, Color } from 'cc';
 import { 计算数值, 计算最大生命 } from './属性计算';
 import { 默认食物表 } from '../默认内容/食物表';
 
-export type 概率类型 = {
+export interface 概率类型 {
   名称: string;
   概率: number;
   数量?: number;
-};
+}
 
 export function 格式化日期字符串(date: number): string {
   if (!date) return '暂无';
@@ -53,7 +53,7 @@ export function 抽取项目(weights: 概率类型[]): string {
 }
 
 export function 抽取物品(物品表: 概率类型[], 必中 = false): string {
-  const drops = [] as Array<{ 名称: string; 数量: number }>;
+  const drops = [] as { 名称: string; 数量: number }[];
 
   // 抽取物品物品，如果force且没有掉落就重抽
   do {
@@ -102,7 +102,7 @@ export function 对象求和(obj: Record<string, number>) {
 
 export function 自动进食(进食列表 = ['果子', '熟肉', '干脆面']): boolean {
   if (存档.饥饿 <= 0) {
-    let 初始饥饿 = 存档.饥饿;
+    const 初始饥饿 = 存档.饥饿;
     for (let i = 0; i < 进食列表.length; i++) {
       const 食物 = 默认食物表.find((f) => f.名称 === 进食列表[i]);
       if (食物?.使用) {
