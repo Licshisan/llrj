@@ -62,7 +62,7 @@ export function 创建时空流浪者() {
   // 显示名称
   let 显示名称 = 敌人信息.client_info.name || '时空流浪者';
   if (敌人存档.游戏难度) {
-    显示名称 += `（${敌人存档.游戏难度}）`;
+    显示名称 += `[${敌人存档.游戏难度}]`;
   }
   if (敌人信息.server_info.title) {
     显示名称 += `【${敌人信息.server_info.title}】`;
@@ -217,7 +217,7 @@ export function 创建榜一大哥() {
   // 显示名称
   let 显示名称 = 敌人信息.client_info.name || '榜一大哥';
   if (敌人存档.游戏难度) {
-    显示名称 += `（${敌人存档.游戏难度}）`;
+    显示名称 += `[${敌人存档.游戏难度}]`;
   }
   if (敌人信息.server_info.title) {
     显示名称 += `【${敌人信息.server_info.title}】`;

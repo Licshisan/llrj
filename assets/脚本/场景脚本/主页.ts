@@ -19,7 +19,7 @@ import {
   计算最大防御,
   计算最大饥饿,
 } from '../方法函数/属性计算';
-import { 抽取项目, 抽取物品, 格式化金钱, 自然恢复生命, 对象求和 } from '../方法函数/公共函数';
+import { 抽取项目, 抽取物品, 自然恢复生命, 对象求和 } from '../方法函数/公共函数';
 import { 播放文本, 放大缩小 } from '../方法函数/动画效果';
 import { 事件 } from './事件';
 import { 战斗 } from './战斗';
@@ -29,7 +29,7 @@ import { 获取当前日记 } from '../默认内容/日记表';
 import { 获取地区名称, 获取当前地区 } from '../默认内容/地区表';
 import { 玩家 } from '../管理器/玩家管理器';
 import { 计算得分 } from '../公共方法/最终得分';
-// import { 获取榜一大哥请求 } from '../方法函数/网络请求';
+import { 获取榜一大哥请求 } from '../方法函数/网络请求';
 const { ccclass, property } = _decorator;
 
 @ccclass('主页')
@@ -339,17 +339,17 @@ export class 主页 extends Component {
       const 标签 = this.node.getComponentsInChildren(Label);
       标签.forEach((label) => {
         if (label.color.equals(Color.BLACK)) {
-          label.color = new Color(233, 233, 233);
+          label.color = new Color(220, 220, 220);
         }
       });
-      this.背景.getComponent(Sprite).color = new Color(23, 23, 23);
+      this.背景.getComponent(Sprite).color = new Color(20, 20, 20);
     }
   }
 
   async 加载榜一大哥() {
-    // if (!存档.临时数据.榜一大哥) {
-    //   存档.临时数据.榜一大哥 = await 获取榜一大哥请求();
-    // }
+    if (!存档.临时数据.榜一大哥 && 存档.其他.挑战进度 >= 16 ) {
+      存档.临时数据.榜一大哥 = await 获取榜一大哥请求();
+    }
   }
 
   点击睡觉() {
@@ -375,21 +375,7 @@ export class 主页 extends Component {
         director.loadScene('确认');
         return;
       }
-      const 提示文本 = '精力为0，是否要强制睡觉？';
-      globalThis.确认参数 = {
-        文本: 提示文本,
-        按钮: {
-          确认睡觉: () => {
-            if (获取当前日记()) {
-              director.loadScene('日记');
-            } else {
-              director.loadScene('睡觉');
-            }
-          },
-          返回: () => director.loadScene('主页'),
-        },
-      };
-      director.loadScene('确认');
+      director.loadScene('睡觉');
     }
   }
 

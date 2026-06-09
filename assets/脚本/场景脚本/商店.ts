@@ -36,10 +36,10 @@ export class 商店 extends Component {
 
   start() {
     this.黑市按钮.active = 存档.天赋.市井通衢 > 0;
-    this.返回按钮.on(
+    this.黑市按钮.on(
       Button.EventType.CLICK,
       () => {
-        globalThis.商贩名称 = '商贩';
+        globalThis.商贩名称 = '黑市';
         director.loadScene('商贩');
       },
       this,

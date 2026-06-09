@@ -36,7 +36,7 @@ export class 睡觉 extends Component {
     this.继续按钮.active = false;
     this.标签.getComponent(Label).string = `第${存档.天数 + 1}天`;
     const sequence = tween(this.node);
-    sequence.delay(1);
+    sequence.delay(1 / 设置.播放速度);
     sequence.call(() => 淡入(this.标签)).delay(2.4 / 设置.播放速度);
     sequence.call(() => 淡入(this.属性容器)).delay(2.4 / 设置.播放速度);
     sequence.call(() => 淡入(this.文本容器)).delay(2.4 / 设置.播放速度);
