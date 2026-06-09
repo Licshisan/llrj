@@ -5,8 +5,8 @@ export const 默认玩家 = {
   id: 0,
   uid: Math.random().toString(36).slice(2, 12),
   client_info: {
-    name: "",
-    show_text: "",
+    name: '',
+    show_text: '',
     win_text: '',
     fail_text: '',
     scores: 0,
@@ -14,12 +14,12 @@ export const 默认玩家 = {
     collections: {} as Record<string, number>,
     created_at: Date.now(),
     updated_at: Date.now(),
-    pass_count: 0
+    pass_count: 0,
   },
   server_info: {
-    title: "",
+    title: '',
     zz: 0,
-    compensations:{}
+    compensations: {},
   },
   created_at: '',
 

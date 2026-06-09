@@ -67,9 +67,7 @@ export async function 请求JSON<T = any>(
 ): Promise<T | null> {
   try {
     const 控制器 = new AbortController();
-    const 超时编号 = 配置.超时
-      ? setTimeout(() => 控制器.abort(), 配置.超时)
-      : null;
+    const 超时编号 = 配置.超时 ? setTimeout(() => 控制器.abort(), 配置.超时) : null;
 
     const 响应 = await fetch(`${服务器地址}${路径}`, {
       method: 配置.方法 || 'GET',
@@ -138,7 +136,10 @@ export async function 获取先驱者请求(): Promise<PioneerInfo[] | null> {
   return 请求JSON<PioneerInfo[]>(`/pioneers${拼接查询(获取玩家校验信息())}`);
 }
 
-export async function 获取随机存档请求(day: number, save_difficulty?: string): Promise<SaveInfo | null> {
+export async function 获取随机存档请求(
+  day: number,
+  save_difficulty?: string,
+): Promise<SaveInfo | null> {
   return 请求JSON<SaveInfo>(
     `/random-save${拼接查询({
       ...获取玩家校验信息(),

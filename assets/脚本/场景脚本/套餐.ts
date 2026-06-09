@@ -96,7 +96,10 @@ export class 套餐 extends Component {
               // 注入藏品
               for (let 藏品名 in 玩家.client_info.collections) {
                 console.log(藏品名);
-                存档.藏品[藏品名] = 计算数值('藏品生效数量', 玩家.client_info.collections[藏品名] || 0);
+                存档.藏品[藏品名] = 计算数值(
+                  '藏品生效数量',
+                  玩家.client_info.collections[藏品名] || 0,
+                );
                 console.log(存档.藏品[藏品名]);
               }
               // 计算并写入技能等级
@@ -107,10 +110,10 @@ export class 套餐 extends Component {
                 }
               }
               // 注入特质
-              if(设置.生效特质.length > 0){
-                设置.生效特质.forEach(i => {
-                  存档.特质[i] = 计算特质等级(i)
-                })
+              if (设置.生效特质.length > 0) {
+                设置.生效特质.forEach((i) => {
+                  存档.特质[i] = 计算特质等级(i);
+                });
               }
 
               执行钩子('新建游戏');

@@ -577,12 +577,32 @@ const 特性表4: 伙伴特性原始定义类型[] = [
   },
 ];
 
-function 增强字段(伙伴: 伙伴特性原始定义类型, 伙伴名: 伙伴名类型) {
-  return {
-    ...伙伴,
-    伙伴名,
-  };
+// todo 修复所有增强字段 使其可以使用getter
+function 增强字段(伙伴, 伙伴名) {
+  // 创建新对象，继承原对象的原型
+  const 新对象 = Object.create(Object.getPrototypeOf(伙伴));
+
+  // 复制所有属性描述符（包括 getter/setter）
+  const 描述符 = Object.getOwnPropertyDescriptors(伙伴);
+  Object.defineProperties(新对象, 描述符);
+
+  // 添加新的"分类"属性（普通属性）
+  Object.defineProperty(新对象, '伙伴名', {
+    value: 伙伴名,
+    writable: true,
+    enumerable: true,
+    configurable: true,
+  });
+
+  return 新对象;
 }
+
+// function 增强字段(伙伴: 伙伴特性原始定义类型, 伙伴名: 伙伴名类型) {
+//   return {
+//     ...伙伴,
+//     伙伴名,
+//   };
+// }
 
 export const 默认伙伴特性表: 伙伴特性定义类型[] = [
   ...特性表1.map((c) => 增强字段(c, '晓月')),

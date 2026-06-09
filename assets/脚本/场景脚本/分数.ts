@@ -105,7 +105,7 @@ export class 分数 extends Component {
     const 完成成就: 成就项目类型[] = [];
     for (const 成就 of 默认成就表) {
       if (!成就.条件 || 玩家.client_info.achievements.find((c) => c.name === 成就.名称)) continue;
-      if(成就.排行类) continue
+      if (成就.排行类) continue;
       const 新成就 = {
         name: 成就.名称,
         description: 成就.描述,
@@ -116,7 +116,7 @@ export class 分数 extends Component {
       成就.效果?.完成成就?.(成就.名称);
       完成成就.push(成就);
     }
-    玩家.client_info.scores = 计算排行榜积分总和()
+    玩家.client_info.scores = 计算排行榜积分总和();
     return 完成成就;
   }
 }

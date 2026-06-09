@@ -15,7 +15,14 @@ import { 默认特质表 } from './特质表';
 import { 默认藏品表 } from './藏品表';
 import { 默认成就表 } from './成就表';
 import { 默认技能表 } from './技能表';
-import { 上报错误, 登录请求, 上传客户端数据, 获取先驱者请求, 获取藏品排行榜请求, 获取排行榜请求 } from '../方法函数/网络请求';
+import {
+  上报错误,
+  登录请求,
+  上传客户端数据,
+  获取先驱者请求,
+  获取藏品排行榜请求,
+  获取排行榜请求,
+} from '../方法函数/网络请求';
 
 let 加载完成 = false;
 
@@ -163,11 +170,10 @@ export async function 加载游戏内容() {
     error('登录失败' + e);
   }
 
-  try{
-    玩家管理器.玩家.pioneers = await 获取先驱者请求()
-    玩家管理器.玩家.leaderboard = await 获取排行榜请求()
-    玩家管理器.玩家.collection_leaderboard = await 获取藏品排行榜请求()
-
+  try {
+    玩家管理器.玩家.pioneers = await 获取先驱者请求();
+    玩家管理器.玩家.leaderboard = await 获取排行榜请求();
+    玩家管理器.玩家.collection_leaderboard = await 获取藏品排行榜请求();
   } catch (e) {
     error('登录失败' + e);
   }

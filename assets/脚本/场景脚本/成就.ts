@@ -101,16 +101,16 @@ export class 成就 extends Component {
     const 已完成成就列表 = 玩家.client_info.achievements;
 
     筛选后的成就.forEach((成就, 序号) => {
-      if(成就.排行类){
-        console.log(成就)
+      if (成就.排行类) {
+        console.log(成就);
         let 文本 = `【${成就.名称}】${成就.描述}`;
         if (成就.奖励) {
           文本 += `\n奖励：${成就.奖励}`;
         }
         创建普通文字(this.内容节点, 文本, 序号, 成就.条件 ? Color.GREEN : Color.GRAY);
-      }else{
+      } else {
         const 完成成就 = 已完成成就列表.find((c) => c.name === 成就.名称); // 本地成就
-  
+
         let 文本 = `【${成就.名称}】`;
         if (完成成就) {
           文本 += 完成成就.description || 成就.描述;
@@ -119,11 +119,11 @@ export class 成就 extends Component {
         } else {
           文本 += 成就.描述;
         }
-  
+
         if (成就.奖励) {
           文本 += `\n奖励：${成就.奖励}`;
         }
-  
+
         const 颜色 = 完成成就 ? Color.GREEN : Color.GRAY;
         创建普通文字(this.内容节点, 文本, 序号, 颜色);
       }

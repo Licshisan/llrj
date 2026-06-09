@@ -676,7 +676,7 @@ const 史诗天赋表: 天赋定义项目类型[] = [
         }
       },
     },
-  }
+  },
 ];
 
 const 传说天赋表: 天赋定义项目类型[] = [
@@ -877,7 +877,12 @@ const 传说天赋表: 天赋定义项目类型[] = [
     说明: '「嗅探」你对宝物有极其敏锐的嗅觉，击败boss及精英怪必然获得一次额外掉落判定',
     效果: {
       战斗胜利: (对局) => {
-        if (!存档.天赋.夺宝达人 || !对局.敌人.名称.includes('BOSS') || !对局.敌人.名称.includes('精英')) return;
+        if (
+          !存档.天赋.夺宝达人 ||
+          !对局.敌人.名称.includes('BOSS') ||
+          !对局.敌人.名称.includes('精英')
+        )
+          return;
         const 掉落物 = 抽取物品(对局.敌人.掉落物);
         if (掉落物) {
           对局.结果文本.push(`「夺宝达人：获得${掉落物}」`);
@@ -1082,6 +1087,40 @@ export function 获取天赋颜色(天赋, 品质) {
   return 天赋.负面 ? 颜色配置[`负面`] : 颜色配置[品质];
 }
 
+// todo 修复所有增强字段 使其可以使用getter
+function 增强字段(t, 品质) {
+  // 创建新对象，继承原对象的原型
+  const 新对象 = Object.create(Object.getPrototypeOf(t));
+
+  // 复制所有属性描述符（包括 getter/setter）
+  const 描述符 = Object.getOwnPropertyDescriptors(t);
+  Object.defineProperties(新对象, 描述符);
+
+  // 添加新的"分类"属性（普通属性）
+  Object.defineProperty(新对象, '品质', {
+    value: 品质,
+    writable: true,
+    enumerable: true,
+    configurable: true,
+  });
+
+  Object.defineProperty(新对象, '负面', {
+    value: 品质 === '负面',
+    writable: true,
+    enumerable: true,
+    configurable: true,
+  });
+
+  Object.defineProperty(新对象, '颜色', {
+    value: 获取天赋颜色(t, 品质),
+    writable: true,
+    enumerable: true,
+    configurable: true,
+  });
+
+  return 新对象;
+}
+
 function 补充天赋(t, 品质) {
   return {
     ...t,
@@ -1092,9 +1131,9 @@ function 补充天赋(t, 品质) {
 }
 
 export const 默认天赋表: 天赋项目类型[] = [
-  ...普通天赋表.map((t) => 补充天赋(t, '普通')),
-  ...稀有天赋表.map((t) => 补充天赋(t, '稀有')),
-  ...史诗天赋表.map((t) => 补充天赋(t, '史诗')),
-  ...传说天赋表.map((t) => 补充天赋(t, '传说')),
-  ...负面天赋表.map((t) => 补充天赋(t, '负面')),
+  ...普通天赋表.map((t) => 增强字段(t, '普通')),
+  ...稀有天赋表.map((t) => 增强字段(t, '稀有')),
+  ...史诗天赋表.map((t) => 增强字段(t, '史诗')),
+  ...传说天赋表.map((t) => 增强字段(t, '传说')),
+  ...负面天赋表.map((t) => 增强字段(t, '负面')),
 ];
