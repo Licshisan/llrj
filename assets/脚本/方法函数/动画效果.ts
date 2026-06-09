@@ -215,7 +215,7 @@ export function 创建动画文字(
   标签组件.fontSize = 38;
   标签组件.lineHeight = 50;
   标签组件.string = 文本内容;
-  标签组件.color = 颜色;
+  标签组件.color = 颜色 || Color.WHITE;
 
   const 宽度 = 布局节点.getComponent(UITransform).width || 650;
   文字节点.getComponent(UITransform).setContentSize(宽度, 0);
@@ -246,7 +246,7 @@ export function 创建普通文字(
   标签组件.lineHeight = 40;
   标签组件.overflow = Label.Overflow.RESIZE_HEIGHT;
   标签组件.horizontalAlign = Label.HorizontalAlign.LEFT;
-  标签组件.color = 颜色;
+  标签组件.color = 颜色 || Color.WHITE;
 
   文字节点.setParent(布局节点);
   文字节点.setPosition(0, 0);
