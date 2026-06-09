@@ -19,7 +19,7 @@ export class 面板 extends Component {
   @property(Node) 分类节点: Node = null;
   @property(Node) 内容: Node = null;
   @property(Node) 返回按钮: Node = null;
-  @property(Node) 退出按钮: Node = null;
+  @property(Node) 图鉴按钮: Node = null;
 
   当前分类 = '面板';
   分类列表 = ['面板', '统计', '技能', '战斗'];
@@ -36,7 +36,7 @@ export class 面板 extends Component {
       },
       this,
     );
-    this.退出按钮.on(Button.EventType.CLICK, () => director.loadScene('首页'), this);
+    this.图鉴按钮.on(Button.EventType.CLICK, () => director.loadScene('图鉴'), this);
 
     this.初始化分类标签();
     this.刷新内容列表();
@@ -139,7 +139,7 @@ export class 面板 extends Component {
       if (存档.藏品[藏品名]) {
         const 藏品 = 默认藏品表.find((x) => x.名称 === 藏品名);
         if (藏品) {
-          const 文字 = `【${藏品名}】${藏品.说明}（当前生效${存档.藏品[藏品名]}个）${藏品.描述}`;
+          const 文字 = `【${藏品名}】（当前生效${存档.藏品[藏品名]}个）${藏品.描述}`;
           创建普通文字(this.内容, 文字, index, 藏品.颜色);
           index++;
         }
@@ -375,7 +375,7 @@ export class 面板 extends Component {
 
     // 其他属性
     const 其他属性 = `======其他属性======
-当前剧情分：${计算得分()}
+当前剧情分：${计算得分().最终得分}
 罪恶：${存档.罪恶}
 阅历：${存档.阅历}
 烟瘾：${存档.烟瘾率}

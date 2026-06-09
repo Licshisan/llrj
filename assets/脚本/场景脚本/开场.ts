@@ -107,7 +107,10 @@ export class 开场 extends Component {
     })
 
     const 抽取的正面天赋 = this.随机抽取(
-      默认天赋表.filter((i) => !i.负面 && i.等级 > 0 && i.名称 !== 设置.保留天赋 && !this.已锁定天赋.includes(i.名称)),
+      默认天赋表.filter((i) => {
+        const 等级 = 计算天赋等级(i.名称, i.隐藏 ? 0 : 1)
+        return !i.负面 && 等级 > 0 && i.名称 !== 设置.保留天赋 && !this.已锁定天赋.includes(i.名称)
+      }),
       正面天赋数量,
     );
     this.当前天赋.push(...抽取的正面天赋.map((x) => x.名称));
@@ -120,7 +123,10 @@ export class 开场 extends Component {
     });
 
     const 抽取的负面天赋 = this.随机抽取(
-      默认天赋表.filter((i) => i.负面 && i.等级 > 0),
+      默认天赋表.filter((i) => {
+        const 等级 = 计算天赋等级(i.名称, i.隐藏 ? 0 : 1)
+        return i.负面 && 等级 > 0
+      }),
       负面天赋数量,
     );
     this.当前天赋.push(...抽取的负面天赋.map((x) => x.名称));
@@ -131,6 +137,8 @@ export class 开场 extends Component {
         已固定: false,
       });
     });
+
+    console.log(临时选中的天赋)
 
     const 序列 = tween(this.node)
       .call(() => 淡出(this.文本容器))
@@ -205,7 +213,7 @@ export class 开场 extends Component {
     this.已锁定天赋.push(item.名称);
     播放文本(this.标签, `成功锁定天赋：${item.名称}`);
 
-    let 文本 = `你拥有天赋「${item.名称}】」`
+    let 文本 = `你拥有天赋「${item.名称}」`
     if(item.已固定){
       文本 += "【已固定】"
     }

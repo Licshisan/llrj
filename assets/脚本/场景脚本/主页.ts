@@ -131,7 +131,6 @@ export class 主页 extends Component {
 
   回档() {
     this.scheduleOnce(() => {
-      存档.天数 = 180
       if (存档.当前剧情) {
         director.loadScene('剧情');
       } else if (存档.当前敌人) {

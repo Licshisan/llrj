@@ -22,7 +22,7 @@ import { 深克隆, 解析颜色 } from '../方法函数/公共函数';
 import { 设置, 保存设置 } from '../管理器/设置管理器';
 import { 玩家 } from '../管理器/玩家管理器';
 import { 计算数值 } from '../方法函数/属性计算';
-import { 计算技能等级 } from '../方法函数/等级计算';
+import { 计算技能等级, 计算特质等级 } from '../方法函数/等级计算';
 const { ccclass, property } = _decorator;
 
 @ccclass('套餐')
@@ -106,6 +106,13 @@ export class 套餐 extends Component {
                   存档.技能[技能.名称] = 等级;
                 }
               }
+              // 注入特质
+              if(设置.生效特质.length > 0){
+                设置.生效特质.forEach(i => {
+                  存档.特质[i] = 计算特质等级(i)
+                })
+              }
+
               执行钩子('新建游戏');
               保存存档();
               director.loadScene('开场');
