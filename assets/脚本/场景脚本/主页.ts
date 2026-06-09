@@ -665,7 +665,7 @@ export class 主页 extends Component {
 
       if (
         (获取地区名称() === '县城' || 获取地区名称() === '山脉' || 获取地区名称() === '山林') &&
-        Math.random() * 100 < (存档.临时数据?.门派熟悉度?.青竹门 || 0) * 0.04
+        Math.random() * 100 < (存档.临时数据?.门派熟悉度?.青竹门 || 0) * 0.05
       ) {
         this.基本消耗();
         this.node.getComponent(事件).触发事件('偶遇青竹门');
@@ -673,7 +673,7 @@ export class 主页 extends Component {
       }
       if (
         (获取地区名称() === '县城' || 获取地区名称() === '山脉' || 获取地区名称() === '山林') &&
-        Math.random() * 100 < (存档.临时数据?.门派熟悉度?.铁衣帮 || 0) * 0.04
+        Math.random() * 100 < (存档.临时数据?.门派熟悉度?.铁衣帮 || 0) * 0.05
       ) {
         this.基本消耗();
         this.node.getComponent(事件).触发事件('偶遇铁衣帮');
@@ -681,7 +681,7 @@ export class 主页 extends Component {
       }
       if (
         (获取地区名称() === '县城' || 获取地区名称() === '山脉' || 获取地区名称() === '山林') &&
-        Math.random() * 100 < (存档.临时数据?.门派熟悉度?.玄水阁 || 0) * 0.04
+        Math.random() * 100 < (存档.临时数据?.门派熟悉度?.玄水阁 || 0) * 0.05
       ) {
         this.基本消耗();
         this.node.getComponent(事件).触发事件('偶遇玄水阁');
@@ -824,7 +824,7 @@ export class 主页 extends Component {
     }
     this.信息栏.getChildByName('健康').getComponent(Label).color = 颜色;
     this.信息栏.getChildByName('金钱').getComponent(Label).string =
-      `金钱  ${格式化金钱(存档.金钱)}`;
+      `金钱  ${(存档.金钱/10).toFixed(1)}`;
     this.信息栏.getChildByName('烟酒').getComponent(Label).string =
       `烟酒  ${存档.物品.香烟}/${存档.物品.啤酒}`;
     this.信息栏.getChildByName('生命').getComponent(Label).string =
