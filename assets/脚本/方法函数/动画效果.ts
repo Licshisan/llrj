@@ -1,17 +1,5 @@
-import type {
-  Vec3} from 'cc';
-import {
-  Node,
-  Label,
-  Color,
-  tween,
-  v3,
-  UIOpacity,
-  Sprite,
-  UITransform,
-  find,
-  Tween,
-} from 'cc';
+import type { Vec3 } from 'cc';
+import { Node, Label, Color, tween, v3, UIOpacity, Sprite, UITransform, find, Tween } from 'cc';
 import { 设置 } from '../管理器/设置管理器';
 
 // 逐字播放文本效果

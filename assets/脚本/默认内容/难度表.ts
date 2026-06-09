@@ -1,4 +1,5 @@
 ﻿import { 存档 } from '../管理器/存档管理器';
+import type { 通用效果字段类型 } from '../管理器/钩子管理器';
 import { 获取地区名称 } from './地区表';
 
 interface 难度定义类型 {
@@ -7,7 +8,7 @@ interface 难度定义类型 {
   提示?: string;
   颜色?: string;
   条件: boolean;
-  效果?: Record<string, (...参数: any) => any>;
+  效果?: 通用效果字段类型;
 }
 
 export const 默认难度表: 难度定义类型[] = [

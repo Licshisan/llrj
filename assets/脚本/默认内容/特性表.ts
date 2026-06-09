@@ -1,13 +1,14 @@
 import { 自动进食 } from '../方法函数/公共函数';
 import { 计算数值, 计算最大生命, 计算最大精力, 计算最大逃跑 } from '../方法函数/属性计算';
 import { 存档 } from '../管理器/存档管理器';
+import type { 通用效果字段类型 } from '../管理器/钩子管理器';
 
 interface 特性定义类型 {
   名称: string;
   条件: boolean;
   描述: string;
   展示: boolean;
-  效果?: Record<string, (...参数: any) => any>;
+  效果?: 通用效果字段类型;
 }
 
 export const 默认特性表: 特性定义类型[] = [

@@ -1,11 +1,11 @@
 import { 存档 } from '../管理器/存档管理器';
-import type { 钩子函数类型 } from '../管理器/钩子管理器';
+import type { 通用效果字段类型, 钩子函数类型 } from '../管理器/钩子管理器';
 import { 获取地区名称 } from './地区表';
 
 export interface 特质项目类型 {
   名称: string;
   说明: string;
-  效果: Record<string, 钩子函数类型>;
+  效果: 通用效果字段类型;
 }
 
 export const 默认特质表: 特质项目类型[] = [

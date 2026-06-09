@@ -824,7 +824,7 @@ export class 主页 extends Component {
     }
     this.信息栏.getChildByName('健康').getComponent(Label).color = 颜色;
     this.信息栏.getChildByName('金钱').getComponent(Label).string =
-      `金钱  ${(存档.金钱/10).toFixed(1)}`;
+      `金钱  ${(存档.金钱 / 10).toFixed(1)}`;
     this.信息栏.getChildByName('烟酒').getComponent(Label).string =
       `烟酒  ${存档.物品.香烟}/${存档.物品.啤酒}`;
     this.信息栏.getChildByName('生命').getComponent(Label).string =

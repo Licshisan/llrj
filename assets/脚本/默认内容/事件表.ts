@@ -2,14 +2,14 @@ import { 存档 } from '../管理器/存档管理器';
 import { error } from 'cc';
 import type { 事件上下文 } from '../场景脚本/事件';
 import { 计算数值, 计算最大生命, 计算最大精力, 计算最大饥饿 } from '../方法函数/属性计算';
-import { 自动进食, 跳转场景 } from '../方法函数/公共函数';
+import { 自动进食 } from '../方法函数/公共函数';
 import { 默认天赋表 } from './天赋表';
 import { 执行钩子 } from '../管理器/钩子管理器';
 import { 获取地区名称 } from './地区表';
 import { 保存设置, 设置 } from '../管理器/设置管理器';
 import { 玩家 } from '../管理器/玩家管理器';
 import { 保存玩家 } from '../管理器/玩家管理器';
-import { 上传客户端数据, 确认领取补偿请求 } from '../方法函数/网络请求';
+import { 确认领取补偿请求 } from '../方法函数/网络请求';
 import { 获取竞技场名气配置, 获取竞技场常规赛敌人配置 } from '../公共方法/地下竞技场';
 import { 计算天赋等级 } from '../方法函数/等级计算';
 

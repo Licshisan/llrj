@@ -17,7 +17,7 @@ import { 创建动画文字, 放大出现, 缩小消失 } from '../方法函数/
 import { 战斗 } from './战斗';
 import { 设置 } from '../管理器/设置管理器';
 import { 执行钩子 } from '../管理器/钩子管理器';
-import type { 事件项目类型} from '../默认内容/事件表';
+import type { 事件项目类型 } from '../默认内容/事件表';
 import { 默认事件表 } from '../默认内容/事件表';
 import { 深克隆 } from '../方法函数/公共函数';
 import { 钓鱼 } from './钓鱼';
