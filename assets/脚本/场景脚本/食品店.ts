@@ -85,9 +85,9 @@ export class 食品店 extends Component {
         按钮5.on(Button.EventType.CLICK, this.点击采购食材, this);
 
         const 按钮6 = this.主页.getChildByName('按钮容器').getChildByName('选择按钮6');
-        按钮6.on(Button.EventType.CLICK, () => 播放文本(this.标签, "咱家的东西都是最新鲜的,客官看看想买点啥~"), this);
+        按钮6.on(Button.EventType.CLICK, () => 播放文本(this.标签, "当前模式正在开发中，请下一个版本再来体验吧~"), this);
 
-        播放文本(this.标签, "咱家的东西都是最新鲜的,客官看看想买点啥~")
+        播放文本(this.标签, "店面正在装修中，店内空空如也~")
         this.主页.getChildByName('返回按钮').on(Button.EventType.CLICK, () => director.loadScene('主页'), this);
         this.子页.getChildByName('返回按钮').on(Button.EventType.CLICK, () => {
             缩小消失(this.子页);

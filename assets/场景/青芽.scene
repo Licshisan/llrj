@@ -598,7 +598,7 @@
       "b": 255,
       "a": 255
     },
-    "_string": "小兰好感 100",
+    "_string": "青芽好感 100",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 32,
@@ -1483,7 +1483,7 @@
     "value": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 144,
+      "y": 206,
       "z": 0
     }
   },
@@ -1613,7 +1613,7 @@
     "value": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 20,
+      "y": 82,
       "z": 0
     }
   },
@@ -1656,7 +1656,7 @@
     "propertyPath": [
       "_string"
     ],
-    "value": "赠送礼物"
+    "value": "喂食"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1743,7 +1743,7 @@
     "value": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -104,
+      "y": -42,
       "z": 0
     }
   },
@@ -1786,7 +1786,7 @@
     "propertyPath": [
       "_string"
     ],
-    "value": "查看说明"
+    "value": "喂药"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1919,7 +1919,7 @@
     "propertyPath": [
       "_string"
     ],
-    "value": "退出"
+    "value": "查看特性"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1935,7 +1935,7 @@
     "propertyPath": [
       "_active"
     ],
-    "value": false
+    "value": true
   },
   {
     "__type__": "cc.UITransform",
@@ -1950,7 +1950,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 720,
-      "height": 372
+      "height": 496
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",

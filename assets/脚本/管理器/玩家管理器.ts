@@ -18,7 +18,7 @@ export const 默认玩家 = {
   },
   server_info: {
     title: "",
-    zz:"",
+    zz: 0,
     compensations:{}
   },
   created_at: '',

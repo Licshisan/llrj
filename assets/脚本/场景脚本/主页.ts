@@ -28,7 +28,6 @@ import { 设置 } from '../管理器/设置管理器';
 import { 获取当前日记 } from '../默认内容/日记表';
 import { 获取地区名称, 获取当前地区 } from '../默认内容/地区表';
 import { 玩家 } from '../管理器/玩家管理器';
-import { 获取营养摘要 } from '../公共方法/食品店表';
 import { 计算得分 } from '../公共方法/最终得分';
 // import { 获取榜一大哥请求 } from '../方法函数/网络请求';
 const { ccclass, property } = _decorator;
@@ -699,6 +698,8 @@ export class 主页 extends Component {
         this.node.getComponent(事件).触发事件('残页交易');
         return false;
       }
+
+      // todo 增加最终决战剧情
     }
 
     // 城中村住房
@@ -857,16 +858,12 @@ export class 主页 extends Component {
       : '睡  觉';
   }
 
-  // todo 显示营养摘要
   计算状态文本() {
     let 状态文本 = '';
     for (const 状态 in 存档.状态) {
       if (存档.状态[状态]) {
         状态文本 += `【${状态}】 `;
       }
-    }
-    if (存档.套餐名称 === '食补筑基') {
-      状态文本 += `【${获取营养摘要()}】`;
     }
     return 状态文本;
   }
