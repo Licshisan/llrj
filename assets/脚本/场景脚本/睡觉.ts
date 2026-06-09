@@ -220,8 +220,6 @@ export class 睡觉 extends Component {
       );
     }
 
-    // todo 饮食-营养体系
-
     // 住房
     if (存档.临时数据.房源) {
       if (存档.其他.住房已居住天数 < 存档.其他.住房天数) {

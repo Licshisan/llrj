@@ -309,7 +309,6 @@ export class 面板 extends Component {
   渲染统计列表() {
     this.内容.removeAllChildren();
 
-    // todo 吃饭信息统计
     let index = 0;
 
     // 赌博信息
