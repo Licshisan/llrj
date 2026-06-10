@@ -1231,11 +1231,11 @@ const 试炼成就: 成就项目类型[] = [
   {
     名称: '基因挑战',
     get 描述() {
-      return `试炼难度，击败挑战副本中的【基因强化人】（${存档.击败次数.基因强化人}/1）`;
+      return `试炼难度，击败挑战副本中的【基因改造人】（${存档.击败次数.基因改造人}/1）`;
     },
     get 条件() {
       const 是试炼难度 = 存档.游戏难度 === '试炼';
-      return 是试炼难度 && 已完成成就('人定胜天') && 存档.击败次数.基因强化人 >= 1;
+      return 是试炼难度 && 已完成成就('人定胜天') && 存档.击败次数.基因改造人 >= 1;
     },
     奖励: '少量排行榜积分；初始天赋位+1',
     积分: 100,
@@ -2820,22 +2820,18 @@ const 特殊成就: 成就项目类型[] = [
   },
 ];
 
-function 增强字段(成就, 分类) {
-  // 创建新对象，继承原对象的原型
+function 增强字段(成就: any, 分类: string) {
   const 新对象 = Object.create(Object.getPrototypeOf(成就));
+  const keys = Object.getOwnPropertyNames(成就);
 
-  // 复制所有属性描述符（包括 getter/setter）
-  const 描述符 = Object.getOwnPropertyDescriptors(成就);
-  Object.defineProperties(新对象, 描述符);
+  for (const key of keys) {
+    const desc = Object.getOwnPropertyDescriptor(成就, key);
+    if (desc) {
+      Object.defineProperty(新对象, key, desc);
+    }
+  }
 
-  // 添加新的"分类"属性（普通属性）
-  Object.defineProperty(新对象, '分类', {
-    value: 分类,
-    writable: true,
-    enumerable: true,
-    configurable: true,
-  });
-
+  Object.defineProperty(新对象, '分类', { value: 分类 });
   return 新对象;
 }
 

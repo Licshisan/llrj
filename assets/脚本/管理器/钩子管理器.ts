@@ -27,7 +27,6 @@ export interface 通用效果字段类型 {
   探索后?: () => void;
   读书?: () => void;
 
-  获取挑战列表?: (挑战组: string[]) => void;
   激活天赋?: (名称: string) => void;
   完成成就?: (名称: string) => void;
   睡觉结算?: (结果文本: string[]) => void;

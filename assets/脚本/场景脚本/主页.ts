@@ -40,6 +40,8 @@ export class 主页 extends Component {
   @property(Node) 标签: Node = null;
   @property(Node) 按钮容器: Node = null;
   @property(Node) 背景: Node = null;
+  // 主动技
+  @property(Node) 苦肉按钮: Node = null;
 
   按钮冷却中 = false;
   冷却时间 = 0.2;
@@ -50,6 +52,7 @@ export class 主页 extends Component {
     this.更新();
     this.回档();
     this.游戏结束();
+    this.主动技能();
 
     this.按钮容器.getChildByName('睡觉').on(
       Button.EventType.CLICK,
@@ -127,6 +130,17 @@ export class 主页 extends Component {
     );
     this.暗夜模式();
     this.加载榜一大哥();
+  }
+
+  主动技能() {
+    this.苦肉按钮.active = 存档.天赋["死侍"] > 0
+    this.苦肉按钮.on(Button.EventType.CLICK, () => {
+      if(存档.天赋["死侍"]){
+        存档.健康 -= 1
+        存档.当日加成.苦肉发动次数 ++
+        this.播放文本(`【苦肉发动，健康-1，当日攻防血属性+4%！今日已触发${存档.当日加成.苦肉发动次数}次，全属性提升${存档.当日加成.苦肉发动次数 * 4}%`);
+      }
+    }, this);
   }
 
   回档() {
@@ -403,20 +417,18 @@ export class 主页 extends Component {
       '双枪老太婆',
       '自爆蛋',
       '晓风基因计划',
-      '基因改造人',
       '一块黑色的石头',
       '机甲少女',
       '炮击少女',
       '吾王',
       '晓风',
+      '基因改造人',
+      '镜像人',
+      '榜一大哥',
+      '一拳超人',
+      '南天门大将军',
+      '统御万天无极大道至真妙有玄穹高上帝'
     ];
-    执行钩子('获取挑战列表', [挑战组]);
-    挑战组.push('镜像人');
-    挑战组.push('榜一大哥');
-    挑战组.push('一拳超人');
-    挑战组.push('南天门大将军');
-    挑战组.push('统御万天无极大道至真妙有玄穹高上帝');
-
     const 敌人名称 = 挑战组[存档.其他.挑战进度];
     if (!敌人名称) {
       this.播放文本('你已经天下无敌了...');

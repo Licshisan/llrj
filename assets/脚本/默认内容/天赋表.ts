@@ -494,29 +494,23 @@ const 稀有天赋表: 天赋定义项目类型[] = [
 ];
 
 const 史诗天赋表: 天赋定义项目类型[] = [
-  { // todo
-    名称: '苦肉计',
-    说明: '「死侍」主动技能：在面板点击使用，消耗1健康，当日攻防血+15%。拼命架势效果翻倍，每天最多使用1次。',
+  {
+    名称: '死侍',
+    说明: '「苦肉」主动技，消耗1健康，当日攻防血+5%「鞭笞」拼命架势有概率效果翻倍',
     效果: {
-      主页更新: () => {
-        if (存档.天赋.死侍) {
-          存档.天赋.苦肉计 = Math.max(存档.天赋.苦肉计 || 0, 存档.天赋.死侍);
-          存档.天赋.死侍 = 0;
-        }
-      },
       计算最大攻击: (计算容器) => {
-        if (存档.天赋.苦肉计 && 存档.当日加成.苦肉计全属性) {
-          计算容器.百分比加成 += 存档.当日加成.苦肉计全属性 / 100;
+        if (存档.天赋.苦肉计 && 存档.当日加成.苦肉发动次数) {
+          计算容器.百分比加成 += 存档.当日加成.苦肉发动次数 * 4 / 100;
         }
       },
       计算最大防御: (计算容器) => {
-        if (存档.天赋.苦肉计 && 存档.当日加成.苦肉计全属性) {
-          计算容器.百分比加成 += 存档.当日加成.苦肉计全属性 / 100;
+        if (存档.天赋.苦肉计 && 存档.当日加成.苦肉发动次数) {
+          计算容器.百分比加成 += 存档.当日加成.苦肉发动次数 * 4 / 100;
         }
       },
       计算最大生命: (计算容器) => {
-        if (存档.天赋.苦肉计 && 存档.当日加成.苦肉计全属性) {
-          计算容器.百分比加成 += 存档.当日加成.苦肉计全属性 / 100;
+        if (存档.天赋.苦肉计 && 存档.当日加成.苦肉发动次数) {
+          计算容器.百分比加成 += 存档.当日加成.苦肉发动次数 * 4 / 100;
         }
       },
       计算拼命架势强度: (计算容器) => {
@@ -524,6 +518,11 @@ const 史诗天赋表: 天赋定义项目类型[] = [
           计算容器.独立乘区 *= 2;
         }
       },
+      睡觉结算: () => {
+        if (存档.天赋.苦肉计 && 存档.当日加成.苦肉发动次数) {
+          存档.当日加成.苦肉发动次数 = 0
+        }
+      }
     },
   },
   {
@@ -1107,46 +1106,20 @@ export function 获取天赋颜色(天赋, 品质) {
   return 天赋.负面 ? 颜色配置[`负面`] : 颜色配置[品质];
 }
 
-function 增强字段(t, 品质) {
-  // 创建新对象，继承原对象的原型
+function 增强字段(t: any, 品质: string) {
   const 新对象 = Object.create(Object.getPrototypeOf(t));
+  const keys = Object.getOwnPropertyNames(t);
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+    const desc = Object.getOwnPropertyDescriptor(t, key);
+    desc && Object.defineProperty(新对象, key, desc);
+  }
 
-  // 复制所有属性描述符（包括 getter/setter）
-  const 描述符 = Object.getOwnPropertyDescriptors(t);
-  Object.defineProperties(新对象, 描述符);
-
-  // 添加新的"分类"属性（普通属性）
-  Object.defineProperty(新对象, '品质', {
-    value: 品质,
-    writable: true,
-    enumerable: true,
-    configurable: true,
-  });
-
-  Object.defineProperty(新对象, '负面', {
-    value: 品质 === '负面',
-    writable: true,
-    enumerable: true,
-    configurable: true,
-  });
-
-  Object.defineProperty(新对象, '颜色', {
-    value: 获取天赋颜色(t, 品质),
-    writable: true,
-    enumerable: true,
-    configurable: true,
-  });
+  Object.defineProperty(新对象, '品质', { value: 品质 });
+  Object.defineProperty(新对象, '负面', { value: 品质 === '负面' });
+  Object.defineProperty(新对象, '颜色', { value: 获取天赋颜色(t, 品质) });
 
   return 新对象;
-}
-
-function 补充天赋(t, 品质) {
-  return {
-    ...t,
-    负面: 品质 === '负面',
-    品质: 品质,
-    颜色: 获取天赋颜色(t, 品质),
-  };
 }
 
 export const 默认天赋表: 天赋项目类型[] = [

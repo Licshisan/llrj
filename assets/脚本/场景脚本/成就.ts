@@ -96,7 +96,6 @@ export class 成就 extends Component {
 
   刷新成就列表() {
     this.内容节点.removeAllChildren();
-    // todo
     const 筛选后的成就 = 默认成就表.filter((成就) => 成就.分类 === this.当前分类);
     const 已完成成就列表 = Array.isArray(玩家.client_info.achievements)
       ? 玩家.client_info.achievements
@@ -110,23 +109,27 @@ export class 成就 extends Component {
         }
         创建普通文字(this.内容节点, 文本, 序号, 成就.条件 ? Color.WHITE : Color.GRAY);
       } else {
-        const 完成成就 = 已完成成就列表.find((c) => c.name === 成就.名称); // 本地成就
+        const 完成成就 = 已完成成就列表.find((c) => c.name === 成就.名称);
 
-        let 文本 = `【${成就.名称}】`;
         if (完成成就) {
-          文本 += 完成成就.description || 成就.描述;
-          const 完成时间 = 完成成就.achieve_at;
-          if (完成时间) 文本 += `\n完成时间：${格式化日期字符串(完成时间)}`;
+          let 文本 = `【${完成成就.name}】`;
+          文本 += 完成成就.description;
+          文本 += `\n${完成成就.description}`;
+          文本 += `\n完成时间：${格式化日期字符串(完成成就.achieve_at)}`;
+          if (成就.奖励) {
+            文本 += `\n奖励：${成就.奖励}`;
+          }
+          创建普通文字(this.内容节点, 文本, 序号, Color.GREEN);
         } else {
+          let 文本 = `【${成就.名称}】`;
           文本 += 成就.描述;
+          文本 += `\n${成就.描述}`;
+          if (成就.奖励) {
+            文本 += `\n奖励：${成就.奖励}`;
+          }
+          const 颜色 = 成就.条件 ? Color.WHITE : Color.GRAY;
+          创建普通文字(this.内容节点, 文本, 序号, 颜色);
         }
-
-        if (成就.奖励) {
-          文本 += `\n奖励：${成就.奖励}`;
-        }
-
-        const 颜色 = 完成成就 ? Color.GREEN : 成就.条件 ? Color.WHITE : Color.GRAY;
-        创建普通文字(this.内容节点, 文本, 序号, 颜色);
       }
     });
   }
