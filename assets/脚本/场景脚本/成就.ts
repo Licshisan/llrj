@@ -96,7 +96,7 @@ export class 成就 extends Component {
 
   刷新成就列表() {
     this.内容节点.removeAllChildren();
-
+    // todo
     const 筛选后的成就 = 默认成就表.filter((成就) => 成就.分类 === this.当前分类);
     const 已完成成就列表 = Array.isArray(玩家.client_info.achievements)
       ? 玩家.client_info.achievements

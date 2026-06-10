@@ -28,6 +28,7 @@ export const 默认玩家 = {
   pioneers: [] as PioneerInfo[],
   leaderboard: { list: [], self: 0 } as LeaderboardResult,
   collection_leaderboard: { list: [], self: 0 } as LeaderboardResult,
+  version: "1.0.0"
 };
 
 export let 玩家: typeof 默认玩家 = JSON.parse(JSON.stringify(默认玩家));
@@ -47,7 +48,7 @@ export function 加载玩家() {
     }
 
     for (const 键 in 默认玩家) {
-      if (键 === '游戏版本') {
+      if (键 === 'version') {
         玩家对象[键] = 默认玩家[键];
         continue;
       }

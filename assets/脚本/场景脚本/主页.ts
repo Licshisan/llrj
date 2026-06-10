@@ -322,7 +322,7 @@ export class 主页 extends Component {
   }
 
   暗夜模式() {
-    // 比例适配
+    // 比例适配 todo
     if (设置.经典比例) {
       const safeArea = this.node.getComponent(SafeArea);
       if (safeArea) {
