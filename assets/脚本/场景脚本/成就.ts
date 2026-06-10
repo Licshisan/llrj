@@ -107,7 +107,7 @@ export class 成就 extends Component {
         if (成就.奖励) {
           文本 += `\n奖励：${成就.奖励}`;
         }
-        创建普通文字(this.内容节点, 文本, 序号, 成就.条件 ? Color.GREEN : Color.GRAY);
+        创建普通文字(this.内容节点, 文本, 序号, 成就.条件 ? Color.WHITE : Color.GRAY);
       } else {
         const 完成成就 = 已完成成就列表.find((c) => c.name === 成就.名称); // 本地成就
 
@@ -124,7 +124,7 @@ export class 成就 extends Component {
           文本 += `\n奖励：${成就.奖励}`;
         }
 
-        const 颜色 = 完成成就 ? Color.GREEN : Color.GRAY;
+        const 颜色 = 完成成就 ? Color.GREEN : 成就.条件 ? Color.WHITE : Color.GRAY;
         创建普通文字(this.内容节点, 文本, 序号, 颜色);
       }
     });

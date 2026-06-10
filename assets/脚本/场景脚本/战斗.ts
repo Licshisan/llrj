@@ -93,6 +93,7 @@ export class 战斗 extends Component {
   @property(Node) 按钮容器: Node;
 
   对局: 对局类型;
+  战斗信息已上移 = false;
 
   进入战斗(敌人名称: string) {
     const 敌人配置 = 默认敌人表.find((e) => e.名称 === 敌人名称);
@@ -315,6 +316,11 @@ export class 战斗 extends Component {
 
     this.文本容器.getChildByName('标签1').getComponent(Label).string = '';
     this.文本容器.getChildByName('标签2').getComponent(Label).string = '';
+    if (!this.战斗信息已上移) {
+      const 位置 = this.文本容器.position;
+      this.文本容器.setPosition(位置.x, 位置.y + 80, 位置.z);
+      this.战斗信息已上移 = true;
+    }
     // 按钮初始化
     this.按钮容器.getChildByName('架势').active = !!存档.当前架势;
     this.按钮容器.getChildByName('架势').getChildByName('标签').getComponent(Label).string =

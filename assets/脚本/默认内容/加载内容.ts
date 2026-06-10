@@ -171,7 +171,7 @@ export async function 加载游戏内容() {
   }
 
   try {
-    玩家管理器.玩家.pioneers = await 获取先驱者请求();
+    玩家管理器.玩家.pioneers = 玩家管理器.标准化先驱者(await 获取先驱者请求());
     玩家管理器.玩家.leaderboard = await 获取排行榜请求();
     玩家管理器.玩家.collection_leaderboard = await 获取藏品排行榜请求();
   } catch (e) {
