@@ -98,7 +98,9 @@ export class 成就 extends Component {
     this.内容节点.removeAllChildren();
 
     const 筛选后的成就 = 默认成就表.filter((成就) => 成就.分类 === this.当前分类);
-    const 已完成成就列表 = 玩家.client_info.achievements;
+    const 已完成成就列表 = Array.isArray(玩家.client_info.achievements)
+      ? 玩家.client_info.achievements
+      : [];
 
     筛选后的成就.forEach((成就, 序号) => {
       if (成就.排行类) {

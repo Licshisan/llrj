@@ -98,10 +98,11 @@ export class 套餐 extends Component {
               玩家.client_info.play_times = 游玩次数;
               保存玩家();
               // 注入藏品
-              for (const 藏品名 in 玩家.client_info.collections) {
+              const 已收集藏品 = 玩家.client_info.collections || {};
+              for (const 藏品名 in 已收集藏品) {
                 存档.藏品[藏品名] = 计算数值(
                   '藏品生效数量',
-                  玩家.client_info.collections[藏品名] || 0,
+                  已收集藏品[藏品名] || 0,
                 );
               }
               // 计算并写入技能等级

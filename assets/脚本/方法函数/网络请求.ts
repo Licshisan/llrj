@@ -50,14 +50,15 @@ function 获取玩家校验信息() {
 }
 
 function 拼接查询(参数: Record<string, any>) {
-  const 查询 = new URLSearchParams();
+  const 片段: string[] = [];
   for (const 键 in 参数) {
     const 值 = 参数[键];
     if (值 !== undefined && 值 !== null && 值 !== '') {
-      查询.set(键, String(值));
+      // 编码避免中文、特殊字符乱码
+      片段.push(`${encodeURIComponent(键)}=${encodeURIComponent(String(值))}`);
     }
   }
-  const 字符串 = 查询.toString();
+  const 字符串 = 片段.join('&');
   return 字符串 ? `?${字符串}` : '';
 }
 

@@ -66,17 +66,17 @@ export function 创建时空流浪者() {
   const 天赋列表 = Object.keys(敌人存档.天赋 || {}).filter((名称) => 敌人存档.天赋[名称] > 0);
 
   // 显示名称
-  let 显示名称 = 敌人信息.client_info.name || '时空流浪者';
+  let 显示名称 = 敌人信息.client_info?.name || '时空流浪者';
   if (敌人存档.游戏难度) {
     显示名称 += `[${敌人存档.游戏难度}]`;
   }
-  if (敌人信息.server_info.title) {
+  if (敌人信息.server_info?.title) {
     显示名称 += `【${敌人信息.server_info.title}】`;
   }
 
   // 出场语
   let 出场语 = '';
-  if (敌人信息.client_info.show_text) {
+  if (敌人信息.client_info?.show_text) {
     出场语 += `“${敌人信息.client_info.show_text}”`;
   } else {
     出场语 += `“是你要挑战我${显示名称}吗？”`;
@@ -154,7 +154,7 @@ export function 创建镜像人() {
 
   // 出场语
   let 出场语 = '';
-  if (敌人信息.client_info.show_text) {
+  if (敌人信息.client_info?.show_text) {
     出场语 += `“${敌人信息.client_info.show_text}”`;
   } else {
     出场语 += `“是你要挑战我${显示名称}吗？”`;
@@ -221,17 +221,17 @@ export function 创建榜一大哥() {
     存档.临时数据?.榜一大哥?.玩家,
   );
   // 显示名称
-  let 显示名称 = 敌人信息.client_info.name || '榜一大哥';
+  let 显示名称 = 敌人信息.client_info?.name || '榜一大哥';
   if (敌人存档.游戏难度) {
     显示名称 += `[${敌人存档.游戏难度}]`;
   }
-  if (敌人信息.server_info.title) {
+  if (敌人信息.server_info?.title) {
     显示名称 += `【${敌人信息.server_info.title}】`;
   }
 
   // 出场语
   let 出场语 = '';
-  if (敌人信息.client_info.show_text) {
+  if (敌人信息.client_info?.show_text) {
     出场语 += `“${敌人信息.client_info.show_text}”`;
   } else {
     出场语 += `““听说你最近风头很盛？””`;

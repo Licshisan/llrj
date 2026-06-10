@@ -107,6 +107,9 @@ export class 分数 extends Component {
 
   结算成就() {
     const 完成成就: 成就项目类型[] = [];
+    if (!Array.isArray(玩家.client_info.achievements)) {
+      玩家.client_info.achievements = [];
+    }
     for (const 成就 of 默认成就表) {
       if (!成就.条件 || 玩家.client_info.achievements.find((c) => c.name === 成就.名称)) continue;
       if (成就.排行类) continue;

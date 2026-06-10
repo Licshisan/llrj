@@ -120,7 +120,7 @@ export class 事件 extends Component {
       },
     };
 
-    选项一.on(Button.EventType.CLICK, () => this.当前事件.结果一(上下文1), this);
+    选项一.on(Button.EventType.CLICK, () => this.当前事件.结果一?.(上下文1), this);
     选项二.on(Button.EventType.CLICK, () => this.当前事件.结果二?.(上下文2), this);
     选项三.on(Button.EventType.CLICK, () => this.当前事件.结果三?.(上下文3), this);
 
@@ -129,15 +129,17 @@ export class 事件 extends Component {
     选项三.setParent(this.按钮容器);
 
     const 序列 = tween(this.node);
-    for (let i = 0; i < this.当前事件.文本.length; i++) {
-      序列.call(() =>
-        创建动画文字(
-          this.文本容器,
-          this.当前事件.文本[i],
-          i,
-          设置.暗夜模式 ? Color.WHITE : Color.BLACK,
-        ),
-      ).delay(1.2 / 设置.播放速度);
+    if (this.当前事件 && this.当前事件.文本) {
+      for (let i = 0; i < this.当前事件.文本.length; i++) {
+        序列.call(() =>
+          创建动画文字(
+            this.文本容器,
+            this.当前事件.文本[i],
+            i,
+            设置.暗夜模式 ? Color.WHITE : Color.BLACK,
+          ),
+        ).delay(1.2 / 设置.播放速度);
+      }
     }
     序列.call(() => 放大出现(this.按钮容器)).start();
   }
@@ -162,6 +164,7 @@ export class 事件 extends Component {
 
   结束事件(描述 = ''): void {
     执行钩子('事件结束', [this.当前事件]);
+    tween(this.node).stop(); 
     this.当前事件 = null;
     存档.当前事件 = '';
     this.node.getComponent(主页).更新();

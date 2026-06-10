@@ -150,13 +150,19 @@ export async function 加载游戏内容() {
   try {
     // 尝试登录
     let player = await 登录请求();
+    if (!player) {
+      throw new Error('登录接口无返回');
+    }
 
     // 断线重传 并且不是 转移玩家
     if (
-      玩家管理器.玩家.client_info.updated_at > player.client_info?.updated_at &&
+      (玩家管理器.玩家.client_info?.updated_at || 0) > (player.client_info?.updated_at || 0) &&
       player.id === 玩家管理器.玩家.id
     ) {
       player = await 上传客户端数据();
+      if (!player) {
+        throw new Error('上传客户端数据无返回');
+      }
     }
 
     if (player.id) 玩家管理器.玩家.id = player.id;
@@ -172,8 +178,8 @@ export async function 加载游戏内容() {
 
   try {
     玩家管理器.玩家.pioneers = (await 获取先驱者请求()) || [];
-    玩家管理器.玩家.leaderboard = await 获取排行榜请求();
-    玩家管理器.玩家.collection_leaderboard = await 获取藏品排行榜请求();
+    玩家管理器.玩家.leaderboard = (await 获取排行榜请求()) || { list: [], self: 0 };
+    玩家管理器.玩家.collection_leaderboard = (await 获取藏品排行榜请求()) || { list: [], self: 0 };
   } catch (e) {
     error('登录失败' + e);
   }
