@@ -112,7 +112,7 @@ export class 进食 extends Component {
                 播放文本(this.标签, 文本);
                 保存存档();
                 this.更新属性();
-                this.刷新所有项目状态();
+                this.创建分页();
               },
             });
           } catch (e) {
@@ -136,17 +136,6 @@ export class 进食 extends Component {
 
     项目组件.getChildByName('标签一').getComponent(Label).string = 食物.描述;
     项目组件.getChildByName('标签二').getComponent(Label).string = 食物.说明;
-  }
-
-  刷新所有项目状态() {
-    const 当前食物表 = 默认食物表.filter((食物) => 食物.显示);
-    for (let i = 0; i < this.所有项目节点.length; i++) {
-      const 节点 = this.所有项目节点[i];
-      if (i < 当前食物表.length) {
-        const 食物数据 = 当前食物表[i];
-        this.更新项目UI(节点, 食物数据);
-      }
-    }
   }
 
   更新属性() {

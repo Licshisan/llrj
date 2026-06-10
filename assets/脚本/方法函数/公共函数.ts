@@ -100,8 +100,8 @@ export function 对象求和(obj: Record<string, number>) {
   return sum;
 }
 
-export function 自动进食(进食列表 = ['果子', '熟肉', '干脆面']): boolean {
-  if (存档.饥饿 <= 0) {
+export function 自动进食(进食列表 = ['果子', '熟肉', '干脆面'], 触发饥饿 = 0): boolean {
+  if (存档.饥饿 <= 触发饥饿) {
     const 初始饥饿 = 存档.饥饿;
     for (let i = 0; i < 进食列表.length; i++) {
       const 食物 = 默认食物表.find((f) => f.名称 === 进食列表[i]);

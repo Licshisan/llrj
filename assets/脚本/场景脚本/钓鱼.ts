@@ -22,6 +22,8 @@ export class 钓鱼 extends Component {
   鱼 = null;
   触发钓鱼() {
     this.初始化();
+    this.按钮.active = true;
+    this.按钮.targetOff(this);
     this.按钮.on(Button.EventType.CLICK, () => this.判定是否命中(), this);
   }
 
@@ -33,10 +35,12 @@ export class 钓鱼 extends Component {
     放大出现(this.钓鱼);
     主页脚本.播放文本('点击开始开始钓鱼！');
 
-    const 鱼 = 随机生成鱼();
-    console.log(鱼);
-    this.色块宽度 = this.色块宽度 * 鱼.色块宽度;
-    this.滑块速度 = this.滑块速度 * 鱼.滑块速度;
+    const 基础色块宽度 = 100;
+    const 基础滑块速度 = 600;
+    const 鱼 = 存档.临时数据.当前钓鱼鱼类 || 随机生成鱼();
+    存档.临时数据.当前钓鱼鱼类 = 鱼;
+    this.色块宽度 = 基础色块宽度 * 鱼.色块宽度;
+    this.滑块速度 = 基础滑块速度 * 鱼.滑块速度;
     this.鱼 = 鱼;
 
     const barUi = this.钓鱼条.getComponent(UITransform)!;
@@ -91,13 +95,14 @@ export class 钓鱼 extends Component {
       // 生成随机鱼信息
       this.scheduleOnce(() => {
         存档.当前事件 = '';
+        存档.临时数据.当前钓鱼鱼类 = null;
         if (!存档.临时数据.鱼篓) {
           存档.临时数据.鱼篓 = [];
         }
         存档.临时数据.鱼篓.push(this.鱼);
         存档.其他.钓鱼最大重量 = Math.max(this.鱼.重量, 存档.其他.钓鱼最大重量);
         保存存档();
-        const 结果文本 = `钓到一条【${this.鱼.名称}】「${this.鱼.品质}${'★'.repeat(this.鱼.星级)}」，重量：${this.鱼.重量}kg，请前往面板查看！`;
+        const 结果文本 = `钓到一条【${this.鱼.名称}】「${this.鱼.品质}${'★'.repeat(this.鱼.星阶)}」，重量：${this.鱼.重量}kg，请前往面板查看！`;
         主页脚本?.播放文本(结果文本);
         this.钓鱼.active = false;
         放大出现(主页脚本?.按钮容器!);
@@ -106,6 +111,7 @@ export class 钓鱼 extends Component {
       主页脚本?.播放文本('什么也没掉到');
       this.scheduleOnce(() => {
         存档.当前事件 = '';
+        存档.临时数据.当前钓鱼鱼类 = null;
         保存存档();
         this.钓鱼.active = false;
         放大出现(主页脚本?.按钮容器!);

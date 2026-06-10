@@ -324,7 +324,10 @@ export class 主页 extends Component {
   暗夜模式() {
     // 比例适配
     if (设置.经典比例) {
-      this.node.getComponent(SafeArea).enabled = false;
+      const safeArea = this.node.getComponent(SafeArea);
+      if (safeArea) {
+        safeArea.enabled = false;
+      }
       const widget = this.node.getComponent(Widget);
       if (widget) {
         widget.top = 0;

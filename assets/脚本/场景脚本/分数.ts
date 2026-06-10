@@ -29,7 +29,6 @@ export class 分数 extends Component {
     const texts = [
       `你的得分为：${得分.最终得分}（答题得分：30，剧情得分:${得分.剧情得分}，属性得分:${得分.属性得分}。满分约100分）`,
     ];
-
     // 成就
     const 套餐 = 默认套餐表.find((套餐) => 套餐.名称 === 存档.套餐名称);
     if (套餐 && 套餐.娱乐) {
@@ -37,9 +36,14 @@ export class 分数 extends Component {
     } else {
       this.结算藏品();
       const 新完成成就 = this.结算成就();
-      await 上传客户端数据();
-      玩家.pioneers = await 获取先驱者请求();
-      const 先驱者成就 = this.结算成就();
+      let 先驱者成就: 成就项目类型[] = [];
+      try {
+        await 上传客户端数据();
+        玩家.pioneers = (await 获取先驱者请求()) || [];
+        先驱者成就 = this.结算成就();
+      } catch (e) {
+        玩家.pioneers = 玩家.pioneers || [];
+      }
       const 完成成就 = [...新完成成就, ...先驱者成就];
 
       保存玩家();
