@@ -65,32 +65,52 @@ export async function 请求JSON<T = any>(
   路径: string,
   配置: { 方法?: 请求方法; 数据?: any; 超时?: number } = {},
 ): Promise<T | null> {
-  try {
-    const 控制器 = new AbortController();
-    const 超时编号 = 配置.超时 ? setTimeout(() => 控制器.abort(), 配置.超时) : null;
+  return new Promise((resolve) => {
+    const xhr = new XMLHttpRequest();
+    const url = `${服务器地址}${路径}`;
+    const method = 配置.方法 || 'GET';
+    const timeout = 配置.超时 ?? 5000;
 
-    const 响应 = await fetch(`${服务器地址}${路径}`, {
-      method: 配置.方法 || 'GET',
-      headers: 配置.数据 === undefined ? undefined : { 'Content-Type': 'application/json' },
-      body: 配置.数据 === undefined ? undefined : JSON.stringify(配置.数据),
-      signal: 控制器.signal,
-    });
+    xhr.timeout = timeout;
+    xhr.open(method, url, true);
 
-    if (超时编号) {
-      clearTimeout(超时编号);
+    // POST 传 JSON 才设置请求头
+    if (method === 'POST' && 配置.数据) {
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
     }
 
-    const 原始数据 = await 响应.json().catch(() => null);
-    if (!响应.ok) {
-      console.warn('网络请求失败', 路径, 响应.status, 原始数据);
-      return null;
-    }
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          const res = JSON.parse(xhr.responseText);
+          resolve(res as T);
+        } catch (e) {
+          console.warn('JSON解析失败', url, e);
+          resolve(null);
+        }
+      } else {
+        console.warn('请求状态码异常', url, xhr.status);
+        resolve(null);
+      }
+    };
 
-    return 原始数据 as T;
-  } catch (错误) {
-    console.warn('网络请求异常', 路径, 错误);
-    return null;
-  }
+    xhr.onerror = () => {
+      console.warn('网络请求错误', url);
+      resolve(null);
+    };
+
+    xhr.ontimeout = () => {
+      console.warn('请求超时', url);
+      resolve(null);
+    };
+
+    // 发送数据
+    if (method === 'POST' && 配置.数据) {
+      xhr.send(JSON.stringify(配置.数据));
+    } else {
+      xhr.send();
+    }
+  });
 }
 
 export async function 登录请求(): Promise<PlayerInfo | null> {

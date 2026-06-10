@@ -17,7 +17,7 @@ export class 设置 extends Component {
   @property(Node) 战败语输入框: Node;
   @property(Node) 确认按钮: Node;
 
-  速度表 = { 1: '一般', 2: '快速', 4: '极速' };
+  速度表 = { 1: '一般', 2: '快速', 5: '极速' };
   start() {
     this.出场语输入框.getComponent(EditBox).string = 玩家.client_info?.show_text || '';
     this.战胜语输入框.getComponent(EditBox).string = 玩家.client_info?.win_text || '';

@@ -151,7 +151,7 @@ export class 开场 extends Component {
     for (let i = 0; i < 临时选中的天赋.length; i++) {
       序列.call(() => {
         const 天赋 = 临时选中的天赋[i];
-        let 文本 = `你拥有天赋「${天赋.名称}】」`;
+        let 文本 = `你拥有天赋「${天赋.名称}」`;
         if (天赋.已固定) {
           文本 += '【已固定】';
         }
@@ -198,7 +198,7 @@ export class 开场 extends Component {
       this.已锁定天赋 = this.已锁定天赋.filter((name) => name !== item.名称);
       播放文本(this.标签, `已取消锁定：${item.名称}`);
 
-      let 文本 = `你拥有天赋「${item.名称}】」`;
+      let 文本 = `你拥有天赋「${item.名称}」`;
       if (item.已固定) {
         文本 += '【已固定】';
       }
