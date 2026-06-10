@@ -1274,8 +1274,8 @@
     "_isAbsVerticalCenter": true,
     "_originalWidth": 720,
     "_originalHeight": 80,
-    "_alignMode": 2,
-    "_lockFlags": 0,
+    "_alignMode": 1,
+    "_lockFlags": 1,
     "_id": "3eZt8XOV5G95JXxISiKrQq"
   },
   {
@@ -2635,8 +2635,8 @@
     "_isAbsVerticalCenter": true,
     "_originalWidth": 668,
     "_originalHeight": 0,
-    "_alignMode": 2,
-    "_lockFlags": 0,
+    "_alignMode": 1,
+    "_lockFlags": 1,
     "_id": "d4MYoiNS9IEo5YbU/bJWQk"
   },
   {
@@ -3104,8 +3104,8 @@
     "_isAbsVerticalCenter": true,
     "_originalWidth": 720,
     "_originalHeight": 0,
-    "_alignMode": 2,
-    "_lockFlags": 0,
+    "_alignMode": 1,
+    "_lockFlags": 1,
     "_id": "62jmYJphtIV5OLM3WWOibO"
   },
   {
@@ -10395,8 +10395,8 @@
     "_isAbsVerticalCenter": true,
     "_originalWidth": 0,
     "_originalHeight": 0,
-    "_alignMode": 2,
-    "_lockFlags": 0,
+    "_alignMode": 1,
+    "_lockFlags": 4,
     "_id": "55Dw8Ra45INKcraLsHEgEb"
   },
   {
@@ -10492,7 +10492,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "文字按钮"
+    "value": "苦肉按钮"
   },
   {
     "__type__": "CCPropertyOverrideInfo",
@@ -10662,6 +10662,9 @@
     },
     "背景": {
       "__id__": 5
+    },
+    "苦肉按钮": {
+      "__id__": 468
     },
     "_id": "afCK9rbURHWI9FD6PPuqXZ"
   },

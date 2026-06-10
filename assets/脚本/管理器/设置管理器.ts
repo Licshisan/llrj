@@ -1,7 +1,7 @@
 import { error, sys, warn } from 'cc';
 
 const 默认设置 = {
-  游戏版本: '1.0.0',
+  游戏版本: '1.0.1',
   上次难度: '普通',
   播放速度: 2,
   播放音乐: false,

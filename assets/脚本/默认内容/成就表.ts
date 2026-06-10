@@ -404,10 +404,7 @@ const 排行成就: 成就项目类型[] = [
     名称: '👑孤独求败',
     get 描述() {
       const 条目 = 玩家.leaderboard?.list?.[0];
-      if (条目) {
-        return `位于排行榜第一，完成者【${条目?.player_name || '暂无'}】id:${条目?.player_id || '暂无'}`;
-      }
-      return '位于排行榜第一，暂无完成者';
+      return `位于排行榜第一，完成者\n${条目?.player_name}（id：${条目?.player_id }）积分:${条目?.score}`;
     },
     get 条件() {
       return 玩家.leaderboard?.self === 1;
@@ -426,10 +423,7 @@ const 排行成就: 成就项目类型[] = [
     名称: '🥈一人之下',
     get 描述() {
       const 条目 = 玩家.leaderboard?.list?.[1];
-      if (条目) {
-        return `位于排行榜第二，完成者【${条目?.player_name || '暂无'}】id:${条目.player_id || '暂无'}`;
-      }
-      return '位于排行榜第二，暂无完成者';
+      return `位于排行榜第二，完成者\n${条目?.player_name}（id：${条目?.player_id}）积分:${条目?.score}`;
     },
     get 条件() {
       return 玩家.leaderboard?.self === 2;
@@ -448,10 +442,7 @@ const 排行成就: 成就项目类型[] = [
     名称: '🥉三甲及第',
     get 描述() {
       const 条目 = 玩家.leaderboard?.list?.[2];
-      if (条目) {
-        return `位于排行榜第三，完成者【${条目?.player_name || '暂无'}】id:${条目.player_id || '暂无'}`;
-      }
-      return '位于排行榜第三，暂无完成者';
+      return `位于排行榜第三，完成者\n${条目?.player_name}（id：${条目?.player_id}）积分:${条目?.score}`;
     },
     get 条件() {
       return 玩家.leaderboard?.self === 3;
@@ -469,16 +460,11 @@ const 排行成就: 成就项目类型[] = [
     排行类: true,
     名称: '🎖️十方霸主',
     get 描述() {
-      const 前十列表 = 玩家.leaderboard?.list?.slice(3, 6);
+      const 前十列表 = 玩家.leaderboard?.list?.slice(3, 10);
       const 完成者列表 = 前十列表?.map(
-        (p) => `${p?.player_name || '暂无'}(id:${p?.player_id || '暂无'})`,
+        (p) => `${p?.player_name}（id：${p?.player_id}）积分:${p?.score}`,
       );
-
-      if (!前十列表?.length) {
-        return `位于排行榜前十，暂无完成者`;
-      }
-
-      return `位于排行榜前十，完成者：${完成者列表.join('，')}`;
+      return `位于排行榜前十，完成者\n${完成者列表.join('，\n')}`;
     },
     get 条件() {
       const 排名 = 玩家.leaderboard?.self;
@@ -498,15 +484,11 @@ const 排行成就: 成就项目类型[] = [
     排行类: true,
     名称: '🚬烟雨江湖',
     get 描述() {
-      const 前二十列表 = 玩家.leaderboard?.list?.slice(10, 13);
+      const 前二十列表 = 玩家.leaderboard?.list?.slice(10, 20);
       const 完成者列表 = 前二十列表?.map(
-        (p) => `${p?.player_name || '暂无'}(id:${p?.player_id || '暂无'})`,
+        (p) => `${p?.player_name}（id：${p?.player_id}）积分:${p?.score}`,
       );
-
-      if (!前二十列表?.length) {
-        return `位于排行榜前二十，暂无完成者`;
-      }
-      return `位于排行榜前二十，完成者：${完成者列表.join('，')}`;
+      return `位于排行榜前二十，完成者\n${完成者列表.join('，\n')}`;
     },
     get 条件() {
       const 排名 = 玩家.leaderboard?.self;
@@ -526,15 +508,11 @@ const 排行成就: 成就项目类型[] = [
     排行类: true,
     名称: '💰一币之力',
     get 描述() {
-      const 前五十列表 = 玩家.leaderboard?.list?.slice(20, 23);
+      const 前五十列表 = 玩家.leaderboard?.list?.slice(20, 50);
       const 完成者列表 = 前五十列表?.map(
-        (p) => `${p?.player_name || '暂无'}(id:${p?.player_id || '暂无'})`,
+        (p) => `${p?.player_name}（id：${p?.player_id}）积分:${p?.score}`,
       );
-
-      if (!前五十列表?.length) {
-        return `位于排行榜前五十，暂无完成者`;
-      }
-      return `位于排行榜前五十，完成者：${完成者列表.join('，')}`;
+      return `位于排行榜前五十，完成者\n${完成者列表.join('，\n')}`;
     },
     get 条件() {
       const 排名 = 玩家.leaderboard?.self;
@@ -556,7 +534,13 @@ const 藏品成就: 成就项目类型[] = [
   {
     排行类: true,
     名称: '多就是强',
-    描述: '位于藏品榜前三',
+    get 描述(){
+      const 前三列表 = 玩家.collection_leaderboard?.list?.slice(0, 3);
+      const 完成者列表 = 前三列表?.map(
+        (p) => `${p?.player_name}（id：${p?.player_id}）数量:${p?.score}`,
+      );
+      return '位于藏品榜前三\n' + 完成者列表.join("\n")
+    },
     get 条件() {
       const 排名 = 玩家.collection_leaderboard?.self;
       return typeof 排名 === 'number' && 排名 >= 1 && 排名 < 4;
@@ -574,7 +558,13 @@ const 藏品成就: 成就项目类型[] = [
   {
     排行类: true,
     名称: '多多益善',
-    描述: '位于藏品榜前十',
+    get 描述(){
+      const 前十列表 = 玩家.collection_leaderboard?.list?.slice(3, 10);
+      const 完成者列表 = 前十列表?.map(
+        (p) => `${p?.player_name}（id：${p?.player_id}）数量:${p?.score}`,
+      );
+      return '位于藏品榜前十\n' + 完成者列表.join("\n")
+    },
     get 条件() {
       const 排名 = 玩家.collection_leaderboard?.self;
       return typeof 排名 === 'number' && 排名 >= 4 && 排名 < 11;
@@ -592,7 +582,13 @@ const 藏品成就: 成就项目类型[] = [
   {
     排行类: true,
     名称: '初具规模',
-    描述: '位于藏品榜前二十',
+    get 描述(){
+      const 前二十列表 = 玩家.collection_leaderboard?.list?.slice(10, 20);
+      const 完成者列表 = 前二十列表?.map(
+        (p) => `${p?.player_name}（id：${p?.player_id}）数量:${p?.score}`,
+      );
+      return '位于藏品榜前二十\n' + 完成者列表.join("\n")
+    },
     get 条件() {
       const 排名 = 玩家.collection_leaderboard?.self;
       return typeof 排名 === 'number' && 排名 >= 11 && 排名 < 21;
@@ -610,7 +606,13 @@ const 藏品成就: 成就项目类型[] = [
   {
     排行类: true,
     名称: '小有所成',
-    描述: '位于藏品榜前五十',
+    get 描述(){
+      const 前五十列表 = 玩家.collection_leaderboard?.list?.slice(20, 50);
+      const 完成者列表 = 前五十列表?.map(
+        (p) => `${p?.player_name}（id：${p?.player_id}）数量:${p?.score}`,
+      );
+      return '位于藏品榜前五十\n' + 完成者列表.join("\n")
+    },
     get 条件() {
       const 排名 = 玩家.collection_leaderboard?.self;
       return typeof 排名 === 'number' && 排名 >= 21 && 排名 < 51;
