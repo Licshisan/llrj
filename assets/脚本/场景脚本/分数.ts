@@ -6,7 +6,7 @@ import { 计算排行榜积分总和, 默认成就表 } from '../默认内容/�
 import type { 成就项目类型 } from '../默认内容/成就表';
 import { 默认套餐表 } from '../默认内容/套餐表';
 import { 上传客户端数据, 获取先驱者请求 } from '../方法函数/网络请求';
-import { 保存玩家, 玩家, 标准化先驱者 } from '../管理器/玩家管理器';
+import { 保存玩家, 玩家 } from '../管理器/玩家管理器';
 import { 对象求和 } from '../方法函数/公共函数';
 import { 计算得分 } from '../公共方法/最终得分';
 const { ccclass, property } = _decorator;
@@ -39,10 +39,10 @@ export class 分数 extends Component {
       let 先驱者成就: 成就项目类型[] = [];
       try {
         await 上传客户端数据();
-        玩家.pioneers = 标准化先驱者(await 获取先驱者请求());
+        玩家.pioneers = (await 获取先驱者请求()) || [];
         先驱者成就 = this.结算成就();
       } catch (e) {
-        玩家.pioneers = 玩家.pioneers || {};
+        玩家.pioneers = 玩家.pioneers || [];
       }
       const 完成成就 = [...新完成成就, ...先驱者成就];
 

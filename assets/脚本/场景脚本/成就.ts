@@ -102,7 +102,6 @@ export class 成就 extends Component {
 
     筛选后的成就.forEach((成就, 序号) => {
       if (成就.排行类) {
-        console.log(成就);
         let 文本 = `【${成就.名称}】${成就.描述}`;
         if (成就.奖励) {
           文本 += `\n奖励：${成就.奖励}`;

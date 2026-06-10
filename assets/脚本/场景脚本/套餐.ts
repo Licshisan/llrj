@@ -99,12 +99,10 @@ export class 套餐 extends Component {
               保存玩家();
               // 注入藏品
               for (const 藏品名 in 玩家.client_info.collections) {
-                console.log(藏品名);
                 存档.藏品[藏品名] = 计算数值(
                   '藏品生效数量',
                   玩家.client_info.collections[藏品名] || 0,
                 );
-                console.log(存档.藏品[藏品名]);
               }
               // 计算并写入技能等级
               for (const 技能 of 默认技能表) {

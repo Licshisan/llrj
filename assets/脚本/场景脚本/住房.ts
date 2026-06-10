@@ -269,9 +269,6 @@ export class 住房 extends Component {
 
     this.中介 = 抽取随机中介();
     this.房源 = 生成中介房源(this.中介);
-
-    console.log(this.中介);
-    console.log(this.房源);
   }
 
   刷新属性() {

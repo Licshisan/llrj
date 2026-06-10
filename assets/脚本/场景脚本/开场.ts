@@ -137,8 +137,6 @@ export class 开场 extends Component {
       });
     });
 
-    console.log(临时选中的天赋);
-
     const 序列 = tween(this.node)
       .call(() => 淡出(this.文本容器))
       .delay(3.5 / 设置.播放速度)

@@ -11,7 +11,8 @@ export class 日记 extends Component {
   @property(Node) 返回按钮: Node;
 
   onLoad(): void {
-    const 日记 = 默认日记表.find((日记) => 日记.条件 && 日记.地区 === 获取当前地区().名称);
+    const 当前地区 = 获取当前地区();
+    const 日记 = 默认日记表.find((日记) => 日记.条件 && 日记.地区 === 当前地区?.名称);
     if (!日记) {
       director.loadScene('睡觉');
       return;

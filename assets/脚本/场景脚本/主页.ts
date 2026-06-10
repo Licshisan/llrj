@@ -366,11 +366,7 @@ export class 主页 extends Component {
           文本: 提示文本,
           按钮: {
             确认睡觉: () => {
-              if (获取当前日记()) {
-                director.loadScene('日记');
-              } else {
-                director.loadScene('睡觉');
-              }
+              this.进入睡觉流程();
             },
             返回: () => director.loadScene('主页'),
           },
@@ -378,6 +374,14 @@ export class 主页 extends Component {
         director.loadScene('确认');
         return;
       }
+      this.进入睡觉流程();
+    }
+  }
+
+  进入睡觉流程() {
+    if (获取当前日记()) {
+      director.loadScene('日记');
+    } else {
       director.loadScene('睡觉');
     }
   }
@@ -763,21 +767,22 @@ export class 主页 extends Component {
 
     const 总权重 = 前进探索战斗权重 + 前进探索事件权重 + 前进探索收集权重;
     const 随机数 = Math.random() * 总权重;
+    const 当前地区 = 获取当前地区();
 
     if (随机数 < 前进探索战斗权重) {
       存档.其他.战斗次数++;
-      const 敌人表 = 获取当前地区().敌人;
+      const 敌人表 = 当前地区.敌人;
       执行钩子('计算地区敌人表', [敌人表]);
       this.node.getComponent(战斗).进入战斗(抽取项目(敌人表));
     } else if (随机数 < 前进探索战斗权重 + 前进探索事件权重) {
       存档.其他.随机事件次数++;
-      const 事件表 = 获取当前地区().事件;
+      const 事件表 = 当前地区.事件;
       执行钩子('计算地区事件表', [事件表]);
       this.node.getComponent(事件).触发事件(抽取项目(事件表));
     } else {
       存档.其他.捡道具次数++;
 
-      const 物品表 = 获取当前地区().物品;
+      const 物品表 = 当前地区.物品;
       const 结果文本: string[] = [];
       执行钩子('计算地区物品表', [{ 物品表, 结果文本 }]);
 
@@ -834,7 +839,6 @@ export class 主页 extends Component {
     this.按钮容器.getChildByName('探索').active = 存档.按钮.探索 > 0;
     this.按钮容器.getChildByName('前进').active = 存档.按钮.前进 > 0;
 
-    console.log(this.按钮容器.getChildByName('前进').active);
     this.按钮容器.getChildByName('伙伴').active = 存档.按钮.伙伴 > 0;
     this.按钮容器.getChildByName('制作').active = 存档.按钮.制作 > 0;
     this.按钮容器.getChildByName('特性').active = 存档.按钮.特性 > 0;
