@@ -103,6 +103,8 @@ export class 分数 extends Component {
       ([k, v]) => (res[k] = (old[k] || 0) + (add[k] || 0)),
     );
     玩家.client_info.collections = res;
+    存档.新藏品 = {}
+    保存玩家();
   }
 
   结算成就() {

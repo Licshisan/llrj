@@ -1,4 +1,4 @@
-﻿import { _decorator, Color, Component, director, Label, Node } from 'cc';
+﻿import { _decorator, Button, Color, Component, director, Label, Node } from 'cc';
 import { 创建普通文字 } from '../方法函数/动画效果';
 import { 格式化日期字符串 } from '../方法函数/公共函数';
 import { 默认成就表 } from '../默认内容/成就表';
@@ -12,6 +12,7 @@ export class 成就 extends Component {
   @property(Node) 返回按钮: Node;
   @property(Node) 分类节点1: Node;
   @property(Node) 分类节点2: Node;
+  @property(Node) 图鉴按钮: Node = null;
 
   当前分类 = '原版';
   分类列表: 成就分类[] = [
@@ -32,6 +33,7 @@ export class 成就 extends Component {
   start() {
     this.初始化分类标签();
     this.刷新成就列表();
+    this.图鉴按钮.on(Button.EventType.CLICK, () => director.loadScene('图鉴'), this);
     this.返回按钮.on(
       Node.EventType.TOUCH_END,
       () => {

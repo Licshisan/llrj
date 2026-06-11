@@ -25,7 +25,6 @@ export class 面板 extends Component {
   @property(Node) 分类节点: Node = null;
   @property(Node) 内容: Node = null;
   @property(Node) 返回按钮: Node = null;
-  @property(Node) 图鉴按钮: Node = null;
 
   当前分类 = '面板';
   分类列表 = ['面板', '统计', '技能', '战斗'];
@@ -42,7 +41,6 @@ export class 面板 extends Component {
       },
       this,
     );
-    this.图鉴按钮.on(Button.EventType.CLICK, () => director.loadScene('图鉴'), this);
 
     this.初始化分类标签();
     this.刷新内容列表();

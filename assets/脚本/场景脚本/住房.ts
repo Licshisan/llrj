@@ -53,6 +53,8 @@ export class 住房 extends Component {
       Button.EventType.CLICK,
       () => {
         if (!this.当前序号) {
+          存档.临时数据.中介 = null
+          保存存档()
           director.loadScene('主页');
         } else {
           this.显示首页();
@@ -267,8 +269,12 @@ export class 住房 extends Component {
       return 房源列表;
     }
 
-    this.中介 = 抽取随机中介();
-    this.房源 = 生成中介房源(this.中介);
+    if(!存档.临时数据.中介){
+      存档.临时数据.中介 = 抽取随机中介()
+      存档.临时数据.房源 = 生成中介房源(this.中介)
+    }
+    this.中介 = 存档.临时数据.中介
+    this.房源 = 存档.临时数据.房源
   }
 
   刷新属性() {

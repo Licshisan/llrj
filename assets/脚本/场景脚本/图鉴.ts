@@ -24,11 +24,7 @@ export class 图鉴 extends Component {
     this.返回按钮.on(
       Button.EventType.CLICK,
       () => {
-        if (globalThis.页面来源 === '面板') {
-          director.loadScene('面板');
-        } else {
-          director.loadScene('主页');
-        }
+        director.loadScene('成就');
       },
       this,
     );
