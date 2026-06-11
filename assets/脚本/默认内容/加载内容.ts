@@ -119,8 +119,8 @@ async function 领取藏品奖励() {
     await 确认领取补偿请求("collections")
     const coll = player.client_info.collections;
     for (const c in 藏品奖励) {
-      player.server_info.collections[c] = 0
       coll[c] = (coll[c] || 0) + (Number(藏品奖励[c]) || 0);
+      player.server_info.collections[c] = 0
     }
   } catch (e) {
     throw new Error(`领取藏品失败: ${(e as Error).message}`);
