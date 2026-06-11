@@ -1115,9 +1115,18 @@ function 增强字段(t: any, 品质: string) {
     desc && Object.defineProperty(新对象, key, desc);
   }
 
-  Object.defineProperty(新对象, '品质', { value: 品质 });
-  Object.defineProperty(新对象, '负面', { value: 品质 === '负面' });
-  Object.defineProperty(新对象, '颜色', { value: 获取天赋颜色(t, 品质) });
+  Object.defineProperty(新对象, '颜色', {
+    value: 获取天赋颜色(t, 品质),
+    enumerable: true
+  });
+  Object.defineProperty(新对象, '品质', {
+    value: 品质,
+    enumerable: true
+  });
+  Object.defineProperty(新对象, '负面', {
+    value: 品质 === '负面',
+    enumerable: true
+  });
 
   return 新对象;
 }

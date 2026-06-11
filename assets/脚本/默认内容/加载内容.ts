@@ -9,7 +9,7 @@ import { 默认制作表 } from './制作表';
 import { 默认伙伴特性表 } from './伙伴特性表';
 import { 默认特性表 } from './特性表';
 import { 默认天赋表 } from './天赋表';
-import { error, log } from 'cc';
+import { error, game, log } from 'cc';
 import { 默认难度表 } from './难度表';
 import { 默认特质表 } from './特质表';
 import { 默认藏品表 } from './藏品表';
@@ -115,17 +115,79 @@ async function 领取藏品奖励() {
   const 藏品奖励 = player?.server_info?.collections;
   if (!藏品奖励) return;
 
-  try{
+  try {
     await 确认领取补偿请求("collections")
-    console.log("正在领取")
     const coll = player.client_info.collections;
     for (const c in 藏品奖励) {
       player.server_info.collections[c] = 0
       coll[c] = (coll[c] || 0) + (Number(藏品奖励[c]) || 0);
     }
-    console.log("领取完成")
-  }catch(e){
-    throw new Error('领取失败');
+  } catch (e) {
+    throw new Error(`领取藏品失败: ${(e as Error).message}`);
+  }
+}
+
+async function 领取成就奖励() {
+  const 成就奖励 = 玩家管理器.玩家?.server_info?.achievements;
+  if (!成就奖励) return;
+  try {
+    await 确认领取补偿请求("achievements");
+    const 本地成就列表 = 玩家管理器.玩家?.client_info?.achievements ?? [];
+    for (const 奖励名称 in 成就奖励) {
+      const 对应成就 = 默认成就表?.find(item => item.名称 === 奖励名称);
+      if (!对应成就) continue;
+
+      if (成就奖励[奖励名称]) {
+        const 已存在 = 本地成就列表.some(item => item.name === 奖励名称);
+        if (!已存在) {
+          const 新成就 = {
+            name: 奖励名称,
+            description: 对应成就.描述,
+            achieve_at: Date.now(),
+          };
+          本地成就列表.push(新成就);
+          对应成就.效果?.完成成就?.(对应成就.名称);
+        }
+      } else {
+        玩家管理器.玩家.client_info.achievements = 本地成就列表.filter(
+          item => item.name !== 奖励名称
+        );
+      }
+    }
+
+    玩家管理器.玩家.server_info.achievements = {};
+  } catch (e) {
+    throw new Error(`领取成就失败: ${(e as Error).message}`);
+  }
+}
+
+
+function compareVersion(v1: string, v2: string): number {
+  const arr1 = v1.split('.').map(Number);
+  const arr2 = v2.split('.').map(Number);
+  const len = Math.max(arr1.length, arr2.length);
+
+  for (let i = 0; i < len; i++) {
+    const n1 = arr1[i] ?? 0;
+    const n2 = arr2[i] ?? 0;
+    if (n1 > n2) return 1;
+    if (n1 < n2) return -1;
+  }
+  return 0;
+}
+
+async function 版本校验() {
+  try {
+    const serverVersion = 玩家管理器.玩家?.server_info?.version;
+    const localVersion = 玩家管理器.玩家?.version;
+    if (!serverVersion) return;
+
+    const res = compareVersion(localVersion, serverVersion);
+    if (res < 0) {
+      game.end();
+    }
+  } catch (e) {
+    throw new Error(`版本校验失败: ${(e as Error).message}`);
   }
 }
 
@@ -193,6 +255,8 @@ export async function 加载游戏内容() {
     if (player.created_at) 玩家管理器.玩家.created_at = player.created_at;
 
     await 领取藏品奖励()
+    await 领取成就奖励()
+    await 版本校验()
     玩家管理器.保存玩家();
   } catch (e) {
     error('登录失败' + e);

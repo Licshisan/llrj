@@ -22,6 +22,8 @@ export const 默认玩家 = {
     zz: 0,
     compensations: {},
     collections:{},
+    achievements: {},
+    version: "",
   },
   created_at: '',
 
@@ -77,3 +79,5 @@ export function 保存玩家() {
     error('保存玩家失败', e);
   }
 }
+
+// todo 流浪者足迹

@@ -2833,7 +2833,7 @@ function 增强字段(成就: any, 分类: string) {
     }
   }
 
-  Object.defineProperty(新对象, '分类', { value: 分类 });
+  Object.defineProperty(新对象, '分类', { value: 分类, enumerable: true });
   return 新对象;
 }
 
