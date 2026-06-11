@@ -53,7 +53,7 @@ export class 分数 extends Component {
         完成成就.forEach((成就) => {
           let 成就文本 = `新成就【${成就.名称}】：${成就.描述}`;
           if (成就.奖励) {
-            成就文本 += `「奖励：${成就.奖励}」`;
+            成就文本 += `\n「奖励：${成就.奖励}」`;
           }
           texts.push(成就文本);
         });
@@ -123,7 +123,12 @@ export class 分数 extends Component {
 
       玩家.client_info.achievements.push(新成就);
       成就.效果?.完成成就?.(成就.名称);
-      完成成就.push(成就);
+      完成成就.push({
+        名称: 成就.名称,
+        描述: 成就.描述,
+        完成时间: Date.now(),
+        条件: true,
+      });
     }
     玩家.client_info.scores = 计算排行榜积分总和();
     return 完成成就;

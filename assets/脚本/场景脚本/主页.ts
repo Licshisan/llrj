@@ -495,7 +495,7 @@ export class 主页 extends Component {
     }
 
     const 前进探索消耗精力 = 计算数值('前进探索消耗精力', 10);
-    if (存档.精力 < 前进探索消耗精力) {
+    if (存档.精力 < 前进探索消耗精力 || 存档.精力 <= 0) {
       this.播放文本('精力不足！');
       return false;
     }
