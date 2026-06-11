@@ -21,6 +21,7 @@ export const 默认玩家 = {
     title: '',
     zz: 0,
     compensations: {},
+    collections:{},
   },
   created_at: '',
 

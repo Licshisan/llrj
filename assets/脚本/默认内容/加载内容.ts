@@ -22,6 +22,8 @@ import {
   获取先驱者请求,
   获取藏品排行榜请求,
   获取排行榜请求,
+  确认领取补偿请求,
+  上传消息请求,
 } from '../方法函数/网络请求';
 
 let 加载完成 = false;
@@ -108,6 +110,26 @@ export function 注册钩子函数() {
   });
 }
 
+// 解析 server_info
+async function 领取藏品奖励() {
+  const player = 玩家管理器.玩家;
+  const 藏品奖励 = player?.server_info?.collections;
+  if (!藏品奖励) return;
+
+  try{
+    await 确认领取补偿请求("collections")
+    console.log("正在领取")
+    const coll = player.client_info.collections;
+    for (const c in 藏品奖励) {
+      player.server_info.collections[c] = 0
+      coll[c] = (coll[c] || 0) + (Number(藏品奖励[c]) || 0);
+    }
+    console.log("领取完成")
+  }catch(e){
+    throw new Error('领取失败');
+  }
+}
+
 function 全局异常捕获() {
   let lastErrorKey = '';
   let lastReportTime = 0;
@@ -128,7 +150,7 @@ function 全局异常捕获() {
     error(`Message: ${msg}`);
     error(`Stack: ${stack}`);
 
-    上报错误({ name, line, msg, stack, setting: 设置管理器.设置 })
+    上报错误({ name, line, msg, stack })
       .then(() => {
         log('错误上报成功');
       })
@@ -171,6 +193,7 @@ export async function 加载游戏内容() {
     if (player.server_info) 玩家管理器.玩家.server_info = player.server_info;
     if (player.created_at) 玩家管理器.玩家.created_at = player.created_at;
 
+    await 领取藏品奖励()
     玩家管理器.保存玩家();
   } catch (e) {
     error('登录失败' + e);

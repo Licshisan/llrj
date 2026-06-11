@@ -193,22 +193,38 @@ func (a *App) uploadLog(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) claimCompensations(w http.ResponseWriter, r *http.Request) {
 	var req struct {
-		UID string `json:"uid"`
-		ID  int64  `json:"id"`
+		UID   string `json:"uid"`
+		ID    int64  `json:"id"`
+		Field string `json:"field"`
 	}
 	if !readJSON(w, r, &req) {
 		return
 	}
+
+	if req.Field == "" {
+		req.Field = "compensations"
+	}
+
+	// 简单防注入：仅允许字母、数字、下划线
+	for _, c := range req.Field {
+		if !((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_') {
+			writeError(w, http.StatusBadRequest, "invalid field name")
+			return
+		}
+	}
+
 	if _, ok := a.requirePlayer(w, r, req.UID, req.ID); !ok {
 		return
 	}
 
-	_, err := a.db.Exec(r.Context(), `
+	// 动态拼接 jsonb 字段减法 SQL
+	sql := `
 		UPDATE players
-		SET server_info = server_info - 'compensations',
+		SET server_info = server_info - $3,
 		    updated_at = NOW()
 		WHERE id = $1 AND uid = $2
-	`, req.ID, req.UID)
+	`
+	_, err := a.db.Exec(r.Context(), sql, req.ID, req.UID, req.Field)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, err.Error())
 		return

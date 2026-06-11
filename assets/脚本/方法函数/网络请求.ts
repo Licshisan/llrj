@@ -194,9 +194,15 @@ export async function 上报错误(data: any) {
   return 上传消息请求(data, 'error');
 }
 
-export async function 确认领取补偿请求(): Promise<PlayerInfo | null> {
+export async function 确认领取补偿请求(field?: string): Promise<PlayerInfo | null> {
+  const postData = {
+    ...获取玩家校验信息()
+  } as any;
+  if (field) {
+    postData.field = field;
+  }
   return 请求JSON<PlayerInfo>('/compensations/claim', {
     方法: 'POST',
-    数据: 获取玩家校验信息(),
+    数据: postData
   });
 }
