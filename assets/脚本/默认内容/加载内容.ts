@@ -132,8 +132,10 @@ async function 领取成就奖励() {
   if (!成就奖励) return;
   try {
     await 确认领取补偿请求("achievements");
-    const 本地成就列表 = 玩家管理器.玩家?.client_info?.achievements ?? [];
-    for (const 奖励名称 in 成就奖励) {
+    let 本地成就列表 = [...(玩家管理器.玩家?.client_info?.achievements ?? [])];
+    const keys = Object.keys(成就奖励);
+
+    for (const 奖励名称 of keys) {
       const 对应成就 = 默认成就表?.find(item => item.名称 === 奖励名称);
       if (!对应成就) continue;
 
@@ -142,19 +144,20 @@ async function 领取成就奖励() {
         if (!已存在) {
           const 新成就 = {
             name: 奖励名称,
-            description: 对应成就.描述,
+            description: 对应成就.描述 ?? "",
             achieve_at: Date.now(),
           };
           本地成就列表.push(新成就);
           对应成就.效果?.完成成就?.(对应成就.名称);
         }
       } else {
-        玩家管理器.玩家.client_info.achievements = 本地成就列表.filter(
-          item => item.name !== 奖励名称
-        );
+        本地成就列表 = 本地成就列表.filter(item => item.name !== 奖励名称);
       }
     }
 
+    if(玩家管理器.玩家.client_info) {
+      玩家管理器.玩家.client_info.achievements = 本地成就列表;
+    }
     玩家管理器.玩家.server_info.achievements = {};
   } catch (e) {
     throw new Error(`领取成就失败: ${(e as Error).message}`);
