@@ -227,7 +227,7 @@ export class 开场 extends Component {
     if (item.已锁定) {
       文本 += '【已锁定】';
     }
-    文本 += `\n效果：${item?.说明}`;
+    文本 += `\n${item?.说明}`;
 
     node.getComponent(Label).string = 文本;
   }

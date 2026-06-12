@@ -1843,6 +1843,7 @@ require = function e(rendi, yered, wilian) {
         return daneysha;
       },
       onLoad: function () {
+        // 存档
         let reby = tilia("scr_data2");
         var jaselynn = 11;
         var elaph = this.getEl();
