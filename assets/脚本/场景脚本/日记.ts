@@ -3,6 +3,7 @@ import { 创建动画文字, 淡入 } from '../方法函数/动画效果';
 import { 设置 } from '../管理器/设置管理器';
 import { 默认日记表 } from '../默认内容/日记表';
 import { 获取当前地区 } from '../默认内容/地区表';
+import { 音频管理器 } from './音频';
 const { ccclass, property } = _decorator;
 
 @ccclass('日记')
@@ -18,6 +19,7 @@ export class 日记 extends Component {
       return;
     }
 
+    音频管理器.instance.playBGM()
     this.返回按钮.active = false;
     const sequence = tween(this.node).delay(1 / 设置.播放速度);
     if (日记.文本.length === 0) {

@@ -49,6 +49,7 @@ export class 主页 extends Component {
 
   start() {
     globalThis.页面来源 = '主页';
+    音频管理器.instance.stopBGM()
 
     this.更新();
     this.回档();

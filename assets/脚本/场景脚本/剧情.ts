@@ -3,6 +3,7 @@ import { 保存存档, 存档 } from '../管理器/存档管理器';
 import { 创建动画文字, 播放文本, 放大出现, 淡入 } from '../方法函数/动画效果';
 import { 设置 } from '../管理器/设置管理器';
 import { 默认剧情表 } from '../默认内容/剧情表';
+import { 音频管理器 } from './音频';
 const { ccclass, property } = _decorator;
 
 export interface 剧情上下文 {
@@ -35,6 +36,7 @@ export class 剧情 extends Component {
       this.显示结果(`当前剧情数据不存在:${剧情名称}（请反馈开发者）`);
       return;
     }
+    音频管理器.instance.playBGM()
     this.文本容器.removeAllChildren();
     this.结果标签.getComponent(Label).string = '';
     this.提示标签.getComponent(Label).string = '';
