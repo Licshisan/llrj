@@ -15,6 +15,7 @@ import { 设置 } from '../管理器/设置管理器';
 import { 抽取物品 } from '../方法函数/公共函数';
 import type { 概率类型 } from '../方法函数/公共函数';
 import { 默认敌人表 } from '../默认内容/敌人表';
+import { 音频管理器 } from './音频';
 const { ccclass, property } = _decorator;
 
 export interface 战斗角色 {
@@ -305,6 +306,7 @@ export class 战斗 extends Component {
 
     this.界面初始化();
     this.node.getComponent(主页).播放文本(this.对局.敌人.出场语);
+    音频管理器.instance.playByName("show")
   }
 
   界面初始化() {
@@ -427,6 +429,12 @@ export class 战斗 extends Component {
     // 特殊
     if (this.对局.主角.其他.已触发居合) {
       this.按钮容器.getChildByName('居合').active = false;
+    }
+
+    if(this.对局.主角.方法 === "爆头" || this.对局.主角.方法 === "枪击"){
+      音频管理器.instance.playByName("fire")
+    } else {
+      音频管理器.instance.playByName("attack")
     }
 
     // 结算
@@ -629,7 +637,10 @@ export class 战斗 extends Component {
     存档.击败次数[this.对局.敌人.名称] =
       (存档.击败次数[this.对局.敌人.名称] || 0) + 1;
 
-    this.scheduleOnce(() => this.结束战斗(this.对局.结果文本.join('\n')), 1.8 / 设置.播放速度);
+    this.scheduleOnce(() => {
+      音频管理器.instance.playByName("win")
+      this.结束战斗(this.对局.结果文本.join('\n')), 1.8 / 设置.播放速度
+    });
   }
 
   失败结算() {
@@ -667,7 +678,10 @@ export class 战斗 extends Component {
       存档.战败次数 = {};
     }
     存档.战败次数[this.对局.敌人.名称] = (存档.战败次数[this.对局.敌人.名称] || 0) + 1;
-    this.scheduleOnce(() => this.结束战斗(this.对局.结果文本.join('\n')), 1.8);
+    this.scheduleOnce(() => {
+      音频管理器.instance.playByName("fail")
+      this.结束战斗(this.对局.结果文本.join('\n')), 1.8
+    });
   }
 
   点击逃跑() {

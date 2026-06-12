@@ -4,7 +4,6 @@ import {
   Color,
   Component,
   director,
-  error,
   Label,
   Node,
   SafeArea,
@@ -20,7 +19,7 @@ import {
   计算最大防御,
   计算最大饥饿,
 } from '../方法函数/属性计算';
-import { 抽取项目, 抽取物品, 自然恢复生命, 对象求和, 跳转场景 } from '../方法函数/公共函数';
+import { 抽取项目, 抽取物品, 自然恢复生命, 对象求和 } from '../方法函数/公共函数';
 import { 播放文本, 放大缩小 } from '../方法函数/动画效果';
 import { 事件 } from './事件';
 import { 战斗 } from './战斗';
@@ -31,6 +30,7 @@ import { 获取地区名称, 获取当前地区 } from '../默认内容/地区�
 import { 玩家 } from '../管理器/玩家管理器';
 import { 计算得分 } from '../公共方法/最终得分';
 import { 获取榜一大哥请求, 获取随机存档请求 } from '../方法函数/网络请求';
+import { 音频管理器 } from './音频';
 const { ccclass, property } = _decorator;
 
 @ccclass('主页')
@@ -59,6 +59,7 @@ export class 主页 extends Component {
       Button.EventType.CLICK,
       () => {
         if (this.按钮冷却中) return;
+        音频管理器.instance.playByName("button")
         this.按钮冷却中 = true;
         this.scheduleOnce(() => (this.按钮冷却中 = false), this.冷却时间);
         this.点击睡觉();
@@ -69,6 +70,7 @@ export class 主页 extends Component {
       Button.EventType.CLICK,
       () => {
         if (this.按钮冷却中) return;
+        音频管理器.instance.playByName("button")
         this.按钮冷却中 = true;
         this.scheduleOnce(() => (this.按钮冷却中 = false), this.冷却时间);
         this.点击挑战();
@@ -79,6 +81,7 @@ export class 主页 extends Component {
       Button.EventType.CLICK,
       () => {
         if (this.按钮冷却中) return;
+        音频管理器.instance.playByName("walk")
         this.按钮冷却中 = true;
         this.scheduleOnce(() => (this.按钮冷却中 = false), this.冷却时间);
         this.点击前进();
@@ -89,6 +92,7 @@ export class 主页 extends Component {
       Button.EventType.CLICK,
       () => {
         if (this.按钮冷却中) return;
+        音频管理器.instance.playByName("walk")
         this.按钮冷却中 = true;
         this.scheduleOnce(() => (this.按钮冷却中 = false), this.冷却时间);
         this.点击探索();
@@ -99,6 +103,7 @@ export class 主页 extends Component {
       Button.EventType.CLICK,
       () => {
         if (this.按钮冷却中) return;
+        音频管理器.instance.playByName("walk")
         this.按钮冷却中 = true;
         this.scheduleOnce(() => (this.按钮冷却中 = false), this.冷却时间);
         this.点击结局();
@@ -108,23 +113,39 @@ export class 主页 extends Component {
 
     this.按钮容器
       .getChildByName('伙伴')
-      .on(Button.EventType.CLICK, () => director.loadScene('伙伴'), this);
+      .on(Button.EventType.CLICK, () => {
+        音频管理器.instance.playByName("button")
+        director.loadScene('伙伴')
+      }, this);
     this.按钮容器
       .getChildByName('进食')
-      .on(Button.EventType.CLICK, () => director.loadScene('进食'), this);
+      .on(Button.EventType.CLICK, () => {
+        音频管理器.instance.playByName("button")
+        director.loadScene('进食')
+      }, this);
     this.按钮容器
       .getChildByName('制作')
-      .on(Button.EventType.CLICK, () => director.loadScene('制作'), this);
+      .on(Button.EventType.CLICK, () => {
+        音频管理器.instance.playByName("button")
+        director.loadScene('制作')
+      }, this);
     this.按钮容器
       .getChildByName('特性')
-      .on(Button.EventType.CLICK, () => director.loadScene('特性'), this);
+      .on(Button.EventType.CLICK, () => {
+        音频管理器.instance.playByName("button")
+        director.loadScene('特性')
+      }, this);
     this.按钮容器
       .getChildByName('商店')
-      .on(Button.EventType.CLICK, () => director.loadScene('商店'), this);
+      .on(Button.EventType.CLICK, () => {
+        音频管理器.instance.playByName("button")
+        director.loadScene('商店')
+      }, this);
     this.信息栏.on(
       Node.EventType.TOUCH_END,
       () => {
         if (存档.当前事件 || 存档.当前敌人) return;
+        音频管理器.instance.playByName("button")
         director.loadScene('面板');
       },
       this,
