@@ -1,5 +1,4 @@
 import { 存档 } from '../管理器/存档管理器';
-import { 默认食材表 } from '../公共方法/食品店表';
 import { 已完成成就 } from './成就表';
 
 interface 商品上下文类型 {

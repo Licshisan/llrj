@@ -115,7 +115,7 @@ export class 成就 extends Component {
 
         if (完成成就) {
           let 文本 = `【${完成成就.name}】`;
-          文本 += `\n${完成成就.description}`;
+          文本 += `${完成成就.description}`;
           文本 += `\n完成时间：${格式化日期字符串(完成成就.achieve_at)}`;
           if (成就.奖励) {
             文本 += `\n奖励：${成就.奖励}`;
@@ -123,7 +123,7 @@ export class 成就 extends Component {
           创建普通文字(this.内容节点, 文本, 序号, Color.GREEN);
         } else {
           let 文本 = `【${成就.名称}】`;
-          文本 += `\n${成就.描述}`;
+          文本 += `${成就.描述}`;
           if (成就.奖励) {
             文本 += `\n奖励：${成就.奖励}`;
           }
