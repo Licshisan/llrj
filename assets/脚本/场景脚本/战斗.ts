@@ -304,6 +304,9 @@ export class 战斗 extends Component {
     战斗主角.战斗初始化(this.对局);
     战斗敌人.战斗初始化(this.对局);
 
+    执行钩子('战斗敌人属性增强', [this.对局]);
+
+
     this.界面初始化();
     this.node.getComponent(主页).播放文本(this.对局.敌人.出场语);
     音频管理器.instance.playByName("show")
@@ -639,8 +642,8 @@ export class 战斗 extends Component {
 
     this.scheduleOnce(() => {
       音频管理器.instance.playByName("win")
-      this.结束战斗(this.对局.结果文本.join('\n')), 1.8 / 设置.播放速度
-    });
+      this.结束战斗(this.对局.结果文本.join('\n'))
+    }, 1.8 / 设置.播放速度);
   }
 
   失败结算() {
@@ -680,8 +683,8 @@ export class 战斗 extends Component {
     存档.战败次数[this.对局.敌人.名称] = (存档.战败次数[this.对局.敌人.名称] || 0) + 1;
     this.scheduleOnce(() => {
       音频管理器.instance.playByName("fail")
-      this.结束战斗(this.对局.结果文本.join('\n')), 1.8
-    });
+      this.结束战斗(this.对局.结果文本.join('\n'))
+    }, 1.8);
   }
 
   点击逃跑() {
