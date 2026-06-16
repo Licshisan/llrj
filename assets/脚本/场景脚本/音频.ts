@@ -1,4 +1,4 @@
-import { _decorator, Component, AudioSource, AudioClip, director, resources, random } from 'cc';
+import { _decorator, Component, AudioSource, AudioClip, director, resources } from 'cc';
 import { 设置 } from '../管理器/设置管理器';
 const { ccclass, property } = _decorator;
 
@@ -13,7 +13,7 @@ export class 音频管理器 extends Component {
         音频管理器.instance = this;
     }
 
-    playByName(path: string, vol = 0.2) {
+    playByName(path: string, vol = 0.3) {
         if (!设置.音效开关) return;
         resources.load("audio/" + path, AudioClip, (err, clip) => {
             console.log(err);
@@ -22,10 +22,11 @@ export class 音频管理器 extends Component {
         });
     }
 
-    playBGM(path?: string, vol = 0.1) {
-        if (!设置.播放音乐) return;
+    playBGM(path?: string, vol = 0.2) {
+        if (!设置.音效开关) return;
         console.log(this.bgmSource)
-        if(this.bgmSource.playing) return;
+        // 修改判断：clip存在并且正在播放才return
+        if(this.bgmSource.clip && this.bgmSource.playing) return;
         const bgms = ["BGM1", "BGM2", "BGM3", "BGM4"]
         if(!path) {
             path = bgms[Math.floor(Math.random() * bgms.length)]
@@ -45,5 +46,6 @@ export class 音频管理器 extends Component {
 
     stopBGM() {
         this.bgmSource.stop();
+        this.bgmSource.clip = null;
     }
 }
