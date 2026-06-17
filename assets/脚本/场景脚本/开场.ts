@@ -74,7 +74,7 @@ export class 开场 extends Component {
     const 临时选中的天赋 = [];
 
     let 天赋数量 = 计算数值('天赋数量', Math.random() * 100 < 80 ? 2 : 1);
-    if (Math.random() * 100 < 计算数值('额外天赋概率', 20)) {
+    if (Math.random() * 100 < 计算数值('额外天赋概率', 18)) {
       天赋数量++;
     }
 

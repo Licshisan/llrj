@@ -128,6 +128,7 @@ export class 分数 extends Component {
         描述: 成就.描述,
         完成时间: Date.now(),
         条件: true,
+        奖励: 成就.奖励
       });
     }
     玩家.client_info.scores = 计算排行榜积分总和();
