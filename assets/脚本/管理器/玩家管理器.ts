@@ -79,5 +79,3 @@ export function 保存玩家() {
     error('保存玩家失败', e);
   }
 }
-
-// todo 流浪者足迹
