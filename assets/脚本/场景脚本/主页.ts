@@ -709,7 +709,7 @@ export class 主页 extends Component {
         }
         if(Math.random() * 100 < 2 && !存档.物品.玄水信物){
           this.基本消耗();
-          this.node.getComponent(战斗).进入战斗("玄水帮弟子");
+          this.node.getComponent(战斗).进入战斗("玄水阁弟子");
           return false;
         }
 
@@ -726,12 +726,12 @@ export class 主页 extends Component {
           this.node.getComponent(事件).触发事件('路过青竹门派');
           return false;
         }
-        if(存档.其他.铁衣帮等级 > 0 && Math.random() * 100 < 1){
+        if(存档.其他.铁衣功等级 > 0 && Math.random() * 100 < 1){
           this.基本消耗();
           this.node.getComponent(事件).触发事件('路过铁衣门派');
           return false;
         }
-        if(存档.其他.玄水阁等级 > 0 && Math.random() * 100 < 1){
+        if(存档.其他.玄水诀等级 > 0 && Math.random() * 100 < 1){
           this.基本消耗();
           this.node.getComponent(事件).触发事件('路过玄水门派');
           return false;
@@ -782,7 +782,7 @@ export class 主页 extends Component {
           this.node.getComponent(事件).触发事件('路过江湖铁衣掌门');
           return false;
         }
-        if(存档.其他.玄水阁声望 >= 100 && 存档.物品.铁衣信物 && Math.random() * 100 < 1){
+        if(存档.其他.玄水阁声望 >= 100 && 存档.物品.玄水信物 && Math.random() * 100 < 1){
           this.基本消耗();
           this.node.getComponent(事件).触发事件('路过江湖玄水掌门');
           return false;
