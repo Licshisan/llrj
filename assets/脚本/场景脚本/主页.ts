@@ -688,50 +688,107 @@ export class 主页 extends Component {
       return false;
     }
 
-    // 江湖人士
-    if (存档.技能.世界感知 >= 2 && (存档.游戏难度 === '真实' || 存档.游戏难度 === '残酷' || 存档.游戏难度 === '绝境')) {
-      if (获取地区名称() === '县城' && Math.random() * 100 < 3) {
+    // 江湖人士县城篇
+    if (存档.技能.世界感知 >= 2 && (存档.游戏难度 === '真实' || 存档.游戏难度 === '残酷' || 存档.游戏难度 === '绝境') && 获取地区名称() === '县城') {
+      if (!存档.其他.开启江湖支线 && !存档.其他.拒绝开启江湖支线) {
         this.基本消耗();
-        this.node.getComponent(事件).触发事件('打探江湖人士');
+        this.node.getComponent(事件).触发事件('选择江湖支线');
         return false;
       }
+      if(存档.其他.开启江湖支线 && !存档.剧情.完成县城江湖线){
+        // 普通散兵
+        if(Math.random() * 100 < 2 && !存档.物品.青竹信物){
+          this.基本消耗();
+          this.node.getComponent(战斗).进入战斗("青竹门弟子");
+          return false;
+        }
+        if(Math.random() * 100 < 2 && !存档.物品.铁衣信物){
+          this.基本消耗();
+          this.node.getComponent(战斗).进入战斗("铁衣帮弟子");
+          return false;
+        }
+        if(Math.random() * 100 < 2 && !存档.物品.玄水信物){
+          this.基本消耗();
+          this.node.getComponent(战斗).进入战斗("玄水帮弟子");
+          return false;
+        }
 
-      if (
-        (获取地区名称() === '县城' || 获取地区名称() === '山脉' || 获取地区名称() === '山林') &&
-        Math.random() * 100 < (存档.临时数据?.门派熟悉度?.青竹门 || 0) * 0.05
-      ) {
-        this.基本消耗();
-        this.node.getComponent(事件).触发事件('偶遇青竹门');
-        return false;
-      }
-      if (
-        (获取地区名称() === '县城' || 获取地区名称() === '山脉' || 获取地区名称() === '山林') &&
-        Math.random() * 100 < (存档.临时数据?.门派熟悉度?.铁衣帮 || 0) * 0.05
-      ) {
-        this.基本消耗();
-        this.node.getComponent(事件).触发事件('偶遇铁衣帮');
-        return false;
-      }
-      if (
-        (获取地区名称() === '县城' || 获取地区名称() === '山脉' || 获取地区名称() === '山林') &&
-        Math.random() * 100 < (存档.临时数据?.门派熟悉度?.玄水阁 || 0) * 0.05
-      ) {
-        this.基本消耗();
-        this.node.getComponent(事件).触发事件('偶遇玄水阁');
-        return false;
-      }
+        // 江湖商贩
+        if(Math.random() * 100 < 2){
+          this.基本消耗();
+          this.node.getComponent(事件).触发事件('江湖商贩');
+          return false;
+        }
 
-      if (
-        (获取地区名称() === '山脉' || 获取地区名称() === '山林' || 存档.当前地点 == '城中村') &&
-        Math.random() * 100 < 1 &&
-        对象求和(存档.临时数据?.残页) > 0
-      ) {
-        this.基本消耗();
-        this.node.getComponent(事件).触发事件('残页交易');
-        return false;
-      }
+        // 挑战门内弟子
+        if(存档.其他.青竹步等级 > 0 && Math.random() * 100 < 1){
+          this.基本消耗();
+          this.node.getComponent(事件).触发事件('路过青竹门派');
+          return false;
+        }
+        if(存档.其他.铁衣帮等级 > 0 && Math.random() * 100 < 1){
+          this.基本消耗();
+          this.node.getComponent(事件).触发事件('路过铁衣门派');
+          return false;
+        }
+        if(存档.其他.玄水阁等级 > 0 && Math.random() * 100 < 1){
+          this.基本消耗();
+          this.node.getComponent(事件).触发事件('路过玄水门派');
+          return false;
+        }
 
-      // todo 增加最终决战剧情
+        // 精英散兵
+        if(存档.击败次数.青竹门精英 > 0 && Math.random() * 100 < 0.5){
+          this.基本消耗();
+          this.node.getComponent(战斗).进入战斗("青竹门精英");
+          return false;
+        }
+        if(存档.击败次数.铁衣帮精英 > 0 && Math.random() * 100 < 0.5){
+          this.基本消耗();
+          this.node.getComponent(战斗).进入战斗("铁衣帮精英");
+          return false;
+        }
+        if(存档.击败次数.玄水阁精英 > 0 && Math.random() * 100 < 0.5){
+          this.基本消耗();
+          this.node.getComponent(战斗).进入战斗("玄水阁精英");
+          return false;
+        }
+
+        // 长老
+        if(存档.其他.青竹门声望 >= 100 && Math.random() * 100 < 1){
+          this.基本消耗();
+          this.node.getComponent(事件).触发事件('路过江湖青竹长老');
+          return false;
+        }
+        if(存档.其他.铁衣帮声望 >= 100 && Math.random() * 100 < 1){
+          this.基本消耗();
+          this.node.getComponent(事件).触发事件('路过江湖铁衣长老');
+          return false;
+        }
+        if(存档.其他.玄水阁声望 >= 100 && Math.random() * 100 < 1){
+          this.基本消耗();
+          this.node.getComponent(事件).触发事件('路过江湖玄水长老');
+          return false;
+        }
+        
+        // 掌门
+        if(存档.其他.青竹门声望 >= 100 && 存档.物品.青竹信物 && Math.random() * 100 < 1){
+          this.基本消耗();
+          this.node.getComponent(事件).触发事件('路过江湖青竹掌门');
+          return false;
+        }
+        if(存档.其他.铁衣帮声望 >= 100 && 存档.物品.铁衣信物 && Math.random() * 100 < 1){
+          this.基本消耗();
+          this.node.getComponent(事件).触发事件('路过江湖铁衣掌门');
+          return false;
+        }
+        if(存档.其他.玄水阁声望 >= 100 && 存档.物品.铁衣信物 && Math.random() * 100 < 1){
+          this.基本消耗();
+          this.node.getComponent(事件).触发事件('路过江湖玄水掌门');
+          return false;
+        }
+
+      }
     }
 
     // 城中村住房
