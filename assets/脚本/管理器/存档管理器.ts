@@ -208,7 +208,7 @@ export function 删除存档(存档名称: string) {
       const key = localStorage.key(i);
       全部存储键.push(key);
     }
-    
+
     const 备份前缀 = `${存档名称}_备份`;
     for (const key of 全部存储键) {
       if (key.startsWith(备份前缀)) {

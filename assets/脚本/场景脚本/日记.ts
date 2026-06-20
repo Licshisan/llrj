@@ -19,7 +19,7 @@ export class 日记 extends Component {
       return;
     }
 
-    音频管理器.instance.playBGM()
+    音频管理器.instance.playBGM();
     this.返回按钮.active = false;
     const sequence = tween(this.node).delay(1 / 设置.播放速度);
     if (日记.文本.length === 0) {

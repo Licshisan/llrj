@@ -4,48 +4,48 @@ const { ccclass, property } = _decorator;
 
 @ccclass('音频管理器')
 export class 音频管理器 extends Component {
-    static instance: 音频管理器;
-    @property(AudioSource) audioSource!: AudioSource;
-    @property(AudioSource) bgmSource!: AudioSource;
+  static instance: 音频管理器;
+  @property(AudioSource) audioSource!: AudioSource;
+  @property(AudioSource) bgmSource!: AudioSource;
 
-    onLoad() {
-        director.addPersistRootNode(this.node);
-        音频管理器.instance = this;
-    }
+  onLoad() {
+    director.addPersistRootNode(this.node);
+    音频管理器.instance = this;
+  }
 
-    playByName(path: string, vol = 0.3) {
-        if (!设置.音效开关) return;
-        resources.load("audio/" + path, AudioClip, (err, clip) => {
-            console.log(err);
-            if (err) return;
-            this.audioSource.playOneShot(clip, vol);
-        });
-    }
+  playByName(path: string, vol = 0.3) {
+    if (!设置.音效开关) return;
+    resources.load('audio/' + path, AudioClip, (err, clip) => {
+      console.log(err);
+      if (err) return;
+      this.audioSource.playOneShot(clip, vol);
+    });
+  }
 
-    playBGM(path?: string, vol = 0.2) {
-        if (!设置.音效开关) return;
-        console.log(this.bgmSource)
-        // 修改判断：clip存在并且正在播放才return
-        if(this.bgmSource.clip && this.bgmSource.playing) return;
-        const bgms = ["BGM1", "BGM2", "BGM3", "BGM4"]
-        if(!path) {
-            path = bgms[Math.floor(Math.random() * bgms.length)]
-        }
-        console.log(path)
-        resources.load("audio/" + path, AudioClip, (err, clip) => {
-            if (err) {
-                console.error("背景音乐加载失败：", err);
-                return;
-            }
-            this.bgmSource.clip = clip;
-            this.bgmSource.volume = vol;
-            this.bgmSource.loop = true;
-            this.bgmSource.play();
-        });
+  playBGM(path?: string, vol = 0.2) {
+    if (!设置.音效开关) return;
+    console.log(this.bgmSource);
+    // 修改判断：clip存在并且正在播放才return
+    if (this.bgmSource.clip && this.bgmSource.playing) return;
+    const bgms = ['BGM1', 'BGM2', 'BGM3', 'BGM4'];
+    if (!path) {
+      path = bgms[Math.floor(Math.random() * bgms.length)];
     }
+    console.log(path);
+    resources.load('audio/' + path, AudioClip, (err, clip) => {
+      if (err) {
+        console.error('背景音乐加载失败：', err);
+        return;
+      }
+      this.bgmSource.clip = clip;
+      this.bgmSource.volume = vol;
+      this.bgmSource.loop = true;
+      this.bgmSource.play();
+    });
+  }
 
-    stopBGM() {
-        this.bgmSource.stop();
-        this.bgmSource.clip = null;
-    }
+  stopBGM() {
+    this.bgmSource.stop();
+    this.bgmSource.clip = null;
+  }
 }

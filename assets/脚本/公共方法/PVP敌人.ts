@@ -84,9 +84,9 @@ export function 创建时空流浪者() {
   }
   出场语 += `\n对方信息【金钱${格式化金钱(敌人存档.金钱)}，精力${敌人最大精力}】`;
   for (const c in 敌人存档.天赋) {
-    const tianfu  = 默认天赋表.find((x)=> x.名称 === c && !x.负面)
-    if(tianfu){
-      const a = `(${tianfu.隐藏 ? "隐藏·" : ""}${tianfu.品质})`
+    const tianfu = 默认天赋表.find((x) => x.名称 === c && !x.负面);
+    if (tianfu) {
+      const a = `(${tianfu.隐藏 ? '隐藏·' : ''}${tianfu.品质})`;
       出场语 += `\n【${tianfu.名称}${a}】`;
     }
   }
@@ -252,9 +252,9 @@ export function 创建榜一大哥() {
   if (敌人存档.天赋 && Object.keys(敌人存档.天赋).length > 0) {
     出场语 += '\n检测到对方持有天赋：';
     for (const c in 敌人存档.天赋) {
-      const tianfu  = 默认天赋表.find((x)=> x.名称 === c && !x.负面)
-      if(tianfu){
-        const a = `(${tianfu.隐藏 ? "隐藏·" : ""}${tianfu.品质})`
+      const tianfu = 默认天赋表.find((x) => x.名称 === c && !x.负面);
+      if (tianfu) {
+        const a = `(${tianfu.隐藏 ? '隐藏·' : ''}${tianfu.品质})`;
         出场语 += `\n【${tianfu.名称}${a}】`;
       }
     }

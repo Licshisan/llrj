@@ -49,7 +49,7 @@ export class 主页 extends Component {
 
   start() {
     globalThis.页面来源 = '主页';
-    音频管理器.instance.stopBGM()
+    音频管理器.instance.stopBGM();
 
     this.更新();
     this.回档();
@@ -60,7 +60,7 @@ export class 主页 extends Component {
       Button.EventType.CLICK,
       () => {
         if (this.按钮冷却中) return;
-        音频管理器.instance.playByName("button")
+        音频管理器.instance.playByName('button');
         this.按钮冷却中 = true;
         this.scheduleOnce(() => (this.按钮冷却中 = false), this.冷却时间);
         this.点击睡觉();
@@ -71,7 +71,7 @@ export class 主页 extends Component {
       Button.EventType.CLICK,
       () => {
         if (this.按钮冷却中) return;
-        音频管理器.instance.playByName("button")
+        音频管理器.instance.playByName('button');
         this.按钮冷却中 = true;
         this.scheduleOnce(() => (this.按钮冷却中 = false), this.冷却时间);
         this.点击挑战();
@@ -82,7 +82,7 @@ export class 主页 extends Component {
       Button.EventType.CLICK,
       () => {
         if (this.按钮冷却中) return;
-        音频管理器.instance.playByName("walk")
+        音频管理器.instance.playByName('walk');
         this.按钮冷却中 = true;
         this.scheduleOnce(() => (this.按钮冷却中 = false), this.冷却时间);
         this.点击前进();
@@ -93,7 +93,7 @@ export class 主页 extends Component {
       Button.EventType.CLICK,
       () => {
         if (this.按钮冷却中) return;
-        音频管理器.instance.playByName("walk")
+        音频管理器.instance.playByName('walk');
         this.按钮冷却中 = true;
         this.scheduleOnce(() => (this.按钮冷却中 = false), this.冷却时间);
         this.点击探索();
@@ -104,7 +104,7 @@ export class 主页 extends Component {
       Button.EventType.CLICK,
       () => {
         if (this.按钮冷却中) return;
-        音频管理器.instance.playByName("walk")
+        音频管理器.instance.playByName('walk');
         this.按钮冷却中 = true;
         this.scheduleOnce(() => (this.按钮冷却中 = false), this.冷却时间);
         this.点击结局();
@@ -112,41 +112,51 @@ export class 主页 extends Component {
       this,
     );
 
-    this.按钮容器
-      .getChildByName('伙伴')
-      .on(Button.EventType.CLICK, () => {
-        音频管理器.instance.playByName("button")
-        director.loadScene('伙伴')
-      }, this);
-    this.按钮容器
-      .getChildByName('进食')
-      .on(Button.EventType.CLICK, () => {
-        音频管理器.instance.playByName("button")
-        director.loadScene('进食')
-      }, this);
-    this.按钮容器
-      .getChildByName('制作')
-      .on(Button.EventType.CLICK, () => {
-        音频管理器.instance.playByName("button")
-        director.loadScene('制作')
-      }, this);
-    this.按钮容器
-      .getChildByName('特性')
-      .on(Button.EventType.CLICK, () => {
-        音频管理器.instance.playByName("button")
-        director.loadScene('特性')
-      }, this);
-    this.按钮容器
-      .getChildByName('商店')
-      .on(Button.EventType.CLICK, () => {
-        音频管理器.instance.playByName("button")
-        director.loadScene('商店')
-      }, this);
+    this.按钮容器.getChildByName('伙伴').on(
+      Button.EventType.CLICK,
+      () => {
+        音频管理器.instance.playByName('button');
+        director.loadScene('伙伴');
+      },
+      this,
+    );
+    this.按钮容器.getChildByName('进食').on(
+      Button.EventType.CLICK,
+      () => {
+        音频管理器.instance.playByName('button');
+        director.loadScene('进食');
+      },
+      this,
+    );
+    this.按钮容器.getChildByName('制作').on(
+      Button.EventType.CLICK,
+      () => {
+        音频管理器.instance.playByName('button');
+        director.loadScene('制作');
+      },
+      this,
+    );
+    this.按钮容器.getChildByName('特性').on(
+      Button.EventType.CLICK,
+      () => {
+        音频管理器.instance.playByName('button');
+        director.loadScene('特性');
+      },
+      this,
+    );
+    this.按钮容器.getChildByName('商店').on(
+      Button.EventType.CLICK,
+      () => {
+        音频管理器.instance.playByName('button');
+        director.loadScene('商店');
+      },
+      this,
+    );
     this.信息栏.on(
       Node.EventType.TOUCH_END,
       () => {
         if (存档.当前事件 || 存档.当前敌人) return;
-        音频管理器.instance.playByName("button")
+        音频管理器.instance.playByName('button');
         director.loadScene('面板');
       },
       this,
@@ -156,15 +166,21 @@ export class 主页 extends Component {
   }
 
   主动技能() {
-    this.苦肉按钮.active = 存档.天赋["死侍"] > 0
-    this.苦肉按钮.on(Button.EventType.CLICK, () => {
-      if(存档.天赋["死侍"]){
-        存档.健康 -= 1
-        存档.其他.苦肉发动次数 ++
-        this.更新()
-        this.播放文本(`【苦肉发动，健康-1，当日攻防血属性+5%！今日已触发${存档.其他.苦肉发动次数}次，全属性提升${存档.其他.苦肉发动次数 * 5}%`);
-      }
-    }, this);
+    this.苦肉按钮.active = 存档.天赋['死侍'] > 0;
+    this.苦肉按钮.on(
+      Button.EventType.CLICK,
+      () => {
+        if (存档.天赋['死侍']) {
+          存档.健康 -= 1;
+          存档.其他.苦肉发动次数++;
+          this.更新();
+          this.播放文本(
+            `【苦肉发动，健康-1，当日攻防血属性+5%！今日已触发${存档.其他.苦肉发动次数}次，全属性提升${存档.其他.苦肉发动次数 * 5}%`,
+          );
+        }
+      },
+      this,
+    );
   }
 
   回档() {
@@ -387,14 +403,14 @@ export class 主页 extends Component {
   }
 
   async 加载榜一大哥() {
-    if (!存档.临时数据.榜一大哥 && 存档.其他.挑战进度 >= 16 ) {
+    if (!存档.临时数据.榜一大哥 && 存档.其他.挑战进度 >= 16) {
       存档.临时数据.榜一大哥 = (await 获取榜一大哥请求()) || null;
     }
 
-    if(!存档.临时数据.时空流浪者){
+    if (!存档.临时数据.时空流浪者) {
       存档.临时数据.时空流浪者 = (await 获取随机存档请求(存档.天数 + 1)) || null;
     }
-    保存存档()
+    保存存档();
   }
 
   点击睡觉() {
@@ -455,7 +471,7 @@ export class 主页 extends Component {
       '榜一大哥',
       '一拳超人',
       '南天门大将军',
-      '统御万天无极大道至真妙有玄穹高上帝'
+      '统御万天无极大道至真妙有玄穹高上帝',
     ];
     const 敌人名称 = 挑战组[存档.其他.挑战进度];
     if (!敌人名称) {
@@ -611,7 +627,7 @@ export class 主页 extends Component {
 
   探索条件() {
     // 千元户
-    if(获取地区名称() === '省城' && 存档.天数 <= 42){
+    if (获取地区名称() === '省城' && 存档.天数 <= 42) {
       存档.其他.进入省城携带金钱 = Math.max(存档.金钱, 存档.其他.进入省城携带金钱);
     }
 
@@ -691,81 +707,90 @@ export class 主页 extends Component {
     // 江湖人士县城篇
     // if (存档.技能.世界感知 >= 2 && (存档.游戏难度 === '真实' || 存档.游戏难度 === '残酷' || 存档.游戏难度 === '绝境') && 获取地区名称() === '县城') {
     if (获取地区名称() === '县城') {
-        if (!存档.其他.开启江湖支线 && !存档.其他.拒绝开启江湖支线) {
+      if (!存档.其他.开启江湖支线 && !存档.其他.拒绝开启江湖支线) {
+        this.基本消耗();
+        this.node.getComponent(事件).触发事件('选择江湖支线');
+        return false;
+      }
+      if (存档.其他.开启江湖支线 && !存档.剧情.完成县城江湖线) {
+        const randPick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+        // 普通散兵
+        const normal = [];
+        let normal_rate = 0;
+        !存档.物品.青竹信物 && (normal.push('青竹门弟子'), (normal_rate += 3));
+        !存档.物品.铁衣信物 && (normal.push('铁衣帮弟子'), (normal_rate += 3));
+        !存档.物品.玄水信物 && (normal.push('玄水阁弟子'), (normal_rate += 3));
+        if (normal.length && Math.random() * 100 < normal_rate) {
           this.基本消耗();
-          this.node.getComponent(事件).触发事件('选择江湖支线');
+          this.node.getComponent(战斗).进入战斗(randPick(normal));
           return false;
         }
-        if (存档.其他.开启江湖支线 && !存档.剧情.完成县城江湖线) {
-          const randPick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-          // 普通散兵
-          const normal = [];
-          let normal_rate = 0
-          !存档.物品.青竹信物 && (normal.push("青竹门弟子"), normal_rate += 3);
-          !存档.物品.铁衣信物 && (normal.push("铁衣帮弟子"), normal_rate += 3);
-          !存档.物品.玄水信物 && (normal.push("玄水阁弟子"), normal_rate += 3);
-          if (normal.length && Math.random() * 100 < normal_rate) {
-            this.基本消耗();
-            this.node.getComponent(战斗).进入战斗(randPick(normal));
-            return false;
-          }
-
-          // 江湖商贩
-          if (Math.random() * 100 < 5) {
-            this.基本消耗();
-            this.node.getComponent(事件).触发事件('江湖商贩');
-            return false;
-          }
-
-          // 门派偶遇
-          const meet = [];
-          let meet_rate = 0;
-          存档.其他.青竹步等级 > 0 && (meet.push('路过青竹门派'), meet_rate += 1.5 + 存档.其他.青竹步等级 / 10);
-          存档.其他.铁衣功等级 > 0 && (meet.push('路过铁衣门派'), meet_rate += 1.5 + 存档.其他.铁衣功等级 / 10);
-          存档.其他.玄水诀等级 > 0 && (meet.push('路过玄水门派'), meet_rate += 1.5 + 存档.其他.玄水诀等级 / 10);
-          if (meet.length && Math.random() * 100 < meet_rate) {
-            this.基本消耗();
-            this.node.getComponent(事件).触发事件(randPick(meet));
-            return false;
-          }
-
-          // 精英散兵
-          const elite = [];
-          let elite_rate = 0;
-          存档.击败次数.青竹门精英 > 0 && (elite.push("青竹门精英"), elite_rate += 3);
-          存档.击败次数.铁衣帮精英 > 0 && (elite.push("铁衣帮精英"), elite_rate += 3);
-          存档.击败次数.玄水阁精英 > 0 && (elite.push("玄水阁精英"), elite_rate += 3);
-          if (elite.length && Math.random() * 100 < elite_rate) {
-            this.基本消耗();
-            this.node.getComponent(战斗).进入战斗(randPick(elite));
-            return false;
-          }
-
-          // 长老
-          const elder = [];
-          let elder_rate = 0
-          存档.其他.青竹门声望 >= 100 && (elder.push('路过江湖青竹长老'), elder_rate += 4);
-          存档.其他.铁衣帮声望 >= 100 && (elder.push('路过江湖铁衣长老'), elder_rate += 4);
-          存档.其他.玄水阁声望 >= 100 && (elder.push('路过江湖玄水长老'), elder_rate += 4);
-          if (elder.length && Math.random() * 100 < elder_rate) {
-            this.基本消耗();
-            this.node.getComponent(事件).触发事件(randPick(elder));
-            return false;
-          }
-
-          // 掌门
-          const master = [];
-          let master_rate = 0;
-          (存档.其他.青竹门声望 >= 100 && 存档.物品.青竹信物) && (master.push('路过江湖青竹掌门'), master_rate += 4);
-          (存档.其他.铁衣帮声望 >= 100 && 存档.物品.铁衣信物) && (master.push('路过江湖铁衣掌门'), master_rate += 4);
-          (存档.其他.玄水阁声望 >= 100 && 存档.物品.玄水信物) && (master.push('路过江湖玄水掌门'), master_rate += 4);
-          if (master.length && Math.random() * 100 < master_rate) {
-            this.基本消耗();
-            this.node.getComponent(事件).触发事件(randPick(master));
-            return false;
-          }
+        // 江湖商贩
+        if (Math.random() * 100 < 5) {
+          this.基本消耗();
+          this.node.getComponent(事件).触发事件('江湖商贩');
+          return false;
         }
+
+        // 门派偶遇
+        const meet = [];
+        let meet_rate = 0;
+        存档.其他.青竹步等级 > 0 &&
+          (meet.push('路过青竹门派'), (meet_rate += 1.5 + 存档.其他.青竹步等级 / 10));
+        存档.其他.铁衣功等级 > 0 &&
+          (meet.push('路过铁衣门派'), (meet_rate += 1.5 + 存档.其他.铁衣功等级 / 10));
+        存档.其他.玄水诀等级 > 0 &&
+          (meet.push('路过玄水门派'), (meet_rate += 1.5 + 存档.其他.玄水诀等级 / 10));
+        if (meet.length && Math.random() * 100 < meet_rate) {
+          this.基本消耗();
+          this.node.getComponent(事件).触发事件(randPick(meet));
+          return false;
+        }
+
+        // 精英散兵
+        const elite = [];
+        let elite_rate = 0;
+        存档.击败次数.青竹门精英 > 0 && (elite.push('青竹门精英'), (elite_rate += 3));
+        存档.击败次数.铁衣帮精英 > 0 && (elite.push('铁衣帮精英'), (elite_rate += 3));
+        存档.击败次数.玄水阁精英 > 0 && (elite.push('玄水阁精英'), (elite_rate += 3));
+        if (elite.length && Math.random() * 100 < elite_rate) {
+          this.基本消耗();
+          this.node.getComponent(战斗).进入战斗(randPick(elite));
+          return false;
+        }
+
+        // 长老
+        const elder = [];
+        let elder_rate = 0;
+        存档.其他.青竹门声望 >= 100 && (elder.push('路过江湖青竹长老'), (elder_rate += 4));
+        存档.其他.铁衣帮声望 >= 100 && (elder.push('路过江湖铁衣长老'), (elder_rate += 4));
+        存档.其他.玄水阁声望 >= 100 && (elder.push('路过江湖玄水长老'), (elder_rate += 4));
+        if (elder.length && Math.random() * 100 < elder_rate) {
+          this.基本消耗();
+          this.node.getComponent(事件).触发事件(randPick(elder));
+          return false;
+        }
+
+        // 掌门
+        const master = [];
+        let master_rate = 0;
+        存档.其他.青竹门声望 >= 100 &&
+          存档.物品.青竹信物 &&
+          (master.push('路过江湖青竹掌门'), (master_rate += 4));
+        存档.其他.铁衣帮声望 >= 100 &&
+          存档.物品.铁衣信物 &&
+          (master.push('路过江湖铁衣掌门'), (master_rate += 4));
+        存档.其他.玄水阁声望 >= 100 &&
+          存档.物品.玄水信物 &&
+          (master.push('路过江湖玄水掌门'), (master_rate += 4));
+        if (master.length && Math.random() * 100 < master_rate) {
+          this.基本消耗();
+          this.node.getComponent(事件).触发事件(randPick(master));
+          return false;
+        }
+      }
     }
 
     // 城中村住房

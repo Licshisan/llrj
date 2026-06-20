@@ -306,10 +306,9 @@ export class 战斗 extends Component {
 
     执行钩子('战斗敌人属性增强', [this.对局]);
 
-
     this.界面初始化();
     this.node.getComponent(主页).播放文本(this.对局.敌人.出场语);
-    音频管理器.instance.playByName("show")
+    音频管理器.instance.playByName('show');
   }
 
   界面初始化() {
@@ -434,10 +433,10 @@ export class 战斗 extends Component {
       this.按钮容器.getChildByName('居合').active = false;
     }
 
-    if(this.对局.主角.方法 === "爆头" || this.对局.主角.方法 === "枪击"){
-      音频管理器.instance.playByName("fire")
+    if (this.对局.主角.方法 === '爆头' || this.对局.主角.方法 === '枪击') {
+      音频管理器.instance.playByName('fire');
     } else {
-      音频管理器.instance.playByName("attack")
+      音频管理器.instance.playByName('attack');
     }
 
     // 结算
@@ -561,8 +560,7 @@ export class 战斗 extends Component {
       }
 
       存档.其他.胜利次数 += 1;
-      存档.击败次数[this.对局.敌人.名称] =
-        (存档.击败次数[this.对局.敌人.名称] || 0) + 1;
+      存档.击败次数[this.对局.敌人.名称] = (存档.击败次数[this.对局.敌人.名称] || 0) + 1;
       this.scheduleOnce(
         () => this.下一个敌人(this.对局.结果文本.join('\n'), this.对局.敌人.下一个敌人),
         2.2 / 设置.播放速度,
@@ -637,12 +635,11 @@ export class 战斗 extends Component {
     }
 
     存档.其他.胜利次数 += 1;
-    存档.击败次数[this.对局.敌人.名称] =
-      (存档.击败次数[this.对局.敌人.名称] || 0) + 1;
+    存档.击败次数[this.对局.敌人.名称] = (存档.击败次数[this.对局.敌人.名称] || 0) + 1;
 
     this.scheduleOnce(() => {
-      音频管理器.instance.playByName("win")
-      this.结束战斗(this.对局.结果文本.join('\n'))
+      音频管理器.instance.playByName('win');
+      this.结束战斗(this.对局.结果文本.join('\n'));
     }, 1.8 / 设置.播放速度);
   }
 
@@ -682,8 +679,8 @@ export class 战斗 extends Component {
     }
     存档.战败次数[this.对局.敌人.名称] = (存档.战败次数[this.对局.敌人.名称] || 0) + 1;
     this.scheduleOnce(() => {
-      音频管理器.instance.playByName("fail")
-      this.结束战斗(this.对局.结果文本.join('\n'))
+      音频管理器.instance.playByName('fail');
+      this.结束战斗(this.对局.结果文本.join('\n'));
     }, 1.8);
   }
 

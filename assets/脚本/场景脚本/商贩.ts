@@ -74,7 +74,8 @@ export class 商贩 extends Component {
       });
     } else if (globalThis.商贩名称 === '江湖商贩') {
       江湖商贩列表.forEach((江湖商贩项目) => {
-        const 名称 = typeof 江湖商贩项目.名称 === 'function' ? 江湖商贩项目.名称(this) : 江湖商贩项目.名称;
+        const 名称 =
+          typeof 江湖商贩项目.名称 === 'function' ? 江湖商贩项目.名称(this) : 江湖商贩项目.名称;
 
         const 选项按钮 = instantiate(this.选择按钮预制体);
         选项按钮.getChildByName('标签').getComponent(Label).string = 名称;
@@ -122,7 +123,7 @@ export class 商贩 extends Component {
   更新() {
     if (globalThis.商贩名称 === '商贩') {
       this.属性一.getComponent(Label).string = '';
-    } else if(globalThis.商贩名称 == "黑市") {
+    } else if (globalThis.商贩名称 == '黑市') {
       this.属性一.getComponent(Label).string = `白色粉末：${存档.物品.白色粉末}`;
     } else {
       this.属性一.getComponent(Label).string = `江湖残页：${存档.物品.江湖残页}`;
@@ -277,9 +278,9 @@ const 黑市列表: 商贩项目类型[] = [
   },
 ];
 
-  // 县城出现特殊商贩，收购虚练残页来贩卖各门派虚练功法，售价为5虚练残页，
-  // 并出现提示，当三家门派到100声望，击败掌门后，会额外出售物品
-  // 升级虚练功法需要精力加虚练残页，消耗残页数量为1~5级需要2个残页，6~10级需要3个残页，11~15级需要4个残页
+// 县城出现特殊商贩，收购虚练残页来贩卖各门派虚练功法，售价为5虚练残页，
+// 并出现提示，当三家门派到100声望，击败掌门后，会额外出售物品
+// 升级虚练功法需要精力加虚练残页，消耗残页数量为1~5级需要2个残页，6~10级需要3个残页，11~15级需要4个残页
 
 const 江湖商贩列表: 商贩项目类型[] = [
   {

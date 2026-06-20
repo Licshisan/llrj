@@ -120,7 +120,7 @@ export class 图鉴 extends Component {
           if (等级 == 0) return;
           if (!设置.生效特质.includes(特质.名称)) {
             const 开局特质数量 = 计算数值('开局特质数量', 1);
-            if(设置.生效特质.length + 1 > 开局特质数量) return
+            if (设置.生效特质.length + 1 > 开局特质数量) return;
 
             设置.生效特质.push(特质.名称);
             播放文本(this.标签, `已选择【${特质.名称}】将再下局游戏生效！`);

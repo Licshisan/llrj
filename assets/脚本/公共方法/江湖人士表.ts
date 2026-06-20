@@ -46,35 +46,28 @@ export const 江湖门派表 = {
 // 可通过虚练残页升级，每一级生命恢复+2，每三级增加1%回复生命值（并且增加100点上限），每五级额外降低触发所需回合数，满级15级
 
 export function 计算升级需要残页(等级) {
-  if(等级 == 0){
-    return 1
-  }
-  else if(等级 >= 1 && 等级 <= 5) {
-    return 2
-  }
-  else if(等级 >= 6 && 等级 <= 10) {
-    return 3
-  }
-  else if(等级 >= 11) {
-    return 4
+  if (等级 == 0) {
+    return 1;
+  } else if (等级 >= 1 && 等级 <= 5) {
+    return 2;
+  } else if (等级 >= 6 && 等级 <= 10) {
+    return 3;
+  } else if (等级 >= 11) {
+    return 4;
   }
 }
 
 export function 计算升级需要精力(等级) {
-  if(等级 == 0){
-    return 10
-  }
-  else if(等级 >= 1 && 等级 <= 5) {
-    return 20
-  }
-  else if(等级 >= 6 && 等级 <= 10) {
-    return 30
-  }
-  else if(等级 >= 11) {
-    return 40
+  if (等级 == 0) {
+    return 10;
+  } else if (等级 >= 1 && 等级 <= 5) {
+    return 20;
+  } else if (等级 >= 6 && 等级 <= 10) {
+    return 30;
+  } else if (等级 >= 11) {
+    return 40;
   }
 }
-
 
 // 县城探索,山脉探索=>随机江湖人士
 // 省城概率极少

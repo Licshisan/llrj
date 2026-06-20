@@ -21,14 +21,13 @@ export class 住房 extends Component {
   当前序号 = 0;
   start() {
     const { 中介, 房源 } = 生成住房数据();
-    if(!存档.临时数据.住房中介 || !存档.临时数据.临时房源){
-      存档.临时数据.住房中介  = 中介
-      存档.临时数据.临时房源  = 房源
-      保存存档()
+    if (!存档.临时数据.住房中介 || !存档.临时数据.临时房源) {
+      存档.临时数据.住房中介 = 中介;
+      存档.临时数据.临时房源 = 房源;
+      保存存档();
     }
-    this.中介 = 存档.临时数据.住房中介
-    this.房源 = 存档.临时数据.临时房源
-
+    this.中介 = 存档.临时数据.住房中介;
+    this.房源 = 存档.临时数据.临时房源;
 
     this.显示首页();
 
@@ -63,8 +62,8 @@ export class 住房 extends Component {
       Button.EventType.CLICK,
       () => {
         if (!this.当前序号) {
-          存档.临时数据.中介 = null
-          保存存档()
+          存档.临时数据.中介 = null;
+          保存存档();
           director.loadScene('主页');
         } else {
           this.显示首页();
@@ -99,7 +98,6 @@ export class 住房 extends Component {
     选项1.on(Button.EventType.CLICK, () => 播放文本(this.标签, '功能暂未开启...'), this);
     播放文本(this.标签, `${this.中介.名称}：${this.中介.介绍}`);
   }
-
 
   刷新属性() {
     this.属性一.getComponent(Label).string =

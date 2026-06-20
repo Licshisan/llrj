@@ -103,7 +103,7 @@ export class 分数 extends Component {
       ([k, v]) => (res[k] = (old[k] || 0) + (add[k] || 0)),
     );
     玩家.client_info.collections = res;
-    存档.新藏品 = {}
+    存档.新藏品 = {};
     保存玩家();
   }
 
@@ -128,7 +128,7 @@ export class 分数 extends Component {
         描述: 成就.描述,
         完成时间: Date.now(),
         条件: true,
-        奖励: 成就.奖励
+        奖励: 成就.奖励,
       });
     }
     玩家.client_info.scores = 计算排行榜积分总和();

@@ -9,7 +9,7 @@ export class 首页 extends Component {
   @property(Node) 游戏信息: Node = null;
 
   start() {
-    globalThis.页面来源 = '首页';    
+    globalThis.页面来源 = '首页';
 
     this.按钮容器
       .getChildByName('开始')

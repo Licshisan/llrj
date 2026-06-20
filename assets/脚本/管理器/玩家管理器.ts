@@ -21,9 +21,9 @@ export const 默认玩家 = {
     title: '',
     zz: 0,
     compensations: {},
-    collections:{},
+    collections: {},
     achievements: {},
-    version: "",
+    version: '',
   },
   created_at: '',
 
@@ -31,7 +31,7 @@ export const 默认玩家 = {
   pioneers: [] as PioneerInfo[],
   leaderboard: { list: [], self: 0 } as LeaderboardResult,
   collection_leaderboard: { list: [], self: 0 } as LeaderboardResult,
-  version: "1.0.3"
+  version: '1.0.3',
 };
 
 export let 玩家: typeof 默认玩家 = JSON.parse(JSON.stringify(默认玩家));

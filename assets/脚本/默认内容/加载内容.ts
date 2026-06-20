@@ -116,11 +116,11 @@ async function 领取藏品奖励() {
   if (!藏品奖励) return;
 
   try {
-    await 确认领取补偿请求("collections")
+    await 确认领取补偿请求('collections');
     const coll = player.client_info.collections;
     for (const c in 藏品奖励) {
       coll[c] = (coll[c] || 0) + (Number(藏品奖励[c]) || 0);
-      player.server_info.collections[c] = 0
+      player.server_info.collections[c] = 0;
     }
   } catch (e) {
     throw new Error(`领取藏品失败: ${(e as Error).message}`);
@@ -131,31 +131,31 @@ async function 领取成就奖励() {
   const 成就奖励 = 玩家管理器.玩家?.server_info?.achievements;
   if (!成就奖励) return;
   try {
-    await 确认领取补偿请求("achievements");
+    await 确认领取补偿请求('achievements');
     let 本地成就列表 = [...(玩家管理器.玩家?.client_info?.achievements ?? [])];
     const keys = Object.keys(成就奖励);
 
     for (const 奖励名称 of keys) {
-      const 对应成就 = 默认成就表?.find(item => item.名称 === 奖励名称);
+      const 对应成就 = 默认成就表?.find((item) => item.名称 === 奖励名称);
       if (!对应成就) continue;
 
       if (成就奖励[奖励名称]) {
-        const 已存在 = 本地成就列表.some(item => item.name === 奖励名称);
+        const 已存在 = 本地成就列表.some((item) => item.name === 奖励名称);
         if (!已存在) {
           const 新成就 = {
             name: 奖励名称,
-            description: 对应成就.描述 ?? "",
+            description: 对应成就.描述 ?? '',
             achieve_at: Date.now(),
           };
           本地成就列表.push(新成就);
           对应成就.效果?.完成成就?.(对应成就.名称);
         }
       } else {
-        本地成就列表 = 本地成就列表.filter(item => item.name !== 奖励名称);
+        本地成就列表 = 本地成就列表.filter((item) => item.name !== 奖励名称);
       }
     }
 
-    if(玩家管理器.玩家.client_info) {
+    if (玩家管理器.玩家.client_info) {
       玩家管理器.玩家.client_info.achievements = 本地成就列表;
     }
     玩家管理器.玩家.server_info.achievements = {};
@@ -163,7 +163,6 @@ async function 领取成就奖励() {
     throw new Error(`领取成就失败: ${(e as Error).message}`);
   }
 }
-
 
 function compareVersion(v1: string, v2: string): number {
   const arr1 = v1.split('.').map(Number);
@@ -257,9 +256,9 @@ export async function 加载游戏内容() {
     if (player.server_info) 玩家管理器.玩家.server_info = player.server_info;
     if (player.created_at) 玩家管理器.玩家.created_at = player.created_at;
 
-    await 领取藏品奖励()
-    await 领取成就奖励()
-    await 版本校验()
+    await 领取藏品奖励();
+    await 领取成就奖励();
+    await 版本校验();
     玩家管理器.保存玩家();
   } catch (e) {
     error('登录失败' + e);
