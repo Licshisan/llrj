@@ -688,7 +688,7 @@ export class 主页 extends Component {
 
     // 地下入口
     if (存档.当前地点 === '城中村' && 存档.停留天数.省城 < 14 && !存档.其他.解锁地下竞技场) {
-      if (!存档.剧情.待接受竞技场邀请 && Math.random() * 100 < 1) {
+      if (!存档.剧情.待接受竞技场邀请 && Math.random() * 100 < 2) {
         this.基本消耗();
         this.node.getComponent(事件).触发事件('地下入口');
         return false;
@@ -712,7 +712,7 @@ export class 主页 extends Component {
         this.node.getComponent(事件).触发事件('选择江湖支线');
         return false;
       }
-      if (存档.其他.开启江湖支线 && !存档.剧情.完成县城江湖线) {
+      if (存档.其他.开启江湖支线 && !存档.其他.拒绝开启江湖支线 && !存档.剧情.完成县城江湖线) {
         const randPick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
         // 普通散兵
