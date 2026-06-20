@@ -156,7 +156,7 @@ export class 开场 extends Component {
         if (天赋.已锁定) {
           文本 += '【已固定】';
         }
-        文本 += `\n效果：${天赋?.说明}`;
+        文本 += `\n${天赋?.说明}`;
 
         创建动画文字(this.文本容器, 文本, i, 天赋.颜色, (文字节点) => {
           this.切换天赋锁定(天赋, 文字节点);
@@ -203,7 +203,7 @@ export class 开场 extends Component {
       if (item.已锁定) {
         文本 += '【已锁定】';
       }
-      文本 += `\n效果：${item?.说明}`;
+      文本 += `\n${item?.说明}`;
 
       node.getComponent(Label).string = 文本;
       return;

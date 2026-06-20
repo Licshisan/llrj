@@ -202,6 +202,15 @@ export function 创建存档() {
 
 export function 删除存档(存档名称: string) {
   try {
+    // 1. 获取全部本地存储key，删除该存档所有备份
+    const 全部存储键 = sys.localStorage.getAllKeys();
+    const 备份前缀 = `${存档名称}_备份`;
+    for (const key of 全部存储键) {
+      if (key.startsWith(备份前缀)) {
+        sys.localStorage.removeItem(key);
+      }
+    }
+
     const 存档名称列表字符串 = sys.localStorage.getItem('存档名称列表');
     const 存档名称列表 = 存档名称列表字符串 ? JSON.parse(存档名称列表字符串) : [];
 

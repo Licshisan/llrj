@@ -122,8 +122,10 @@ export class 商贩 extends Component {
   更新() {
     if (globalThis.商贩名称 === '商贩') {
       this.属性一.getComponent(Label).string = '';
-    } else {
+    } else if(globalThis.商贩名称 == "黑市") {
       this.属性一.getComponent(Label).string = `白色粉末：${存档.物品.白色粉末}`;
+    } else {
+      this.属性一.getComponent(Label).string = `江湖残页：${存档.物品.江湖残页}`;
     }
     this.属性二.getComponent(Label).string = `金钱：${(存档.金钱 / 10).toFixed(1)}元`;
   }
