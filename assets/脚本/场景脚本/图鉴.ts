@@ -92,7 +92,7 @@ export class 图鉴 extends Component {
         title += 天赋.品质;
         创建普通文字(
           this.内容,
-          `【${天赋.名称}(${title})】LV${等级}\n${天赋.说明}`,
+          `【${天赋.名称}(${title})】\n${天赋.说明}`,
           index,
           等级 > 0 ? 天赋.颜色 : null,
         );

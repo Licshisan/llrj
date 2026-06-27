@@ -289,7 +289,7 @@ export class 主页 extends Component {
       return;
     }
 
-    if (!存档.其他.完成选择保留天赋) {
+    if (!存档.其他.完成选择保留天赋 && 对象求和(存档.天赋) > 0) {
       this.node.getComponent(事件).触发事件('走到最后');
       保存存档();
       return;

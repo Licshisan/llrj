@@ -350,7 +350,7 @@ export class 战斗 extends Component {
     双枪按钮.targetOff(this);
     双枪按钮.on(Node.EventType.TOUCH_END, this.点击双枪, this);
 
-    this.按钮容器.getChildByName('居合').active = 存档.天赋.祖传黑刀 > 0 && 存档.物品.黑刀 >= 5;
+    this.按钮容器.getChildByName('居合').active = 存档.天赋.黑刀传人 > 0 && 存档.物品.黑刀 >= 5;
     const 居合按钮 = this.按钮容器.getChildByName('居合');
     居合按钮.targetOff(this);
     居合按钮.on(Node.EventType.TOUCH_END, this.点击居合, this);
