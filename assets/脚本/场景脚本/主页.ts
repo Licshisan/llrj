@@ -716,6 +716,7 @@ export class 主页 extends Component {
         const randPick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
         // 普通散兵
+        // todo 在某门派声望达到100点时，降低该门派弟子刷新概率，提高另外声望不足100点的门派弟子刷新概率，三门派都100声望之后恢复正常
         const normal = [];
         let normal_rate = 0;
         !存档.物品.青竹信物 && (normal.push('青竹门弟子'), (normal_rate += 3));

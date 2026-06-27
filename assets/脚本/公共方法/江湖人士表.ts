@@ -58,15 +58,7 @@ export function 计算升级需要残页(等级) {
 }
 
 export function 计算升级需要精力(等级) {
-  if (等级 == 0) {
-    return 10;
-  } else if (等级 >= 1 && 等级 <= 5) {
-    return 20;
-  } else if (等级 >= 6 && 等级 <= 10) {
-    return 30;
-  } else if (等级 >= 11) {
-    return 40;
-  }
+  return 10
 }
 
 // 县城探索,山脉探索=>随机江湖人士
