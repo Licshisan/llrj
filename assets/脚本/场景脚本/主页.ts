@@ -627,7 +627,7 @@ export class 主页 extends Component {
 
   探索条件() {
     // 千元户
-    if (获取地区名称() === '省城' && 存档.天数 <= 42) {
+    if (获取地区名称() === '省城' && 存档.停留天数.省城 <= 36) {
       存档.其他.进入省城携带金钱 = Math.max(存档.金钱, 存档.其他.进入省城携带金钱);
     }
 
@@ -713,18 +713,30 @@ export class 主页 extends Component {
         return false;
       }
       if (存档.其他.开启江湖支线 && !存档.其他.拒绝开启江湖支线 && !存档.剧情.完成县城江湖线) {
-        const randPick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+        const randPickWeight = list => {
+          let sum = list.reduce((s, i) => s + i.w, 0);
+          let r = Math.random() * sum;
+          for (const item of list) if ((r -= item.w) <= 0) return item.n;
+        };
 
-        // 普通散兵
-        // todo 在某门派声望达到100点时，降低该门派弟子刷新概率，提高另外声望不足100点的门派弟子刷新概率，三门派都100声望之后恢复正常
-        const normal = [];
-        let normal_rate = 0;
-        !存档.物品.青竹信物 && (normal.push('青竹门弟子'), (normal_rate += 3));
-        !存档.物品.铁衣信物 && (normal.push('铁衣帮弟子'), (normal_rate += 3));
-        !存档.物品.玄水信物 && (normal.push('玄水阁弟子'), (normal_rate += 3));
-        if (normal.length && Math.random() * 100 < normal_rate) {
+        const fs = [
+          {n:'青竹门弟子',i:'青竹信物',r:'青竹声望'},
+          {n:'铁衣帮弟子',i:'铁衣信物',r:'铁衣声望'},
+          {n:'玄水阁弟子',i:'玄水信物',r:'玄水阁声望'}
+        ];
+        let pool = [], totalRate = 0;
+        const allMax = fs.every(v => 存档.声望[v.r] >= 100);
+
+        for (const f of fs) {
+          if (存档.物品[f.i]) continue;
+          const w = allMax ? 3 : (存档.声望[f.r] >= 100 ? 1.5 : 5);
+          pool.push({ n: f.n, w });
+          totalRate += w;
+        }
+
+        if (pool.length && Math.random() * 100 < totalRate) {
           this.基本消耗();
-          this.node.getComponent(战斗).进入战斗(randPick(normal));
+          this.node.getComponent(战斗).进入战斗(randPickWeight(pool));
           return false;
         }
 
@@ -735,6 +747,7 @@ export class 主页 extends Component {
           return false;
         }
 
+        const randPick = (arr) => arr[Math.floor(Math.random() * arr.length)];
         // 门派偶遇
         const meet = [];
         let meet_rate = 0;
