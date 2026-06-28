@@ -112,7 +112,7 @@ export class 制作 extends Component {
     if (制作.条件) {
       标签组件.color = new Color(0, 255, 0);
     } else {
-      标签组件.color = Color.WHITE;
+      标签组件.color = new Color(200, 200, 200);
     }
 
     项目组件.getChildByName('标签一').getComponent(Label).string = 制作.描述;

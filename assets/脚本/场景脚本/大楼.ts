@@ -10,6 +10,7 @@ export class 大楼 extends Component {
   @property(Node) 标签: Node = null;
   @property(Node) 大楼: Node = null;
   @property(Node) 餐厅: Node = null;
+  @property(Node) 心理咨询室: Node = null;
 
   start() {
     if (!存档.其他.电疗店开店) {
@@ -119,10 +120,20 @@ export class 大楼 extends Component {
       );
     }
 
-    this.大楼
-      .getChildByName('按钮容器')
-      .getChildByName('选择按钮6')
-      .on(Button.EventType.CLICK, () => 播放文本(this.标签, '广告位招租！'), this);
+    const 六层按钮 = this.大楼.getChildByName('按钮容器').getChildByName('选择按钮6');
+    if (Math.random() * 100 < 10 && 存档.技能.世界感知 >= 4) {
+      存档.其他.心理咨询次数 = 0
+      六层按钮.getChildByName('标签').getComponent(Label).string = '六楼：晓风心理咨询室';
+      六层按钮.on(Button.EventType.CLICK, () => this.点击六楼(), this);
+    } else {
+      六层按钮.getChildByName('标签').getComponent(Label).string = '？？？？（晓风心理咨询室放假中...）';
+      六层按钮.on(
+        Button.EventType.CLICK,
+        () => 播放文本(this.标签, '“咨询师外出进修，今日暂停接待~”'),
+        this,
+      );
+    }
+
     // 餐厅界面
     this.餐厅.getChildByName('返回按钮').on(
       Button.EventType.CLICK,
@@ -143,7 +154,40 @@ export class 大楼 extends Component {
       .getChildByName('按钮容器')
       .getChildByName('选择按钮2')
       .on(Button.EventType.CLICK, () => this.点击炒坚果(), this);
+
+
+    // 心理咨询室界面
+    this.心理咨询室.getChildByName('返回按钮').on(
+      Button.EventType.CLICK,
+      () => {
+        缩小消失(this.心理咨询室);
+        放大出现(this.大楼);
+      },
+      this,
+    );
+
+    // 基础疏导
+    const 疏导成功率 = Math.min(10 + 存档.停留天数.省城, 70) + 存档.其他.心理咨询次数 * 3;
+    this.心理咨询室
+      .getChildByName('按钮容器')
+      .getChildByName('选择按钮1').getChildByName("标签").getComponent(Label).string = `基础疏导（3元一次，成功率${疏导成功率}%，已咨询${存档.其他.心理咨询次数}/3）`
+
+    this.心理咨询室
+      .getChildByName('按钮容器')
+      .getChildByName('选择按钮1')
+      .on(Button.EventType.CLICK, () => this.点击基础疏导(), this);
+
+    // 深层治疗
+    const 治疗成功率 = Math.min(30 + 存档.停留天数.省城, 90) + 存档.其他.心理咨询次数 * 3;
+    this.心理咨询室
+      .getChildByName('按钮容器')
+      .getChildByName('选择按钮2').getChildByName("标签").getComponent(Label).string = `深度治疗（18元一次，成功率${治疗成功率}%，已咨询${存档.其他.心理咨询次数}/3）`
+    this.心理咨询室
+      .getChildByName('按钮容器')
+      .getChildByName('选择按钮2')
+      .on(Button.EventType.CLICK, () => this.点击深层治疗(), this);
   }
+
   点击一楼() {
     if (存档.其他.金融赢钱率 === 0) {
       播放文本(this.标签, '"今日已投资，请明日再来吧~"');
@@ -161,14 +205,14 @@ export class 大楼 extends Component {
     //   return;
     // }
     // 超过50可用于投资
-    const 投资金额 = 存档.金钱 > 500 ? 存档.金钱 - 500 : 存档.金钱
+    const 投资金额 = 存档.金钱 > 500 ? 500 : 存档.金钱
 
     const 赢钱率 = Math.random() * 50;
     const 赢钱数 = Math.floor((投资金额 * 赢钱率) / 100);
     if (Math.random() * 100 < 存档.其他.金融赢钱率) {
       存档.金钱 += 赢钱数;
       存档.其他.投资累计收益 += 赢钱数;
-      播放文本(this.标签, `投资成功！投资金额${(投资金额/ 10).toFixed(1)}/50，金钱增加${赢钱率.toFixed(1)}%(+${(赢钱数 / 10).toFixed(1)})`);
+      播放文本(this.标签, `投资成功！投资金额${(投资金额/ 10).toFixed(1)}元/50，金钱增加${赢钱率.toFixed(1)}%(+${(赢钱数 / 10).toFixed(1)}元)`);
     } else {
       const 投资挽回次数 = 计算数值('投资挽回次数');
       if (存档.其他.投资已挽回次数 < 投资挽回次数) {
@@ -228,7 +272,6 @@ export class 大楼 extends Component {
       .getComponent(Label).string = '二楼：晓风服饰（已售罄）';
     this.更新();
   }
-
   点击三楼() {
     缩小消失(this.大楼);
     放大出现(this.餐厅);
@@ -330,7 +373,6 @@ export class 大楼 extends Component {
     }
     this.更新();
   }
-
   点击五楼(电疗成功率: number) {
     if (存档.其他.电疗店次数 >= 3) {
       播放文本(this.标签, '"啊哈哈哈哈哈~有些累了...下次再来哈~"');
@@ -361,6 +403,11 @@ export class 大楼 extends Component {
       `五楼：晓风电疗（资产${(存档.其他.电疗店资产 / 10).toFixed(1)}元,成功率${电疗成功率}%）`;
     this.更新();
   }
+  点击六楼() {
+    缩小消失(this.大楼);
+    放大出现(this.心理咨询室);
+    this.标签.getComponent(Label).string = '';
+  }
 
   点击巨无霸() {
     if (存档.饥饿 > 计算最大饥饿()) {
@@ -380,7 +427,6 @@ export class 大楼 extends Component {
     }
     this.更新();
   }
-
   点击炒坚果() {
     if (存档.饥饿 > 计算最大饥饿()) {
       播放文本(this.标签, '已经吃不下啦...');
@@ -398,6 +444,91 @@ export class 大楼 extends Component {
     }
     this.更新();
   }
+
+  点击基础疏导(){
+    if (存档.其他.心理咨询次数 >= 3) {
+      播放文本(this.标签, '今日咨询次数已满，心事留到明天再来倾诉吧');
+      return;
+    }
+    if (存档.金钱 < 30) {
+      播放文本(this.标签, '金钱不足！');
+      return;
+    }
+
+    存档.金钱 -= 30;
+    存档.其他.心理咨询次数 += 1;
+
+
+    const 疏导成功率 = Math.min(10 + 存档.停留天数.省城, 70) + 存档.其他.心理咨询次数 * 3;
+    let 提示文字 = '';
+
+    if (Math.random() * 100 < 疏导成功率) {
+      let 回精力 = Math.floor(计算最大精力() * 0.03);
+      if(回精力 > 100) 回精力 = 100
+      const 加健康 = Math.floor(Math.random() * 5 + 5);
+      存档.精力 += 回精力;
+      存档.健康 += 加健康;
+      提示文字 = `一番开导舒缓压抑，精力+${回精力}，健康+${加健康}`;
+    } else {
+      const 扣精力 = Math.floor(计算最大精力() * 0.03);
+      存档.精力 -= 扣精力;
+      提示文字 = `短暂交谈没能解开郁结，内心压力加重，精力-${扣精力}`;
+    }
+    播放文本(this.标签, 提示文字);
+
+    const 疏导成功率2 = Math.min(10 + 存档.停留天数.省城, 70) + 存档.其他.心理咨询次数 * 3;
+    this.心理咨询室
+      .getChildByName('按钮容器')
+      .getChildByName('选择按钮1').getChildByName("标签").getComponent(Label).string = `基础疏导（3元一次，成功率${疏导成功率2}%，已咨询${存档.其他.心理咨询次数}/3）`
+    const 治疗成功率2 = Math.min(30 + 存档.停留天数.省城, 90) + 存档.其他.心理咨询次数 * 3;
+    this.心理咨询室
+      .getChildByName('按钮容器')
+      .getChildByName('选择按钮2').getChildByName("标签").getComponent(Label).string = `深度治疗（18元一次，成功率${治疗成功率2}%，已咨询${存档.其他.心理咨询次数}/3）`
+    
+      this.更新();
+  }
+
+  点击深层治疗(){
+    if (存档.其他.心理咨询次数 >= 3) {
+      播放文本(this.标签, '今日咨询次数已满，心事留到明天再来倾诉吧');
+      return;
+    }
+    if (存档.金钱 < 180) {
+      播放文本(this.标签, '金钱不足！');
+      return;
+    }
+
+    存档.金钱 -= 180;
+    存档.其他.心理咨询次数 += 1;
+
+    const 治疗成功率 = Math.min(30 + 存档.停留天数.省城, 90) + 存档.其他.心理咨询次数 * 3;
+    let 提示文字 = '';
+
+    if (Math.random() * 100 < 治疗成功率) {
+      let 回精力 = Math.floor(计算最大精力() * 0.15);
+      if(回精力 > 500) 回精力 = 500
+      const 加健康 = Math.floor(Math.random() * 25 + 25);
+      存档.精力 += 回精力;
+      存档.健康 += 加健康;
+      提示文字 = `深度心理干预完成，精力+${回精力}，健康+${加健康}！`;
+    } else {
+      const 扣精力 = Math.floor(计算最大精力() * 0.15);
+      存档.精力 -= 扣精力;
+      提示文字 = `长时间心理拉扯加重内耗，精力-${扣精力}`;
+    }
+    播放文本(this.标签, 提示文字);
+
+    const 疏导成功率2 = Math.min(10 + 存档.停留天数.省城, 70) + 存档.其他.心理咨询次数 * 3;
+    this.心理咨询室
+      .getChildByName('按钮容器')
+      .getChildByName('选择按钮1').getChildByName("标签").getComponent(Label).string = `基础疏导（3元一次，成功率${疏导成功率2}%，已咨询${存档.其他.心理咨询次数}/3）`
+    const 治疗成功率2 = Math.min(30 + 存档.停留天数.省城, 90) + 存档.其他.心理咨询次数 * 3;
+    this.心理咨询室
+      .getChildByName('按钮容器')
+      .getChildByName('选择按钮2').getChildByName("标签").getComponent(Label).string = `深度治疗（18元一次，成功率${治疗成功率2}%，已咨询${存档.其他.心理咨询次数}/3）`
+
+    this.更新();
+  };
 
   更新() {
     this.属性.getComponent(Label).string =
