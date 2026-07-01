@@ -14,6 +14,7 @@ const 默认设置 = {
   经典比例: false,
   生效特质: [],
   音效开关: true,
+  锁定天赋: [],
 };
 
 export let 设置: typeof 默认设置 = JSON.parse(JSON.stringify(默认设置));
