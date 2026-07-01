@@ -18,6 +18,7 @@ export class 伙伴 extends Component {
 
   @property(Node) 一键喂果: Node = null;
   @property(Node) 一键喂药: Node = null;
+  @property(Node) 一键喂肉: Node = null;
 
   onLoad(): void {
     if (!存档.伙伴.晓月关系) {
@@ -88,6 +89,7 @@ export class 伙伴 extends Component {
 
     this.一键喂果.active = true;
     this.一键喂药.active = true;
+    this.一键喂肉.active = true;
     this.一键喂果.on(
       Button.EventType.CLICK,
       () => {
@@ -130,6 +132,29 @@ export class 伙伴 extends Component {
       },
       this,
     );
+    this.一键喂肉.on(
+      Button.EventType.CLICK,
+      () => {
+        globalThis.确认参数 = {
+          文本: '确定要一次性投喂所有熟肉给晓月吗？',
+          按钮: {
+            确定: () => {
+              存档.伙伴.连续不喂食晓月天数 = 0;
+              存档.伙伴.今日喂食晓月 = 1;
+              const 投喂熟肉数 = 存档.物品.熟肉;
+              存档.物品.熟肉 -= 投喂熟肉数;
+              const 伙伴互动增加好感 = 计算数值('伙伴互动增加好感', 投喂熟肉数 * 3);
+              存档.伙伴.晓月好感 += 伙伴互动增加好感;
+              director.loadScene('伙伴');
+            },
+            返回: () => director.loadScene('伙伴'),
+          },
+        };
+        director.loadScene('确认');
+      },
+      this,
+    );
+
   }
 
   更新() {
