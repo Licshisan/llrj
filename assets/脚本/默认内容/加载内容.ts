@@ -164,6 +164,21 @@ async function 领取成就奖励() {
   }
 }
 
+async function 领取玩家名称() {
+  const player = 玩家管理器.玩家;
+  const serverInfo = player?.server_info as any;
+  const 玩家名称 = String(serverInfo?.player_name).trim();
+  if (!玩家名称) return;
+
+  try {
+    await 确认领取补偿请求('player_name');
+    player.client_info.name = 玩家名称;
+    serverInfo.player_name = '';
+  } catch (e) {
+    throw new Error(`领取玩家名称失败: ${(e as Error).message}`);
+  }
+}
+
 function compareVersion(v1: string, v2: string): number {
   const arr1 = v1.split('.').map(Number);
   const arr2 = v2.split('.').map(Number);
@@ -258,6 +273,7 @@ export async function 加载游戏内容() {
 
     await 领取藏品奖励();
     await 领取成就奖励();
+    await 领取玩家名称();
     await 版本校验();
     玩家管理器.保存玩家();
   } catch (e) {

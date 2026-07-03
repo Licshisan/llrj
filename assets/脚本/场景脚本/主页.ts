@@ -162,7 +162,7 @@ export class 主页 extends Component {
       this,
     );
     this.暗夜模式();
-    this.加载榜一大哥();
+    this.加载PVP();
   }
 
   主动技能() {
@@ -402,7 +402,7 @@ export class 主页 extends Component {
     }
   }
 
-  async 加载榜一大哥() {
+  async 加载PVP() {
     if (!存档.临时数据.榜一大哥 && 存档.其他.挑战进度 >= 16) {
       const 榜一大哥 = await 获取榜一大哥请求();
       if(榜一大哥?.save?.临时数据?.榜一大哥){

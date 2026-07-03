@@ -203,26 +203,13 @@ export function 创建存档(立即保存 = true) {
 
 export function 删除存档(存档名称: string) {
   try {
-    // 1. 获取全部本地存储key，删除该存档所有备份
-    const 全部存储键 = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      全部存储键.push(key);
-    }
-
-    const 备份前缀 = `${存档名称}_备份`;
-    for (const key of 全部存储键) {
-      if (key.startsWith(备份前缀)) {
-        sys.localStorage.removeItem(key);
-      }
-    }
-
     const 存档名称列表字符串 = sys.localStorage.getItem('存档名称列表');
     const 存档名称列表 = 存档名称列表字符串 ? JSON.parse(存档名称列表字符串) : [];
 
     const 新存档名称列表 = 存档名称列表.filter((名称: string) => 名称 !== 存档名称);
     sys.localStorage.setItem('存档名称列表', JSON.stringify(新存档名称列表));
     sys.localStorage.removeItem(存档名称);
+    删除存档备份(存档名称);
 
     Object.assign(主存档, 创建默认值代理(JSON.parse(JSON.stringify(默认存档))));
     当前激活存档 = 主存档;
@@ -276,11 +263,31 @@ export function 保存存档() {
 export function 备份存档(备份名称: string) {
   try {
     const 备份字段 = 存档.存档名称 + '_备份' + 备份名称;
+    const 备份列表字段 = 存档.存档名称 + '_备份列表';
+    const 备份列表字符串 = sys.localStorage.getItem(备份列表字段);
+    const 备份列表: string[] = 备份列表字符串 ? JSON.parse(备份列表字符串) : [];
+
+    if (!备份列表.includes(备份字段)) {
+      备份列表.push(备份字段);
+      sys.localStorage.setItem(备份列表字段, JSON.stringify(备份列表));
+    }
+
     const 存档字符串 = JSON.stringify(存档);
     sys.localStorage.setItem(备份字段, 存档字符串);
   } catch (e) {
     error('备份存档失败', e);
   }
+}
+
+function 删除存档备份(存档名称: string) {
+  const 备份列表字段 = 存档名称 + '_备份列表';
+  const 备份列表字符串 = sys.localStorage.getItem(备份列表字段);
+  const 备份列表: string[] = 备份列表字符串 ? JSON.parse(备份列表字符串) : [];
+
+  for (const 备份字段 of 备份列表) {
+    sys.localStorage.removeItem(备份字段);
+  }
+  sys.localStorage.removeItem(备份列表字段);
 }
 
 export function 加载备份(备份名称: string) {
