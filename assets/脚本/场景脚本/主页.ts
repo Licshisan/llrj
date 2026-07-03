@@ -555,8 +555,8 @@ export class 主页 extends Component {
     }
 
     // 掠夺天赋
-    if (存档.其他.待抢夺) {
-      存档.其他.待抢夺 = 0;
+    if (存档.其他.待抢夺天赋) {
+      存档.其他.待抢夺天赋 = 0;
       this.node.getComponent(事件).触发事件('抢夺天赋');
       return false;
     }
@@ -849,8 +849,8 @@ export class 主页 extends Component {
     }
 
     // 算天赋
-    const 算天赋概率 = 计算数值('算天赋概率', 1);
-    if (存档.距离 > 100 && 存档.距离 <= 299 && Math.random() * 100 < 算天赋概率 && 存档.其他.算命次数 < 20) {
+    const 命理师概率 = 计算数值('命理师概率', 1);
+    if (存档.距离 > 100 && 存档.距离 <= 299 && Math.random() * 100 < 命理师概率 && 存档.其他.算命次数 < 20) {
       this.基本消耗();
       this.node.getComponent(事件).触发事件('命理师');
       return;
