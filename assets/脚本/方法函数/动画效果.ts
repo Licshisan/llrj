@@ -1,6 +1,15 @@
 import type { Vec3 } from 'cc';
-import { Node, Label, Color, tween, v3, UIOpacity, Sprite, UITransform, find, Tween } from 'cc';
+import { Node, Label, Color, tween, v3, UIOpacity, Sprite, UITransform, find, Tween, RichText } from 'cc';
 import { 设置 } from '../管理器/设置管理器';
+
+export type 普通文字样式替换 = {
+  匹配: string | RegExp;
+  颜色?: Color | string;
+  加粗?: boolean;
+  斜体?: boolean;
+  下划线?: boolean;
+  大小?: number;
+};
 
 // 逐字播放文本效果
 export function 播放文本(目标节点: Node, 文本内容: string, 间隔时间 = 120): void {
@@ -225,28 +234,104 @@ export function 创建普通文字(
   文本内容: string,
   索引: number,
   颜色: Color = Color.WHITE,
-  点击的回调?: Function,
+  点击的回调?: Function | 普通文字样式替换[],
+  样式替换: 普通文字样式替换[] = [],
 ) {
   const 文字节点 = new Node(`label_${索引}`);
-  const 标签组件 = 文字节点.addComponent(Label);
-
-  标签组件.string = 文本内容;
-  标签组件.fontSize = 32;
-  标签组件.lineHeight = 40;
-  标签组件.overflow = Label.Overflow.RESIZE_HEIGHT;
-  标签组件.horizontalAlign = Label.HorizontalAlign.LEFT;
-  标签组件.color = 颜色 || Color.WHITE;
+  const 默认颜色 = 颜色 || Color.WHITE;
+  const 实际点击回调 = typeof 点击的回调 === 'function' ? 点击的回调 : undefined;
+  const 实际样式替换 = Array.isArray(点击的回调) ? 点击的回调 : 样式替换;
+  const 是否使用富文本 = 实际样式替换.length > 0;
+  const 宽度 = 布局节点.getComponent(UITransform).width || 650;
+  const 文字变换 = 文字节点.getComponent(UITransform) || 文字节点.addComponent(UITransform);
 
   文字节点.setParent(布局节点);
   文字节点.setPosition(0, 0);
+  文字变换.setContentSize(宽度, 0);
 
-  if (点击的回调) {
-    文字节点.on(Node.EventType.TOUCH_END, (evt) => {
-      点击的回调(文字节点, evt);
-    });
+  if (是否使用富文本) {
+    const 转富文本颜色 = (目标颜色: Color | string): string => {
+      if (typeof 目标颜色 === 'string') return 目标颜色.startsWith('#') ? 目标颜色 : `#${目标颜色}`;
+
+      const 转十六进制 = (值: number) => Math.max(0, Math.min(255, Math.round(值))).toString(16).padStart(2, '0');
+      return `#${转十六进制(目标颜色.r)}${转十六进制(目标颜色.g)}${转十六进制(目标颜色.b)}`;
+    };
+    const 转义富文本 = (文本: string): string => 文本.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const 转义正则文本 = (文本: string): string => 文本.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const 包裹样式 = (文本: string, 样式?: 普通文字样式替换): string => {
+      let 结果 = 转义富文本(文本);
+      if (!样式) return 结果;
+
+      if (样式.颜色) 结果 = `<color=${转富文本颜色(样式.颜色)}>${结果}</color>`;
+      if (样式.大小) 结果 = `<size=${样式.大小}>${结果}</size>`;
+      if (样式.加粗) 结果 = `<b>${结果}</b>`;
+      if (样式.斜体) 结果 = `<i>${结果}</i>`;
+      if (样式.下划线) 结果 = `<u>${结果}</u>`;
+      return 结果;
+    };
+
+    type 文本片段 = { 文本: string; 样式?: 普通文字样式替换 };
+    let 片段列表: 文本片段[] = [{ 文本: 文本内容 }];
+
+    for (const 样式 of 实际样式替换) {
+      if (!样式?.匹配) continue;
+
+      const 正则 =
+        typeof 样式.匹配 === 'string'
+          ? new RegExp(转义正则文本(样式.匹配), 'g')
+          : new RegExp(样式.匹配.source, 样式.匹配.flags.includes('g') ? 样式.匹配.flags : `${样式.匹配.flags}g`);
+      const 新片段列表: 文本片段[] = [];
+
+      for (const 片段 of 片段列表) {
+        if (片段.样式) {
+          新片段列表.push(片段);
+          continue;
+        }
+
+        let 起点 = 0;
+        正则.lastIndex = 0;
+
+        for (let 匹配结果 = 正则.exec(片段.文本); 匹配结果; 匹配结果 = 正则.exec(片段.文本)) {
+          const 匹配文本 = 匹配结果[0];
+          if (!匹配文本) {
+            正则.lastIndex++;
+            continue;
+          }
+
+          if (匹配结果.index > 起点) 新片段列表.push({ 文本: 片段.文本.slice(起点, 匹配结果.index) });
+          新片段列表.push({ 文本: 匹配文本, 样式 });
+          起点 = 匹配结果.index + 匹配文本.length;
+        }
+
+        if (起点 < 片段.文本.length) 新片段列表.push({ 文本: 片段.文本.slice(起点) });
+      }
+
+      片段列表 = 新片段列表;
+    }
+
+    const 富文本组件 = 文字节点.addComponent(RichText);
+    富文本组件.fontSize = 32;
+    富文本组件.lineHeight = 40;
+    富文本组件.horizontalAlign = RichText.HorizontalAlign.LEFT;
+    富文本组件.fontColor = 默认颜色;
+    富文本组件.maxWidth = 宽度;
+    富文本组件.string = 片段列表.map((片段) => 包裹样式(片段.文本, 片段.样式)).join('');
+  } else {
+    const 标签组件 = 文字节点.addComponent(Label);
+    标签组件.string = 文本内容;
+    标签组件.fontSize = 32;
+    标签组件.lineHeight = 40;
+    标签组件.overflow = Label.Overflow.RESIZE_HEIGHT;
+    标签组件.horizontalAlign = Label.HorizontalAlign.LEFT;
+    标签组件.color = 默认颜色;
   }
 
-  const 宽度 = 布局节点.getComponent(UITransform).width || 650;
-  文字节点.getComponent(UITransform).setContentSize(宽度, 0);
-  标签组件.updateRenderData(true);
+  if (实际点击回调) {
+    文字节点.on(Node.EventType.TOUCH_END, (evt) => {
+      实际点击回调(文字节点, evt);
+    });
+  }
+  if (!是否使用富文本) {
+    文字节点.getComponent(Label).updateRenderData(true);
+  }
 }
