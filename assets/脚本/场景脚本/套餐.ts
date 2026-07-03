@@ -14,7 +14,7 @@ import {
 } from 'cc';
 import { 播放文本, 淡入 } from '../方法函数/动画效果';
 import { 执行钩子 } from '../管理器/钩子管理器';
-import { 保存存档, 创建存档, 存档 } from '../管理器/存档管理器';
+import { 创建存档, 存档 } from '../管理器/存档管理器';
 import { 默认套餐表 } from '../默认内容/套餐表';
 import { 默认难度表 } from '../默认内容/难度表';
 import { 默认技能表 } from '../默认内容/技能表';
@@ -104,7 +104,7 @@ export class 套餐 extends Component {
                 return;
               }
 
-              创建存档();
+              创建存档(false);
               存档.创建时间 = Date.now();
               存档.套餐名称 = 套餐.名称;
               存档.游戏难度 = this.当前难度;
@@ -132,7 +132,6 @@ export class 套餐 extends Component {
               }
 
               执行钩子('新建游戏');
-              保存存档();
               director.loadScene('开场');
             },
             this,
@@ -180,7 +179,7 @@ export class 套餐 extends Component {
         选项按钮.setParent(单页);
 
         选项按钮.getChildByName('标签').getComponent(Label).string = `${难度.名称}：${难度.说明}`;
-        选项按钮.getChildByName('标签').getComponent(Label).color = 解析颜色(难度.颜色);
+        选项按钮.getChildByName('标签').getComponent(Label).color = 难度.颜色;
         if (难度.条件) {
           选项按钮.on(
             Button.EventType.CLICK,

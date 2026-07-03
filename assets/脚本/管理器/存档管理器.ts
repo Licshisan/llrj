@@ -176,23 +176,24 @@ export function 获取存档列表(): (typeof 存档)[] {
     .filter(Boolean);
 }
 
-export function 创建存档() {
+export function 创建存档(立即保存 = true) {
   const 存档名称 = '存档_' + Math.random().toString(36).slice(2, 8);
+  const 新存档 = JSON.parse(JSON.stringify(默认存档));
+  新存档.存档名称 = 存档名称;
+
+  Object.assign(主存档, 创建默认值代理(JSON.parse(JSON.stringify(新存档))));
+  当前激活存档 = 主存档;
+
+  if (!立即保存) return;
 
   const 存档名称列表字符串 = sys.localStorage.getItem('存档名称列表');
   const 存档名称列表 = 存档名称列表字符串 ? JSON.parse(存档名称列表字符串) : [];
-
-  const 新存档 = JSON.parse(JSON.stringify(默认存档));
-  新存档.存档名称 = 存档名称;
 
   try {
     sys.localStorage.setItem(存档名称, JSON.stringify(新存档));
 
     存档名称列表.push(存档名称);
     sys.localStorage.setItem('存档名称列表', JSON.stringify(存档名称列表));
-
-    Object.assign(主存档, 创建默认值代理(JSON.parse(JSON.stringify(新存档))));
-    当前激活存档 = 主存档;
   } catch (e) {
     error('创建存档失败', e);
     存档名称列表.pop();
@@ -258,6 +259,13 @@ export function 加载存档(存档名称: string) {
 
 export function 保存存档() {
   try {
+    const 存档名称列表字符串 = sys.localStorage.getItem('存档名称列表');
+    const 存档名称列表 = 存档名称列表字符串 ? JSON.parse(存档名称列表字符串) : [];
+    if (!存档名称列表.includes(存档.存档名称)) {
+      存档名称列表.push(存档.存档名称);
+      sys.localStorage.setItem('存档名称列表', JSON.stringify(存档名称列表));
+    }
+
     const 存档字符串 = JSON.stringify(存档);
     sys.localStorage.setItem(存档.存档名称, 存档字符串);
   } catch (e) {
