@@ -36,6 +36,17 @@ export class 分数 extends Component {
     } else {
       this.结算藏品();
       const 新完成成就 = this.结算成就();
+
+
+      // 结档奖励
+      const 接档天赋点奖励 = this.结算接档天赋点奖励(得分.最终得分);
+      if (接档天赋点奖励 > 0) {
+        texts.push(
+          `根据【${存档.游戏难度}】难度和最终得分，获得额外天赋点+${接档天赋点奖励}。当前额外天赋点：${玩家.client_info.extra_talent_points}`,
+        );
+      }
+
+
       let 先驱者成就: 成就项目类型[] = [];
       try {
         await 上传客户端数据();
@@ -133,5 +144,31 @@ export class 分数 extends Component {
     }
     玩家.client_info.scores = 计算排行榜积分总和();
     return 完成成就;
+  }
+
+  结算接档天赋点奖励(最终得分: number) {
+    const 难度奖励表: Record<string, number[]> = {
+      普通: [1, 1, 2],
+      试炼: [1, 2, 3],
+      真实: [2, 3, 4],
+      残酷: [2, 3, 5],
+      绝境: [3, 4, 6],
+    };
+    const 奖励列表 = 难度奖励表[存档.游戏难度] || 难度奖励表.普通;
+    let 奖励点数 = 0;
+    if (最终得分 >= 90) {
+      奖励点数 = 奖励列表[2];
+    } else if (最终得分 >= 80) {
+      奖励点数 = 奖励列表[1];
+    } else if (最终得分 >= 70) {
+      奖励点数 = 奖励列表[0];
+    }
+
+    if (奖励点数 > 0) {
+      玩家.client_info.extra_talent_points =
+        (玩家.client_info.extra_talent_points || 0) + 奖励点数;
+    }
+
+    return 奖励点数;
   }
 }
