@@ -130,7 +130,7 @@ export class 剧情 extends Component {
 
     const sequence = tween(this.node).delay(1 / 设置.播放速度);
     for (let i = 0; i < 剧情.文本.length; i++) {
-      sequence.call(() => 创建动画文字(this.文本容器, 剧情.文本[i], i)).delay(2 / 设置.播放速度);
+      sequence.call(() => 创建动画文字(this.文本容器, 剧情.文本[i])).delay(2 / 设置.播放速度);
     }
     sequence.call(() => 放大出现(this.按钮容器));
     sequence.start();

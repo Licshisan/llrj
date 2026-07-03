@@ -103,13 +103,13 @@ export class 成就 extends Component {
       ? 玩家.client_info.achievements
       : [];
 
-    筛选后的成就.forEach((成就, 序号) => {
+    筛选后的成就.forEach((成就) => {
       if (成就.排行类) {
         let 文本 = `【${成就.名称}】${成就.描述}`;
         if (成就.奖励) {
           文本 += `\n奖励：${成就.奖励}`;
         }
-        创建普通文字(this.内容节点, 文本, 序号, 成就.条件 ? Color.WHITE : Color.GRAY);
+        创建普通文字(this.内容节点, 文本, 成就.条件 ? Color.WHITE : Color.GRAY);
       } else {
         const 完成成就 = 已完成成就列表.find((c) => c.name === 成就.名称);
 
@@ -120,7 +120,7 @@ export class 成就 extends Component {
           if (成就.奖励) {
             文本 += `\n奖励：${成就.奖励}`;
           }
-          创建普通文字(this.内容节点, 文本, 序号, Color.GREEN);
+          创建普通文字(this.内容节点, 文本, Color.GREEN);
         } else {
           let 文本 = `【${成就.名称}】`;
           文本 += `${成就.描述}`;
@@ -128,7 +128,7 @@ export class 成就 extends Component {
             文本 += `\n奖励：${成就.奖励}`;
           }
           const 颜色 = 成就.条件 ? Color.WHITE : Color.GRAY;
-          创建普通文字(this.内容节点, 文本, 序号, 颜色);
+          创建普通文字(this.内容节点, 文本, 颜色);
         }
       }
     });

@@ -14,11 +14,10 @@ export class 特性 extends Component {
   start() {
     globalThis.页面来源 = '特性';
 
-    默认特性表.forEach((特性, index) => {
+    默认特性表.forEach((特性) => {
       创建普通文字(
         this.内容,
         `【${特性.名称}】${特性.描述}`,
-        index,
         特性.条件 ? Color.GREEN : Color.WHITE,
       );
     });

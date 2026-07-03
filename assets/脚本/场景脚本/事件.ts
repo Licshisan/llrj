@@ -135,7 +135,6 @@ export class 事件 extends Component {
           创建动画文字(
             this.文本容器,
             this.当前事件.文本[i],
-            i,
             设置.暗夜模式 ? Color.WHITE : Color.BLACK,
           ),
         ).delay(1.2 / 设置.播放速度);

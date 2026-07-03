@@ -49,7 +49,7 @@ export class 开场 extends Component {
 
     const 序列 = tween(this.node).delay(0.6);
     for (let i = 0; i < 开场文本.length; i++) {
-      序列.call(() => 创建动画文字(this.文本容器, 开场文本[i], i)).delay(1.6 / 设置.播放速度);
+      序列.call(() => 创建动画文字(this.文本容器, 开场文本[i])).delay(1.6 / 设置.播放速度);
     }
     序列.delay(2.6 / 设置.播放速度);
     序列.call(() => {
@@ -158,7 +158,7 @@ export class 开场 extends Component {
         }
         文本 += `\n${天赋?.说明}`;
 
-        创建动画文字(this.文本容器, 文本, i, 天赋.颜色, (文字节点) => {
+        创建动画文字(this.文本容器, 文本, 天赋.颜色, (文字节点) => {
           this.切换天赋锁定(天赋, 文字节点);
         });
       }).delay(1.5 / 设置.播放速度);

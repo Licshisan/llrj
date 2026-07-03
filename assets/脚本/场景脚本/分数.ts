@@ -74,7 +74,7 @@ export class 分数 extends Component {
     // 播放
     const 序列 = tween(this.node).delay(1);
     for (let 索引 = 0; 索引 < texts.length; 索引++) {
-      序列.call(() => 创建动画文字(this.文本容器, texts[索引], 索引)).delay(2.2 / 设置.播放速度);
+      序列.call(() => 创建动画文字(this.文本容器, texts[索引])).delay(2.2 / 设置.播放速度);
     }
     序列.call(() => 淡入(this.选项容器)).delay(1);
     序列.start();
