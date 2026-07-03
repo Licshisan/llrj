@@ -23,6 +23,7 @@ import { 设置, 保存设置 } from '../管理器/设置管理器';
 import { 保存玩家, 玩家 } from '../管理器/玩家管理器';
 import { 计算数值 } from '../方法函数/属性计算';
 import { 计算技能等级, 计算特质等级 } from '../方法函数/等级计算';
+import { 计算自选天赋点状态 } from '../方法函数/天赋计算';
 const { ccclass, property } = _decorator;
 
 @ccclass('套餐')
@@ -38,7 +39,7 @@ export class 套餐 extends Component {
   显示难度页 = false;
   当前难度 = 设置.上次难度 || '普通';
   start() {
-    globalThis.页面来源 = '套餐'
+    globalThis.页面来源 = '套餐';
     this.难度按钮.getComponent(Label).string = `当前难度：${this.当前难度}`;
 
     播放文本(this.标签, '请选择一种初始道具套餐...');
@@ -94,6 +95,15 @@ export class 套餐 extends Component {
           选项按钮.on(
             Button.EventType.CLICK,
             () => {
+              const 天赋点状态 = 计算自选天赋点状态(设置.锁定天赋, this.当前难度);
+              if (!天赋点状态.可以进入) {
+                播放文本(
+                  this.标签,
+                  `当前自选天赋在【${this.当前难度}】难度需要${天赋点状态.消耗}点天赋点，你只有${天赋点状态.基础天赋点 + 天赋点状态.额外天赋点}点，请到图鉴调整自选天赋。`,
+                );
+                return;
+              }
+
               创建存档();
               存档.创建时间 = Date.now();
               存档.套餐名称 = 套餐.名称;

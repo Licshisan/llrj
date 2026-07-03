@@ -13,6 +13,7 @@ export const 默认玩家 = {
     achievements: [] as { name: string; description: string; achieve_at: number }[],
     collections: {} as Record<string, number>,
     play_times: {} as Record<string, number>,
+    extra_talent_points: 0,
     created_at: Date.now(),
     updated_at: Date.now(),
     pass_count: 0,
