@@ -31,6 +31,7 @@ export class 成就 extends Component {
   ];
 
   start() {
+    const 页面来源 = globalThis.页面来源
     globalThis.页面来源 = '成就'
 
     this.初始化分类标签();
@@ -39,7 +40,7 @@ export class 成就 extends Component {
     this.返回按钮.on(
       Node.EventType.TOUCH_END,
       () => {
-        if (globalThis.页面来源 === '特性') {
+        if (页面来源 === '特性') {
           director.loadScene('特性');
         } else {
           director.loadScene('首页');

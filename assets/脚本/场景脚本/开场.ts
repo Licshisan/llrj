@@ -16,8 +16,6 @@ export class 开场 extends Component {
   @property(Node) 文本容器: Node = null;
   @property(Node) 继续按钮: Node = null;
   @property(Node) 刷新按钮: Node = null;
-  刷新次数 = 0;
-  刷新机会 = 计算数值('刷新机会', 12);
   当前天赋: string[] = [];
 
   start() {
@@ -54,10 +52,9 @@ export class 开场 extends Component {
   }
 
   点击刷新() {
-    this.刷新次数++;
     this.继续按钮.active = false;
     this.刷新按钮.active = false;
-    this.刷新按钮.getComponent(Label).string = `<刷新${this.刷新次数}/${this.刷新机会}>`;
+    this.刷新按钮.getComponent(Label).string = '<刷新>';
 
     this.当前天赋 = [];
     const 临时选中的天赋 = [];
@@ -137,9 +134,7 @@ export class 开场 extends Component {
     序列.delay(1.5 / 设置.播放速度);
     序列.call(() => {
       淡入(this.继续按钮);
-      if (this.刷新次数 < this.刷新机会) {
-        淡入(this.刷新按钮);
-      }
+      淡入(this.刷新按钮);
     });
     序列.start();
   }

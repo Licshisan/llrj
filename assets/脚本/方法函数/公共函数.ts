@@ -151,12 +151,3 @@ export function 深克隆<T>(target: T): T {
   }
   return cloneObj;
 }
-
-export function 解析颜色(颜色字符串: string): Color {
-  if (!颜色字符串) return Color.WHITE;
-  const 十六进制 = 颜色字符串.replace('#', '');
-  const r = parseInt(十六进制.substring(0, 2), 16);
-  const g = parseInt(十六进制.substring(2, 4), 16);
-  const b = parseInt(十六进制.substring(4, 6), 16);
-  return new Color(r, g, b, 255);
-}

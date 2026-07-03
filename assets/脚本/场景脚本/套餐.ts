@@ -11,6 +11,7 @@ import {
   _decorator,
   Node,
   UIOpacity,
+  Color,
 } from 'cc';
 import { 播放文本, 淡入 } from '../方法函数/动画效果';
 import { 执行钩子 } from '../管理器/钩子管理器';
@@ -18,7 +19,6 @@ import { 创建存档, 存档 } from '../管理器/存档管理器';
 import { 默认套餐表 } from '../默认内容/套餐表';
 import { 默认难度表 } from '../默认内容/难度表';
 import { 默认技能表 } from '../默认内容/技能表';
-import { 深克隆, 解析颜色 } from '../方法函数/公共函数';
 import { 设置, 保存设置 } from '../管理器/设置管理器';
 import { 保存玩家, 玩家 } from '../管理器/玩家管理器';
 import { 计算数值 } from '../方法函数/属性计算';
@@ -84,13 +84,13 @@ export class 套餐 extends Component {
       分页组件.addPage(单页);
 
       for (let i = 0; i < this.页大小; i++) {
-        const 套餐 = 深克隆(默认套餐表[页码 * this.页大小 + i]);
+        const 套餐 = 默认套餐表[页码 * this.页大小 + i];
         if (!套餐) break;
         const 选项按钮 = instantiate(this.选项按钮预制体);
         选项按钮.setParent(单页);
 
         选项按钮.getChildByName('标签').getComponent(Label).string = `【${套餐.名称}】${套餐.说明}`;
-        选项按钮.getChildByName('标签').getComponent(Label).color = 解析颜色(套餐.颜色);
+        选项按钮.getChildByName('标签').getComponent(Label).color = 套餐.颜色 || Color.WHITE;
         if (套餐.条件) {
           选项按钮.on(
             Button.EventType.CLICK,
@@ -173,13 +173,13 @@ export class 套餐 extends Component {
       分页组件.addPage(单页);
 
       for (let i = 0; i < this.页大小; i++) {
-        const 难度 = 深克隆(默认难度表[页码 * this.页大小 + i]);
+        const 难度 = 默认难度表[页码 * this.页大小 + i]
         if (!难度) break;
         const 选项按钮 = instantiate(this.选项按钮预制体);
         选项按钮.setParent(单页);
 
         选项按钮.getChildByName('标签').getComponent(Label).string = `${难度.名称}：${难度.说明}`;
-        选项按钮.getChildByName('标签').getComponent(Label).color = 难度.颜色;
+        选项按钮.getChildByName('标签').getComponent(Label).color = 难度.颜色 ?? Color.WHITE;
         if (难度.条件) {
           选项按钮.on(
             Button.EventType.CLICK,
