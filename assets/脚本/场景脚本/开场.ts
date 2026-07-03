@@ -7,7 +7,7 @@ import { 默认天赋表 } from '../默认内容/天赋表';
 import { 计算数值, 计算最大生命, 计算最大精力, 计算最大饥饿 } from '../方法函数/属性计算';
 import { 计算天赋等级 } from '../方法函数/等级计算';
 import { 保存玩家, 玩家 } from '../管理器/玩家管理器';
-import { 计算自选天赋点状态 } from '../方法函数/天赋计算';
+import { 计算自选天赋点状态 } from '../公共方法/天赋计算';
 const { ccclass, property } = _decorator;
 
 @ccclass('开场')

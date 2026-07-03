@@ -23,7 +23,7 @@ import { 设置, 保存设置 } from '../管理器/设置管理器';
 import { 保存玩家, 玩家 } from '../管理器/玩家管理器';
 import { 计算数值 } from '../方法函数/属性计算';
 import { 计算技能等级, 计算特质等级 } from '../方法函数/等级计算';
-import { 计算自选天赋点状态 } from '../方法函数/天赋计算';
+import { 计算自选天赋点状态 } from '../公共方法/天赋计算';
 const { ccclass, property } = _decorator;
 
 @ccclass('套餐')

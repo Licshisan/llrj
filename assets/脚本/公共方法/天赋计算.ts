@@ -1,6 +1,6 @@
 import { 玩家 } from '../管理器/玩家管理器';
 import { 默认天赋表 } from '../默认内容/天赋表';
-import { 计算数值 } from './属性计算';
+import { 计算数值 } from '../方法函数/属性计算';
 
 const 难度额外花费表: Record<string, number> = {
   普通: 0,
@@ -28,7 +28,7 @@ function 计算自选天赋消耗(天赋名称列表: string[], 难度: string):
 }
 
 export function 计算自选天赋点状态(天赋名称列表: string[], 难度: string) {
-  const 基础天赋点 = 计算数值('基础天赋点');
+  const 基础天赋点 = 计算数值('基础天赋点', 3);
   const 额外天赋点 = 玩家.client_info.extra_talent_points || 0;
   const 锁定上限 = 计算数值('天赋锁定上限', 3);
   const 消耗 = 计算自选天赋消耗(天赋名称列表, 难度);

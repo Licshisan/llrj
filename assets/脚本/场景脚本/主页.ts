@@ -184,6 +184,12 @@ export class 主页 extends Component {
   }
 
   回档() {
+    // todo简单修复
+    if(存档.天赋.百折不挠 && 存档.精力 > 计算最大精力() * 3 && !存档.其他.已修复百折不挠){
+      存档.其他.已修复百折不挠 = 1
+      存档.精力 = 计算最大精力()
+    }
+
     this.scheduleOnce(() => {
       if (存档.当前剧情) {
         director.loadScene('剧情');
