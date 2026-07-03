@@ -31,6 +31,8 @@ export class 成就 extends Component {
   ];
 
   start() {
+    globalThis.页面来源 = '成就'
+
     this.初始化分类标签();
     this.刷新成就列表();
     this.图鉴按钮.on(Button.EventType.CLICK, () => director.loadScene('图鉴'), this);

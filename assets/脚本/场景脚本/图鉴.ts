@@ -24,7 +24,13 @@ export class 图鉴 extends Component {
     this.返回按钮.on(
       Button.EventType.CLICK,
       () => {
-        director.loadScene('成就');
+        if (globalThis.页面来源 === '套餐') {
+          director.loadScene('套餐');
+        } else if(globalThis.页面来源 === '成就') {
+          director.loadScene('成就');
+        } else {
+          director.loadScene('首页');
+        }
       },
       this,
     );

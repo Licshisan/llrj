@@ -32,11 +32,13 @@ export class 套餐 extends Component {
   @property(Prefab) 选项按钮预制体: Prefab = null;
   @property(Node) 返回按钮: Node = null;
   @property(Node) 难度按钮: Node = null;
+  @property(Node) 图鉴按钮: Node = null;
 
   页大小 = 7;
   显示难度页 = false;
   当前难度 = 设置.上次难度 || '普通';
   start() {
+    globalThis.页面来源 = '套餐'
     this.难度按钮.getComponent(Label).string = `当前难度：${this.当前难度}`;
 
     播放文本(this.标签, '请选择一种初始道具套餐...');
@@ -50,14 +52,17 @@ export class 套餐 extends Component {
       Button.EventType.CLICK,
       () => {
         if (!this.显示难度页) {
+          播放文本(this.标签, '请选择一种游戏难度...');
           this.创建难度分页();
         } else {
+          播放文本(this.标签, '请选择一种初始道具套餐...');
           this.创建套餐分页();
         }
         this.显示难度页 = !this.显示难度页;
       },
       this,
     );
+    this.图鉴按钮.on(Button.EventType.CLICK, () => director.loadScene('图鉴'), this);
   }
 
   创建套餐分页() {
