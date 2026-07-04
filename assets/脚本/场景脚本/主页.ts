@@ -27,10 +27,12 @@ import { 执行钩子 } from '../管理器/钩子管理器';
 import { 设置 } from '../管理器/设置管理器';
 import { 获取当前日记 } from '../默认内容/日记表';
 import { 获取地区名称, 获取当前地区 } from '../默认内容/地区表';
+import { 默认天赋表 } from '../默认内容/天赋表';
 import { 玩家 } from '../管理器/玩家管理器';
 import { 计算得分 } from '../公共方法/最终得分';
 import { 获取榜一大哥请求, 获取随机存档请求 } from '../方法函数/网络请求';
 import { 音频管理器 } from './音频';
+import { 计算天赋等级 } from '../方法函数/等级计算';
 const { ccclass, property } = _decorator;
 
 @ccclass('主页')
@@ -668,6 +670,24 @@ export class 主页 extends Component {
     if (获取地区名称() === '山林' && 存档.天数 >= 80) {
       if (存档.距离 > 100 && 存档.距离 < 300) {
         this.播放文本('还是先去省城整顿一下吧！');
+        return false;
+      }
+    }
+
+    // 命运典当行
+    if (
+      存档.当前地点 === '市中心' &&
+      存档.停留天数.省城 >= 7 &&
+      !存档.其他.完成命运典当行
+    ) {
+      const 有可典当天赋 = 默认天赋表.some((i) => {
+        const 等级 = 计算天赋等级(i.名称, i.隐藏 ? 0 : 1);
+        return !i.负面 && 等级 > 0 && !存档.天赋[i.名称];
+      });
+      const 触发概率 = 存档.其他.拒绝命运典当行次数 ? 3 : 100;
+      if (有可典当天赋 && Math.random() * 100 < 触发概率) {
+        this.基本消耗();
+        this.node.getComponent(事件).触发事件('命运典当行');
         return false;
       }
     }
