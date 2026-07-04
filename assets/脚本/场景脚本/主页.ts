@@ -839,7 +839,8 @@ export class 主页 extends Component {
       存档.天数 >= 142 &&
       存档.天数 < 145 &&
       Math.random() * 100 < 50 &&
-      存档.精力 < 50
+      存档.精力 < 50 && 
+      !存档.剧情.击败荒野幽灵
     ) {
       this.基本消耗();
       this.node.getComponent(事件).触发事件('雨夜白影');

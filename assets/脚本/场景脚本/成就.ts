@@ -138,5 +138,9 @@ export class 成就 extends Component {
         }
       }
     });
+
+    if(this.当前分类 === '排行'){
+      创建普通文字(this.内容节点, `当前成就积分：${玩家.client_info.scores}`);
+    }
   }
 }
