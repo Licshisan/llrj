@@ -12,6 +12,7 @@ export class 小兰 extends Component {
   @property(Node) 切换1: Node = null;
   @property(Node) 切换2: Node = null;
   @property(Node) 切换3: Node = null;
+  @property(Node) 切换4: Node = null;
   @property(Node) 退出按钮: Node = null;
 
   start() {
@@ -40,6 +41,15 @@ export class 小兰 extends Component {
       Button.EventType.CLICK,
       () => {
         director.loadScene('青芽');
+      },
+      this,
+    );
+
+    this.切换4.active = 存档.伙伴.小樱关系 > 0;
+    this.切换4.on(
+      Button.EventType.CLICK,
+      () => {
+        director.loadScene('小樱');
       },
       this,
     );

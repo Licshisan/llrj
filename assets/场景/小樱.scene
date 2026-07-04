@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.SceneAsset",
-    "_name": "青芽",
+    "_name": "小樱",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -11,7 +11,7 @@
   },
   {
     "__type__": "cc.Scene",
-    "_name": "青芽",
+    "_name": "小樱",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -56,7 +56,7 @@
     "_globals": {
       "__id__": 132
     },
-    "_id": "a9a07f69-f2fa-4909-9da6-2aa216d8c812"
+    "_id": "884d726f-0390-41fa-8ec8-0e8b3d5a9871"
   },
   {
     "__type__": "cc.Node",
@@ -598,7 +598,7 @@
       "b": 255,
       "a": 255
     },
-    "_string": "青芽好感 100",
+    "_string": "小樱好感 100",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 32,
@@ -1417,7 +1417,7 @@
     "propertyPath": [
       "_string"
     ],
-    "value": "<小樱>"
+    "value": "<青芽>"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1812,7 +1812,7 @@
     "propertyPath": [
       "_string"
     ],
-    "value": "喂食"
+    "value": "送果子"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1942,7 +1942,7 @@
     "propertyPath": [
       "_string"
     ],
-    "value": "喂药"
+    "value": "送残页（暂未开放）"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -2075,7 +2075,7 @@
     "propertyPath": [
       "_string"
     ],
-    "value": "查看特性"
+    "value": "伙伴特性（暂未开放）"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -2382,7 +2382,7 @@
     "_id": "8bwIvfLrdKOIrXA0B58l6a"
   },
   {
-    "__type__": "c7f128k/3tO5K9lRedBf6Tz",
+    "__type__": "0db14RhXd9OSpJ3GdJwlIf7",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -2418,7 +2418,7 @@
     "退出按钮": {
       "__id__": 114
     },
-    "_id": "64bdijBoFP87nk1kKxSv6s"
+    "_id": "e5yuOPDhxPUrXuntnmVoHo"
   },
   {
     "__type__": "cc.PrefabInfo",

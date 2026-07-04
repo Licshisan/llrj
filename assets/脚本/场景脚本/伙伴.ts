@@ -14,6 +14,7 @@ export class 伙伴 extends Component {
   @property(Node) 切换1: Node = null;
   @property(Node) 切换2: Node = null;
   @property(Node) 切换3: Node = null;
+  @property(Node) 切换4: Node = null;
   @property(Node) 退出按钮: Node = null;
 
   @property(Node) 一键喂果: Node = null;
@@ -29,7 +30,9 @@ export class 伙伴 extends Component {
         director.loadScene('小兰');
       } else if (存档.伙伴.青芽关系) {
         director.loadScene('青芽');
-      }
+      } else if (存档.伙伴.小樱关系) {
+        director.loadScene('小樱');
+      } 
     }
   }
 
@@ -79,6 +82,18 @@ export class 伙伴 extends Component {
       () => {
         if (存档.伙伴.青芽关系) {
           director.loadScene('青芽');
+          return;
+        }
+      },
+      this,
+    );
+
+    this.切换4.active = 存档.伙伴.小樱关系 > 0;
+    this.切换4.on(
+      Button.EventType.CLICK,
+      () => {
+        if (存档.伙伴.小樱关系) {
+          director.loadScene('小樱');
           return;
         }
       },
