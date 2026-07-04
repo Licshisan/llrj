@@ -59,20 +59,15 @@ export class 开场 extends Component {
     this.当前天赋 = [];
     const 临时选中的天赋 = [];
 
-    let 天赋数量 = 计算数值('天赋数量', 2);
+    const 自选天赋列表 = 默认天赋表.filter((item) => 设置.锁定天赋.includes(item.名称));
+    const 自选正面天赋列表 = 自选天赋列表.filter((天赋) => !天赋.负面);
+    const 自选负面天赋列表 = 自选天赋列表.filter((天赋) => 天赋.负面);
+    let 随机正面天赋数量 = Math.floor(Math.random() * 2);
     if (Math.random() * 100 < 计算数值('额外天赋概率', 10)) {
-      天赋数量++;
+      随机正面天赋数量++;
     }
 
-    const 自选天赋列表 = 默认天赋表.filter((item) => 设置.锁定天赋.includes(item.名称));
-    const 自选正面天赋数量 = 自选天赋列表.filter((天赋) => !天赋.负面).length;
-    const 自选负面天赋数量 = 自选天赋列表.filter((天赋) => 天赋.负面).length;
-    const 正面天赋数量 = Math.max(天赋数量, 自选正面天赋数量);
-    const 负面天赋数量 = Math.min(正面天赋数量, 3);
-    const 剩余正面天赋数量 = Math.max(0, 正面天赋数量 - 自选正面天赋数量);
-    const 剩余负面天赋数量 = Math.max(0, 负面天赋数量 - 自选负面天赋数量);
-
-    自选天赋列表.forEach((天赋) => {
+    自选正面天赋列表.forEach((天赋) => {
       this.当前天赋.push(天赋.名称);
       临时选中的天赋.push({
         ...天赋,
@@ -85,7 +80,7 @@ export class 开场 extends Component {
         const 等级 = 计算天赋等级(i.名称, i.隐藏 ? 0 : 1);
         return !i.负面 && 等级 > 0 && !设置.锁定天赋.includes(i.名称);
       }),
-      剩余正面天赋数量,
+      随机正面天赋数量,
     );
     this.当前天赋.push(...抽取的正面天赋.map((x) => x.名称));
     抽取的正面天赋.forEach((天赋) => {
@@ -95,6 +90,17 @@ export class 开场 extends Component {
       });
     });
 
+    自选负面天赋列表.forEach((天赋) => {
+      this.当前天赋.push(天赋.名称);
+      临时选中的天赋.push({
+        ...天赋,
+        已自选: true,
+      });
+    });
+
+    const 正面天赋数量 = 自选正面天赋列表.length + 抽取的正面天赋.length;
+    const 负面天赋数量 = Math.max(自选负面天赋列表.length, Math.min(正面天赋数量, 3));
+    const 剩余负面天赋数量 = Math.max(0, 负面天赋数量 - 自选负面天赋列表.length);
     const 抽取的负面天赋 = this.随机抽取(
       默认天赋表.filter((i) => {
         const 等级 = 计算天赋等级(i.名称, i.隐藏 ? 0 : 1);
