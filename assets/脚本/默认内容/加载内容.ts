@@ -167,7 +167,7 @@ async function 领取成就奖励() {
 async function 领取玩家名称() {
   const player = 玩家管理器.玩家;
   const serverInfo = player?.server_info as any;
-  const 玩家名称 = String(serverInfo?.player_name).trim();
+  const 玩家名称 = serverInfo?.player_name
   if (!玩家名称) return;
 
   try {

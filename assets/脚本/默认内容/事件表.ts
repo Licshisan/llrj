@@ -1052,6 +1052,10 @@ const 山脉事件 = [
       }
 
       if(Math.random() * 100 < 10) {
+        if(!玩家.client_info?.extra_talent_points){
+          玩家.client_info.extra_talent_points = 0
+        }
+
         玩家.client_info.extra_talent_points += 1;
         res += `窥得自身潜藏格局，收获1点潜力！目前额外天赋点为${玩家.client_info.extra_talent_points}`
       }

@@ -63,6 +63,7 @@ export class 住房 extends Component {
       () => {
         if (!this.当前序号) {
           存档.临时数据.中介 = null;
+          存档.临时数据.临时房源= null;
           保存存档();
           director.loadScene('主页');
         } else {

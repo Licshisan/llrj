@@ -39,7 +39,7 @@ export class 分数 extends Component {
 
 
       // 结档奖励
-      const 接档天赋点奖励 = this.结算接档天赋点奖励(得分.最终得分);
+      const 接档天赋点奖励 = this.结算天赋点奖励(得分.最终得分);
       if (接档天赋点奖励 > 0) {
         texts.push(
           `根据【${存档.游戏难度}】难度和最终得分，获得额外天赋点+${接档天赋点奖励}。当前额外天赋点：${玩家.client_info.extra_talent_points}`,
@@ -146,7 +146,7 @@ export class 分数 extends Component {
     return 完成成就;
   }
 
-  结算接档天赋点奖励(最终得分: number) {
+  结算天赋点奖励(最终得分: number) {
     const 难度奖励表: Record<string, number[]> = {
       普通: [1, 1, 2],
       试炼: [1, 2, 3],

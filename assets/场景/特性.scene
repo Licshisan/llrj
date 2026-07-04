@@ -2023,7 +2023,7 @@
     "propertyPath": [
       "_active"
     ],
-    "value": false
+    "value": true
   },
   {
     "__type__": "cc.Node",
@@ -2384,11 +2384,8 @@
     "按钮容器": {
       "__id__": 31
     },
-    "退出": {
+    "退出按钮": {
       "__id__": 121
-    },
-    "设置": {
-      "__id__": 144
     },
     "_id": "4deW1W65dLkINWT/zcmNLa"
   },
