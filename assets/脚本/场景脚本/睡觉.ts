@@ -110,7 +110,7 @@ export class 睡觉 extends Component {
     }
 
     // 遇敌
-    if (Math.random() * 100 < 17) {
+    if (Math.random() * 100 < 20) {
       if (Math.random() * 100 < 70 || 获取地区名称() === '省城') {
         const 贼系列 = [
           '女贼(小学生)',

@@ -62,7 +62,7 @@ export class 开场 extends Component {
     const 自选天赋列表 = 默认天赋表.filter((item) => 设置.锁定天赋.includes(item.名称));
     const 自选正面天赋列表 = 自选天赋列表.filter((天赋) => !天赋.负面);
     const 自选负面天赋列表 = 自选天赋列表.filter((天赋) => 天赋.负面);
-    let 随机正面天赋数量 = Math.floor(Math.random() * 2);
+    let 随机正面天赋数量 = 0
     if (Math.random() * 100 < 计算数值('额外天赋概率', 10)) {
       随机正面天赋数量++;
     }

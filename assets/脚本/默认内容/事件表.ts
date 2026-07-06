@@ -1050,25 +1050,26 @@ const 山脉事件 = [
         res += `命光乍现，激活【${新天赋.名称}】\n${新天赋.说明}。`
       }
 
-      if(Math.random() * 100 < 50) {
+      if(Math.random() * 100 < 60) {
         const 恢复比例 = 计算数值("算命恢复精力百分比", 50)
 
         const 恢复精力 = Math.floor(计算最大精力() * 恢复比例 / 100);
         存档.精力 += 恢复精力;
-        res + `命理师疏导气血，精力+${恢复精力}！`
+        res += `命理师疏导气血，精力+${恢复精力}！`
       }
 
-      if(Math.random() * 100 < 10) {
+      if(Math.random() * 100 < 20) {
         if(!玩家.client_info?.extra_talent_points){
           玩家.client_info.extra_talent_points = 0
         }
 
         玩家.client_info.extra_talent_points += 1;
         res += `窥得自身潜藏格局，收获1点潜力！目前额外天赋点为${玩家.client_info.extra_talent_points}`
+        保存玩家()
       }
-
+ 
       if(!res){
-        res = `命理师收下你的钱，卦象混沌，一无所获...`
+        res = `命理师收下你的钱，卦象混沌，什么也没发生...`
       }
 
       结束事件(res);

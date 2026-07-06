@@ -5252,7 +5252,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 373.58,
+      "y": 374.84000000000003,
       "z": 0
     },
     "_lrot": {
@@ -5291,7 +5291,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 700,
-      "height": 42.84
+      "height": 40.32
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -5323,10 +5323,10 @@
     "_string": "\"我是要称为第一剑豪的男人！\"",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 32,
-    "_fontSize": 32,
+    "_actualFontSize": 31,
+    "_fontSize": 31,
     "_fontFamily": "Arial",
-    "_lineHeight": 34,
+    "_lineHeight": 32,
     "_overflow": 3,
     "_enableWrapText": true,
     "_font": null,
@@ -5384,7 +5384,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 290.73999999999995,
+      "y": 294.52,
       "z": 0
     },
     "_lrot": {
@@ -5423,7 +5423,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 700,
-      "height": 42.84
+      "height": 40.32
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -5455,10 +5455,10 @@
     "_string": "\"我是要称为第一剑豪的男人！\"",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 32,
-    "_fontSize": 32,
+    "_actualFontSize": 31,
+    "_fontSize": 31,
     "_fontFamily": "Arial",
-    "_lineHeight": 34,
+    "_lineHeight": 32,
     "_overflow": 3,
     "_enableWrapText": true,
     "_font": null,
