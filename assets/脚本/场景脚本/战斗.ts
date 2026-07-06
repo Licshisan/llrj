@@ -96,6 +96,14 @@ export class 战斗 extends Component {
   对局: 对局类型;
 
   进入战斗(敌人名称: string) {
+    if (存档.临时数据.大退前敌人 === 敌人名称) {
+      存档.其他.战斗重进次数 += 1;
+    } else {
+      存档.其他.战斗重进次数 = 0;
+    }
+    存档.临时数据.大退前敌人 = 敌人名称
+    保存存档()
+
     const 敌人配置 = 默认敌人表.find((e) => e.名称 === 敌人名称);
 
     if (!敌人配置) {
@@ -306,7 +314,16 @@ export class 战斗 extends Component {
     战斗敌人.战斗初始化(this.对局);
 
     this.界面初始化();
-    this.node.getComponent(主页).播放文本(this.对局.敌人.出场语);
+    let res = this.对局.敌人.出场语
+    if(存档.其他.战斗重进次数){
+      res += `\n已大退（${存档.其他.战斗重进次数}/3）次，大退三次将直接判负`
+      if(存档.其他.战斗重进次数 >= 3){
+        this.node.getComponent(主页).播放文本(res);
+        this.失败结算();
+        return
+      }
+    }
+    this.node.getComponent(主页).播放文本(res);
     音频管理器.instance.playByName('show');
   }
 
@@ -772,6 +789,7 @@ export class 战斗 extends Component {
 
   结束战斗(text: string) {
     存档.当前敌人 = '';
+    存档.其他.战斗重进次数 = 0;
     this.战斗.active = false;
     this.对局 = null;
 
@@ -786,6 +804,7 @@ export class 战斗 extends Component {
     this.node.getComponent(主页).播放文本(text);
     存档.当前敌人 = next;
     保存存档();
+    存档.其他.战斗重进次数 = 0;
     this.进入战斗(next);
   }
 
