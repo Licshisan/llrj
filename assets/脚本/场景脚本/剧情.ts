@@ -141,6 +141,7 @@ export class 剧情 extends Component {
     this.提示标签.active = false;
     this.按钮容器.scale = new Vec3(0, 0, 0);
     播放文本(this.结果标签, message);
+    保存存档()
     this.scheduleOnce(() => 淡入(this.继续按钮));
   }
 
