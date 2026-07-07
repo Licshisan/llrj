@@ -62,11 +62,7 @@ export class 分数 extends Component {
 
       if (完成成就.length > 0) {
         完成成就.forEach((成就) => {
-          let 成就文本 = `新成就【${成就.名称}】：${成就.描述}`;
-          if (成就.奖励) {
-            成就文本 += `\n「奖励：${成就.奖励}」`;
-          }
-          texts.push(成就文本);
+          texts.push(`完成成就【${成就.名称}】${成就.描述}「奖励：${成就.奖励}」`);
         });
       } else {
         texts.push('你本次没有新完成的成就哦');
