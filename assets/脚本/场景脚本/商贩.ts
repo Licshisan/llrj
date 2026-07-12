@@ -23,6 +23,8 @@ export class 商贩 extends Component {
   itemName = '';
   itemNum = 0;
   itemPrice = 0;
+  江湖物品 = "青竹符"
+  江湖物品售罄 = false;
 
   onLoad() {
     this.更新();
@@ -118,6 +120,9 @@ export class 商贩 extends Component {
     this.itemName = item[0];
     this.itemNum = item[1];
     this.itemPrice = Math.floor(item[2] * Math.max(0.6, Math.min(1.3, discount)));
+
+    const a = ['青竹符', '铁衣鳞', '玄水佩']
+    this.江湖物品 = a[Math.floor(Math.random() * a.length)]
   }
 
   更新() {
@@ -293,10 +298,6 @@ const 黑市列表: 商贩项目类型[] = [
   },
 ];
 
-// 县城出现特殊商贩，收购虚练残页来贩卖各门派虚练功法，售价为5虚练残页，
-// 并出现提示，当三家门派到100声望，击败掌门后，会额外出售物品
-// 升级虚练功法需要精力加虚练残页，消耗残页数量为1~5级需要2个残页，6~10级需要3个残页，11~15级需要4个残页
-
 const 江湖商贩列表: 商贩项目类型[] = [
   {
     名称: '《青竹步功法入门》（需5江湖残页）',
@@ -349,6 +350,21 @@ const 江湖商贩列表: 商贩项目类型[] = [
       存档.物品.江湖残页 -= 1;
       存档.金钱 += 5;
       return '出售【残页】*1，获得5毛';
+    },
+  },
+  {
+    名称: (self) => `购买「${self.江湖物品}」（需0.5元）`,
+    购买: (self) => {
+      if (存档.物品.江湖残页 < 5) {
+        return '残页不足！';
+      }
+      if(self.江湖物品售罄){
+        return '已售罄~下次再来吧！';
+      }
+      self.江湖物品售罄 = true
+      存档.物品.江湖残页 -= 5;
+      存档.物品[self.江湖物品] += 1;
+      return `获得【${self.江湖物品}】*1`;
     },
   },
 ];
