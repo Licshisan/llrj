@@ -10,6 +10,10 @@ const { ccclass, property } = _decorator;
 export class 日记 extends Component {
   @property(Node) 文本容器: Node;
   @property(Node) 返回按钮: Node;
+  已播放文本2: boolean = false
+  已播放文本3: boolean = false
+  已播放文本4: boolean = false
+  已播放文本5: boolean = false
 
   onLoad(): void {
     const 当前地区 = 获取当前地区();
@@ -20,18 +24,46 @@ export class 日记 extends Component {
     }
 
     音频管理器.instance.playBGM();
+    this.播放日记(日记.文本)
+    this.返回按钮.on(Button.EventType.CLICK, () => {
+      if(日记.文本2 && !this.已播放文本2){
+        this.已播放文本2 = true
+        this.播放日记(日记.文本2)
+        return
+      }
+      if(日记.文本3 && !this.已播放文本3){
+        this.已播放文本3 = true
+        this.播放日记(日记.文本3)
+        return
+      }
+      if(日记.文本4 && !this.已播放文本4){
+        this.已播放文本4 = true
+        this.播放日记(日记.文本4)
+        return
+      }
+      if(日记.文本5 && !this.已播放文本5){
+        this.已播放文本5 = true
+        this.播放日记(日记.文本5)
+        return
+      }
+
+      director.loadScene('睡觉')
+    }, this);
+  }
+
+  播放日记(文本: string[]) {
     this.返回按钮.active = false;
     const sequence = tween(this.node).delay(1 / 设置.播放速度);
-    if (日记.文本.length === 0) {
+    if (文本.length === 0) {
       sequence.call(() => 淡入(this.返回按钮));
     }
-    for (let i = 0; i < 日记.文本.length; i++) {
-      if (i === 日记.文本.length - 1) {
+    for (let i = 0; i < 文本.length; i++) {
+      if (i === 文本.length - 1) {
         sequence.call(() => 淡入(this.返回按钮));
       }
-      sequence.call(() => 创建动画文字(this.文本容器, 日记.文本[i])).delay(2 / 设置.播放速度);
+
+      sequence.call(() => 创建动画文字(this.文本容器, 文本[i])).delay(2 / 设置.播放速度);
     }
     sequence.start();
-    this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene('睡觉'), this);
   }
 }
