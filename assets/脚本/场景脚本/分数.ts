@@ -1,5 +1,5 @@
 import { _decorator, Button, Component, director, Node, tween, EditBox } from 'cc';
-import { 删除存档, 存档 } from '../管理器/存档管理器';
+import { 保存存档, 删除存档, 存档 } from '../管理器/存档管理器';
 import { 创建动画文字, 播放文本, 淡入 } from '../方法函数/动画效果';
 import { 设置 } from '../管理器/设置管理器';
 import { 计算排行榜积分总和, 默认成就表 } from '../默认内容/成就表';
@@ -143,6 +143,10 @@ export class 分数 extends Component {
   }
 
   结算天赋点奖励(最终得分: number) {
+    if(存档.其他.已结算额外天赋) {
+      return
+    }
+    
     const 难度奖励表: Record<string, number[]> = {
       普通: [1, 1, 2],
       试炼: [1, 2, 3],
@@ -164,7 +168,8 @@ export class 分数 extends Component {
       玩家.client_info.extra_talent_points =
         (玩家.client_info.extra_talent_points || 0) + 奖励点数;
     }
-
+    存档.其他.已结算额外天赋 = 1
+    保存存档()
     return 奖励点数;
   }
 }

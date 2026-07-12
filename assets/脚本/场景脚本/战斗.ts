@@ -316,8 +316,8 @@ export class 战斗 extends Component {
     this.界面初始化();
     let res = this.对局.敌人.出场语
     if(存档.其他.战斗重进次数){
-      res += `\n已大退（${存档.其他.战斗重进次数}/3）次，大退三次将直接判负`
-      if(存档.其他.战斗重进次数 >= 3){
+      res += `\n已大退（${存档.其他.战斗重进次数}/8）次，大退8次将直接判负`
+      if(存档.其他.战斗重进次数 >= 8){
         this.node.getComponent(主页).播放文本(res);
         this.失败结算();
         return

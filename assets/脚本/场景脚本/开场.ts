@@ -62,9 +62,11 @@ export class 开场 extends Component {
     const 自选天赋列表 = 默认天赋表.filter((item) => 设置.锁定天赋.includes(item.名称));
     const 自选正面天赋列表 = 自选天赋列表.filter((天赋) => !天赋.负面);
     const 自选负面天赋列表 = 自选天赋列表.filter((天赋) => 天赋.负面);
-    let 随机正面天赋数量 = 0
+    const 锁定上限 = 计算数值('天赋锁定上限', 3);
+    let 随机正面天赋数量 = Math.max(锁定上限 - 自选正面天赋列表.length, 0)
+
     if(存档.套餐名称 === '三倍套餐'){
-      随机正面天赋数量 = 3
+      随机正面天赋数量 += 3
     }
     if (Math.random() * 100 < 计算数值('额外天赋概率', 10)) {
       随机正面天赋数量++;
