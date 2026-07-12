@@ -18,7 +18,7 @@ import { 保存存档, 存档 } from '../管理器/存档管理器';
 import { 执行钩子 } from '../管理器/钩子管理器';
 import { 默认商品表 } from '../默认内容/商品表';
 import { 深克隆 } from '../方法函数/公共函数';
-import { 设置 } from '../管理器/设置管理器';
+import { 保存设置, 设置 } from '../管理器/设置管理器';
 const { ccclass, property } = _decorator;
 
 @ccclass('商店')
@@ -30,6 +30,7 @@ export class 商店 extends Component {
   @property(Prefab) 项目预制体: Prefab;
   @property(Node) 返回按钮: Node;
   @property(Node) 黑市按钮: Node;
+  @property(Node) 批量按钮: Node;
 
   页大小 = 4;
   所有项目节点: Node[] = [];
@@ -47,6 +48,16 @@ export class 商店 extends Component {
 
     this.更新标签();
     this.创建分页();
+    this.批量按钮.on(
+      Button.EventType.CLICK,
+      () => {
+        设置.批量购买 = !设置.批量购买;
+        保存设置();
+        播放文本(this.标签, `已${设置.批量购买 ? '开启' : '关闭'}批量购买`);
+      },
+      this,
+    );
+
     this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene('主页'), this);
   }
 

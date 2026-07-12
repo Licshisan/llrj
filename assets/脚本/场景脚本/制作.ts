@@ -29,6 +29,7 @@ export class 制作 extends Component {
   @property(Prefab) 项目预制体: Prefab;
   @property(PageView) 分页视图: PageView;
   @property(Node) 返回按钮: Node;
+  @property(Node) 桥洞按钮: Node;
 
   页大小 = 4;
   制作表 = [];
@@ -37,6 +38,12 @@ export class 制作 extends Component {
   start() {
     this.更新属性();
     this.创建分页();
+
+    this.桥洞按钮.active = !!存档.天赋.市井通衢
+    this.桥洞按钮.on(Button.EventType.CLICK, () => {
+      director.loadScene('桥洞');
+    }, this);
+
     this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene('主页'), this);
   }
 
