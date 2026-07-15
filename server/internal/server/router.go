@@ -14,6 +14,8 @@ func (a *App) Routes() http.Handler {
 	mux.HandleFunc("POST /player/upload", a.uploadPlayer)
 	mux.HandleFunc("POST /save/upload", a.uploadSave)
 	mux.HandleFunc("POST /log", a.uploadLog)
+	mux.HandleFunc("GET /logs", a.listLogs)
+	mux.HandleFunc("GET /logs/view", a.logsPage)
 	mux.HandleFunc("POST /compensations/claim", a.claimCompensations)
 	mux.HandleFunc("GET /leaderboard", a.leaderboard)
 	mux.HandleFunc("GET /collection-leaderboard", a.collectionLeaderboard)

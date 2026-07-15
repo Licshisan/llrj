@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Logs Viewer</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f9;
+      --panel: #ffffff;
+      --text: #1e2329;
+      --muted: #68707d;
+      --line: #d8dde5;
+      --accent: #0b6bcb;
+      --accent-dark: #084f96;
+      --danger: #b42318;
+      --code: #f0f3f7;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 14px/1.45 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      background: var(--panel);
+      padding: 18px 24px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 650;
+    }
+
+    main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 20px 24px 32px;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: minmax(160px, 1fr) minmax(140px, 1fr) 120px auto;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 16px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    input,
+    select,
+    button {
+      min-height: 38px;
+      border-radius: 6px;
+      font: inherit;
+    }
+
+    input,
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      padding: 8px 10px;
+    }
+
+    button {
+      border: 0;
+      background: var(--accent);
+      color: #fff;
+      padding: 8px 16px;
+      font-weight: 650;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: var(--accent-dark);
+    }
+
+    .status {
+      min-height: 22px;
+      margin: 0 0 12px;
+      color: var(--muted);
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    table {
+      width: 100%;
+      min-width: 880px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      background: #eef2f6;
+      color: #3b4350;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      z-index: 1;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .mono {
+      font-family: "Cascadia Mono", Consolas, monospace;
+    }
+
+    .level {
+      display: inline-block;
+      min-width: 64px;
+      border-radius: 999px;
+      background: #e9eef5;
+      padding: 3px 8px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    pre {
+      max-height: 220px;
+      margin: 0;
+      overflow: auto;
+      border-radius: 6px;
+      background: var(--code);
+      padding: 10px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 12px;
+    }
+
+    @media (max-width: 760px) {
+      header,
+      main {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      form {
+        grid-template-columns: 1fr;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Logs Viewer</h1>
+  </header>
+  <main>
+    <form id="filters">
+      <label>
+        Player ID
+        <input id="player_id" name="player_id" inputmode="numeric" autocomplete="off" placeholder="e.g. 1001">
+      </label>
+      <label>
+        Level
+        <input id="level" name="level" autocomplete="off" placeholder="info / warn / error">
+      </label>
+      <label>
+        Limit
+        <input id="limit" name="limit" type="number" min="1" max="500" value="100">
+      </label>
+      <button type="submit">Search</button>
+    </form>
+
+    <p id="status" class="status"></p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Player ID</th>
+            <th>Level</th>
+            <th>Created At</th>
+            <th>Log</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    const form = document.querySelector("#filters");
+    const rows = document.querySelector("#rows");
+    const statusEl = document.querySelector("#status");
+
+    function setStatus(message, isError) {
+      statusEl.textContent = message || "";
+      statusEl.classList.toggle("error", Boolean(isError));
+    }
+
+    function textCell(text, className) {
+      const cell = document.createElement("td");
+      if (className) {
+        cell.className = className;
+      }
+      cell.textContent = text == null || text === "" ? "-" : String(text);
+      return cell;
+    }
+
+    function render(data) {
+      rows.replaceChildren();
+      for (const item of data) {
+        const tr = document.createElement("tr");
+        tr.appendChild(textCell(item.id, "mono"));
+        tr.appendChild(textCell(item.player_id, "mono"));
+
+        const levelCell = document.createElement("td");
+        const level = document.createElement("span");
+        level.className = "level";
+        level.textContent = item.level || "-";
+        levelCell.appendChild(level);
+        tr.appendChild(levelCell);
+
+        tr.appendChild(textCell(item.created_at ? new Date(item.created_at).toLocaleString() : "-", "mono"));
+
+        const logCell = document.createElement("td");
+        const pre = document.createElement("pre");
+        pre.textContent = JSON.stringify(item.log || {}, null, 2);
+        logCell.appendChild(pre);
+        tr.appendChild(logCell);
+
+        rows.appendChild(tr);
+      }
+    }
+
+    async function loadLogs() {
+      const params = new URLSearchParams();
+      for (const name of ["player_id", "level", "limit"]) {
+        const value = form.elements[name].value.trim();
+        if (value) {
+          params.set(name, value);
+        }
+      }
+
+      setStatus("Loading...");
+      try {
+        const response = await fetch("/logs?" + params.toString());
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || "Request failed");
+        }
+        render(data);
+        setStatus("Loaded " + data.length + " log record(s).");
+      } catch (error) {
+        render([]);
+        setStatus(error.message, true);
+      }
+    }
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      loadLogs();
+    });
+
+    loadLogs();
+  </script>
+</body>
+</html>
