@@ -13,177 +13,171 @@
       --muted: #68707d;
       --line: #d8dde5;
       --accent: #0b6bcb;
-      --accent-dark: #084f96;
       --danger: #b42318;
       --code: #f0f3f7;
+      --success: #009950;
     }
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
       background: var(--bg);
       color: var(--text);
-      font: 14px/1.45 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font: 14px/1.4 system-ui, sans-serif;
+      padding-bottom: 30px;
     }
 
     header {
-      border-bottom: 1px solid var(--line);
       background: var(--panel);
-      padding: 18px 24px;
+      border-bottom: 1px solid var(--line);
+      padding: 12px 16px;
     }
 
     h1 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 650;
+      font-size: 18px;
+      font-weight: 600;
     }
 
     main {
-      max-width: 1280px;
+      padding: 12px 16px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 20px 24px 32px;
     }
 
-    form {
+    /* 简化筛选表单，移动端自动单列 */
+    #filters {
       display: grid;
-      grid-template-columns: minmax(160px, 1fr) minmax(140px, 1fr) 120px auto;
-      gap: 12px;
-      align-items: end;
-      margin-bottom: 16px;
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      padding: 12px;
       background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      margin-bottom: 12px;
     }
 
     label {
-      display: grid;
-      gap: 6px;
-      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
       font-size: 12px;
+      color: var(--muted);
       font-weight: 600;
-      text-transform: uppercase;
     }
 
-    input,
-    select,
-    button {
-      min-height: 38px;
-      border-radius: 6px;
-      font: inherit;
-    }
-
-    input,
-    select {
-      width: 100%;
+    input {
+      height: 36px;
       border: 1px solid var(--line);
-      background: #fff;
-      color: var(--text);
-      padding: 8px 10px;
+      border-radius: 5px;
+      padding: 0 8px;
+      font-size: 14px;
     }
 
     button {
-      border: 0;
+      height: 36px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .search-btn {
       background: var(--accent);
       color: #fff;
-      padding: 8px 16px;
-      font-weight: 650;
-      cursor: pointer;
+    }
+    .search-btn:hover {
+      background: #084f96;
     }
 
-    button:hover {
-      background: var(--accent-dark);
+    .copy-btn {
+      background: #eef2f6;
+      color: var(--text);
+      padding: 4px 10px;
+      height: auto;
+      font-size: 12px;
+    }
+    .copy-btn.success {
+      background: var(--success);
+      color: #fff;
     }
 
     .status {
-      min-height: 22px;
-      margin: 0 0 12px;
+      margin-bottom: 10px;
+      font-size: 13px;
       color: var(--muted);
     }
-
     .status.error {
       color: var(--danger);
     }
 
+    /* 表格简化，移动端友好 */
     .table-wrap {
-      overflow: auto;
-      border: 1px solid var(--line);
-      border-radius: 8px;
       background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      overflow-x: auto;
     }
 
     table {
       width: 100%;
-      min-width: 880px;
       border-collapse: collapse;
+      min-width: 700px;
     }
 
-    th,
-    td {
-      padding: 10px 12px;
+    th, td {
+      padding: 8px 10px;
       border-bottom: 1px solid var(--line);
-      text-align: left;
       vertical-align: top;
+      font-size: 13px;
     }
 
     th {
       position: sticky;
       top: 0;
       background: #eef2f6;
-      color: #3b4350;
       font-size: 12px;
-      font-weight: 700;
       text-transform: uppercase;
-      z-index: 1;
-    }
-
-    tr:last-child td {
-      border-bottom: 0;
     }
 
     .mono {
-      font-family: "Cascadia Mono", Consolas, monospace;
+      font-family: Consolas, monospace;
+      font-size: 12px;
     }
 
     .level {
-      display: inline-block;
-      min-width: 64px;
+      padding: 2px 6px;
       border-radius: 999px;
       background: #e9eef5;
-      padding: 3px 8px;
-      text-align: center;
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 11px;
+      font-weight: bold;
     }
 
     pre {
-      max-height: 220px;
-      margin: 0;
-      overflow: auto;
-      border-radius: 6px;
+      max-height: 160px;
       background: var(--code);
-      padding: 10px;
+      padding: 8px;
+      border-radius: 5px;
+      overflow: auto;
       white-space: pre-wrap;
-      word-break: break-word;
+      word-break: break-all;
       font-size: 12px;
+      margin: 6px 0;
     }
 
-    @media (max-width: 760px) {
-      header,
-      main {
-        padding-left: 14px;
-        padding-right: 14px;
-      }
-
-      form {
+    /* 移动端强制单列表单 */
+    @media (max-width: 640px) {
+      #filters {
         grid-template-columns: 1fr;
       }
-
-      button {
-        width: 100%;
+      h1 {
+        font-size: 16px;
+      }
+      th, td {
+        padding: 6px 8px;
       }
     }
   </style>
@@ -196,30 +190,33 @@
     <form id="filters">
       <label>
         Player ID
-        <input id="player_id" name="player_id" inputmode="numeric" autocomplete="off" placeholder="e.g. 1001">
+        <input id="player_id" name="player_id" inputmode="numeric" autocomplete="off" placeholder="1001">
       </label>
       <label>
         Level
-        <input id="level" name="level" autocomplete="off" placeholder="info / warn / error">
+        <input id="level" name="level" autocomplete="off" placeholder="info/warn/error">
       </label>
       <label>
         Limit
         <input id="limit" name="limit" type="number" min="1" max="500" value="100">
       </label>
-      <button type="submit">Search</button>
+      <label style="justify-content: flex-end;">
+        &nbsp;
+        <button type="submit" class="search-btn">Search</button>
+      </label>
     </form>
 
-    <p id="status" class="status"></p>
+    <p id="status" class="status">请输入筛选条件后点击搜索</p>
 
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
             <th>ID</th>
-            <th>Player ID</th>
+            <th>PlayerID</th>
             <th>Level</th>
-            <th>Created At</th>
-            <th>Log</th>
+            <th>Time</th>
+            <th>Log Content</th>
           </tr>
         </thead>
         <tbody id="rows"></tbody>
@@ -232,76 +229,109 @@
     const rows = document.querySelector("#rows");
     const statusEl = document.querySelector("#status");
 
-    function setStatus(message, isError) {
-      statusEl.textContent = message || "";
-      statusEl.classList.toggle("error", Boolean(isError));
+    // 状态提示
+    function setStatus(message, isError = false) {
+      statusEl.textContent = message;
+      statusEl.classList.toggle("error", isError);
     }
 
-    function textCell(text, className) {
+    // 生成单元格
+    function textCell(text, className = "") {
       const cell = document.createElement("td");
-      if (className) {
-        cell.className = className;
-      }
-      cell.textContent = text == null || text === "" ? "-" : String(text);
+      if (className) cell.className = className;
+      cell.textContent = text ?? "-";
       return cell;
     }
 
+    // 复制日志文本
+    async function copyText(text, btn) {
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.classList.add("success");
+        btn.textContent = "已复制";
+        setTimeout(() => {
+          btn.classList.remove("success");
+          btn.textContent = "复制日志";
+        }, 1200);
+      } catch (err) {
+        btn.textContent = "复制失败";
+        setTimeout(() => btn.textContent = "复制日志", 1200);
+      }
+    }
+
+    // 渲染日志列表
     function render(data) {
       rows.replaceChildren();
+      if (!data.length) {
+        setStatus("无匹配日志数据");
+        return;
+      }
+
       for (const item of data) {
         const tr = document.createElement("tr");
         tr.appendChild(textCell(item.id, "mono"));
         tr.appendChild(textCell(item.player_id, "mono"));
 
-        const levelCell = document.createElement("td");
-        const level = document.createElement("span");
-        level.className = "level";
-        level.textContent = item.level || "-";
-        levelCell.appendChild(level);
-        tr.appendChild(levelCell);
+        // Level标签
+        const levelTd = document.createElement("td");
+        const levelSpan = document.createElement("span");
+        levelSpan.className = "level";
+        levelSpan.textContent = item.level || "-";
+        levelTd.appendChild(levelSpan);
+        tr.appendChild(levelTd);
 
-        tr.appendChild(textCell(item.created_at ? new Date(item.created_at).toLocaleString() : "-", "mono"));
+        // 时间
+        const timeStr = item.created_at ? new Date(item.created_at).toLocaleString() : "-";
+        tr.appendChild(textCell(timeStr, "mono"));
 
-        const logCell = document.createElement("td");
+        // 日志内容 + 复制按钮
+        const logTd = document.createElement("td");
+        const copyBtn = document.createElement("button");
+        copyBtn.className = "copy-btn";
+        copyBtn.textContent = "复制日志";
+
+        const logJson = JSON.stringify(item.log ?? {}, null, 2);
+        copyBtn.onclick = () => copyText(logJson, copyBtn);
+
         const pre = document.createElement("pre");
-        pre.textContent = JSON.stringify(item.log || {}, null, 2);
-        logCell.appendChild(pre);
-        tr.appendChild(logCell);
+        pre.textContent = logJson;
+
+        logTd.append(copyBtn, pre);
+        tr.appendChild(logTd);
 
         rows.appendChild(tr);
       }
+      setStatus(`加载完成，共 ${data.length} 条日志`);
     }
 
+    // 请求日志接口
     async function loadLogs() {
       const params = new URLSearchParams();
-      for (const name of ["player_id", "level", "limit"]) {
-        const value = form.elements[name].value.trim();
-        if (value) {
-          params.set(name, value);
-        }
-      }
+      ["player_id", "level", "limit"].forEach(name => {
+        const val = form.elements[name].value.trim();
+        if (val) params.set(name, val);
+      });
 
-      setStatus("Loading...");
+      setStatus("加载中...");
       try {
-        const response = await fetch("/logs?" + params.toString());
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.error || "Request failed");
-        }
-        render(data);
-        setStatus("Loaded " + data.length + " log record(s).");
-      } catch (error) {
+        const res = await fetch(`/logs?${params.toString()}`);
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error || "请求失败");
+        render(json);
+      } catch (err) {
         render([]);
-        setStatus(error.message, true);
+        setStatus(err.message, true);
       }
     }
 
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
+    // 仅提交表单触发查询，页面初始化不自动调用loadLogs
+    form.addEventListener("submit", e => {
+      e.preventDefault();
       loadLogs();
     });
 
-    loadLogs();
+    // 初始状态清空表格
+    render([]);
   </script>
 </body>
 </html>
