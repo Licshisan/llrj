@@ -875,7 +875,7 @@ export class 战斗 extends Component {
     this.标签容器.getChildByName('生命').getComponent(Label).string =
       `HP${存档.生命}/${计算最大生命()}`;
     this.标签容器.getChildByName('逃跑率').getComponent(Label).string =
-      `${this.计算主角逃跑成功率()}%`;
+      `${this.计算主角逃跑成功率()}%第${this.对局.回合数}回合`;
 
     if (存档.物品?.枪 > 0) {
       this.按钮容器.getChildByName('枪').getComponent(Label).string =
