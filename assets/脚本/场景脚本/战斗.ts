@@ -411,18 +411,16 @@ export class 战斗 extends Component {
     this.对局.敌人.被攻击前(this.对局);
     存档.生命 = this.对局.主角.生命;
     this.对局.攻击.计算结果 =
-      Math.max(
+      (
         (this.对局.攻击.初始值 + this.对局.攻击.基础加成) *
           (1 + this.对局.攻击.加法乘率) *
-          this.对局.攻击.独立乘区,
-        0,
+          this.对局.攻击.独立乘区
       ) + this.对局.攻击.最终修正;
     this.对局.防御.计算结果 =
-      Math.max(
+      (
         (this.对局.防御.初始值 + this.对局.防御.基础加成) *
           (1 + this.对局.防御.加法乘率) *
-          this.对局.防御.独立乘区,
-        0,
+          this.对局.防御.独立乘区
       ) + this.对局.防御.最终修正;
     this.对局.伤害.初始值 = Math.max(this.对局.攻击.计算结果 - this.对局.防御.计算结果, 0);
     this.对局.主角.攻击时(this.对局);
@@ -430,11 +428,10 @@ export class 战斗 extends Component {
     // 贯穿
     if (存档.天赋.贯穿) {
       const 计算结果 =
-        Math.max(
+        (
           (this.对局.伤害.初始值 + this.对局.伤害.基础加成) *
             (1 + this.对局.伤害.加法乘率) *
-            this.对局.伤害.独立乘区,
-          0,
+            this.对局.伤害.独立乘区
         ) + this.对局.伤害.最终修正;
 
       this.对局.伤害.初始值 = 0;
@@ -456,16 +453,15 @@ export class 战斗 extends Component {
     }
 
     this.对局.伤害.计算结果 =
-      Math.max(
+      (
         (this.对局.伤害.初始值 + this.对局.伤害.基础加成) *
           (1 + this.对局.伤害.加法乘率) *
-          this.对局.伤害.独立乘区,
-        0,
+          this.对局.伤害.独立乘区
       ) + this.对局.伤害.最终修正;
 
     // 醉酒
     if(存档.状态.醉酒){
-      this.对局.结果文本.push(`【「醉拳」你迷迷糊糊一拳打到了自己身上！${this.对局.主角.显示名称}受到${Math.floor(this.对局.伤害.计算结果)}点伤害】`)
+      this.对局.结果文本.push(`【「醉拳」你迷迷糊糊一拳打到了自己身上！${this.对局.主角.名称}受到${Math.floor(this.对局.伤害.计算结果)}点伤害】`)
       this.对局.主角.生命 -= Math.floor(this.对局.伤害.计算结果);
     }else{
       this.对局.敌人.生命 -= Math.floor(this.对局.伤害.计算结果);
@@ -477,7 +473,7 @@ export class 战斗 extends Component {
     存档.生命 = this.对局.主角.生命;
     //更新渲染
     if (this.对局.主角.方法) {
-      this.对局.结果文本.unshift(`${this.对局.主角.显示名称}使用「${this.对局.主角.方法}」`);
+      this.对局.结果文本.unshift(`${this.对局.主角.名称}使用「${this.对局.主角.方法}」`);
     }
     this.对局.结果文本.push(
       `${this.对局.敌人.显示名称}受到${Math.floor(this.对局.伤害.计算结果)}点伤害。`,
@@ -562,29 +558,26 @@ export class 战斗 extends Component {
       this.对局.主角.被攻击前(this.对局);
       存档.生命 = this.对局.主角.生命;
       this.对局.攻击.计算结果 =
-        Math.max(
+        (
           (this.对局.攻击.初始值 + this.对局.攻击.基础加成) *
             (1 + this.对局.攻击.加法乘率) *
-            this.对局.攻击.独立乘区,
-          0,
+            this.对局.攻击.独立乘区
         ) + this.对局.攻击.最终修正;
       this.对局.防御.计算结果 =
-        Math.max(
+        (
           (this.对局.防御.初始值 + this.对局.防御.基础加成) *
             (1 + this.对局.防御.加法乘率) *
-            this.对局.防御.独立乘区,
-          0,
+            this.对局.防御.独立乘区
         ) + this.对局.防御.最终修正;
       this.对局.伤害.初始值 = Math.max(this.对局.攻击.计算结果 - this.对局.防御.计算结果, 0);
       this.对局.敌人.攻击时(this.对局);
       this.对局.主角.被攻击时(this.对局);
       存档.生命 = this.对局.主角.生命;
       this.对局.伤害.计算结果 =
-        Math.max(
+        (
           (this.对局.伤害.初始值 + this.对局.伤害.基础加成) *
             (1 + this.对局.伤害.加法乘率) *
-            this.对局.伤害.独立乘区,
-          0,
+            this.对局.伤害.独立乘区
         ) + this.对局.伤害.最终修正;
       this.对局.主角.生命 -= Math.floor(this.对局.伤害.计算结果);
       存档.生命 = this.对局.主角.生命;
@@ -596,7 +589,7 @@ export class 战斗 extends Component {
         this.对局.结果文本.unshift(`${this.对局.敌人.显示名称}使用「${this.对局.敌人.方法}」`);
       }
       this.对局.结果文本.push(
-        `${this.对局.主角.显示名称}受到${Math.floor(this.对局.伤害.计算结果)}点伤害。`,
+        `${this.对局.主角.名称}受到${Math.floor(this.对局.伤害.计算结果)}点伤害。`,
       );
     }
 
