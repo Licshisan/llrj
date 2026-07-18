@@ -1863,7 +1863,7 @@
     "propertyPath": [
       "_transition"
     ],
-    "value": 0
+    "value": 3
   },
   {
     "__type__": "cc.Node",
@@ -2160,7 +2160,7 @@
     "propertyPath": [
       "_transition"
     ],
-    "value": 0
+    "value": 3
   },
   {
     "__type__": "cc.Node",
@@ -2444,7 +2444,7 @@
     "propertyPath": [
       "_transition"
     ],
-    "value": 0
+    "value": 3
   },
   {
     "__type__": "cc.UITransform",
