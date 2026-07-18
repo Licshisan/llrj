@@ -477,10 +477,10 @@ export class 战斗 extends Component {
     存档.生命 = this.对局.主角.生命;
     //更新渲染
     if (this.对局.主角.方法) {
-      this.对局.结果文本.unshift(`${this.对局.主角.名称}使用「${this.对局.主角.方法}」`);
+      this.对局.结果文本.unshift(`${this.对局.主角.显示名称}使用「${this.对局.主角.方法}」`);
     }
     this.对局.结果文本.push(
-      `${this.对局.敌人.名称}受到${Math.floor(this.对局.伤害.计算结果)}点伤害。`,
+      `${this.对局.敌人.显示名称}受到${Math.floor(this.对局.伤害.计算结果)}点伤害。`,
     );
     this.显示主角文本(this.对局.结果文本.join('\n'));
     this.更新();
@@ -528,7 +528,7 @@ export class 战斗 extends Component {
     //逃跑判定
     if (Math.random() * 100 < this.计算敌人逃跑成功率()) {
       执行钩子('敌人逃跑成功', [this.对局]);
-      this.结束战斗(`${this.对局.敌人.名称}逃跑啦！`);
+      this.结束战斗(`${this.对局.敌人.显示名称}逃跑啦！`);
       return;
     }
 
@@ -593,10 +593,10 @@ export class 战斗 extends Component {
       存档.生命 = this.对局.主角.生命;
       //更新渲染
       if (this.对局.敌人.方法) {
-        this.对局.结果文本.unshift(`${this.对局.敌人.名称}使用「${this.对局.敌人.方法}」`);
+        this.对局.结果文本.unshift(`${this.对局.敌人.显示名称}使用「${this.对局.敌人.方法}」`);
       }
       this.对局.结果文本.push(
-        `${this.对局.主角.名称}受到${Math.floor(this.对局.伤害.计算结果)}点伤害。`,
+        `${this.对局.主角.显示名称}受到${Math.floor(this.对局.伤害.计算结果)}点伤害。`,
       );
     }
 
