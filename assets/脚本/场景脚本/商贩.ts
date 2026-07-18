@@ -6,6 +6,7 @@ const { ccclass, property } = _decorator;
 export interface 商贩项目类型 {
   名称: string | ((peddler: 商贩) => string);
   购买: (peddler: 商贩) => string;
+  条件?: (peddler: 商贩) => boolean;
 }
 
 @ccclass('商贩')
@@ -18,7 +19,6 @@ export class 商贩 extends Component {
   @property(Node) 返回按钮: Node = null;
   @property(Prefab) 选择按钮预制体: Prefab = null;
 
-  // 商贩相关属性
   sellOut = false;
   itemName = '';
   itemNum = 0;
@@ -26,78 +26,67 @@ export class 商贩 extends Component {
   江湖物品 = "青竹符"
   江湖物品售罄 = false;
 
+  private 按钮列表: {
+    按钮: Node;
+    项目: 商贩项目类型;
+  }[] = [];
+
   onLoad() {
     this.更新();
     this.按钮容器.removeAllChildren();
     this.重置();
+    this.初始化按钮();
+    this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene('主页'), this);
+  }
+
+  private 初始化按钮() {
+    this.按钮列表 = [];
+    const 列表映射: Record<string, 商贩项目类型[]> = {
+      '商贩': 商贩列表,
+      '黑市': 黑市列表,
+      '江湖商贩': 江湖商贩列表,
+    };
+
+    const 当前列表 = 列表映射[globalThis.商贩名称];
+    if (!当前列表) return;
 
     if (globalThis.商贩名称 === '商贩') {
-      商贩列表.forEach((商贩项目) => {
-        const 名称 = typeof 商贩项目.名称 === 'function' ? 商贩项目.名称(this) : 商贩项目.名称;
-
-        const 选项按钮 = instantiate(this.选择按钮预制体);
-        选项按钮.getChildByName('标签').getComponent(Label).string = 名称;
-        选项按钮.on(
-          Button.EventType.CLICK,
-          () => {
-            const text = 商贩项目.购买(this);
-            播放文本(this.标签, text);
-            const newName =
-              typeof 商贩项目.名称 === 'function' ? 商贩项目.名称(this) : 商贩项目.名称;
-            选项按钮.getChildByName('标签').getComponent(Label).string = newName;
-            this.更新();
-            保存存档();
-          },
-          this,
-        );
-        播放文本(this.标签, '“来看看有没有你需要的东西~”');
-        选项按钮.setParent(this.按钮容器);
-      });
-    } else if (globalThis.商贩名称 === '黑市') {
-      黑市列表.forEach((黑市项目) => {
-        const 名称 = typeof 黑市项目.名称 === 'function' ? 黑市项目.名称(this) : 黑市项目.名称;
-
-        const 选项按钮 = instantiate(this.选择按钮预制体);
-        选项按钮.getChildByName('标签').getComponent(Label).string = 名称;
-        选项按钮.on(
-          Button.EventType.CLICK,
-          () => {
-            const text = 黑市项目.购买(this);
-            播放文本(this.标签, text);
-            const newName =
-              typeof 黑市项目.名称 === 'function' ? 黑市项目.名称(this) : 黑市项目.名称;
-            选项按钮.getChildByName('标签').getComponent(Label).string = newName;
-            this.更新();
-            保存存档();
-          },
-          this,
-        );
-        选项按钮.setParent(this.按钮容器);
-      });
-    } else if (globalThis.商贩名称 === '江湖商贩') {
-      江湖商贩列表.forEach((江湖商贩项目) => {
-        const 名称 =
-          typeof 江湖商贩项目.名称 === 'function' ? 江湖商贩项目.名称(this) : 江湖商贩项目.名称;
-
-        const 选项按钮 = instantiate(this.选择按钮预制体);
-        选项按钮.getChildByName('标签').getComponent(Label).string = 名称;
-        选项按钮.on(
-          Button.EventType.CLICK,
-          () => {
-            const text = 江湖商贩项目.购买(this);
-            播放文本(this.标签, text);
-            const newName =
-              typeof 江湖商贩项目.名称 === 'function' ? 江湖商贩项目.名称(this) : 江湖商贩项目.名称;
-            选项按钮.getChildByName('标签').getComponent(Label).string = newName;
-            this.更新();
-            保存存档();
-          },
-          this,
-        );
-        选项按钮.setParent(this.按钮容器);
-      });
+      播放文本(this.标签, '“来看看有没有你需要的东西~”');
     }
-    this.返回按钮.on(Button.EventType.CLICK, () => director.loadScene('主页'), this);
+
+    const 过滤列表 = 当前列表.filter((项目) => {
+      if (项目.条件 && !项目.条件(this)) {
+        return false;
+      }
+      return true;
+    });
+
+    过滤列表.forEach((项目) => {
+
+      const 选项按钮 = instantiate(this.选择按钮预制体);
+      const 名称 = typeof 项目.名称 === 'function' ? 项目.名称(this) : 项目.名称;
+      选项按钮.getChildByName('标签').getComponent(Label).string = 名称;
+      选项按钮.on(
+        Button.EventType.CLICK,
+        () => {
+          const text = 项目.购买(this);
+          播放文本(this.标签, text);
+          this.更新();
+          this.刷新所有按钮名称();
+          保存存档();
+        },
+        this,
+      );
+      选项按钮.setParent(this.按钮容器);
+      this.按钮列表.push({ 按钮: 选项按钮, 项目 });
+    });
+  }
+
+  private 刷新所有按钮名称() {
+    this.按钮列表.forEach((映射) => {
+      const 名称 = typeof 映射.项目.名称 === 'function' ? 映射.项目.名称(this) : 映射.项目.名称;
+      映射.按钮.getChildByName('标签').getComponent(Label).string = 名称;
+    });
   }
 
   重置() {
@@ -113,7 +102,6 @@ export class 商贩 extends Component {
       ['滑稽裤', 1, 60],
     ];
     const index = Math.floor(Math.random() * list.length);
-    // const index = Math.floor((存档.天数 || 0)) % list.length;
     const item = list[index];
     const discount = Math.random();
 
@@ -204,7 +192,7 @@ const 商贩列表: 商贩项目类型[] = [
 const 黑市列表: 商贩项目类型[] = [
   {
     名称: '白色粉末换1元',
-    购买: (self) => {
+    购买: () => {
       if (存档.物品.白色粉末 < 1) {
         return '白色粉末不足！';
       }
@@ -215,7 +203,7 @@ const 黑市列表: 商贩项目类型[] = [
   },
   {
     名称: '《少妇白洁》（需4白色粉末）',
-    购买: (self) => {
+    购买: () => {
       if (存档.其他.少妇白洁) {
         return '你已拥有此书！';
       }
@@ -229,7 +217,7 @@ const 黑市列表: 商贩项目类型[] = [
   },
   {
     名称: '《搬砖，从入门到放弃》（需6元）',
-    购买: (self) => {
+    购买: () => {
       if (存档.其他.搬砖从入门到放弃) {
         return '你已拥有此书！';
       }
@@ -241,10 +229,9 @@ const 黑市列表: 商贩项目类型[] = [
       return '获得《搬砖，从入门到放弃》！请到看书界面使用。';
     },
   },
-
   {
     名称: '《中国居民膳食指南1997版》（需6元）',
-    购买: (self) => {
+    购买: () => {
       if (存档.其他.中国居民膳食指南1997版) {
         return '你已拥有此书！';
       }
@@ -257,22 +244,20 @@ const 黑市列表: 商贩项目类型[] = [
     },
   },
   {
-    名称: (self) => `枪（需${存档.物品.枪 * 10 + 10}个白色粉末）`,
-    购买: (self) => {
+    名称: () => `枪（需${存档.物品.枪 * 10 + 10}个白色粉末）`,
+    购买: () => {
       const need = 存档.物品.枪 * 10 + 10;
       if (存档.物品.白色粉末 < need) {
         return '白色粉末不足！';
       }
       存档.物品.白色粉末 -= need;
       存档.物品.枪 = (存档.物品.枪 || 0) + 1;
-      self.按钮容器.getChildByName('选择按钮5').getChildByName('标签').getComponent(Label).string =
-        `枪（需${存档.物品.枪 * 10 + 10}个白色粉末）`;
       return '获得「枪」！';
     },
   },
   {
     名称: '购买子弹（0.5元/个）',
-    购买: (self) => {
+    购买: () => {
       if (存档.金钱 < 5) {
         return '钱不够！';
       }
@@ -282,8 +267,8 @@ const 黑市列表: 商贩项目类型[] = [
     },
   },
   {
-    名称: (self) => `出售所有漂亮石头（每个1毛，已有${存档.物品.漂亮石头}个）`,
-    购买: (self) => {
+    名称: () => `出售所有漂亮石头（每个1毛，已有${存档.物品.漂亮石头}个）`,
+    购买: () => {
       const count = 存档.物品.漂亮石头;
       if (count <= 0) {
         return '你身上没有漂亮石头~';
@@ -291,8 +276,6 @@ const 黑市列表: 商贩项目类型[] = [
       const money = count;
       存档.金钱 += money;
       存档.物品.漂亮石头 = 0;
-      self.按钮容器.getChildByName('选择按钮7').getChildByName('标签').getComponent(Label).string =
-        `出售所有漂亮石头（每个1毛，已有${存档.物品.漂亮石头}个）`;
       return `${count}个漂亮石头出售成功，获得${(count / 10).toFixed(1)}元！`;
     },
   },
@@ -301,7 +284,7 @@ const 黑市列表: 商贩项目类型[] = [
 const 江湖商贩列表: 商贩项目类型[] = [
   {
     名称: '《青竹步功法入门》（需5江湖残页）',
-    购买: (self) => {
+    购买: () => {
       if (存档.其他.青竹步功法入门) {
         return '你已拥有此书！';
       }
@@ -310,12 +293,12 @@ const 江湖商贩列表: 商贩项目类型[] = [
       }
       存档.物品.江湖残页 -= 5;
       存档.其他.青竹步功法入门 += 1;
-      return '获得《青竹步功法入门》！请在面板界面使用。';
+      return '获得《青竹步功法入门》！请在制作界面使用。';
     },
   },
   {
     名称: '《铁衣功功法入门》（需5江湖残页）',
-    购买: (self) => {
+    购买: () => {
       if (存档.其他.铁衣功功法入门) {
         return '你已拥有此书！';
       }
@@ -324,12 +307,12 @@ const 江湖商贩列表: 商贩项目类型[] = [
       }
       存档.物品.江湖残页 -= 5;
       存档.其他.铁衣功功法入门 += 1;
-      return '获得《铁衣功功法入门》！请在面板界面使用。';
+      return '获得《铁衣功功法入门》！请在制作界面使用。';
     },
   },
   {
     名称: '《玄水诀功法入门》（需5江湖残页）',
-    购买: (self) => {
+    购买: () => {
       if (存档.其他.玄水诀功法入门) {
         return '你已拥有此书！';
       }
@@ -338,12 +321,12 @@ const 江湖商贩列表: 商贩项目类型[] = [
       }
       存档.物品.江湖残页 -= 5;
       存档.其他.玄水诀功法入门 = 1;
-      return '获得《玄水诀功法入门》！请在面板界面使用。';
+      return '获得《玄水诀功法入门》！请在制作界面使用。';
     },
   },
   {
     名称: () => `出售江湖残页（每个5毛，已拥有${存档.物品.江湖残页}）`,
-    购买: (self) => {
+    购买: () => {
       if (存档.物品.江湖残页 <= 0) {
         return '残页不足！';
       }
@@ -353,20 +336,30 @@ const 江湖商贩列表: 商贩项目类型[] = [
     },
   },
   {
-    名称: (self) => `购买「${self.江湖物品}」（需5残页）`,
+    名称: (self) => {
+      if (self.江湖物品售罄) {
+        return '已售罄';
+      }
+      return `购买「${self.江湖物品}」（需5残页）限购1个！`;
+    },
     购买: (self) => {
       if (存档.物品.江湖残页 < 5) {
         return '残页不足！';
       }
-      if(self.江湖物品售罄){
+      if (self.江湖物品售罄) {
         return '已售罄~下次再来吧！';
       }
-      self.江湖物品售罄 = true
+      self.江湖物品售罄 = true;
       存档.物品.江湖残页 -= 5;
       存档.物品[self.江湖物品] += 1;
       return `获得【${self.江湖物品}】*1`;
     },
+    条件: () => {
+      return (
+        (存档.击败次数['青竹门长老'] || 0) > 0 ||
+        (存档.击败次数['铁衣帮长老'] || 0) > 0 ||
+        (存档.击败次数['玄水阁长老'] || 0) > 0
+      );
+    },
   },
 ];
-
-
