@@ -286,7 +286,7 @@ export class 战斗 extends Component {
 
     // 重置变量
     this.对局 = {
-      回合数: 0,
+      回合数: 1,
       是否PVP: !!敌人.是否PVP,
       PVP敌人存档: 敌人.PVP敌人存档,
 
@@ -434,7 +434,14 @@ export class 战斗 extends Component {
           this.对局.伤害.独立乘区,
         0,
       ) + this.对局.伤害.最终修正;
-    this.对局.敌人.生命 -= Math.floor(this.对局.伤害.计算结果);
+
+    if(存档.状态.醉酒){
+      this.对局.结果文本.push("【「醉拳」你迷迷糊糊一拳打到了自己身上！】")
+      this.对局.主角.生命 -= Math.floor(this.对局.伤害.计算结果);
+    }else{
+      this.对局.敌人.生命 -= Math.floor(this.对局.伤害.计算结果);
+    }
+
     存档.生命 = this.对局.主角.生命;
     this.对局.主角.攻击后(this.对局);
     this.对局.敌人.被攻击后(this.对局);
