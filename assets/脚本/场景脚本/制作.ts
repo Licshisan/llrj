@@ -140,7 +140,7 @@ export class 制作 extends Component {
 
   更新属性() {
     this.属性一.getComponent(Label).string =
-      `饥饿：${存档.饥饿}/${计算最大饥饿()}  精力：${存档.精力}/${计算最大精力()}  `;
+      `饥饿：${存档.饥饿}/${计算最大饥饿()} 精力：${存档.精力}/${计算最大精力()}`;
     this.属性二.getComponent(Label).string = `生命：${存档.生命}/${计算最大生命()}`;
   }
 }

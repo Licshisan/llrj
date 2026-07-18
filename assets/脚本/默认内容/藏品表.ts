@@ -379,12 +379,6 @@ const 传说藏品: 藏品定义类型[] = [
   },
 ];
 
-const 藏品颜色表: Record<藏品类型, Color> = {
-  普通: new Color(255, 255, 255),
-  稀有: new Color(0, 180, 255),
-  史诗: new Color(255, 100, 255),
-  传说: new Color(255, 215, 0),
-};
 const 藏品掉落概率表: Record<藏品类型, number> = { 普通: 0.01, 稀有: 0.1, 史诗: 1, 传说: 5 };
 const 难度掉落倍率表: Record<string, number> = {
   普通: 0.5,
