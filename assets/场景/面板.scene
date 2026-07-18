@@ -1210,7 +1210,7 @@
     "value": {
       "__type__": "cc.Size",
       "width": 640,
-      "height": 980
+      "height": 1020
     }
   },
   {
@@ -1230,7 +1230,7 @@
     "value": {
       "__type__": "cc.Size",
       "width": 640,
-      "height": 980
+      "height": 1020
     }
   },
   {
@@ -1291,7 +1291,7 @@
     "value": {
       "__type__": "cc.Size",
       "width": 12,
-      "height": 980
+      "height": 1020
     }
   },
   {

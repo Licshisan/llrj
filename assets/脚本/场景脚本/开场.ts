@@ -1,6 +1,6 @@
 ﻿import { _decorator, Component, Node, director, tween, Button, log, UIOpacity, Label } from 'cc';
 import { 保存设置, 设置 } from '../管理器/设置管理器';
-import { 创建动画文字, 播放文本, 淡入, 淡出 } from '../方法函数/动画效果';
+import { 创建动画文字, 创建普通文字, 播放文本, 淡入, 淡出 } from '../方法函数/动画效果';
 import { 保存存档, 存档 } from '../管理器/存档管理器';
 import { 执行钩子 } from '../管理器/钩子管理器';
 import { 默认天赋表 } from '../默认内容/天赋表';
@@ -136,11 +136,11 @@ export class 开场 extends Component {
         const 天赋 = 临时选中的天赋[i];
         let 文本 = `你拥有天赋「${天赋.名称}」`;
         if (天赋.已自选) {
-          文本 += '【已锁定】';
+          文本 += '[已锁定]';
         }
         文本 += `\n${天赋?.说明}`;
 
-        创建动画文字(this.文本容器, 文本, 天赋.颜色);
+        创建普通文字(this.文本容器, 文本, 天赋.颜色);
       }).delay(1.5 / 设置.播放速度);
     }
     序列.delay(1.5 / 设置.播放速度);

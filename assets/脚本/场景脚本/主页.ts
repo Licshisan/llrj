@@ -406,6 +406,7 @@ export class 主页 extends Component {
           label.color = new Color(220, 220, 220);
         }
       });
+      this.node.getChildByPath("战斗/血量条/条").getComponent(Sprite).color = new Color(220, 220, 220);
       this.背景.getComponent(Sprite).color = new Color(20, 20, 20);
     }
   }

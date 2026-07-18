@@ -16,6 +16,7 @@ import { 抽取物品 } from '../方法函数/公共函数';
 import type { 概率类型 } from '../方法函数/公共函数';
 import { 默认敌人表 } from '../默认内容/敌人表';
 import { 音频管理器 } from './音频';
+import { 玩家 } from '../管理器/玩家管理器';
 const { ccclass, property } = _decorator;
 
 export interface 战斗角色 {
@@ -133,7 +134,7 @@ export class 战斗 extends Component {
 
     const 战斗主角: 战斗角色 = {
       名称: '你',
-      显示名称: '你',
+      显示名称: 玩家.client_info.name ?? '你',
       等级: Math.floor(存档.经验 / 100),
       方法: '普攻',
       生命: 存档.生命,
@@ -593,8 +594,8 @@ export class 战斗 extends Component {
     this.显示敌人文本(this.对局.结果文本.join('\n'));
     this.更新();
     this.node.getComponent(主页).更新();
-    从0放大缩小(this.标签容器.getChildByName('生命'));
-    从0放大缩小(this.标签容器.getChildByName('逃跑率'));
+    // 从0放大缩小(this.标签容器.getChildByName('生命'));
+    // 从0放大缩小(this.标签容器.getChildByName('逃跑率'));
     this.node.getComponent(主页).标签.getComponent(Label).string = '';
     震动(this.node.getChildByName('相机'));
     this.对局.回合数++;
@@ -634,10 +635,11 @@ export class 战斗 extends Component {
     //主角胜利
     执行钩子('战斗胜利', [this.对局]);
 
+    let res = ''
     // 基本掉落
     const 掉落物文本 = 抽取物品(this.对局.敌人.掉落物);
     if (掉落物文本) {
-      this.对局.结果文本.push(`获得${掉落物文本}。`);
+      res += `获得${掉落物文本}。`;
     }
 
     // 属性提升
@@ -645,20 +647,20 @@ export class 战斗 extends Component {
       const 随机数 = Math.random() * 100;
       if (随机数 < 20) {
         存档.防御 += this.对局.敌人.增加属性;
-        this.对局.结果文本.push(`防御提高${this.对局.敌人.增加属性}点！`);
+        res += `防御提高${this.对局.敌人.增加属性}点！`
       } else if (随机数 < 60) {
         存档.攻击 += this.对局.敌人.增加属性;
-        this.对局.结果文本.push(`攻击提高${this.对局.敌人.增加属性}点！`);
+        res += `攻击提高${this.对局.敌人.增加属性}点！`
       } else {
         存档.最大生命 += this.对局.敌人.增加属性 * 5;
-        this.对局.结果文本.push(`最大生命值提高${this.对局.敌人.增加属性 * 5}点！`);
+        res += `最大生命值提高${this.对局.敌人.增加属性 * 5}点！`
       }
     }
 
     // 声望奖励
     if (this.对局.敌人.增加声望) {
       存档.声望 += this.对局.敌人.增加声望;
-      this.对局.结果文本.push(`声望+${this.对局.敌人.增加声望}！`);
+      res += `声望+${this.对局.敌人.增加声望}！`
     }
 
     // 经验提升
@@ -669,7 +671,7 @@ export class 战斗 extends Component {
 
       const 获取经验 = 计算数值('获取经验', this.对局.敌人.等级);
       存档.经验 += 获取经验;
-      this.对局.结果文本.push(`经验+${获取经验}！`);
+      res += `经验+${获取经验}！`
     }
 
     if (this.对局.主角.其他?.架势使用次数) {
@@ -683,12 +685,13 @@ export class 战斗 extends Component {
       if (maxKey) {
         if (存档.架势经验[maxKey] < 150) {
           存档.架势经验[maxKey] += 1;
-          this.对局.结果文本.push(`${maxKey}架势熟练度+1！`);
+          res += `${maxKey}架势熟练度+1！`
         } else {
-          this.对局.结果文本.push(`${maxKey}架势熟练度已达最大值！`);
+          res += `${maxKey}架势熟练度已达最大值！`
         }
       }
     }
+    this.对局.结果文本.push(res);
 
     //敌人失败
     this.对局.敌人.失败效果(this.对局);
@@ -711,6 +714,7 @@ export class 战斗 extends Component {
     // 角色失败
     执行钩子('战斗失败', [this.对局]);
 
+    let res = ''
     // 损失健康
     if (this.对局.敌人.损失健康 > 0) {
       存档.健康 -= this.对局.敌人.损失健康;
@@ -718,17 +722,16 @@ export class 战斗 extends Component {
       if (存档.天数 < 20) {
         提示 += `（健康为0时游戏结束）`;
       }
-      this.对局.结果文本.push(提示);
+      res += 提示
     }
 
     // 作者的守护
     if (存档.天数 <= 3) {
       存档.生命 = 计算最大生命();
       存档.健康 += this.对局.敌人.损失健康;
-      this.对局.结果文本.push(
-        '【作者的守护：游戏前3天战斗失败不会受到惩罚，并且帮你补满血，请开心点玩游戏吧~】',
-      );
+      res += '【作者的守护：游戏前3天战斗失败不会受到惩罚，并且帮你补满血，请开心点玩游戏吧~】'
     }
+    this.对局.结果文本.push(res);
 
     // 敌人胜利
     this.对局.敌人.胜利效果(this.对局);

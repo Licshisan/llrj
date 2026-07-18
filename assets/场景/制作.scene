@@ -527,7 +527,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": -320,
-      "y": 534.8,
+      "y": 560,
       "z": 0
     },
     "_lrot": {
@@ -571,7 +571,7 @@
     "_anchorPoint": {
       "__type__": "cc.Vec2",
       "x": 0,
-      "y": 0.5
+      "y": 1
     },
     "_id": "c5yz9vV+FF9Z3yLuSzTFqY"
   },
@@ -598,11 +598,11 @@
     "_string": "饥饿信息",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
-    "_actualFontSize": 33,
+    "_actualFontSize": 32,
     "_fontSize": 32,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
-    "_overflow": 2,
+    "_overflow": 3,
     "_enableWrapText": true,
     "_font": null,
     "_isSystemFontUsed": true,
@@ -659,7 +659,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 320,
-      "y": 534.8,
+      "y": 560,
       "z": 0
     },
     "_lrot": {
@@ -703,7 +703,7 @@
     "_anchorPoint": {
       "__type__": "cc.Vec2",
       "x": 1,
-      "y": 0.5
+      "y": 1
     },
     "_id": "a1oq2d73VClJEYFoIC6F4+"
   },
@@ -730,11 +730,11 @@
     "_string": "饥饿信息",
     "_horizontalAlign": 2,
     "_verticalAlign": 1,
-    "_actualFontSize": 33,
+    "_actualFontSize": 32,
     "_fontSize": 32,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
-    "_overflow": 2,
+    "_overflow": 3,
     "_enableWrapText": true,
     "_font": null,
     "_isSystemFontUsed": true,

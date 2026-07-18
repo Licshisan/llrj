@@ -190,7 +190,7 @@ export function 随机分散文本和战斗元素(): void {
 }
 
 // 放大出现
-export function 放大出现(目标节点: Node, 持续时长 = 0.4): void {
+export function 放大出现(目标节点: Node, 持续时长 = 0.3): void {
   if (!目标节点) return;
   目标节点.setScale(v3(0, 0, 0));
   目标节点.active = true;
@@ -200,7 +200,7 @@ export function 放大出现(目标节点: Node, 持续时长 = 0.4): void {
 }
 
 // 缩小消失
-export function 缩小消失(目标节点: Node, 持续时长 = 0.4): void {
+export function 缩小消失(目标节点: Node, 持续时长 = 0.3): void {
   if (!目标节点) return;
   tween(目标节点)
     .to(持续时长, { scale: v3(0, 0, 0) })
@@ -332,8 +332,8 @@ export function 创建普通文字(
     }
 
     const 富文本组件 = 文字节点.addComponent(RichText);
-    富文本组件.fontSize = 32;
-    富文本组件.lineHeight = 40;
+    富文本组件.fontSize = 30;
+    富文本组件.lineHeight = 35;
     富文本组件.horizontalAlign = RichText.HorizontalAlign.LEFT;
     富文本组件.fontColor = 默认颜色;
     富文本组件.maxWidth = 宽度;
@@ -341,8 +341,8 @@ export function 创建普通文字(
   } else {
     const 标签组件 = 文字节点.addComponent(Label);
     标签组件.string = 文本内容;
-    标签组件.fontSize = 32;
-    标签组件.lineHeight = 40;
+    标签组件.fontSize = 30;
+    标签组件.lineHeight = 35;
     标签组件.overflow = Label.Overflow.RESIZE_HEIGHT;
     标签组件.horizontalAlign = Label.HorizontalAlign.LEFT;
     标签组件.color = 默认颜色;

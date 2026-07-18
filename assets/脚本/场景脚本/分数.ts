@@ -1,6 +1,6 @@
 import { _decorator, Button, Component, director, Node, tween, EditBox } from 'cc';
 import { 保存存档, 删除存档, 存档 } from '../管理器/存档管理器';
-import { 创建动画文字, 播放文本, 淡入 } from '../方法函数/动画效果';
+import { 创建动画文字, 创建普通文字, 播放文本, 淡入 } from '../方法函数/动画效果';
 import { 设置 } from '../管理器/设置管理器';
 import { 计算排行榜积分总和, 默认成就表 } from '../默认内容/成就表';
 import type { 成就项目类型 } from '../默认内容/成就表';
@@ -62,7 +62,7 @@ export class 分数 extends Component {
 
       if (完成成就.length > 0) {
         完成成就.forEach((成就) => {
-          texts.push(`完成成就【${成就.名称}】${成就.描述}「奖励：${成就.奖励}」`);
+          texts.push(`完成成就【${成就.名称}】${成就.描述}\n「奖励：${成就.奖励}」`);
         });
       } else {
         texts.push('你本次没有新完成的成就哦');
@@ -81,7 +81,7 @@ export class 分数 extends Component {
     // 播放
     const 序列 = tween(this.node).delay(1);
     for (let 索引 = 0; 索引 < texts.length; 索引++) {
-      序列.call(() => 创建动画文字(this.文本容器, texts[索引])).delay(2.2 / 设置.播放速度);
+      序列.call(() => 创建普通文字(this.文本容器, texts[索引])).delay(2.2 / 设置.播放速度);
     }
     序列.call(() => 淡入(this.选项容器)).delay(1);
     序列.start();

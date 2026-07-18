@@ -127,6 +127,7 @@ export class 进食 extends Component {
   更新项目UI(项目组件: Node, 食物: any) {
     const 标签组件 = 项目组件.getChildByName('选择按钮').getChildByName('标签').getComponent(Label);
     标签组件.string = 食物.名称;
+    标签组件.fontSize = 42
 
     if (食物.条件) {
       标签组件.color = new Color(0, 255, 0);

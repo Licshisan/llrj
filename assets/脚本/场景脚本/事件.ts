@@ -60,9 +60,12 @@ export class 事件 extends Component {
     const 选项二 = instantiate(this.选项按钮预制体);
     const 选项三 = instantiate(this.选项按钮预制体);
 
-    选项一.name = '选项一';
-    选项二.name = '选项二';
-    选项三.name = '选项三';
+    选项一.name = '选项按钮1';
+    选项二.name = '选项按钮2';
+    选项三.name = '选项按钮3';
+
+    console.log(this.当前事件)
+
 
     选项一.active = !!this.当前事件.选项一;
     选项二.active = !!this.当前事件.选项二;
@@ -150,7 +153,17 @@ export class 事件 extends Component {
 
     this.事件.active = true;
     this.文本容器.removeAllChildren();
-    this.按钮容器.removeAllChildren();
+    // this.按钮容器.removeAllChildren();
+    const children = this.按钮容器.children;
+    // 从最后一位往前删，不会打乱前面下标
+    for (let i = children.length - 1; i >= 0; i--) {
+        const c = children[i];
+        console.log(c.name);
+        if (c.name.startsWith('选项')) {
+            c.destroy();
+        }
+    }
+
     this.按钮容器.scale = new Vec3(0, 0, 0);
   }
 
