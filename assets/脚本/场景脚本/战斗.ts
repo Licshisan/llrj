@@ -426,8 +426,35 @@ export class 战斗 extends Component {
       ) + this.对局.防御.最终修正;
     this.对局.伤害.初始值 = Math.max(this.对局.攻击.计算结果 - this.对局.防御.计算结果, 0);
     this.对局.主角.攻击时(this.对局);
+
+    // 贯穿
+    if (存档.天赋.贯穿) {
+      const 计算结果 =
+        Math.max(
+          (this.对局.伤害.初始值 + this.对局.伤害.基础加成) *
+            (1 + this.对局.伤害.加法乘率) *
+            this.对局.伤害.独立乘区,
+          0,
+        ) + this.对局.伤害.最终修正;
+
+      this.对局.伤害.初始值 = 0;
+      this.对局.伤害.基础加成 = 0;
+      this.对局.伤害.加法乘率 = 0;
+      this.对局.伤害.独立乘区 = 0;
+      this.对局.伤害.最终修正 += 计算结果;
+      this.对局.结果文本.push(`【「贯穿·透骨」伤害凝聚为${计算结果}点真实伤害】`);
+      this.对局.主角.其他.闪避前伤害 = 计算结果
+    }
+
     this.对局.敌人.被攻击时(this.对局);
     存档.生命 = this.对局.主角.生命;
+
+    // 贯穿二阶
+    if(存档.天赋.贯穿 >= 2 && this.对局.伤害.最终修正 === 0){
+      this.对局.伤害.最终修正 += this.对局.主角.其他.闪避前伤害
+      this.对局.结果文本.push(`【「贯穿·封踪」敌人已无从闪避】`);
+    }
+
     this.对局.伤害.计算结果 =
       Math.max(
         (this.对局.伤害.初始值 + this.对局.伤害.基础加成) *
@@ -436,8 +463,9 @@ export class 战斗 extends Component {
         0,
       ) + this.对局.伤害.最终修正;
 
+    // 醉酒
     if(存档.状态.醉酒){
-      this.对局.结果文本.push("【「醉拳」你迷迷糊糊一拳打到了自己身上！】")
+      this.对局.结果文本.push(`【「醉拳」你迷迷糊糊一拳打到了自己身上！${this.对局.主角.显示名称}受到${Math.floor(this.对局.伤害.计算结果)}点伤害】`)
       this.对局.主角.生命 -= Math.floor(this.对局.伤害.计算结果);
     }else{
       this.对局.敌人.生命 -= Math.floor(this.对局.伤害.计算结果);
@@ -587,6 +615,7 @@ export class 战斗 extends Component {
           `【「钢铁意志」锁定1点生命（今日已触发${存档.其他.当日钢铁意志次数}/${存档.特质.钢铁意志}次）】`,
         );
       }
+      存档.生命 = this.对局.主角.生命
     }
 
 
@@ -876,9 +905,13 @@ export class 战斗 extends Component {
     this.血量条.getComponent(ProgressBar).progress = this.对局.敌人.生命 / this.对局.敌人.最大生命;
 
     this.标签容器.getChildByName('生命').getComponent(Label).string =
-      `HP${存档.生命}/${计算最大生命()}`;
+      `HP${this.对局.主角.生命}/${this.对局.主角.最大生命}`;
     this.标签容器.getChildByName('逃跑率').getComponent(Label).string =
       `${this.计算主角逃跑成功率()}%第${this.对局.回合数}回合`;
+    this.标签容器.getChildByName('攻击').getComponent(Label).string =
+      `ATT${this.对局.主角.攻击}`;
+    this.标签容器.getChildByName('防御').getComponent(Label).string =
+      `DEF${this.对局.主角.防御}`;
 
     if (存档.物品?.枪 > 0) {
       this.按钮容器.getChildByName('枪').getComponent(Label).string =

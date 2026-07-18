@@ -74,6 +74,7 @@ export class 小兰 extends Component {
       return;
     }
     存档.精力 -= 聊天消耗精力;
+    存档.其他.当天聊天次数 ++
 
     const 小兰聊天内容 = [
       '这么晚来找我...不怕被人看见？',

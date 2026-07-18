@@ -61,6 +61,8 @@ export class 桥洞 extends Component {
             return;
           }
           存档.精力 -= 聊天消耗精力;
+          存档.其他.当天聊天次数 ++
+
 
           const e = Math.floor(存档.伙伴.碧瑶聊天成功率 + 存档.其他.流浪猫篷等级 * 2);
           if (Math.random() * 100 < e) {
