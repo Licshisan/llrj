@@ -22,7 +22,7 @@ import { 默认技能表 } from '../默认内容/技能表';
 import { 设置, 保存设置 } from '../管理器/设置管理器';
 import { 保存玩家, 玩家 } from '../管理器/玩家管理器';
 import { 计算数值 } from '../方法函数/属性计算';
-import { 计算技能等级, 计算特质等级 } from '../方法函数/等级计算';
+import { 计算套餐等级, 计算技能等级, 计算特质等级 } from '../方法函数/等级计算';
 import { 计算自选天赋点状态 } from '../公共方法/天赋计算';
 const { ccclass, property } = _decorator;
 
@@ -107,6 +107,7 @@ export class 套餐 extends Component {
               创建存档(false);
               存档.创建时间 = Date.now();
               存档.套餐名称 = 套餐.名称;
+              存档.其他.套餐等级 = 计算套餐等级(套餐.名称)
               存档.游戏难度 = this.当前难度;
               const 游玩次数 = 玩家.client_info.play_times || {};
               游玩次数[存档.游戏难度] = (游玩次数[存档.游戏难度] || 0) + 1;
