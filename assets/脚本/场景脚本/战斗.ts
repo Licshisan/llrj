@@ -375,7 +375,7 @@ export class 战斗 extends Component {
     枪械按钮.on(Node.EventType.TOUCH_END, this.点击枪, this);
 
     // 新增
-    this.按钮容器.getChildByName('双枪').active = 存档.天赋.枪弹专家 > 0 && 存档.物品.枪 >= 2;
+    this.按钮容器.getChildByName('双枪').active = 存档.天赋.枪魂 > 0 && 存档.物品.枪 >= 2;
     const 双枪按钮 = this.按钮容器.getChildByName('双枪');
     双枪按钮.targetOff(this);
     双枪按钮.on(Node.EventType.TOUCH_END, this.点击双枪, this);

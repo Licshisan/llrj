@@ -39,7 +39,7 @@ export class 制作 extends Component {
     this.更新属性();
     this.创建分页();
 
-    this.桥洞按钮.active = !!存档.天赋.市井通衢
+    this.桥洞按钮.active = !!存档.天赋.市井通途
     this.桥洞按钮.on(Button.EventType.CLICK, () => {
       director.loadScene('桥洞');
     }, this);
