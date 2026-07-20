@@ -47,12 +47,14 @@ export class 商店 extends Component {
     );
 
     this.更新标签();
+    this.更新批量按钮文字();
     this.创建分页();
     this.批量按钮.on(
       Button.EventType.CLICK,
       () => {
         设置.批量购买 = !设置.批量购买;
         保存设置();
+        this.更新批量按钮文字();
         播放文本(this.标签, `已${设置.批量购买 ? '开启' : '关闭'}批量购买`);
       },
       this,
@@ -202,6 +204,14 @@ export class 商店 extends Component {
   更新标签() {
     this.属性一.getComponent(Label).string = `金钱：${(存档.金钱 / 10).toFixed(1)}元`;
     this.属性二.getComponent(Label).string = `积分：${存档.积分}`;
+  }
+
+  更新批量按钮文字() {
+    const 标签节点 = this.批量按钮.getChildByName('标签') || this.批量按钮;
+    const 标签 = 标签节点.getComponent(Label);
+    if (标签) {
+      标签.string = 设置.批量购买 ? '批量：开' : '批量：关';
+    }
   }
 
   更新项目UI(项目组件: Node, 商品: any) {

@@ -24,16 +24,151 @@ import { 播放文本, 放大缩小 } from '../方法函数/动画效果';
 import { 事件 } from './事件';
 import { 战斗 } from './战斗';
 import { 执行钩子 } from '../管理器/钩子管理器';
-import { 设置 } from '../管理器/设置管理器';
+import { 保存设置, 设置 } from '../管理器/设置管理器';
 import { 获取当前日记 } from '../默认内容/日记表';
 import { 获取地区名称, 获取当前地区 } from '../默认内容/地区表';
 import { 默认天赋表 } from '../默认内容/天赋表';
-import { 玩家 } from '../管理器/玩家管理器';
+import { 保存玩家, 玩家 } from '../管理器/玩家管理器';
 import { 计算得分 } from '../公共方法/最终得分';
 import { 获取榜一大哥请求, 获取随机存档请求 } from '../方法函数/网络请求';
 import { 音频管理器 } from './音频';
 import { 计算天赋等级 } from '../方法函数/等级计算';
+import { 默认成就表 } from '../默认内容/成就表';
 const { ccclass, property } = _decorator;
+
+const 天赋名称映射: Record<string, string> = {
+  书童: '读书人',
+  回春: '治疗术',
+  胃袋: '大胃袋',
+  威猛: '强壮',
+  坚韧: '骨头硬',
+  生机: '火力旺',
+  资粮: '零花钱',
+  免疫: '免疫力',
+  迅捷: '溜得快',
+  情圣: '交际好手',
+  精力储存: '精力储备',
+  孤注一掷: '赌术潜质',
+  持枪入门: '持枪者',
+  荒野拾荒: '拾荒者',
+  攻防一体: '破势',
+  稳守天成: '善守者',
+  枪弹专家: '枪魂',
+  市井通衢: '市井通途',
+  绝命裁决: '裁决',
+  正义之力: '仁者',
+  粗鄙: '粗俗',
+  讷言: '语言障碍',
+  文盲: '不识字',
+};
+
+const 成就名称映射: Record<string, string> = {
+  '守擂<普通>': '守擂者<普通>',
+};
+
+function 迁移数值字段(
+  对象: Record<string, number> | undefined,
+  映射: Record<string, string>,
+) {
+  if (!对象) return false;
+  let 已修改 = false;
+  for (const [旧名称, 新名称] of Object.entries(映射)) {
+    if (!Object.prototype.hasOwnProperty.call(对象, 旧名称)) continue;
+    const 旧值 = Number(对象[旧名称]) || 0;
+    const 新值 = Number(对象[新名称]) || 0;
+    对象[新名称] = Math.max(旧值, 新值);
+    delete 对象[旧名称];
+    已修改 = true;
+  }
+  return 已修改;
+}
+
+function 迁移还丹字段(对象: Record<string, number> | undefined) {
+  if (!对象) return false;
+  let 已修改 = false;
+  for (const 名称 of Object.keys(对象)) {
+    if (!名称.endsWith('还丹')) continue;
+    const 新名称 = 名称.replace(/还丹$/, '丹药');
+    对象[新名称] = (Number(对象[新名称]) || 0) + (Number(对象[名称]) || 0);
+    delete 对象[名称];
+    已修改 = true;
+  }
+  return 已修改;
+}
+
+function 迁移成就列表() {
+  let 已修改 = false;
+  const 成就列表 = 玩家.client_info?.achievements;
+  if (Array.isArray(成就列表)) {
+    const 去重: Record<string, { name: string; description: string; achieve_at: number }> = {};
+    for (const 成就 of 成就列表) {
+      if (!成就 || typeof 成就 !== 'object') continue;
+      const 新名称 = 成就名称映射[成就.name] || 成就.name;
+      const 默认成就 = 默认成就表.find((item) => item.名称 === 新名称);
+      const 新成就 = {
+        ...成就,
+        name: 新名称,
+        description: 默认成就?.描述 ?? 成就.description,
+      };
+      const 已有 = 去重[新名称];
+      if (!已有 || (新成就.achieve_at || 0) < (已有.achieve_at || 0)) {
+        去重[新名称] = 新成就;
+      }
+      if (新名称 !== 成就.name || 新成就.description !== 成就.description) {
+        已修改 = true;
+      }
+    }
+    if (Object.keys(去重).length !== 成就列表.length) {
+      已修改 = true;
+    }
+    玩家.client_info.achievements = Object.values(去重);
+  }
+
+  const serverAchievements = 玩家.server_info?.achievements as Record<string, any>;
+  if (serverAchievements && typeof serverAchievements === 'object' && !Array.isArray(serverAchievements)) {
+    for (const [旧名称, 新名称] of Object.entries(成就名称映射)) {
+      if (!Object.prototype.hasOwnProperty.call(serverAchievements, 旧名称)) continue;
+      if (!Object.prototype.hasOwnProperty.call(serverAchievements, 新名称)) {
+        serverAchievements[新名称] = serverAchievements[旧名称];
+      }
+      delete serverAchievements[旧名称];
+      已修改 = true;
+    }
+  }
+
+  return 已修改;
+}
+
+function 进入游戏字段修复() {
+  if (存档.游戏版本 === '1.0.8') return;
+  if (存档.其他.存档字段已修复) return;
+
+  let 已修改 = false;
+  已修改 = 迁移数值字段(存档.天赋, 天赋名称映射) || 已修改;
+  已修改 = 迁移还丹字段(存档.物品) || 已修改;
+  已修改 = 迁移还丹字段(存档.使用次数) || 已修改;
+
+  if (Array.isArray(设置.锁定天赋)) {
+    const 新列表 = Array.from(new Set(设置.锁定天赋.map((名称) => 天赋名称映射[名称] || 名称)));
+    if (新列表.length !== 设置.锁定天赋.length || 新列表.some((名称, 索引) => 名称 !== 设置.锁定天赋[索引])) {
+      设置.锁定天赋 = 新列表;
+      已修改 = true;
+    }
+  }
+  if (设置.保留天赋 && 天赋名称映射[设置.保留天赋]) {
+    设置.保留天赋 = 天赋名称映射[设置.保留天赋];
+    已修改 = true;
+  }
+
+  已修改 = 迁移成就列表() || 已修改;
+
+  存档.其他.存档字段已修复 = 1;
+  保存存档();
+  if (已修改) {
+    保存设置();
+    保存玩家();
+  }
+}
 
 @ccclass('主页')
 export class 主页 extends Component {
@@ -52,6 +187,7 @@ export class 主页 extends Component {
   start() {
     globalThis.页面来源 = '主页';
     音频管理器.instance.stopBGM();
+    进入游戏字段修复();
 
     this.更新();
     this.回档();

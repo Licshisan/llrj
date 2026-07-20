@@ -120,8 +120,8 @@ export class 成就 extends Component {
         const 完成成就 = 已完成成就列表.find((c) => c.name === 成就.名称);
 
         if (完成成就) {
-          let 文本 = `【${完成成就.name}】`;
-          文本 += `${完成成就.description}`;
+          let 文本 = `【${成就.名称}】`;
+          文本 += `${成就.描述}`;
           文本 += `\n完成时间：${格式化日期字符串(完成成就.achieve_at)}`;
           if (成就.奖励) {
             文本 += `\n奖励：${成就.奖励}`;

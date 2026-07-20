@@ -33,6 +33,15 @@ export class 分数 extends Component {
     const 套餐 = 默认套餐表.find((套餐) => 套餐.名称 === 存档.套餐名称);
     if (套餐 && 套餐.娱乐) {
       texts.push(`娱乐套餐【${套餐.名称}】，无法完成成就`);
+      const 版本限定成就 = 套餐.名称 === '体验套餐'
+        ? this.结算成就((成就) => 成就.名称 === '体验测试员')
+        : [];
+      if (版本限定成就.length > 0) {
+        版本限定成就.forEach((成就) => {
+          texts.push(`完成成就【${成就.名称}】${成就.描述}\n「奖励：${成就.奖励}」`);
+        });
+        保存玩家();
+      }
     } else {
       this.结算藏品();
       const 新完成成就 = this.结算成就();
@@ -114,12 +123,13 @@ export class 分数 extends Component {
     保存玩家();
   }
 
-  结算成就() {
+  结算成就(筛选?: (成就: 成就项目类型) => boolean) {
     const 完成成就: 成就项目类型[] = [];
     if (!Array.isArray(玩家.client_info.achievements)) {
       玩家.client_info.achievements = [];
     }
     for (const 成就 of 默认成就表) {
+      if (筛选 && !筛选(成就)) continue;
       if (!成就.条件 || 玩家.client_info.achievements.find((c) => c.name === 成就.名称)) continue;
       if (成就.排行类) continue;
       const 新成就 = {

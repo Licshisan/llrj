@@ -31,7 +31,7 @@ const 默认存档 = {
   游戏难度: '普通' as string,
   套餐名称: '新手模式' as string,
   创建时间: Date.now(),
-  游戏版本: "1.0.7",
+  游戏版本: '1.0.8',
 
   天数: 1,
   距离: 1,
@@ -181,6 +181,7 @@ export function 创建存档(立即保存 = true) {
   const 存档名称 = '存档_' + Math.random().toString(36).slice(2, 8);
   const 新存档 = JSON.parse(JSON.stringify(默认存档));
   新存档.存档名称 = 存档名称;
+  新存档.其他.存档字段已修复 = 1;
 
   Object.assign(主存档, 创建默认值代理(JSON.parse(JSON.stringify(新存档))));
   当前激活存档 = 主存档;
