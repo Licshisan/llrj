@@ -43,3 +43,52 @@
 成就显示新的成就
 成就奖励
 诈骗团伙
+
+// 挑战说明
+
+            if (jozalyn.notify666 != 1) {
+              xela.playText("Canvas/Text/txt_notify", "友情提示:下一个挑战需要消耗大量健康以构造挑战对象(" + truvy + ")点".split("").reverse().join(""), 10);
+              jozalyn.notify666 = 1;
+              return;
+            }
+            var dalexa;
+            let debanhy = truvy + 20;
+            dalexa = 14;
+            if (jozalyn.health < debanhy) {
+              if (aryaveer.isFightDetailMode()) {
+                jozalyn.choice[6] += 1;
+              }
+              xela.playText("Canvas/Text/txt_notify", "下一个挑战需要消耗大量健康以构造挑战对象(" + truvy + "点),你的健康值低于" + debanhy + ",无法开启", 10);
+              return;
+            } else {
+              jozalyn.health -= truvy;
+            }
+          }
+          if (patrickjames == 217) {
+            var srivar;
+            let tyrese = 500;
+            srivar = "apegen";
+            let agha = "友情提示:下一个挑战为限时挑战(<=140天才可触发),需要消耗较多金钱以邀请挑战对象(" + aryaveer.getYuanText(tyrese) + ")";
+            if (jozalyn.notify217 != 1) {
+              xela.playText("Canvas/Text/txt_notify", agha, 10);
+              jozalyn.notify217 = 1;
+              return;
+            }
+            var kaelah;
+            let vipul = tyrese;
+            kaelah = 6;
+            if (jozalyn.money < vipul) {
+              xela.playText("Canvas/Text/txt_notify", agha + ",你的金钱不足,无法开启", 10);
+              return;
+            } else {
+              jozalyn.money -= tyrese;
+            }
+          }
+          if (patrickjames == aryaveer.getJxEnemyId()) {
+            let dalanna = "友情提示:下一个挑战为限时挑战(<=150天才可触发),有三次挑战机会,战斗伤害结果计入极限挑战排行榜,战斗中途退出机会作废(每1%烟瘾扣减1%有效伤害结算比例)";
+            if (jozalyn.notify218 != 1) {
+              xela.playText("Canvas/Text/txt_notify", dalanna, 10);
+              jozalyn.notify218 = 1;
+              return;
+            }
+          }
