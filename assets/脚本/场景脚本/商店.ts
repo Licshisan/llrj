@@ -17,7 +17,7 @@ import { 播放文本 } from '../方法函数/动画效果';
 import { 保存存档, 存档 } from '../管理器/存档管理器';
 import { 执行钩子 } from '../管理器/钩子管理器';
 import { 默认商品表 } from '../默认内容/商品表';
-import { 深克隆 } from '../方法函数/公共函数';
+import { 格式化金钱, 深克隆 } from '../方法函数/公共函数';
 import { 保存设置, 设置 } from '../管理器/设置管理器';
 const { ccclass, property } = _decorator;
 
@@ -116,6 +116,9 @@ export class 商店 extends Component {
         .on(
           Button.EventType.CLICK,
           () => {
+            let a = 存档.金钱
+
+
             if (设置.批量购买) {
               const 批量次数 = 10;
 
@@ -138,7 +141,15 @@ export class 商店 extends Component {
                 }
               }
 
-              播放文本(this.标签, `已批量购买${成功购买数}次（${最后提示文本}）`);
+              let res = ''
+              if(存档.状态.人脉){
+                存档.状态.人脉 = 0
+                let 返还 = Math.floor((a - 存档.金钱) * 0.2)
+                存档.金钱 += 返还
+                res += `【人脉】已节省${格式化金钱(返还)}`
+              }
+
+              播放文本(this.标签, `已批量购买${成功购买数}次（${最后提示文本}）${res}}`);
               保存存档();
               this.更新标签();
               this.刷新所有项目状态();
@@ -146,8 +157,15 @@ export class 商店 extends Component {
               商品.选项一效果({
                 提示: (文本) => 播放文本(this.标签, 文本),
                 购买成功: (文本) => {
-                  执行钩子('购买后', [商品]);
-                  播放文本(this.标签, 文本);
+                  let res = ''
+                  if(存档.状态.人脉){
+                    存档.状态.人脉 = 0
+                    let 返还 = Math.floor((a - 存档.金钱) * 0.2)
+                    存档.金钱 += 返还
+                    res += `【人脉】已节省${格式化金钱(返还)}`
+                  }
+
+                  播放文本(this.标签, 文本+res);
                   保存存档();
                   this.更新标签();
                   this.刷新所有项目状态();
