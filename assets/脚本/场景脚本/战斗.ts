@@ -804,6 +804,11 @@ export class 战斗 extends Component {
       return;
     }
     // 逃跑成功
+    if(this.对局.敌人.名称 === '靶子'){
+      this.结束战斗( `【测试结束：总伤害${this.对局.敌人.最大生命 - this.对局.敌人.生命}】`);
+      return
+    }
+
     this.对局.结果文本 = ['逃跑成功！'];
     执行钩子('逃跑成功', [this.对局]);
     存档.其他.逃跑成功次数++;
@@ -878,6 +883,7 @@ export class 战斗 extends Component {
     存档.当前敌人 = next;
     保存存档();
     存档.其他.战斗重进次数 = 0;
+    存档.临时数据.大退前敌人 = '';
     this.进入战斗(next);
   }
 

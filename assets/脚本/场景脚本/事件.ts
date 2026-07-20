@@ -177,13 +177,19 @@ export class 事件 extends Component {
   结束事件(描述 = ''): void {
     执行钩子('事件结束', [this.当前事件]);
     tween(this.node).stop();
-    this.当前事件 = null;
     存档.当前事件 = '';
     this.node.getComponent(主页).更新();
     this.事件.active = false;
 
     放大出现(this.node.getComponent(主页).按钮容器);
     this.node.getComponent(主页).播放文本(描述);
+
+    // 命理师可以放弃天赋
+    if(this.当前事件.名称 === '命理师') {
+      return
+    }
+
+    this.当前事件 = null;
     保存存档();
   }
 }

@@ -1,94 +1,27 @@
-简明成就描述
 
-我打通缉犯没打过，回到认识晓月的那一天，发现放羊老头给的天赋也没了，后来也没有遇见这个事件
-
-被假房东赶出来的文本没有了
-过天结算的时候会什么都不显示，有时候还会卡掉陷阱之类的其他结算，只显示饥饿减少和蚊帐回血
-名气一落千丈
-隐藏剧情图鉴
-
-买了电饭煲和自行车过后，原来的位置会变成钓鱼竿
-
-大退判负两次
-
-小樱部分文案未修改
-
-铁衣长老和帮主技能问题
-
-拳场所有拳手改为失去当前名气*10%（即七段最多失去30点拳场名气）
-
-修改闪避率上限锁定30%，除非有写明能突破闪避上限，否则任何途径的闪避率总和最高30%
 
 削弱市井天赋，一阶情况下桥洞开局不开放升级页面，仅可读书以及进行基础锻炼
 
-那我还留着600多页的残页没换咋办
+存档修复 丹药还原 天赋还原 成就名称更新
 
-拼命显示数值
-心里咨询师文本
-
-存档修复
-丹药还原
-天赋还原
-成就名称更新 修复存档
-使用书籍在制作
-
-增加支持无选项事件
 优化面板
-无视正的防御
-
-出售鱼
-完善旧书店
-
 
 成就显示新的成就
-成就奖励
-诈骗团伙
 
-// 挑战说明
+// 下一次更新 
+挑战说明
+  xela.playText("Canvas/Text/txt_notify", "友情提示:下一个挑战需要消耗大量健康以构造挑战对象(" + truvy + ")点".split("").reverse().join(""), 10);
+  xela.playText("Canvas/Text/txt_notify", "下一个挑战需要消耗大量健康以构造挑战对象(" + truvy + "点),你的健康值低于" + debanhy + ",无法开启", 10);
+let agha = "友情提示:下一个挑战为限时挑战(<=140天才可触发),需要消耗较多金钱以邀请挑战对象(" + aryaveer.getYuanText(tyrese) + ")";
+let dalanna = "友情提示:下一个挑战为限时挑战(<=150天才可触发),有三次挑战机会,战斗伤害结果计入极限挑战排行榜,战斗中途退出机会作废(每1%烟瘾扣减1%有效伤害结算比例)";
 
-            if (jozalyn.notify666 != 1) {
-              xela.playText("Canvas/Text/txt_notify", "友情提示:下一个挑战需要消耗大量健康以构造挑战对象(" + truvy + ")点".split("").reverse().join(""), 10);
-              jozalyn.notify666 = 1;
-              return;
-            }
-            var dalexa;
-            let debanhy = truvy + 20;
-            dalexa = 14;
-            if (jozalyn.health < debanhy) {
-              if (aryaveer.isFightDetailMode()) {
-                jozalyn.choice[6] += 1;
-              }
-              xela.playText("Canvas/Text/txt_notify", "下一个挑战需要消耗大量健康以构造挑战对象(" + truvy + "点),你的健康值低于" + debanhy + ",无法开启", 10);
-              return;
-            } else {
-              jozalyn.health -= truvy;
-            }
-          }
-          if (patrickjames == 217) {
-            var srivar;
-            let tyrese = 500;
-            srivar = "apegen";
-            let agha = "友情提示:下一个挑战为限时挑战(<=140天才可触发),需要消耗较多金钱以邀请挑战对象(" + aryaveer.getYuanText(tyrese) + ")";
-            if (jozalyn.notify217 != 1) {
-              xela.playText("Canvas/Text/txt_notify", agha, 10);
-              jozalyn.notify217 = 1;
-              return;
-            }
-            var kaelah;
-            let vipul = tyrese;
-            kaelah = 6;
-            if (jozalyn.money < vipul) {
-              xela.playText("Canvas/Text/txt_notify", agha + ",你的金钱不足,无法开启", 10);
-              return;
-            } else {
-              jozalyn.money -= tyrese;
-            }
-          }
-          if (patrickjames == aryaveer.getJxEnemyId()) {
-            let dalanna = "友情提示:下一个挑战为限时挑战(<=150天才可触发),有三次挑战机会,战斗伤害结果计入极限挑战排行榜,战斗中途退出机会作废(每1%烟瘾扣减1%有效伤害结算比例)";
-            if (jozalyn.notify218 != 1) {
-              xela.playText("Canvas/Text/txt_notify", dalanna, 10);
-              jozalyn.notify218 = 1;
-              return;
-            }
-          }
+完善旧书店
+增加成就奖励 各自杂类的
+
+增加支持无选项事件 并增加到山洞事件
+
+小樱部分文案未修改
+
+修改闪避率上限锁定30%，除非有写明能突破闪避上限，否则任何途径的闪避率总和最高30%
+
+加强山林

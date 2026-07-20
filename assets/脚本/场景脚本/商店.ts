@@ -215,12 +215,16 @@ export class 商店 extends Component {
   }
 
   刷新所有项目状态() {
+    const 所有商品 = 默认商品表.filter((i) => i.显示);
     for (let i = 0; i < this.所有项目节点.length; i++) {
       const 节点 = this.所有项目节点[i];
-      const 所有商品 = 默认商品表.filter((i) => i.显示);
-      if (i < 所有商品.length) {
-        const 商品数据 = 所有商品[i];
+      const 商品名称 = 节点.name.replace('商品_', '');
+      const 商品数据 = 所有商品.find((g) => g.名称 === 商品名称);
+      if (商品数据) {
+        节点.active = true;
         this.更新项目UI(节点, 商品数据);
+      } else {
+        节点.active = false;
       }
     }
   }

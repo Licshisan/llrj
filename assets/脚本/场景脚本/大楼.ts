@@ -133,6 +133,10 @@ export class 大楼 extends Component {
         this,
       );
     }
+    if(存档.技能.世界感知 < 4){
+      六层按钮.getChildByName('标签').getComponent(Label).string = '？？？？（常年休假...）';
+    }
+
 
     // 餐厅界面
     this.餐厅.getChildByName('返回按钮').on(
