@@ -36,7 +36,7 @@ export class 商店 extends Component {
   所有项目节点: Node[] = [];
 
   start() {
-    this.黑市按钮.active = 存档.天赋.市井通衢 > 0;
+    this.黑市按钮.active = 存档.天赋.市井通途 > 0;
     this.黑市按钮.on(
       Button.EventType.CLICK,
       () => {
