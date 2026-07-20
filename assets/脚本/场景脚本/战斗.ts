@@ -385,7 +385,7 @@ export class 战斗 extends Component {
     居合按钮.targetOff(this);
     居合按钮.on(Node.EventType.TOUCH_END, this.点击居合, this);
 
-    this.按钮容器.getChildByName('自残').active = 存档.天赋.狂刃 >= 3
+    this.按钮容器.getChildByName('自残').active = 存档.天赋.狂刃 >= 3 && 存档.其他.今日自残次数 < 5
     const 自残按钮 = this.按钮容器.getChildByName('自残');
     自残按钮.targetOff(this);
     自残按钮.on(Node.EventType.TOUCH_END, this.点击自残, this);
@@ -866,6 +866,12 @@ export class 战斗 extends Component {
   }
 
   点击自残() {
+    if (存档.其他.今日自残次数 >= 5) {
+      this.对局.主角.其他.开启自残 = false;
+      const 自残按钮 = this.按钮容器.getChildByName('自残');
+      自残按钮.active = false;
+      return;
+    }
     this.对局.主角.其他.开启自残 = !this.对局.主角.其他.开启自残;
     const 自残按钮 = this.按钮容器.getChildByName('自残');
     自残按钮.getComponent(Label).string =
