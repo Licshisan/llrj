@@ -1,4 +1,4 @@
-﻿import { _decorator, Component, Node, director, tween, Button, log, UIOpacity, Label } from 'cc';
+import { _decorator, Component, Node, director, tween, Button, log, UIOpacity, Label } from 'cc';
 import { 保存设置, 设置 } from '../管理器/设置管理器';
 import { 创建动画文字, 创建普通文字, 播放文本, 淡入, 淡出 } from '../方法函数/动画效果';
 import { 保存存档, 存档 } from '../管理器/存档管理器';
@@ -215,3 +215,4 @@ export class 开场 extends Component {
     }
   }
 }
+

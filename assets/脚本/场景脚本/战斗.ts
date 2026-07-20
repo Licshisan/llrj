@@ -380,7 +380,11 @@ export class 战斗 extends Component {
     双枪按钮.targetOff(this);
     双枪按钮.on(Node.EventType.TOUCH_END, this.点击双枪, this);
 
-    this.按钮容器.getChildByName('居合').active = 存档.天赋.黑刀传人 > 0 && 存档.物品.黑刀 >= 5;
+    const 居合使用上限 = 存档.天赋.黑刀传人 >= 3 ? 2 : 1;
+    this.按钮容器.getChildByName('居合').active =
+      存档.天赋.黑刀传人 > 0 &&
+      存档.物品.黑刀 >= 5 &&
+      (this.对局.主角.其他.居合使用次数 || 0) < 居合使用上限;
     const 居合按钮 = this.按钮容器.getChildByName('居合');
     居合按钮.targetOff(this);
     居合按钮.on(Node.EventType.TOUCH_END, this.点击居合, this);
@@ -412,6 +416,7 @@ export class 战斗 extends Component {
     };
     this.对局.伤害 = { 初始值: 0, 基础加成: 0, 加法乘率: 0, 独立乘区: 1, 最终修正: 0, 计算结果: 0 };
     this.对局.结果文本 = [];
+    this.对局.主角.其他.枪魂开枪 = false;
     this.对局.主角.攻击前(this.对局);
     this.对局.敌人.被攻击前(this.对局);
     存档.生命 = this.对局.主角.生命;
@@ -448,8 +453,27 @@ export class 战斗 extends Component {
       this.对局.主角.其他.闪避前伤害 = 计算结果
     }
 
+    if (存档.天赋.枪魂 >= 3 && this.对局.主角.其他.枪魂开枪) {
+      this.对局.主角.其他.枪魂闪避前伤害 =
+        (
+          (this.对局.伤害.初始值 + this.对局.伤害.基础加成) *
+            (1 + this.对局.伤害.加法乘率) *
+            this.对局.伤害.独立乘区
+        ) + this.对局.伤害.最终修正;
+    }
+
     this.对局.敌人.被攻击时(this.对局);
     存档.生命 = this.对局.主角.生命;
+
+    if (存档.天赋.枪魂 >= 3 && this.对局.主角.其他.枪魂开枪 && this.对局.伤害.独立乘区 === 0) {
+      const 闪避前伤害 = this.对局.主角.其他.枪魂闪避前伤害 || 0;
+      this.对局.伤害.初始值 = 0;
+      this.对局.伤害.基础加成 = 0;
+      this.对局.伤害.加法乘率 = 0;
+      this.对局.伤害.独立乘区 = 0;
+      this.对局.伤害.最终修正 = 闪避前伤害;
+      this.对局.结果文本.push('【「枪魂」枪击无视闪避】');
+    }
 
     // 贯穿二阶
     if(存档.天赋.贯穿 >= 2 && this.对局.伤害.最终修正 === 0){
@@ -497,7 +521,8 @@ export class 战斗 extends Component {
     }
 
     // 特殊
-    if (this.对局.主角.其他.已触发居合) {
+    const 居合使用上限 = 存档.天赋.黑刀传人 >= 3 ? 2 : 1;
+    if ((this.对局.主角.其他.居合使用次数 || 0) >= 居合使用上限) {
       this.按钮容器.getChildByName('居合').active = false;
     }
     if (this.对局.主角.其他.已触发自残) {
@@ -955,3 +980,4 @@ export class 战斗 extends Component {
     从0放大缩小(t);
   }
 }
+

@@ -5,6 +5,7 @@ import { 自动进食 } from '../方法函数/公共函数';
 import { 计算数值, 计算最大生命, 计算最大精力, 计算最大饥饿 } from '../方法函数/属性计算';
 import { 执行钩子 } from '../管理器/钩子管理器';
 import { 获取当前日记 } from '../默认内容/日记表';
+import { 获取地区名称 } from '../默认内容/地区表';
 const { ccclass, property } = _decorator;
 
 @ccclass('桥洞')
@@ -147,6 +148,10 @@ export class 桥洞 extends Component {
       .on(
         Button.EventType.CLICK,
         () => {
+          if (获取地区名称() !== '省城' && 存档.天赋.市井通途 < 3) {
+            播放文本(this.标签, '暂未满足开启条件！');
+            return;
+          }
           this.标签.getComponent(Label).string = '';
           缩小消失(this.桥洞);
           放大出现(this.升级);
@@ -1084,6 +1089,13 @@ export class 桥洞 extends Component {
         .getChildByName('标签')
         .getComponent(Label).string = '读书';
     }
+
+    this.桥洞
+      .getChildByName('按钮容器')
+      .getChildByName('选择按钮4')
+      .getChildByName('标签')
+      .getComponent(Label).string =
+      获取地区名称() === '省城' || 存档.天赋.市井通途 >= 3 ? '升级' : '？？？？';
   }
 
   更新外出() {
@@ -1326,3 +1338,4 @@ export class 桥洞 extends Component {
     }
   }
 }
+
