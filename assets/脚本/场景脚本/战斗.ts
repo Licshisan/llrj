@@ -384,6 +384,11 @@ export class 战斗 extends Component {
     const 居合按钮 = this.按钮容器.getChildByName('居合');
     居合按钮.targetOff(this);
     居合按钮.on(Node.EventType.TOUCH_END, this.点击居合, this);
+
+    this.按钮容器.getChildByName('自残').active = 存档.天赋.狂刃 >= 3
+    const 自残按钮 = this.按钮容器.getChildByName('自残');
+    自残按钮.targetOff(this);
+    自残按钮.on(Node.EventType.TOUCH_END, this.点击自残, this);
   }
 
   点击攻击() {
@@ -493,6 +498,11 @@ export class 战斗 extends Component {
     if (this.对局.主角.其他.已触发居合) {
       this.按钮容器.getChildByName('居合').active = false;
     }
+    if (this.对局.主角.其他.已触发自残) {
+      this.按钮容器.getChildByName('自残').active = false;
+    }
+
+
 
     if (this.对局.主角.方法 === '爆头' || this.对局.主角.方法 === '枪击') {
       音频管理器.instance.playByName('fire');
@@ -851,6 +861,13 @@ export class 战斗 extends Component {
     const 居合按钮 = this.按钮容器.getChildByName('居合');
     居合按钮.getComponent(Label).string =
       `居合\n【${['关', '开'][Number(this.对局.主角.其他.开启居合)]}】`;
+  }
+
+  点击自残() {
+    this.对局.主角.其他.开启自残 = !this.对局.主角.其他.开启自残;
+    const 自残按钮 = this.按钮容器.getChildByName('自残');
+    自残按钮.getComponent(Label).string =
+      `自残\n【${['关', '开'][Number(this.对局.主角.其他.开启自残)]}】`;
   }
 
   计算主角逃跑成功率() {
