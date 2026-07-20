@@ -52,8 +52,9 @@ export class 日记 extends Component {
   }
 
   播放日记(文本: string[]) {
+    this.文本容器.removeAllChildren()
     this.返回按钮.active = false;
-    const sequence = tween(this.node).delay(1 / 设置.播放速度);
+    const sequence = tween(this.node).delay(1.2 / 设置.播放速度);
     if (文本.length === 0) {
       sequence.call(() => 淡入(this.返回按钮));
     }
