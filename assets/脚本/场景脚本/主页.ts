@@ -643,6 +643,12 @@ export class 主页 extends Component {
   }
 
   探索条件() {
+    // 限制
+    if (存档.天数 >= 180) {
+      director.loadScene('结局');
+      return false;
+    }
+
     // 千元户
     if (获取地区名称() === '省城' && 存档.停留天数.省城 <= 36) {
       存档.其他.进入省城携带金钱 = Math.max(存档.金钱, 存档.其他.进入省城携带金钱);
@@ -692,7 +698,7 @@ export class 主页 extends Component {
     //     return false;
     //   }
     // }
-
+    
     // 比武大会
     if (
       存档.当前地点 === '市中心' &&
@@ -883,11 +889,13 @@ export class 主页 extends Component {
       return;
     }
 
-    if (存档.天数 >= 180) {
-      director.loadScene('结局');
-      return false;
+    // 神秘商人
+    if(获取地区名称() !== '荒野' && Math.random() * 100 < 1 && 存档.其他.当天神秘商人次数 < 3) {
+      存档.其他.当天神秘商人次数 ++
+      this.基本消耗();
+      this.node.getComponent(事件).触发事件('神秘商人');
+      return
     }
-
     return true;
   }
 

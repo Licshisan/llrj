@@ -468,6 +468,8 @@ export class 战斗 extends Component {
     if(存档.状态.醉酒){
       this.对局.结果文本.push(`【「醉拳」你迷迷糊糊一拳打到了自己身上！${this.对局.主角.名称}受到${Math.floor(this.对局.伤害.计算结果)}点伤害】`)
       this.对局.主角.生命 -= Math.floor(this.对局.伤害.计算结果);
+      this.对局.伤害.计算结果 = 0
+      存档.状态.醉酒 = 0
     }else{
       this.对局.敌人.生命 -= Math.floor(this.对局.伤害.计算结果);
     }
