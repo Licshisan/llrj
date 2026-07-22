@@ -1,7 +1,7 @@
 import { error, sys, warn } from 'cc';
 
 const 默认设置 = {
-  游戏版本: '1.0.8',
+  游戏版本: '1.0.9',
   上次难度: '普通',
   播放速度: 2,
   播放音乐: true,
@@ -15,6 +15,7 @@ const 默认设置 = {
   生效特质: [],
   音效开关: true,
   锁定天赋: [],
+  扫荡开关: false,
 };
 
 export let 设置: typeof 默认设置 = JSON.parse(JSON.stringify(默认设置));

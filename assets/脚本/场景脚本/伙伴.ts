@@ -23,16 +23,18 @@ export class 伙伴 extends Component {
 
   onLoad(): void {
     if (!存档.伙伴.晓月关系) {
-      if (存档.伙伴.碧瑶关系) {
-        globalThis.伙伴特性伙伴名称 = '碧瑶';
-        director.loadScene('伙伴特性');
-      } else if (存档.伙伴.小兰关系) {
+      if (存档.伙伴.小兰关系) {
         director.loadScene('小兰');
       } else if (存档.伙伴.青芽关系) {
         director.loadScene('青芽');
       } else if (存档.伙伴.小樱关系) {
         director.loadScene('小樱');
-      } 
+      }
+
+      if (存档.伙伴.碧瑶关系) {
+        globalThis.伙伴特性伙伴名称 = '碧瑶';
+        director.loadScene('伙伴特性');
+      }
     }
   }
 

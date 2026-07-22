@@ -22,18 +22,6 @@ const { ccclass, property } = _decorator;
 
 const 阶层名列表 = ['零', '一', '二', '三', '四'];
 
-function 获取当前阶层天赋说明(说明: string, 等级: number) {
-  const 阶层名 = 阶层名列表[等级];
-  if (!阶层名) return 说明;
-
-  const 阶层前缀 = `${阶层名}阶`;
-  const 匹配说明 = 说明
-    .split('\n')
-    .map((行) => 行.trim())
-    .find((行) => 行.startsWith(阶层前缀));
-
-  return 匹配说明 ? 匹配说明.slice(阶层前缀.length).trim() : 说明;
-}
 
 @ccclass('面板')
 export class 面板 extends Component {
@@ -144,7 +132,7 @@ export class 面板 extends Component {
         if (天赋) {
           const 天赋等级 = 存档.天赋[天赋名];
           const 阶层名 = 阶层名列表[天赋等级] || `${天赋等级}`;
-          const 阶层说明 = 获取当前阶层天赋说明(天赋.说明, 天赋等级);
+          const 阶层说明 = 天赋.说明.split('\n').slice(0, 天赋等级).join('\n')
           创建普通文字(this.内容, `【${天赋名}(${天赋.隐藏 ? '隐藏·' : ''}${天赋.品质})·${阶层名}阶】\n${阶层说明}`, 天赋.颜色);
         }
       }

@@ -20,7 +20,7 @@ import {
   计算最大饥饿,
 } from '../方法函数/属性计算';
 import { 抽取项目, 抽取物品, 自然恢复生命, 对象求和 } from '../方法函数/公共函数';
-import { 播放文本, 放大缩小 } from '../方法函数/动画效果';
+import { 停止播放文本, 播放文本, 放大缩小 } from '../方法函数/动画效果';
 import { 事件 } from './事件';
 import { 战斗 } from './战斗';
 import { 执行钩子 } from '../管理器/钩子管理器';
@@ -32,8 +32,6 @@ import { 保存玩家, 玩家 } from '../管理器/玩家管理器';
 import { 计算得分 } from '../公共方法/最终得分';
 import { 获取榜一大哥请求, 获取随机存档请求 } from '../方法函数/网络请求';
 import { 音频管理器 } from './音频';
-import { 计算天赋等级 } from '../方法函数/等级计算';
-import { 默认成就表 } from '../默认内容/成就表';
 const { ccclass, property } = _decorator;
 
 const 天赋名称映射: Record<string, string> = {
@@ -60,10 +58,6 @@ const 天赋名称映射: Record<string, string> = {
   粗鄙: '粗俗',
   讷言: '语言障碍',
   文盲: '不识字',
-};
-
-const 成就名称映射: Record<string, string> = {
-  '守擂<普通>': '守擂者<普通>',
 };
 
 function 迁移数值字段(
@@ -96,51 +90,8 @@ function 迁移还丹字段(对象: Record<string, number> | undefined) {
   return 已修改;
 }
 
-function 迁移成就列表() {
-  let 已修改 = false;
-  const 成就列表 = 玩家.client_info?.achievements;
-  if (Array.isArray(成就列表)) {
-    const 去重: Record<string, { name: string; description: string; achieve_at: number }> = {};
-    for (const 成就 of 成就列表) {
-      if (!成就 || typeof 成就 !== 'object') continue;
-      const 新名称 = 成就名称映射[成就.name] || 成就.name;
-      const 默认成就 = 默认成就表.find((item) => item.名称 === 新名称);
-      const 新成就 = {
-        ...成就,
-        name: 新名称,
-        description: 默认成就?.描述 ?? 成就.description,
-      };
-      const 已有 = 去重[新名称];
-      if (!已有 || (新成就.achieve_at || 0) < (已有.achieve_at || 0)) {
-        去重[新名称] = 新成就;
-      }
-      if (新名称 !== 成就.name || 新成就.description !== 成就.description) {
-        已修改 = true;
-      }
-    }
-    if (Object.keys(去重).length !== 成就列表.length) {
-      已修改 = true;
-    }
-    玩家.client_info.achievements = Object.values(去重);
-  }
-
-  const serverAchievements = 玩家.server_info?.achievements as Record<string, any>;
-  if (serverAchievements && typeof serverAchievements === 'object' && !Array.isArray(serverAchievements)) {
-    for (const [旧名称, 新名称] of Object.entries(成就名称映射)) {
-      if (!Object.prototype.hasOwnProperty.call(serverAchievements, 旧名称)) continue;
-      if (!Object.prototype.hasOwnProperty.call(serverAchievements, 新名称)) {
-        serverAchievements[新名称] = serverAchievements[旧名称];
-      }
-      delete serverAchievements[旧名称];
-      已修改 = true;
-    }
-  }
-
-  return 已修改;
-}
-
 function 进入游戏字段修复() {
-  if (存档.游戏版本 === '1.0.8') return;
+  if (存档.游戏版本 === '1.0.8' || 存档.游戏版本 === '1.0.9') return;
   if (存档.其他.存档字段已修复) return;
 
   let 已修改 = false;
@@ -159,8 +110,6 @@ function 进入游戏字段修复() {
     设置.保留天赋 = 天赋名称映射[设置.保留天赋];
     已修改 = true;
   }
-
-  已修改 = 迁移成就列表() || 已修改;
 
   存档.其他.存档字段已修复 = 1;
   保存存档();
@@ -183,6 +132,7 @@ export class 主页 extends Component {
 
   按钮冷却中 = false;
   冷却时间 = 0.2;
+  扫荡结果文本: string[] = [];
 
   start() {
     globalThis.页面来源 = '主页';
@@ -323,12 +273,6 @@ export class 主页 extends Component {
   }
 
   回档() {
-    // todo简单修复
-    if(存档.天赋.百折不挠 && 存档.精力 > 计算最大精力() * 10 && !存档.其他.已修复百折不挠){
-      存档.其他.已修复百折不挠 = 1
-      存档.精力 = 计算最大精力()
-    }
-
     this.scheduleOnce(() => {
       if (存档.当前剧情) {
         director.loadScene('剧情');
@@ -655,7 +599,7 @@ export class 主页 extends Component {
     保存存档();
   }
 
-  点击探索() {
+  点击探索(扫荡模式 = false) {
     if (!this.前置条件() || !this.探索条件()) {
       this.更新();
       保存存档();
@@ -663,7 +607,7 @@ export class 主页 extends Component {
     }
     执行钩子('探索前');
     this.基本消耗();
-    this.主要逻辑();
+    const 探索结果 = this.主要逻辑(扫荡模式);
     执行钩子('探索后');
 
     if (存档.当前地点 === '山洞') {
@@ -674,6 +618,18 @@ export class 主页 extends Component {
     }
     this.更新();
     保存存档();
+
+    // 扫荡模式：如果是搜索事件，播放文本后停顿再继续探索
+    if (设置.扫荡开关 && 探索结果.是搜索事件) {
+      this.按钮容器.getChildByName('探索').active = false;
+      停止播放文本(this.标签);
+      this.标签.getComponent(Label).string = this.标签.getComponent(Label).string + '\n' + 探索结果.结果文本;
+      存档.当前文本 = 探索结果.结果文本;
+      // 停顿一下再继续探索
+      this.scheduleOnce(() => {
+        this.点击探索(true);
+      }, 1.2 / 设置.播放速度);
+    }
   }
 
   前置条件() {
@@ -878,7 +834,7 @@ export class 主页 extends Component {
       }
     }
     if (存档.当前地点 === '地下竞技场' && 存档.其他.当日比赛次数 >= 4) {
-      this.播放文本('今日赛事已结束，他们再来探索吧！');
+      this.播放文本('今日赛事已结束，明天再来探索吧！');
       return false;
     }
 
@@ -1046,7 +1002,7 @@ export class 主页 extends Component {
     自然恢复生命();
   }
 
-  主要逻辑() {
+  主要逻辑(扫荡模式 = false): { 是搜索事件: boolean; 结果文本: string } {
     存档.其他.前进探索次数++;
 
     let 前进探索战斗初始权重 = 20;
@@ -1075,11 +1031,20 @@ export class 主页 extends Component {
       const 敌人表 = 当前地区.敌人;
       执行钩子('计算地区敌人表', [敌人表]);
       this.node.getComponent(战斗).进入战斗(抽取项目(敌人表));
+
+      if(扫荡模式){
+        this.按钮容器.getChildByName('探索').active = true;
+      }
+      return { 是搜索事件: false, 结果文本: '' };
     } else if (随机数 < 前进探索战斗权重 + 前进探索事件权重) {
       存档.其他.随机事件次数++;
       const 事件表 = 当前地区.事件;
       执行钩子('计算地区事件表', [事件表]);
       this.node.getComponent(事件).触发事件(抽取项目(事件表));
+      if(扫荡模式){
+        this.按钮容器.getChildByName('探索').active = true;
+      }
+      return { 是搜索事件: false, 结果文本: '' };
     } else {
       存档.其他.捡道具次数++;
 
@@ -1094,7 +1059,12 @@ export class 主页 extends Component {
       结果文本.push(基本抽取 ? `发现：${基本抽取}` : '什么也没发现！');
 
       执行钩子('收集材料', [{ 物品表, 结果文本 }]);
-      this.播放文本(结果文本.join('\n'));
+      const 最终文本 = 结果文本.join('\n');
+      // 非扫荡模式立即播放文本，扫荡模式不播放（累积后一起显示）
+      if (!扫荡模式) {
+        this.播放文本(最终文本);
+      }
+      return { 是搜索事件: true, 结果文本: 最终文本 };
     }
   }
 
@@ -1138,6 +1108,12 @@ export class 主页 extends Component {
     this.按钮容器.getChildByName('挑战').active = 存档.按钮.挑战 > 0;
     this.按钮容器.getChildByName('睡觉').active = 存档.按钮.睡觉 > 0;
     this.按钮容器.getChildByName('探索').active = 存档.按钮.探索 > 0;
+
+    if(设置.扫荡开关){
+      this.按钮容器.getChildByName('探索').getChildByName('标签').getComponent(Label).string = "扫  荡"
+    } else {
+      this.按钮容器.getChildByName('探索').getChildByName('标签').getComponent(Label).string = "探  索"
+    }
     this.按钮容器.getChildByName('前进').active = 存档.按钮.前进 > 0;
 
     this.按钮容器.getChildByName('伙伴').active = 存档.按钮.伙伴 > 0;

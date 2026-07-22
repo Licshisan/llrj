@@ -46,15 +46,13 @@ export class 分数 extends Component {
       this.结算藏品();
       const 新完成成就 = this.结算成就();
 
-
       // 结档奖励
-      const 接档天赋点奖励 = this.结算天赋点奖励(得分.最终得分);
-      if (接档天赋点奖励 > 0) {
+      const 结档天赋点奖励 = this.结算天赋点奖励(得分.最终得分);
+      if (结档天赋点奖励 > 0) {
         texts.push(
-          `根据【${存档.游戏难度}】难度和最终得分，获得额外天赋点+${接档天赋点奖励}。当前额外天赋点：${玩家.client_info.extra_talent_points}`,
+          `根据【${存档.游戏难度}】难度和最终得分，获得额外天赋点+${结档天赋点奖励}。当前额外天赋点：${玩家.client_info.extra_talent_points}`,
         );
       }
-
 
       let 先驱者成就: 成就项目类型[] = [];
       try {
@@ -67,7 +65,6 @@ export class 分数 extends Component {
       const 完成成就 = [...新完成成就, ...先驱者成就];
 
       保存玩家();
-      删除存档(存档.存档名称);
 
       if (完成成就.length > 0) {
         完成成就.forEach((成就) => {
@@ -95,7 +92,7 @@ export class 分数 extends Component {
     序列.call(() => 淡入(this.选项容器)).delay(1);
     序列.start();
     淡入(this.输入框);
-
+    删除存档(存档.存档名称);
     // 点击结束
     this.选项容器.getChildByName('选择按钮2').on(
       Button.EventType.CLICK,

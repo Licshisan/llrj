@@ -79,6 +79,16 @@ export class 设置 extends Component {
       },
       this,
     );
+    this.按钮容器.getChildByName('扫荡').on(
+      Button.EventType.CLICK,
+      () => {
+        设置管理器.设置.扫荡开关 = !设置管理器.设置.扫荡开关;
+        设置管理器.保存设置();
+        播放文本(this.标签, `已${设置管理器.设置.扫荡开关 ? '开启' : '关闭'}扫荡`);
+      },
+      this,
+    );
+
 
     this.确认按钮.on(Button.EventType.CLICK, this.点击确认, this);
     // this.按钮容器.getChildByName("公告").on(Button.EventType.CLICK, () => director.loadScene("公告"), this);

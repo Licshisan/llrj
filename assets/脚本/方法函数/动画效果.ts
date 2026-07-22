@@ -51,6 +51,13 @@ export function 播放文本(目标节点: Node, 文本内容: string, 间隔时
   );
 }
 
+export function 停止播放文本(目标节点: Node): void {
+  if (!目标节点) return;
+  const 标签组件 = 目标节点.getComponent(Label);
+  if (!标签组件) return;
+  标签组件.unscheduleAllCallbacks();
+}
+
 // 淡入效果
 export function 淡入(目标节点: Node, 持续时长 = 2.4): void {
   if (!目标节点) return;
