@@ -20,7 +20,7 @@ import {
   计算最大饥饿,
 } from '../方法函数/属性计算';
 import { 抽取项目, 抽取物品, 自然恢复生命, 对象求和 } from '../方法函数/公共函数';
-import { 停止播放文本, 播放文本, 放大缩小 } from '../方法函数/动画效果';
+import { 停止播放文本, 播放文本, 放大出现, 放大缩小, 缩小消失 } from '../方法函数/动画效果';
 import { 事件 } from './事件';
 import { 战斗 } from './战斗';
 import { 执行钩子 } from '../管理器/钩子管理器';
@@ -621,7 +621,7 @@ export class 主页 extends Component {
 
     // 扫荡模式：如果是搜索事件，播放文本后停顿再继续探索
     if (设置.扫荡开关 && 探索结果.是搜索事件) {
-      this.按钮容器.getChildByName('探索').active = false;
+      缩小消失(this.按钮容器)
       停止播放文本(this.标签);
       this.标签.getComponent(Label).string = this.标签.getComponent(Label).string + '\n' + 探索结果.结果文本;
       存档.当前文本 = 探索结果.结果文本;
@@ -1032,18 +1032,13 @@ export class 主页 extends Component {
       执行钩子('计算地区敌人表', [敌人表]);
       this.node.getComponent(战斗).进入战斗(抽取项目(敌人表));
 
-      if(扫荡模式){
-        this.按钮容器.getChildByName('探索').active = true;
-      }
       return { 是搜索事件: false, 结果文本: '' };
     } else if (随机数 < 前进探索战斗权重 + 前进探索事件权重) {
       存档.其他.随机事件次数++;
       const 事件表 = 当前地区.事件;
       执行钩子('计算地区事件表', [事件表]);
       this.node.getComponent(事件).触发事件(抽取项目(事件表));
-      if(扫荡模式){
-        this.按钮容器.getChildByName('探索').active = true;
-      }
+
       return { 是搜索事件: false, 结果文本: '' };
     } else {
       存档.其他.捡道具次数++;
