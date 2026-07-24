@@ -975,12 +975,16 @@ export class 主页 extends Component {
       return
     }
 
-    if((a === '县城' || 存档.当前地点 === '城中村') && Math.random() * 100 < 1) {
+    if(a === '县城' && Math.random() * 100 < 0.1) {
       this.基本消耗();
       this.node.getComponent(事件).触发事件('旧书店');
       return
     }
-
+    if(存档.当前地点 === '城中村' && Math.random() * 100 < 1) {
+      this.基本消耗();
+      this.node.getComponent(事件).触发事件('旧书店');
+      return
+    }
     return true;
   }
 
