@@ -600,6 +600,9 @@ export class 主页 extends Component {
   }
 
   点击探索(扫荡模式 = false) {
+    if(扫荡模式){
+      放大出现(this.按钮容器)
+    }
     if (!this.前置条件() || !this.探索条件()) {
       this.更新();
       保存存档();
@@ -773,24 +776,6 @@ export class 主页 extends Component {
         return false;
       }
     }
-
-    // 命运典当行
-    // if (
-    //   存档.当前地点 === '市中心' &&
-    //   存档.停留天数.省城 >= 7 &&
-    //   !存档.其他.完成命运典当行
-    // ) {
-    //   const 有可典当天赋 = 默认天赋表.some((i) => {
-    //     const 等级 = 计算天赋等级(i.名称, i.隐藏 ? 0 : 1);
-    //     return !i.负面 && 等级 > 0 && !存档.天赋[i.名称];
-    //   });
-    //   const 触发概率 = 存档.其他.拒绝命运典当行次数 ? 3 : 100;
-    //   if (有可典当天赋 && Math.random() * 100 < 触发概率) {
-    //     this.基本消耗();
-    //     this.node.getComponent(事件).触发事件('命运典当行');
-    //     return false;
-    //   }
-    // }
     
     // 比武大会
     if (
@@ -983,12 +968,19 @@ export class 主页 extends Component {
     }
 
     // 神秘商人
-    if(获取地区名称() !== '荒野' && Math.random() * 100 < 1 && 存档.其他.当天神秘商人次数 < 3) {
-      存档.其他.当天神秘商人次数 ++
+    const a = 获取地区名称()
+    if((a === '县城' || a === '山脉' || a === '山林' || 存档.当前地点 === '城中村')  && Math.random() * 100 < 1) {
       this.基本消耗();
       this.node.getComponent(事件).触发事件('神秘商人');
       return
     }
+
+    if((a === '县城' || 存档.当前地点 === '城中村') && Math.random() * 100 < 1) {
+      this.基本消耗();
+      this.node.getComponent(事件).触发事件('旧书店');
+      return
+    }
+
     return true;
   }
 
