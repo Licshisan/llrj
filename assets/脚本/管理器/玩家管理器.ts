@@ -32,7 +32,7 @@ export const 默认玩家 = {
   pioneers: [] as PioneerInfo[],
   leaderboard: { list: [], self: 0 } as LeaderboardResult,
   collection_leaderboard: { list: [], self: 0 } as LeaderboardResult,
-  version: '1.0.9',
+  version: '1.0.10',
 };
 
 export let 玩家: typeof 默认玩家 = JSON.parse(JSON.stringify(默认玩家));

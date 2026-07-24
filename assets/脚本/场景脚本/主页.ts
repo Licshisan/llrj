@@ -91,7 +91,7 @@ function 迁移还丹字段(对象: Record<string, number> | undefined) {
 }
 
 function 进入游戏字段修复() {
-  if (存档.游戏版本 === '1.0.8' || 存档.游戏版本 === '1.0.9') return;
+  if (存档.游戏版本 === '1.0.8' || 存档.游戏版本 === '1.0.9' || 存档.游戏版本 === '1.0.10') return;
   if (存档.其他.存档字段已修复) return;
 
   let 已修改 = false;
