@@ -99,7 +99,7 @@ export function 升级天赋(天赋名称?: string): { 成功: boolean; 消息: 
 export function 使用果实(果实名称: string): { 成功: boolean; 消息: string; 天赋?: typeof 默认天赋表[0] } {
   const 果实品质映射: Record<string, string> = {
     混沌果实: '',
-    青纹果实: '普通',
+    白纹果实: '普通',
     蓝焰果实: '稀有',
     紫霞果实: '史诗',
     金麟果实: '传说',

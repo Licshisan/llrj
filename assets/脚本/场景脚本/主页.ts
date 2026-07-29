@@ -1094,6 +1094,10 @@ export class 主页 extends Component {
 
     this.状态栏.getChildByName('状态').getComponent(Label).string = this.计算状态文本();
     this.状态栏.getChildByName('进度').getComponent(Label).string = this.计算进度文本();
+    this.状态栏.getChildByName('难度').getComponent(Label).string = `【${存档.游戏难度}】`
+    if(存档.游戏难度 === '普通'){
+      this.状态栏.getChildByName('难度').active = false
+    }
 
     this.按钮容器.getChildByName('商店').active = 存档.按钮.商店 > 0;
     this.按钮容器.getChildByName('挑战').active = 存档.按钮.挑战 > 0;
