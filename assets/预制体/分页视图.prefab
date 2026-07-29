@@ -43,7 +43,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 0,
+      "y": -20,
       "z": 0
     },
     "_lrot": {
@@ -159,7 +159,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -310,
+      "x": -315,
       "y": 0,
       "z": 0
     },
@@ -212,7 +212,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 310,
+      "x": 315,
       "y": 0,
       "z": 0
     },
@@ -253,8 +253,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 620,
-      "height": 1010
+      "width": 600,
+      "height": 1000
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -389,7 +389,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 930,
+      "x": 945,
       "y": 0,
       "z": 0
     },
@@ -430,8 +430,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 620,
-      "height": 1010
+      "width": 600,
+      "height": 1000
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -554,8 +554,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 1240,
-      "height": 1010
+      "width": 1260,
+      "height": 1000
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -588,11 +588,11 @@
       "height": 40
     },
     "_startAxis": 0,
-    "_paddingLeft": 0,
-    "_paddingRight": 0,
+    "_paddingLeft": 15,
+    "_paddingRight": 15,
     "_paddingTop": 0,
     "_paddingBottom": 0,
-    "_spacingX": 0,
+    "_spacingX": 30,
     "_spacingY": 0,
     "_verticalDirection": 1,
     "_horizontalDirection": 0,
@@ -669,8 +669,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 620,
-      "height": 1010
+      "width": 630,
+      "height": 1000
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -791,7 +791,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -485,
+      "y": -475,
       "z": 0
     },
     "_lrot": {
@@ -891,7 +891,7 @@
     "_left": 0,
     "_right": 0,
     "_top": 0,
-    "_bottom": -10,
+    "_bottom": -5,
     "_horizontalCenter": 0,
     "_verticalCenter": 0,
     "_isAbsLeft": true,
@@ -937,8 +937,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 600,
-      "height": 1010
+      "width": 630,
+      "height": 1000
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",

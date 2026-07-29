@@ -70,7 +70,7 @@ export class 制作 extends Component {
     } else {
       单页 = new Node(`页_${页码 + 1}`);
       const 页面视图大小 = this.分页视图.getComponent(UITransform);
-      单页.addComponent(UITransform).setContentSize(页面视图大小.width, 页面视图大小.height);
+      单页.addComponent(UITransform).setContentSize(600, 页面视图大小.height);
 
       const 布局 = 单页.addComponent(Layout);
       布局.type = Layout.Type.VERTICAL;
