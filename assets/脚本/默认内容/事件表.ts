@@ -1105,7 +1105,7 @@ const 山脉事件 = [
         res += `命理师疏导气血，精力+${恢复精力}！`
       }
 
-      if(Math.random() * 100 < 8) {
+      if(Math.random() * 100 < 10) {
         if(!玩家.client_info?.extra_talent_points){
           玩家.client_info.extra_talent_points = 0
         }
