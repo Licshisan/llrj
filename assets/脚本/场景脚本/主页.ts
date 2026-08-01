@@ -136,6 +136,7 @@ export class 主页 extends Component {
 
   start() {
     globalThis.页面来源 = '主页';
+
     音频管理器.instance.stopBGM();
     进入游戏字段修复();
 
@@ -1006,6 +1007,19 @@ export class 主页 extends Component {
       this.node.getComponent(事件).触发事件('旧书店');
       return
     }
+
+    // 山洞深渊回响
+    if (
+      存档.当前地点 === '山洞' &&
+      存档.击败次数['？？？？'] >= 30 &&
+      !存档.其他.完成深渊回响
+    ) {
+      this.基本消耗();
+      存档.当前剧情 = '深渊低语';
+      director.loadScene('剧情');
+      return false;
+    }
+
     return true;
   }
 
