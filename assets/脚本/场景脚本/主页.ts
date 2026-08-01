@@ -481,14 +481,24 @@ export class 主页 extends Component {
     }
 
     if (设置.暗夜模式) {
-      const 标签 = this.node.getComponentsInChildren(Label);
-      标签.forEach((label) => {
+      this.node.getChildByPath("战斗/血量条/条").getComponent(Sprite).color = new Color(220, 220, 220);
+      this.背景.getComponent(Sprite).color = new Color(20, 20, 20);
+
+      // 文字颜色
+      this.node.getComponentsInChildren(Label).forEach((label) => {
         if (label.color.equals(Color.BLACK)) {
           label.color = new Color(220, 220, 220);
         }
       });
-      this.node.getChildByPath("战斗/血量条/条").getComponent(Sprite).color = new Color(220, 220, 220);
-      this.背景.getComponent(Sprite).color = new Color(20, 20, 20);
+
+      // 按钮
+      this.node.getComponentsInChildren(Button).forEach((button) => {
+        const sprite = button.node.getComponent(Sprite);
+        if(sprite.color.equals(Color.WHITE)){
+          sprite.color = new Color(50, 50, 50);
+          button.normalColor = new Color(50, 50, 50);
+        }
+      });
     }
   }
 

@@ -11,7 +11,7 @@
     "6c48a": {
       "importer": "texture",
       "uuid": "9ed670e3-1eba-4910-8e44-bd58b43460fd@6c48a",
-      "displayName": "重制版",
+      "displayName": "remake",
       "id": "6c48a",
       "name": "texture",
       "userData": {
@@ -35,7 +35,7 @@
     "f9941": {
       "importer": "sprite-frame",
       "uuid": "9ed670e3-1eba-4910-8e44-bd58b43460fd@f9941",
-      "displayName": "重制版",
+      "displayName": "remake",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
