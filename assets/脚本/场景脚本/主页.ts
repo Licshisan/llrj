@@ -19,7 +19,7 @@ import {
   计算最大防御,
   计算最大饥饿,
 } from '../方法函数/属性计算';
-import { 抽取项目, 抽取物品, 自然恢复生命, 对象求和 } from '../方法函数/公共函数';
+import { 抽取项目, 抽取物品, 自然恢复生命, 对象求和, 获取今日节日 } from '../方法函数/公共函数';
 import { 停止播放文本, 播放文本, 放大出现, 放大缩小, 缩小消失 } from '../方法函数/动画效果';
 import { 事件 } from './事件';
 import { 战斗 } from './战斗';
@@ -653,6 +653,17 @@ export class 主页 extends Component {
     if (存档.健康 <= 0) {
       this.游戏结束();
       return false;
+    }
+
+    // 节日事件（每年每个节日仅触发一次，10%概率触发）
+    const 今日节日 = 获取今日节日();
+    if (今日节日) {
+      const 节日键 = `节日${new Date().getFullYear()}${今日节日}`;
+      if (存档.其他[节日键] <= 2 && Math.random() * 100 < 5 && 存档.当前地点 === '城中村') {
+        存档.其他[节日键] = 1;
+        this.node.getComponent(事件).触发事件(今日节日);
+        return false;
+      }
     }
 
     // 领取补偿
