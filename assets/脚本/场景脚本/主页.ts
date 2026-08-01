@@ -840,7 +840,7 @@ export class 主页 extends Component {
         this.node.getComponent(事件).触发事件('选择江湖支线');
         return false;
       }
-      if (存档.其他.开启江湖支线 && !存档.其他.拒绝开启江湖支线) {
+      if (存档.其他.开启江湖支线 && !存档.其他.拒绝开启江湖支线 && !存档.剧情.完成县城江湖线) {
         const randPickWeight = list => {
           let sum = list.reduce((s, i) => s + i.w, 0);
           let r = Math.random() * sum;
