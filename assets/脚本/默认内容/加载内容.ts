@@ -24,6 +24,7 @@ import {
   获取排行榜请求,
   确认领取补偿请求,
 } from '../方法函数/网络请求';
+import { 新建外部存档 } from '../管理器/存档管理器';
 
 let 加载完成 = false;
 
@@ -179,6 +180,22 @@ async function 领取玩家名称() {
   }
 }
 
+async function 领取玩家存档() {
+  const player = 玩家管理器.玩家;
+  const serverInfo = player?.server_info as any;
+  const 玩家存档 = serverInfo?.save
+  if (!玩家存档) return;
+
+  try {
+    await 确认领取补偿请求('save');
+    新建外部存档(玩家存档)
+    serverInfo.save = '';
+  } catch (e) {
+    throw new Error(`领取玩家名称失败: ${(e as Error).message}`);
+  }
+}
+
+
 function compareVersion(v1: string, v2: string): number {
   const arr1 = v1.split('.').map(Number);
   const arr2 = v2.split('.').map(Number);
@@ -274,6 +291,7 @@ export async function 加载游戏内容() {
     await 领取藏品奖励();
     await 领取成就奖励();
     await 领取玩家名称();
+    await 领取玩家存档();
     await 版本校验();
     玩家管理器.保存玩家();
   } catch (e) {

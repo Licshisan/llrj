@@ -25,6 +25,7 @@ export const 默认玩家 = {
     collections: {},
     achievements: {},
     version: '',
+    save: '',
   },
   created_at: '',
 
