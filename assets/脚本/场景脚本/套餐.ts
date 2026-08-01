@@ -116,7 +116,9 @@ export class 套餐 extends Component {
               // 注入藏品
               const 已收集藏品 = 玩家.client_info.collections || {};
               for (const 藏品名 in 已收集藏品) {
-                存档.藏品[藏品名] = 计算数值('藏品生效数量', 已收集藏品[藏品名] || 0);
+                const 最大限额 = 计算数值('藏品携带上限', 3);
+                const 数量 = Math.min(已收集藏品[藏品名], 最大限额);
+                存档.藏品[藏品名] = 数量
               }
               // 计算并写入技能等级
               for (const 技能 of 默认技能表) {
