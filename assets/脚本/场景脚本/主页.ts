@@ -136,7 +136,6 @@ export class 主页 extends Component {
 
   start() {
     globalThis.页面来源 = '主页';
-
     音频管理器.instance.stopBGM();
     进入游戏字段修复();
 
@@ -278,6 +277,7 @@ export class 主页 extends Component {
       if (存档.当前剧情) {
         director.loadScene('剧情');
       } else if (存档.当前敌人) {
+        存档.当前事件 = ''
         this.node.getComponent(战斗).进入战斗(存档.当前敌人);
       } else if (存档.当前事件) {
         this.node.getComponent(事件).触发事件(存档.当前事件);
@@ -874,14 +874,14 @@ export class 主页 extends Component {
           totalRate += w;
         }
 
-        if (pool.length && Math.random() * 100 < totalRate) {
+        if (pool.length && Math.random() * 100 < totalRate * 0.8) {
           this.基本消耗();
           this.node.getComponent(战斗).进入战斗(randPickWeight(pool));
           return false;
         }
 
         // 江湖商贩
-        if (Math.random() * 100 < 5) {
+        if (Math.random() * 100 < 4) {
           this.基本消耗();
           this.node.getComponent(事件).触发事件('江湖商贩');
           return false;
@@ -897,7 +897,7 @@ export class 主页 extends Component {
           (meet.push('路过铁衣门派'), (meet_rate += 1.5 + 存档.其他.铁衣功等级 / 10));
         存档.其他.玄水诀等级 > 0 &&
           (meet.push('路过玄水门派'), (meet_rate += 1.5 + 存档.其他.玄水诀等级 / 10));
-        if (meet.length && Math.random() * 100 < meet_rate) {
+        if (meet.length && Math.random() * 100 < meet_rate * 0.8) {
           this.基本消耗();
           this.node.getComponent(事件).触发事件(randPick(meet));
           return false;
@@ -909,7 +909,7 @@ export class 主页 extends Component {
         存档.击败次数.青竹门精英 > 0 && (elite.push('青竹门精英'), (elite_rate += 3));
         存档.击败次数.铁衣帮精英 > 0 && (elite.push('铁衣帮精英'), (elite_rate += 3));
         存档.击败次数.玄水阁精英 > 0 && (elite.push('玄水阁精英'), (elite_rate += 3));
-        if (elite.length && Math.random() * 100 < elite_rate) {
+        if (elite.length && Math.random() * 100 < elite_rate * 0.8) {
           this.基本消耗();
           this.node.getComponent(战斗).进入战斗(randPick(elite));
           return false;
@@ -921,7 +921,7 @@ export class 主页 extends Component {
         存档.其他.青竹门声望 >= 100 && (elder.push('路过江湖青竹长老'), (elder_rate += 4));
         存档.其他.铁衣帮声望 >= 100 && (elder.push('路过江湖铁衣长老'), (elder_rate += 4));
         存档.其他.玄水阁声望 >= 100 && (elder.push('路过江湖玄水长老'), (elder_rate += 4));
-        if (elder.length && Math.random() * 100 < elder_rate) {
+        if (elder.length && Math.random() * 100 < elder_rate * 0.8) {
           this.基本消耗();
           this.node.getComponent(事件).触发事件(randPick(elder));
           return false;
@@ -939,7 +939,7 @@ export class 主页 extends Component {
         存档.其他.玄水阁声望 >= 100 &&
           存档.物品.玄水信物 &&
           (master.push('路过江湖玄水掌门'), (master_rate += 4));
-        if (master.length && Math.random() * 100 < master_rate) {
+        if (master.length && Math.random() * 100 < master_rate * 0.8) {
           this.基本消耗();
           this.node.getComponent(事件).触发事件(randPick(master));
           return false;

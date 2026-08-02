@@ -16,7 +16,6 @@ export class 音频管理器 extends Component {
   playByName(path: string, vol = 0.3) {
     if (!设置.音效开关) return;
     resources.load('audio/' + path, AudioClip, (err, clip) => {
-      console.log(err);
       if (err) return;
       this.audioSource.playOneShot(clip, vol);
     });
