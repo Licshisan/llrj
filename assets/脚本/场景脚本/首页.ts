@@ -1,6 +1,6 @@
 import { _decorator, Button, Component, director, Label, Node } from 'cc';
 import { 加载游戏内容 } from '../默认内容/加载内容';
-import { 设置 } from '../管理器/设置管理器';
+import { 保存设置, 设置 } from '../管理器/设置管理器';
 const { ccclass, property } = _decorator;
 
 @ccclass('首页')
@@ -10,6 +10,11 @@ export class 首页 extends Component {
 
   start() {
     globalThis.页面来源 = '首页';
+
+    if(设置.播放速度 == 5){
+      设置.播放速度 = 6
+      保存设置()
+    }
 
     this.按钮容器
       .getChildByName('开始')
