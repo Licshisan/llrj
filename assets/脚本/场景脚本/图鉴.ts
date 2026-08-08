@@ -22,6 +22,9 @@ export class 图鉴 extends Component {
   分类列表 = ['天赋', '特质', '技能', '藏品'];
   天赋摘要节点: Node | null = null;
   天赋条目节点表: Record<string, Node> = {};
+  天赋渲染版本 = 0;
+  待渲染天赋列表: any[] = [];
+  待渲染天赋索引 = 0;
 
   start() {
     this.返回按钮.on(
@@ -73,6 +76,9 @@ export class 图鉴 extends Component {
   }
 
   刷新内容列表() {
+    this.天赋渲染版本++;
+    this.待渲染天赋列表 = [];
+    this.待渲染天赋索引 = 0;
     this.清空天赋缓存();
     switch (this.当前分类) {
       case '天赋':
@@ -207,16 +213,38 @@ ${难度消耗文本}
     创建普通文字(this.内容, `<点击清空已选择的天赋>\n`, Color.GRAY, () => {
       设置.锁定天赋 = [];
       保存设置();
-      this.渲染天赋列表();
+      this.刷新内容列表();
     });
 
-    默认天赋表.forEach((天赋) => {
+    this.待渲染天赋列表 = 默认天赋表.filter((天赋) => {
       const 等级 = 计算天赋等级(天赋.名称, 天赋.隐藏 ? 0 : 1);
-      if (!天赋.隐藏 || 等级 > 0) {
-        this.创建天赋条目节点(天赋);
-      }
+      return !天赋.隐藏 || 等级 > 0;
     });
+    this.待渲染天赋索引 = 0;
+    this.分批渲染天赋条目(this.天赋渲染版本);
+  }
 
+  分批渲染天赋条目(渲染版本: number) {
+    if (渲染版本 !== this.天赋渲染版本 || this.当前分类 !== '天赋') return;
+
+    const 每批数量 = 8;
+    const 批次结束索引 = Math.min(
+      this.待渲染天赋索引 + 每批数量,
+      this.待渲染天赋列表.length,
+    );
+    for (; this.待渲染天赋索引 < 批次结束索引; this.待渲染天赋索引++) {
+      this.创建天赋条目节点(this.待渲染天赋列表[this.待渲染天赋索引]);
+    }
+
+    if (this.待渲染天赋索引 < this.待渲染天赋列表.length) {
+      this.scheduleOnce(() => this.分批渲染天赋条目(渲染版本), 0);
+      return;
+    }
+
+    this.渲染天赋规则说明();
+  }
+
+  渲染天赋规则说明() {
     创建普通文字(
       this.内容,
       `======规则说明======
