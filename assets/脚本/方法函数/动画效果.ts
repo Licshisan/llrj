@@ -363,4 +363,6 @@ export function 创建普通文字(
   if (!是否使用富文本) {
     文字节点.getComponent(Label).updateRenderData(true);
   }
+
+  return 文字节点;
 }
