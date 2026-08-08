@@ -554,6 +554,11 @@ export class 主页 extends Component {
   }
 
   点击挑战() {
+    const 开始挑战 = (敌人名称: string) => {
+      存档.精力 -= 10;
+      this.node.getComponent(战斗).进入战斗(敌人名称);
+    }
+
     if (存档.精力 < 10) {
       this.播放文本('挑战需10点精力！');
       return;
@@ -587,8 +592,18 @@ export class 主页 extends Component {
       this.播放文本('你已经天下无敌了...');
       return;
     }
-    存档.精力 -= 10;
-    this.node.getComponent(战斗).进入战斗(敌人名称);
+
+    if (敌人名称 === '镜像人') {
+      this.node.getComponent(事件).触发事件('挑战镜像人确认');
+      return;
+    }
+
+    if (敌人名称 === '榜一大哥') {
+      this.node.getComponent(事件).触发事件('挑战榜一大哥确认');
+      return;
+    }
+
+    开始挑战(敌人名称);
   }
 
   点击前进() {
