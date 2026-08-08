@@ -271,7 +271,11 @@ export class 桥洞 extends Component {
       .on(
         Button.EventType.CLICK,
         () => {
-          if (存档.精力 < 50) {
+          if (存档.停留天数.省城 < 12) {
+            播放文本(this.标签, '暂未满足开启条件！加油吧~');
+            return;
+          }
+          if (存档.精力 < 10) {
             播放文本(this.标签, '精力不足！');
             return;
           }
