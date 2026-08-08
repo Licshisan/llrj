@@ -18,7 +18,7 @@ import { 自动进食 } from '../方法函数/公共函数';
 import { 执行钩子 } from '../管理器/钩子管理器';
 import { 获取地区名称 } from '../默认内容/地区表';
 import { 默认剧情表 } from '../默认内容/剧情表';
-import { 获取随机存档请求, 上传存档请求 } from '../方法函数/网络请求';
+import { 上传存档请求 } from '../方法函数/网络请求';
 const { ccclass, property } = _decorator;
 
 @ccclass('睡觉')
