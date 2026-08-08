@@ -24,6 +24,10 @@ export class 分数 extends Component {
     this.选项容器.active = false;
     this.输入框.active = false;
 
+    if(存档.剧情.通关){
+      玩家.client_info.pass_count += 1
+    }
+
     // 得分
     const 得分 = 计算得分();
     const texts = [
