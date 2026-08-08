@@ -167,20 +167,13 @@ const 稀有藏品: 藏品定义类型[] = [
         }
       },
       收集材料: ({ 结果文本 }) => {
-        const lastClaimTime = localStorage.getItem('lastRewardClaimTime');
-        const now = new Date();
-        const nowYear = now.getFullYear();
-        const nowMonth = now.getMonth();
-        const 可以领取 =
-          !lastClaimTime ||
-          (() => {
-            const lastDate = new Date(lastClaimTime);
-            return nowYear !== lastDate.getFullYear() || nowMonth !== lastDate.getMonth();
-          })();
+        const 当前游戏月 = Math.floor((存档.天数 - 1) / 30) + 1;
+        const 上次领取游戏月 = 存档.其他.流浪者足迹领取游戏月 || 0;
+        const 可以领取 = 当前游戏月 > 上次领取游戏月;
 
         if (可以领取) {
           存档.新藏品['流浪者足迹'] = (存档.新藏品['流浪者足迹'] || 0) + 1;
-          localStorage.setItem('lastRewardClaimTime', now.toISOString());
+          存档.其他.流浪者足迹领取游戏月 = 当前游戏月;
           结果文本.push('系统提示，成功领取本月藏品【流浪者足迹】*1！');
         }
       },
