@@ -28,28 +28,28 @@ function 执行敌人技能视角(敌人存档: any, 对局: 对局类型, 钩�
   });
 }
 
-function 解析数据(敌人存档数据: any, 敌人玩家数据: any) {
+function 解析数据(敌人存档数据: any, 敌人玩家数据: any, 敌人名称: string) {
   // 解析存档
   if (!敌人存档数据 || typeof 敌人存档数据 !== 'object') {
-    throw new Error(`PVP加载失败！【时空流浪者】敌人存档不存在`);
+    throw new Error(`PVP加载失败！【${敌人名称}】敌人存档不存在`);
   }
   let 深拷贝数据;
   try {
     深拷贝数据 = JSON.parse(JSON.stringify(敌人存档数据));
   } catch (e) {
-    throw new Error(`PVP加载失败！【时空流浪者】敌人存档解析失败`);
+    throw new Error(`PVP加载失败！【${敌人名称}】敌人存档解析失败`);
   }
   const 敌人存档: typeof 存档 = 创建默认值代理(深拷贝数据);
 
   // 解析玩家
   if (!敌人玩家数据 || typeof 敌人玩家数据 !== 'object') {
-    throw new Error(`PVP加载失败！【时空流浪者】敌人玩家不存在`);
+    throw new Error(`PVP加载失败！【${敌人名称}】敌人玩家不存在`);
   }
   let 敌人信息: typeof 玩家;
   try {
     敌人信息 = JSON.parse(JSON.stringify(敌人玩家数据));
   } catch (e) {
-    throw new Error(`PVP加载失败！【时空流浪者】敌人玩家解析失败`);
+    throw new Error(`PVP加载失败！【${敌人名称}】敌人玩家解析失败`);
   }
 
   return { 敌人存档, 敌人信息 };
@@ -59,6 +59,7 @@ export function 创建时空流浪者() {
   const { 敌人存档, 敌人信息 } = 解析数据(
     存档.临时数据?.时空流浪者?.save,
     存档.临时数据?.时空流浪者?.player,
+    '时空流浪者',
   );
   const 敌人最大生命 = 执行存档上下文(敌人存档, () => 计算最大生命());
   const 敌人最大攻击 = 执行存档上下文(敌人存档, () => 计算最大攻击());
@@ -145,7 +146,7 @@ export function 创建时空流浪者() {
 }
 
 export function 创建镜像人() {
-  const { 敌人存档, 敌人信息 } = 解析数据(存档, 玩家);
+  const { 敌人存档, 敌人信息 } = 解析数据(存档, 玩家, '镜像人');
 
   const 敌人最大生命 = 执行存档上下文(敌人存档, () => 计算最大生命());
   const 敌人最大攻击 = 执行存档上下文(敌人存档, () => 计算最大攻击());
@@ -225,6 +226,7 @@ export function 创建榜一大哥() {
   const { 敌人存档, 敌人信息 } = 解析数据(
     存档.临时数据?.榜一大哥?.save,
     存档.临时数据?.榜一大哥?.player,
+    '榜一大哥',
   );
 
   const 敌人最大生命 = 执行存档上下文(敌人存档, () => 计算最大生命());

@@ -119,6 +119,17 @@ function 进入游戏字段修复() {
   }
 }
 
+function PVP存档有效(数据: any) {
+  return !!数据 && typeof 数据 === 'object' && !!数据.save && typeof 数据.save === 'object' && !!数据.player && typeof 数据.player === 'object';
+}
+
+function 清理PVP临时数据(数据: any, 敌人名称: '榜一大哥' | '时空流浪者') {
+  if (数据?.save?.临时数据 && typeof 数据.save.临时数据 === 'object') {
+    数据.save.临时数据[敌人名称] = 0;
+  }
+  return 数据;
+}
+
 @ccclass('主页')
 export class 主页 extends Component {
   @property(Node) 顶部状态栏: Node = null;
@@ -504,22 +515,33 @@ export class 主页 extends Component {
   }
 
   async 加载PVP() {
-    if (!存档.临时数据.榜一大哥 && 存档.其他.挑战进度 >= 16) {
-      const 榜一大哥 = await 获取榜一大哥请求();
-      if(榜一大哥?.save?.临时数据?.榜一大哥){
-        榜一大哥.save.临时数据.榜一大哥 = 0
-      }
-      存档.临时数据.榜一大哥 = 榜一大哥 || 0;
+    if (存档.其他.挑战进度 >= 16 && !PVP存档有效(存档.临时数据.榜一大哥)) {
+      await this.确保PVP敌人('榜一大哥');
     }
 
-    if (!存档.临时数据.时空流浪者) {
-      const 时空流浪者 = await 获取随机存档请求(存档.天数 + 1);
-      if(时空流浪者?.save?.临时数据?.时空流浪者){
-        时空流浪者.save.临时数据.时空流浪者 = 0
-      }
-      存档.临时数据.时空流浪者 = 时空流浪者 || 0;
+    if (!PVP存档有效(存档.临时数据.时空流浪者)) {
+      await this.确保PVP敌人('时空流浪者');
     }
     保存存档();
+  }
+
+  async 确保PVP敌人(敌人名称: '榜一大哥' | '时空流浪者') {
+    if (PVP存档有效(存档.临时数据[敌人名称])) {
+      return true;
+    }
+
+    存档.临时数据[敌人名称] = null;
+    const 数据 =
+      敌人名称 === '榜一大哥' ? await 获取榜一大哥请求() : await 获取随机存档请求(存档.天数 + 1);
+
+    if (!PVP存档有效(数据)) {
+      保存存档();
+      return PVP存档有效(存档.临时数据[敌人名称]);
+    }
+
+    存档.临时数据[敌人名称] = 清理PVP临时数据(数据, 敌人名称);
+    保存存档();
+    return true;
   }
 
   点击睡觉() {
@@ -553,7 +575,7 @@ export class 主页 extends Component {
     }
   }
 
-  点击挑战() {
+  async 点击挑战() {
     const 开始挑战 = (敌人名称: string) => {
       存档.精力 -= 10;
       this.node.getComponent(战斗).进入战斗(敌人名称);
@@ -599,6 +621,10 @@ export class 主页 extends Component {
     }
 
     if (敌人名称 === '榜一大哥') {
+      if (!(await this.确保PVP敌人('榜一大哥'))) {
+        this.播放文本('榜一大哥数据加载失败，请稍后再试。');
+        return;
+      }
       this.node.getComponent(事件).触发事件('挑战榜一大哥确认');
       return;
     }

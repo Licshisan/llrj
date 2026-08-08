@@ -21,6 +21,10 @@ import { 默认剧情表 } from '../默认内容/剧情表';
 import { 上传存档请求 } from '../方法函数/网络请求';
 const { ccclass, property } = _decorator;
 
+function PVP存档有效(数据: any) {
+  return !!数据 && typeof 数据 === 'object' && !!数据.save && typeof 数据.save === 'object' && !!数据.player && typeof 数据.player === 'object';
+}
+
 @ccclass('睡觉')
 export class 睡觉 extends Component {
   @property(Node) 标签: Node = null!;
@@ -188,8 +192,10 @@ export class 睡觉 extends Component {
 
     // 24%概率遇到其他玩家（PVP）
     if (存档.当前敌人 == '' && 存档.天数 > 1 && 存档.天数 < 178 && Math.random() * 100 < 28) {
-      if (存档.临时数据.时空流浪者) {
+      if (PVP存档有效(存档.临时数据.时空流浪者)) {
         存档.当前敌人 = '时空流浪者';
+      } else {
+        存档.临时数据.时空流浪者 = null;
       }
     } else if (存档.临时数据.时空流浪者) {
       存档.临时数据.时空流浪者 = null;
