@@ -36,6 +36,8 @@ export class 剧情 extends Component {
       this.显示结果(`当前剧情数据不存在:${剧情名称}（请反馈开发者）`);
       return;
     }
+    存档.当前剧情 = 剧情名称;
+    保存存档();
     音频管理器.instance.playBGM();
     this.文本容器.removeAllChildren();
     this.结果标签.getComponent(Label).string = '';
@@ -54,6 +56,8 @@ export class 剧情 extends Component {
         if (!text) {
           this.结束剧情();
         } else {
+          存档.当前剧情 = '';
+          保存存档();
           this.显示结果(text);
         }
       },
@@ -63,6 +67,8 @@ export class 剧情 extends Component {
         if (!text) {
           this.结束剧情();
         } else {
+          存档.当前剧情 = '';
+          保存存档();
           this.显示结果(text);
         }
       },
